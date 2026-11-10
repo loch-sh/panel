@@ -5,7 +5,7 @@ import reactHooksPlugin from "eslint-plugin-react-hooks";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 
 export default defineConfig([
-  { ignores: ["dist", "dist-e2e", "test-results", "playwright-report"] },
+  { ignores: ["dist", "dist-e2e", "test-results", "playwright-report", "coverage"] },
   ...tseslint.configs.recommended,
   {
     files: ["**/*.ts", "**/*.tsx"],
