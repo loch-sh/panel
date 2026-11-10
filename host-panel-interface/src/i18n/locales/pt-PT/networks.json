@@ -1,0 +1,324 @@
+{
+  "title": "Redes privadas",
+  "intro": "Redes isoladas para os seus sites e serviços: só os membros de uma rede comunicam entre si. Todas as redes são internas: não dão acesso à Internet.",
+  "forbidden": "As redes privadas estão reservadas aos administradores.",
+  "newNetwork": "Nova rede",
+  "empty": "Ainda não existe nenhuma rede privada",
+  "columns": {
+    "name": "Nome",
+    "subnet": "Sub-rede",
+    "gateway": "Gateway",
+    "members": "Membros",
+    "properties": "Propriedades",
+    "description": "Descrição",
+    "actions": "Ações"
+  },
+  "tags": {
+    "shared": "Partilhada",
+    "private": "Privada",
+    "noInternet": "Sem acesso à Internet",
+    "reservedOverlap": "Intervalo reservado"
+  },
+  "tagHints": {
+    "shared": "Rede do módulo de serviços: todos os sites nela presentes acedem aos serviços nela presentes. Não pode ser eliminada.",
+    "private": "Só os seus membros comunicam entre si.",
+    "noInternet": "Rede interna: os seus membros não podem aceder à Internet através dela.",
+    "reservedOverlap": "A sua sub-rede sobrepõe-se ao intervalo reservado {{range}} (uma LAN ou VPN usada fora do Docker): os endereços desse intervalo podem ficar inacessíveis a partir dos seus contentores."
+  },
+  "state": {
+    "ok": "OK",
+    "missing": "Em falta",
+    "compromised": "Comprometida"
+  },
+  "stateHints": {
+    "ok": "A rede Docker é a que o painel criou.",
+    "missing": "A rede Docker não existe no servidor: os seus membros não podem arrancar nela. A API recria-a no próximo arranque.",
+    "compromised": "A rede Docker não é a que o painel criou: os seus membros não são considerados fiáveis até ser corrigida."
+  },
+  "problems": {
+    "replaced": "A rede foi substituída fora do painel (ID diferente).",
+    "notBridge": "Não é uma rede bridge local.",
+    "notInternal": "Não é interna: os seus membros poderiam aceder à Internet.",
+    "unexpectedOptions": "Tem opções inesperadas (IPv6 ou uma rede de configuração).",
+    "missingLabel": "Falta a etiqueta do painel.",
+    "unexpectedLabel": "A sua etiqueta do painel indica outra rede.",
+    "composeProject": "Foi criada por um projeto Compose.",
+    "unexpectedSubnet": "A sua sub-rede não é a registada.",
+    "inspectFailed": "Não foi possível consultar o Docker.",
+    "other": "Rede Docker inesperada."
+  },
+  "automatic": "Automática",
+  "delete": {
+    "title": "Eliminar a rede {{name}}?",
+    "content": "A rede Docker é removida. Uma rede só pode ser eliminada quando já não tiver membros.",
+    "submit": "Eliminar",
+    "systemHint": "A rede partilhada do módulo de serviços não pode ser eliminada.",
+    "inUseHint": "Desassocie primeiro os seus membros."
+  },
+  "toasts": {
+    "created": "Rede {{name}} criada.",
+    "deleted": "Rede {{name}} eliminada.",
+    "descriptionSaved": "Descrição guardada.",
+    "attached": "{{name}} está ligado à rede.",
+    "detached": "{{name}} está desligado da rede.",
+    "siteRedeploying": "{{name}} está a ser reimplementado com as novas redes…",
+    "siteRedeployed": "{{name}} foi reimplementado com as novas redes.",
+    "siteRedeployFailed": "A reimplementação de {{name}} falhou: consulte a sua última operação.",
+    "disconnected": "Contentor {{name}} desligado."
+  },
+  "create": {
+    "title": "Nova rede privada",
+    "intro": "Crie uma rede isolada e depois associe-lhe sites e instâncias de serviço: só os seus membros comunicam entre si.",
+    "back": "Voltar à lista",
+    "submit": "Criar a rede",
+    "sections": {
+      "name": {
+        "title": "Nome",
+        "subtitle": "1 a 24 letras minúsculas, algarismos ou hífenes, a começar por uma letra. Não pode ser alterado mais tarde."
+      },
+      "description": {
+        "title": "Descrição",
+        "subtitle": "Opcional: para que serve a rede."
+      },
+      "addressing": {
+        "title": "Endereçamento",
+        "subtitle": "O intervalo IPv4 da rede, definido uma única vez (o Docker não o pode alterar mais tarde)."
+      },
+      "members": {
+        "title": "Membros",
+        "subtitle": "Opcional: sites e instâncias de serviços a associar depois de criada a rede."
+      }
+    },
+    "nameLabel": "Nome",
+    "namePlaceholder": "backend",
+    "nameRequired": "Introduza um nome.",
+    "nameInvalid": "1 a 24 letras minúsculas, algarismos ou hífenes, a começar por uma letra e sem terminar com um hífen.",
+    "nameReserved": "Este nome está reservado.",
+    "nameTaken": "Já existe uma rede com este nome.",
+    "dockerName": "Nome Docker: {{name}}",
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Loja e a sua base de dados",
+    "descriptionInvalid": "Sem caracteres de controlo, no máximo 200 caracteres.",
+    "addressing": {
+      "automatic": {
+        "title": "Automático",
+        "description": "O Docker escolhe um intervalo privado livre."
+      },
+      "manual": {
+        "title": "Sub-rede manual",
+        "description": "Escolha o intervalo, por ex. para evitar um conflito com uma VPN."
+      }
+    },
+    "subnetLabel": "Sub-rede (CIDR)",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "Um intervalo IPv4 privado (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 ou 100.64.0.0/10), de /16 a /28, escrito com o seu endereço de rede.",
+    "subnetRequired": "Introduza uma sub-rede, ou escolha Automático.",
+    "subnetProblems": {
+      "format": "Escreva um intervalo IPv4 em notação CIDR, por ex. 10.20.0.0/24.",
+      "networkAddress": "Escreva o intervalo com o seu endereço de rede: {{expected}}.",
+      "prefixLength": "O comprimento do prefixo tem de estar entre /16 e /28.",
+      "privateRange": "O intervalo tem de ser privado: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 ou 100.64.0.0/10.",
+      "reserved": "O intervalo sobrepõe-se ao intervalo reservado {{range}} (uma LAN ou VPN usada fora do Docker)."
+    },
+    "usableHosts_one": "{{count}} endereço utilizável",
+    "usableHosts_many": "{{count}} de endereços utilizáveis",
+    "usableHosts_other": "{{count}} endereços utilizáveis",
+    "summary": {
+      "title": "Resumo",
+      "name": "Nome",
+      "dockerName": "Nome Docker",
+      "subnet": "Sub-rede",
+      "internet": "Acesso à Internet",
+      "internetNone": "Nenhum (rede interna)",
+      "note": "A rede começa vazia: associe sites e instâncias de serviço a partir da sua página.",
+      "limit": "Redes privadas",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "Membros",
+      "membersNone": "Nenhum"
+    },
+    "limitReached": "O limite de {{max}} redes privadas foi atingido: elimine primeiro uma rede.",
+    "ranges": {
+      "private": "Intervalos permitidos",
+      "reserved": "Intervalos reservados",
+      "reservedNone": "Nenhum",
+      "reservedHintManual": "Uma sub-rede que se sobreponha a um intervalo reservado (uma LAN ou VPN usada fora do Docker) é recusada.",
+      "reservedHintAutomatic": "Se o Docker escolher um intervalo que se sobreponha a um intervalo reservado, a criação é recusada: escolha então uma sub-rede manual."
+    },
+    "members": {
+      "label": "Sites e instâncias de serviços",
+      "placeholder": "Escolha sites ou instâncias de serviços",
+      "restart": "Cada membro escolhido é recriado com esta rede: alguns segundos de interrupção para o seu contentor (um site é implementado de novo).",
+      "failedHint": "A rede foi criada: associe-os de novo com «Associar um recurso».",
+      "failedTitle_one": "{{count}} membro não pôde ser associado",
+      "failedTitle_many": "{{count}} membros não puderam ser associados",
+      "failedTitle_other": "{{count}} membros não puderam ser associados",
+      "partial_one": "Rede {{name}} criada, mas {{count}} membro não pôde ser associado.",
+      "partial_many": "Rede {{name}} criada, mas {{count}} membros não puderam ser associados.",
+      "partial_other": "Rede {{name}} criada, mas {{count}} membros não puderam ser associados."
+    }
+  },
+  "detail": {
+    "back": "Voltar às redes",
+    "notFound": "Esta rede não existe (ou já não existe).",
+    "info": "Informações",
+    "dockerName": "Nome Docker",
+    "id": "ID Docker",
+    "subnet": "Sub-rede",
+    "gateway": "Gateway",
+    "internet": "Acesso à Internet",
+    "internetNone": "Nenhum (rede interna)",
+    "internetWarning": "Não interna: os membros podem aceder à Internet",
+    "created": "Criada",
+    "createdBy": "{{date}} por {{user}}",
+    "description": "Descrição",
+    "descriptionEmpty": "Sem descrição",
+    "editDescription": "Editar a descrição",
+    "members": "Membros",
+    "membersEmpty": "Ainda sem membros: associe um site ou uma instância de serviço.",
+    "attach": "Associar um recurso",
+    "systemNote": "Rede partilhada do módulo de serviços: as instâncias de serviço juntam-se a ela por predefinição, e todos os sites nela presentes lhes acedem."
+  },
+  "members": {
+    "columns": {
+      "kind": "Tipo",
+      "name": "Nome",
+      "container": "Contentor",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "Estado",
+      "actions": "Ações"
+    },
+    "kinds": {
+      "site": "Site",
+      "instance": "Instância de serviço",
+      "panel": "Painel",
+      "unmanaged": "Não gerido",
+      "function": "Função"
+    },
+    "panelHint": "O próprio painel: junta-se à rede enquanto estiver aberto um túnel de portas (loch proxy) para um dos seus membros.",
+    "notConnected": "Declarado mas não ligado",
+    "notConnectedHint": "O seu ficheiro compose declara esta rede, mas o seu contentor não está nela: está parado ou tem de ser reimplementado.",
+    "notDeclared": "Ligado mas não declarado",
+    "notDeclaredHint": "O contentor está na rede, mas o seu ficheiro compose não a declara: foi ligado manualmente.",
+    "noContainer": "Sem contentor",
+    "detach": "Desassociar",
+    "lastNetworkHint": "Uma instância de serviço mantém pelo menos uma rede: associe-a primeiro a outra rede.",
+    "detachConfirm": {
+      "title": "Desassociar {{name}} de {{network}}?",
+      "site": "O site é reimplementado sem esta rede: os seus contentores são recriados (alguns segundos de interrupção) e deixa de aceder aos membros desta rede.",
+      "instance": "{{container}} reinicia sem esta rede: os seus clientes são desligados durante alguns segundos, e os sites desta rede perdem o acesso.",
+      "submit": "Desassociar",
+      "function": "A função {{name}} é recriada sem esta rede: os membros desta rede deixam de poder invocá-la."
+    },
+    "lastNetworkHintFunction": "Uma função mantém pelo menos uma rede: associe-a primeiro a outra rede."
+  },
+  "unmanaged": {
+    "title_one": "{{count}} contentor não gerido pelo painel está nesta rede",
+    "title_many": "{{count}} de contentores não geridos pelo painel estão nesta rede",
+    "title_other": "{{count}} contentores não geridos pelo painel estão nesta rede",
+    "description": "Juntaram-se a ela fora do painel (por ex. uma stack de CI) e acedem aos seus membros. Desligue-os se não o devessem fazer.",
+    "disconnect": "Desligar",
+    "confirm": {
+      "title": "Desligar {{name}}?",
+      "content": "O contentor é desligado da rede agora. Volta a juntar-se a ela se o seu próprio ficheiro compose a declarar e for reimplementado.",
+      "submit": "Desligar"
+    }
+  },
+  "attach": {
+    "title": "Associar um recurso a {{network}}",
+    "intro": "O contentor do membro é recriado com esta rede: alguns segundos de interrupção apenas para esse contentor.",
+    "resource": "Recurso",
+    "placeholder": "Escolha um site ou uma instância de serviço",
+    "sites": "Sites",
+    "instances": "Instâncias de serviço",
+    "noResource": "Nenhum site ou instância de serviço para associar.",
+    "submit": "Associar",
+    "disabled": {
+      "unauthenticated": "Sem autenticação: não pode juntar-se à rede partilhada",
+      "modified": "Editada manualmente",
+      "operation": "Operação em curso"
+    },
+    "restart": {
+      "site": "O site {{name}} é reimplementado: os seus contentores são recriados (alguns segundos de interrupção).",
+      "instance": "{{container}} reinicia: os seus sites perdem a ligação durante alguns segundos.",
+      "function": "A função {{name}} é recriada com esta rede: uma invocação em curso é interrompida."
+    },
+    "functions": "Funções"
+  },
+  "select": {
+    "placeholder": "Escolha as redes",
+    "unavailable": "Indisponível",
+    "createLink": "Criar uma rede privada",
+    "loadFailed": "Não é possível listar as redes."
+  },
+  "tabs": {
+    "private": "Redes privadas",
+    "docker": "Outras redes Docker"
+  },
+  "docker": {
+    "intro": "Redes Docker que o painel não gere: as do próprio Docker (bridge, host, none), as de stacks Compose (por exemplo implementadas por CI/CD, o proxy inverso) e as criadas à mão. São apresentadas só de leitura.",
+    "empty": "Nenhuma outra rede Docker",
+    "columns": {
+      "origin": "Origem",
+      "driver": "Controlador",
+      "containers": "Contentores"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose: {{project}}",
+      "other": "Outra"
+    },
+    "originHints": {
+      "docker": "Criada pelo próprio Docker.",
+      "compose": "Criada por um projeto Compose (por exemplo uma stack implementada por CI/CD).",
+      "other": "Criada à mão ou por outra ferramenta."
+    },
+    "internet": "Acesso à Internet",
+    "internetHint": "Não interna: os seus contentores podem chegar à Internet através dela.",
+    "internetYes": "Sim (não interna)",
+    "back": "Voltar às redes Docker",
+    "title": "Rede Docker",
+    "notFound": "Esta rede Docker não existe (ou já não existe), ou é uma rede do painel.",
+    "readOnly": "Esta rede não é gerida pelo painel: é apresentada só de leitura.",
+    "containersEmpty": "Nenhum contentor nesta rede.",
+    "containersTitle_one": "{{count}} contentor",
+    "containersTitle_many": "{{count}} contentores",
+    "containersTitle_other": "{{count}} contentores"
+  },
+  "site": {
+    "title": "Redes do painel",
+    "intro": "O site chega aos outros membros destas redes (instâncias de serviços, sites). Ligar ou desligar uma rede volta a implementar o site: reinicia durante alguns segundos.",
+    "connect": "Ligar uma rede",
+    "disconnect": "Desligar",
+    "empty": "O site não está em nenhuma rede do painel.",
+    "columns": {
+      "type": "Tipo",
+      "state": "Estado",
+      "warnings": "Avisos"
+    },
+    "connected": "Ligado",
+    "connectedHint": "O contentor do site está nesta rede.",
+    "unknown": "Rede desconhecida",
+    "unknownHint": "As definições do site indicam uma rede que o painel não conhece (ou já não conhece).",
+    "modifiedHint": "O ficheiro compose foi editado à mão: as redes não podem ser alteradas a partir do painel.",
+    "busyHint": "Está em curso uma operação neste site.",
+    "connectModal": {
+      "title": "Ligar {{name}} a uma rede",
+      "network": "Rede",
+      "placeholder": "Escolha uma rede",
+      "none": "O site já está em todas as redes do painel.",
+      "submit": "Ligar"
+    },
+    "toasts": {
+      "connected": "{{name}} está ligado a {{network}}.",
+      "disconnected": "{{name}} está desligado de {{network}}."
+    },
+    "other": {
+      "title": "Outras redes Docker",
+      "intro": "Redes não geridas pelo painel em que está o contentor do site (por exemplo a rede do proxy inverso). Só de leitura.",
+      "empty": "O contentor do site não está em nenhuma outra rede Docker.",
+      "loadFailed": "Não é possível listar as outras redes Docker."
+    }
+  }
+}

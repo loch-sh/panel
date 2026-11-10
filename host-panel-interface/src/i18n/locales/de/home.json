@@ -1,0 +1,58 @@
+{
+  "title": "Willkommen in der Administrationskonsole",
+  "cards": {
+    "resourceOverview": {
+      "title": "Ressourcenübersicht",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "wird geladen",
+      "unavailable": "nicht verfügbar",
+      "resources": {
+        "containers": "Container",
+        "stacks": "Stacks",
+        "hosting": "Gehostete Websites",
+        "database": "Datenbanken",
+        "cache": "Cache",
+        "messaging": "Messaging",
+        "queue": "Warteschlangen",
+        "storage": "Speicher",
+        "functions": "Funktionen",
+        "cron": "Geplante Aufgaben",
+        "networks": "Private Netzwerke",
+        "sftp": "SFTP-Benutzer",
+        "domains": "Domains",
+        "apiKeys": "API-Schlüssel"
+      }
+    },
+    "containerCount": {
+      "title": "Anzahl der Container"
+    },
+    "profile": {
+      "adminTitle": "Administratorprofil",
+      "userTitle": "Benutzerprofil",
+      "adminAccess": "Sie haben Zugriff auf alle Container (außer Systemcontainer).",
+      "noAccess": "Ihr Administrator hat noch keinen Zugriff für Sie festgelegt.",
+      "restrictedAccess": "Sie haben Zugriff auf folgende Container: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Zuletzt bereitgestellte Stacks",
+      "empty": "Keine Stacks",
+      "abnormalExit": "Abnormales Beenden"
+    },
+    "latestDomains": {
+      "title": "Neueste Domains",
+      "empty": "Keine Domains"
+    },
+    "errorContainers": {
+      "title": "Fehlerhaft beendete Container",
+      "empty": "Keine fehlerhaften Container"
+    },
+    "support": {
+      "title": "Technischer Support",
+      "emergency": "📲 Notfall: {{phone}}",
+      "openTicket": "📕 Störungsticket eröffnen"
+    },
+    "serviceStatus": {
+      "title": "Dienststatus"
+    }
+  }
+}

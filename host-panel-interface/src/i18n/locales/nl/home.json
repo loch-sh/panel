@@ -1,0 +1,58 @@
+{
+  "title": "Welkom bij de beheerconsole",
+  "cards": {
+    "resourceOverview": {
+      "title": "Overzicht van resources",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "laden",
+      "unavailable": "niet beschikbaar",
+      "resources": {
+        "containers": "Containers",
+        "stacks": "Stacks",
+        "hosting": "Gehoste sites",
+        "database": "Databases",
+        "cache": "Cache",
+        "messaging": "Messaging",
+        "queue": "Wachtrijen",
+        "storage": "Opslag",
+        "functions": "Functies",
+        "cron": "Geplande taken",
+        "networks": "Privénetwerken",
+        "sftp": "SFTP-gebruikers",
+        "domains": "Domeinen",
+        "apiKeys": "API-sleutels"
+      }
+    },
+    "containerCount": {
+      "title": "Aantal containers"
+    },
+    "profile": {
+      "adminTitle": "Beheerdersprofiel",
+      "userTitle": "Gebruikersprofiel",
+      "adminAccess": "Je hebt toegang tot alle containers (behalve systeemcontainers).",
+      "noAccess": "Je beheerder heeft nog geen toegang voor je ingesteld.",
+      "restrictedAccess": "Je hebt toegang tot de volgende containers: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Laatst uitgerolde stacks",
+      "empty": "Geen stacks",
+      "abnormalExit": "Abnormaal beëindigd"
+    },
+    "latestDomains": {
+      "title": "Nieuwste domeinen",
+      "empty": "Geen domeinen"
+    },
+    "errorContainers": {
+      "title": "Containers die met een fout zijn gestopt",
+      "empty": "Geen containers met fouten"
+    },
+    "support": {
+      "title": "Technische ondersteuning",
+      "emergency": "📲 Noodgeval: {{phone}}",
+      "openTicket": "📕 Incidentticket aanmaken"
+    },
+    "serviceStatus": {
+      "title": "Status van de diensten"
+    }
+  }
+}

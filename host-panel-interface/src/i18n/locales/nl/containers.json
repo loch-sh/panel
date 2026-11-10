@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Starten",
+    "restart": "Herstarten",
+    "stop": "Stoppen",
+    "kill": "Kill",
+    "delete": "Verwijderen",
+    "detachedTerminal": "Losgekoppelde terminal",
+    "detailsAndTerminal": "Details en terminal"
+  },
+  "stackActions": {
+    "start": "Stack starten",
+    "stop": "Stack stoppen",
+    "restart": "Stack herstarten",
+    "started": "Stack “{{name}}” gestart",
+    "stopped": "Stack “{{name}}” gestopt",
+    "restarted": "Stack “{{name}}” herstart",
+    "partialFailure": "Stack “{{name}}”: {{failed}} van {{total}} containers konden niet worden verwerkt"
+  },
+  "confirm": {
+    "delete": "Weet je zeker dat je de container “{{name}}” wilt verwijderen?",
+    "stop": "Weet je zeker dat je de container “{{name}}” wilt stoppen?",
+    "kill": "Weet je zeker dat je de container “{{name}}” wilt killen? Deze actie is direct en geeft het proces geen tijd om netjes af te sluiten.",
+    "stackStop": "Weet je zeker dat je alle containers van de stack “{{name}}” wilt stoppen?",
+    "stackRestart": "Weet je zeker dat je alle containers van de stack “{{name}}” wilt herstarten? De services zijn even niet beschikbaar."
+  },
+  "list": {
+    "title": "Containers",
+    "searchPlaceholder": "Zoek een container, een stack...",
+    "filterActive": "Actief",
+    "filterAll": "Alle",
+    "filterErrors": "Fouten",
+    "noStack": "Geen stack",
+    "errorExitsTooltip": "Een of meer containers zijn abnormaal beëindigd",
+    "hostingTag": "Hosting",
+    "serviceTag": "Dienst",
+    "type": {
+      "label": "Stacktype",
+      "all": "Alle",
+      "hosting": "Hosting",
+      "services": "Diensten",
+      "other": "Overige"
+    },
+    "stackFilter": "Stack: {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Containers",
+    "id": "ID",
+    "name": "Naam",
+    "state": "Status",
+    "webRouting": "Webroutering",
+    "actions": "Acties"
+  },
+  "table": {
+    "copyIdTooltip": "Volledige container-ID kopiëren",
+    "idCopied": "De ID is gekopieerd!",
+    "abnormalExit": "Abnormaal beëindigd"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} actief"
+  },
+  "sidePanel": {
+    "title": "Containerdetails",
+    "fullScreen": "Volledig scherm",
+    "consoleOnly": "Alleen console",
+    "noData": "Geen gegevens voor deze container",
+    "heading": "Container {{name}}",
+    "compose": {
+      "title": "Gestart door compose",
+      "project": "✅ Project {{project}}",
+      "no": "❌ Nee"
+    },
+    "identifier": "Identificatie",
+    "image": "Image",
+    "currentState": "Huidige status",
+    "startedAt": {
+      "title": "Gestart",
+      "value": "Op {{date}} om {{time}}"
+    },
+    "restartCount": "Aantal herstarts",
+    "network": "Netwerk",
+    "mounts": "Koppelpunten",
+    "none": "Geen",
+    "hostPath": "Hostpad",
+    "logPath": "Logpad",
+    "logs": {
+      "title": "Live logs",
+      "show": "Logs tonen",
+      "close": "Logs sluiten"
+    },
+    "terminal": {
+      "title": "Interactieve Docker-terminal",
+      "open": "Terminal openen",
+      "detach": "Loskoppelen",
+      "detachPopup": "Loskoppelen in een pop-up",
+      "unavailable": "De terminal is niet beschikbaar (waarschijnlijk ontbreekt <code>tty:true</code> in het compose-bestand, of is de container niet gestart met het argument <code>-t</code>)."
+    }
+  },
+  "mountTable": {
+    "type": "Type",
+    "source": "Bron",
+    "destination": "Bestemming"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protocol",
+    "localPort": "Lokale poort",
+    "hostPort": "Hostpoort"
+  },
+  "stats": {
+    "open": "Monitoring",
+    "close": "Monitoring sluiten",
+    "live": "Live",
+    "cpuTotal": "Totale CPU:",
+    "ramLabel": "RAM:",
+    "netLabel": "Net:",
+    "columns": {
+      "container": "Container",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Netwerk",
+      "pids": "PID's"
+    }
+  },
+  "logViewer": {
+    "error": "Fout"
+  },
+  "popupTerminal": {
+    "missingId": "Container-ID ontbreekt",
+    "windowTitle": "{{appName}} - Terminal",
+    "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  }
+}

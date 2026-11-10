@@ -1,0 +1,500 @@
+{
+  "title": "Functies",
+  "intro": "Serverless functies: handlers geschreven voor AWS Lambda™ (Node.js, Python) die op deze server draaien, in een geïsoleerde container die op aanvraag wordt gestart. Dezelfde code draait ook ongewijzigd op AWS Lambda.",
+  "trademarkNotice": "AWS Lambda is een handelsmerk van Amazon.com, Inc. of haar dochterondernemingen. Loch.sh is niet verbonden aan Amazon en wordt niet door Amazon onderschreven.",
+  "forbidden": "Functies zijn voorbehouden aan beheerders.",
+  "disabled": "De functiemodule is uitgeschakeld op deze server (FUNCTIONS_ENABLED).",
+  "configError": "De functiemodule is ingeschakeld maar kon niet starten: zie de API-logs.",
+  "runtimeNotReady": "Er is nog geen vertrouwde functieruntime op de server geïnstalleerd: functies kunnen niet worden aangemaakt of uitgevoerd.",
+  "newFunction": "Nieuwe functie",
+  "createFirst": "Een functie aanmaken",
+  "limitReached": "De limiet van {{max}} functies is bereikt: verwijder eerst een functie.",
+  "noCode": "Geen code",
+  "presentation": {
+    "title": "Nog geen functie",
+    "text": "Een functie is een handler (index.handler, lambda_function.lambda_handler) die als zip wordt geüpload, met haar dependencies. Het paneel voert haar uit in de AWS Lambda-basisimage die AWS publiceert, met het geheugen, de CPU en de time-out die je kiest; sites, services en andere functies op haar netwerken roepen haar aan met de AWS SDK of een gewoon HTTP-verzoek.",
+    "security": "Elke functie krijgt een eigen privénetwerk, geen gepubliceerde poort en geen internettoegang tenzij je die toestaat; haar aanroepgegevens worden één keer getoond."
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} functies",
+    "memory": "geheugen {{used}} / {{max}}",
+    "memoryUnbounded": "geheugen {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "Naam",
+    "runtime": "Runtime",
+    "state": "Status",
+    "memory": "Geheugen",
+    "timeout": "Time-out",
+    "networks": "Netwerken",
+    "internet": "Internet",
+    "deployment": "Actieve deployment",
+    "deployedAt": "Uitgerold",
+    "actions": "Acties"
+  },
+  "tags": {
+    "purgeOnly": "Alleen purgeren"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go, Rust… (aangepaste runtime)"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript, of TypeScript gecompileerd naar JavaScript.",
+    "python": "Python-modules en hun dependencies.",
+    "provided": "Elke gecompileerde taal: een uitvoerbaar bestand bootstrap, gebouwd voor Linux."
+  },
+  "states": {
+    "not_deployed": "Geen code",
+    "running": "Actief",
+    "stopped": "Gestopt",
+    "missing": "Ontbreekt",
+    "modified": "Buiten het paneel bewerkt",
+    "unverified": "Niet geverifieerd",
+    "invalid": "Onleesbaar"
+  },
+  "stateHints": {
+    "not_deployed": "Aangemaakt, maar er is nog geen code geüpload: er draait niets.",
+    "running": "De container van de functie draait en beantwoordt aanroepen.",
+    "stopped": "De functie is gestopt: start haar om haar aan te roepen.",
+    "missing": "Er is code uitgerold en de functie is niet gestopt, maar haar container bestaat niet: start haar opnieuw.",
+    "modified": "Het compose-project is buiten het paneel bewerkt: het paneel voert het nooit uit. Purgeer de functie.",
+    "unverified": "Er draait een container, maar het is niet de container die het paneel heeft aangemaakt: hij wordt niet gebruikt.",
+    "invalid": "Het referentiebestand is onleesbaar: de functie kan alleen worden gepurgeerd."
+  },
+  "health": {
+    "unhealthy": "Ongezond",
+    "starting": "Bezig met starten"
+  },
+  "egress": {
+    "label": "Internettoegang",
+    "on": "Toegestaan",
+    "off": "Geen",
+    "onHint": "De functie kan het internet bereiken (en de host, het LAN en metadata-endpoints, tenzij firewallregels anders bepalen).",
+    "offHint": "De functie bereikt alleen de leden van haar netwerken.",
+    "help": "Standaard uit: de functie bereikt alleen de leden van haar netwerken.",
+    "warning": "Met internettoegang kan de code van de functie haar gegevens en geheimen overal naartoe sturen, en de gateway van de host, het LAN en cloud-metadata-endpoints bereiken, tenzij DOCKER-USER-firewallregels die blokkeren.",
+    "enableTitle": "Internettoegang toestaan voor {{name}}?",
+    "disableTitle": "Internettoegang van {{name}} intrekken?",
+    "recreate": "De container van de functie wordt opnieuw aangemaakt: een lopende aanroep wordt afgebroken.",
+    "enable": "Toestaan",
+    "disable": "Intrekken",
+    "enabledToast": "{{name}} kan het internet bereiken.",
+    "disabledToast": "{{name}} bereikt het internet niet meer."
+  },
+  "sigv4": {
+    "label": "SigV4-aanroepers (AWS SDK)",
+    "bearer": "Aanroepers authenticeren altijd met een bearer-token (Authorization: Bearer …), dat één keer wordt getoond.",
+    "help": "Standaard uit. Aan: AWS SDK-clients kunnen de functie ook aanroepen met een toegangssleutelpaar (endpoint-url http://fn-<name>:8080, regio us-east-1).",
+    "warning": "De runtime heeft het SigV4-geheim zelf nodig: het staat in de container, dus de code van de functie kan het lezen. Het maakt alleen het aanroepen van de functie mogelijk.",
+    "enabled": "Geaccepteerd",
+    "disabled": "Niet geaccepteerd"
+  },
+  "actions": {
+    "test": "Testen",
+    "testOf": "{{name}} testen",
+    "start": "Starten",
+    "startOf": "{{name}} starten",
+    "stop": "Stoppen",
+    "stopOf": "{{name}} stoppen",
+    "restart": "Herstarten",
+    "restartOf": "{{name}} herstarten",
+    "delete": "Verwijderen",
+    "deleteOf": "{{name}} verwijderen",
+    "purge": "Purgeren",
+    "purgeOf": "{{name}} purgeren"
+  },
+  "confirm": {
+    "stop": {
+      "title": "{{name}} stoppen?",
+      "content": "De functie beantwoordt geen aanroepen meer totdat ze opnieuw wordt gestart (geplande taken mislukken in de tussentijd)."
+    },
+    "restart": {
+      "title": "{{name}} herstarten?",
+      "content": "De container wordt herstart: lopende aanroepen worden afgebroken."
+    }
+  },
+  "delete": {
+    "title": "De functie {{name}} verwijderen?",
+    "content": "De container, de code, alle deployments, geheimen, aanroepgegevens en het eigen netwerk worden verwijderd. Niets kan worden hersteld.",
+    "submit": "Verwijderen",
+    "confirmLabel": "Typ de naam om te bevestigen:"
+  },
+  "purge": {
+    "title": "De functie {{name}} purgeren?",
+    "content": "De functie is buiten het paneel bewerkt: ze wordt verwijderd zonder een van haar bestanden uit te voeren (containers, code, deployments, geheimen, aanroepgegevens). Niets kan worden hersteld.",
+    "submit": "Purgeren"
+  },
+  "toasts": {
+    "created": "Functie {{name}} aangemaakt.",
+    "updated": "Configuratie van {{name}} opgeslagen.",
+    "deleted": "Functie {{name}} verwijderd.",
+    "purged": "Functie {{name}} gepurgeerd.",
+    "networkKept": "Het netwerk {{network}} is behouden: er zijn nog andere leden aan gekoppeld.",
+    "start": "{{name}} gestart.",
+    "stop": "{{name}} gestopt.",
+    "restart": "{{name}} herstart.",
+    "rotated": "Nieuwe aanroepgegevens voor {{name}}."
+  },
+  "units": {
+    "mb": "MB",
+    "s": "s",
+    "seconds_one": "{{count}} seconde",
+    "seconds_other": "{{count}} seconden"
+  },
+  "create": {
+    "title": "Nieuwe functie",
+    "intro": "Een functie voert een handler uit die voor AWS Lambda™ is geschreven. Er draait niets totdat haar code is uitgerold: upload nu een zip, of later vanaf haar pagina.",
+    "back": "Terug naar de functies",
+    "submit": "De functie aanmaken",
+    "latest": "Nieuwste",
+    "runtimeLabel": "Runtime",
+    "versionLabel": "Versie",
+    "imageNote": "AWS Lambda-basisimage gepubliceerd door AWS voor {{arch}}, opgehaald via mirror.gcr.io en vastgepind op digest.",
+    "handlerLabel": "Handler",
+    "handlerInvalid": "<file>.<function>: letters, cijfers, _ en -, mappen gescheiden door /, bijv. index.handler of src/app.handler.",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>, bijv. index.handler voor de handler die door index.js (of index.mjs) wordt geëxporteerd.",
+      "python": "<module>.<function>, bijv. lambda_function.lambda_handler of app.main.handler.",
+      "provided": "Aan je bootstrap doorgegeven als _HANDLER, die hij kan lezen. Leeg: bootstrap."
+    },
+    "zipLabel": "Code (zip)",
+    "zipOptional": "Optioneel: de handler en zijn dependencies, nooit op de server gebouwd. De zip wordt direct na het aanmaken geüpload.",
+    "zipRemove": "Verwijderen",
+    "sections": {
+      "runtime": {
+        "title": "Runtime",
+        "subtitle": "De taal en de versie ervan."
+      },
+      "code": {
+        "title": "Code",
+        "subtitle": "De handler die de runtime aanroept, en optioneel de zip om uit te rollen."
+      },
+      "resources": {
+        "title": "Resources",
+        "subtitle": "Limieten van de container van de functie."
+      },
+      "env": {
+        "title": "Variabelen en geheimen",
+        "subtitle": "Omgeving van de functie. Geheimen worden apart bewaard en kunnen nooit worden teruggelezen."
+      },
+      "networks": {
+        "title": "Netwerktoegang",
+        "subtitle": "Wie de functie kan aanroepen, en wat ze kan bereiken."
+      },
+      "invoke": {
+        "title": "Aanroep",
+        "subtitle": "Hoe aanroepers op haar netwerken zich authenticeren."
+      },
+      "name": {
+        "title": "Naam",
+        "subtitle": "1 tot {{max}} kleine letters, cijfers of streepjes, beginnend met een letter. Het is ook haar hostnaam: fn-<name>."
+      }
+    },
+    "nameLabel": "Naam",
+    "nameRequired": "Voer een naam in.",
+    "nameInvalid": "1 tot 21 kleine letters, cijfers of streepjes, beginnend met een letter en niet eindigend op een streepje.",
+    "nameReserved": "Deze naam is gereserveerd.",
+    "nameTaken": "Er bestaat al een functie met deze naam.",
+    "summary": {
+      "title": "Overzicht",
+      "runtime": "Runtime",
+      "handler": "Handler",
+      "code": "Code",
+      "codeLater": "Later geüpload",
+      "resources": "Resources",
+      "resourcesValue": "{{memory}}, {{cpus}} CPU, {{timeout}} s",
+      "env": "Omgeving",
+      "envValue": "{{variables}} variabelen, {{secrets}} geheimen",
+      "networks": "Netwerken",
+      "internet": "Internettoegang",
+      "auth": "Authenticatie",
+      "authBearer": "Bearer-token",
+      "authSigv4": "Bearer-token en SigV4",
+      "name": "Naam",
+      "endpoint": "Interne URL",
+      "credentialsNote": "De aanroepgegevens worden één keer getoond, direct na het aanmaken."
+    },
+    "setup": {
+      "title": "Bezig met instellen",
+      "secrets": "Geheimen",
+      "code": "Code uploaden",
+      "failed": "Mislukt: {{error}} Doe het opnieuw vanaf de pagina van de functie."
+    },
+    "handlerOptionalLabel": "Handler (optioneel)",
+    "handlerInvalidCustom": "Letters, cijfers, _, - en ., mappen gescheiden door /, geen deel dat begint met . of -; hoogstens 128 tekens.",
+    "bootstrap": {
+      "title": "De zip bevat een uitvoerbaar bestand bootstrap in de hoofdmap",
+      "help": "Bouw het voor Linux {{arch}} en zip het, bijvoorbeeld in Go met aws-lambda-go:"
+    }
+  },
+  "resources": {
+    "memory": "Geheugen",
+    "memoryHelp": "Van {{min}} tot {{max}}.",
+    "cpus": "CPU",
+    "cpusHelp": "Van {{min}} tot {{max}}, in stappen van 0,01.",
+    "timeout": "Time-out",
+    "timeoutHelp": "Van 1 tot {{max}} seconden per aanroep.",
+    "tmp": "Grootte van /tmp",
+    "tmpHelp": "Van {{min}} tot {{max}}.",
+    "tmpNote": "Bestanden in /tmp tellen mee voor de geheugenlimiet: een functie die /tmp volschrijft, wordt gestopt wegens geheugengebrek.",
+    "budget": "Nog beschikbaar voor de functies: {{memory}} geheugen en {{cpus}} CPU.",
+    "overBudget": "Deze resources overschrijden wat er over is van het budget van de functies: het aanmaken wordt geweigerd."
+  },
+  "env": {
+    "nameRequired": "Voer een naam in.",
+    "nameInvalid": "Letters, cijfers en underscores, niet beginnend met een cijfer.",
+    "nameReserved": "Deze naam is gereserveerd door de runtime (AWS_LAMBDA_*, AWS_REGION, PATH…).",
+    "nameDuplicate": "Deze naam wordt al gebruikt door een variabele of een geheim.",
+    "value": {
+      "lines": "Slechts één regel.",
+      "size": "Maximaal 4096 bytes."
+    },
+    "variable": {
+      "title": "Variabelen",
+      "help": "Geschreven in het compose-bestand van de functie: zet hier geen geheimen.",
+      "empty": "Geen variabele.",
+      "add": "Een variabele toevoegen",
+      "remove": "Variabele {{index}} verwijderen",
+      "nameLabel": "Naam van variabele {{index}}",
+      "valueLabel": "Waarde van variabele {{index}}",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "Waarde"
+    },
+    "secret": {
+      "title": "Geheimen",
+      "warning": "De waarde van een geheim wordt één keer geschreven: ze kan worden vervangen of verwijderd, maar nooit meer worden getoond, door het paneel of door wie dan ook.",
+      "empty": "Geen geheim.",
+      "add": "Een geheim toevoegen",
+      "remove": "Geheim {{index}} verwijderen",
+      "nameLabel": "Naam van geheim {{index}}",
+      "valueLabel": "Waarde van geheim {{index}}",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "Geheime waarde"
+    }
+  },
+  "networks": {
+    "title": "Netwerken",
+    "intro": "Leden van deze netwerken (sites, service-instanties, andere functies) kunnen de functie aanroepen via haar interne URL. Een functie komt nooit op het servicesnetwerk.",
+    "dedicated": "Eigen netwerk",
+    "dedicatedHint": "Aangemaakt met de functie, alleen voor haar: koppel de sites of services die haar aanroepen.",
+    "dedicatedTag": "Eigen",
+    "extra": "Andere privénetwerken",
+    "extraHelp": "Optioneel: netwerken waar de functie ook aan deelneemt.",
+    "servicesRefused": "Een functie komt nooit op het servicesnetwerk: koppel haar aan een privénetwerk.",
+    "connect": "Een netwerk verbinden",
+    "connectTitle": "{{name}} met een netwerk verbinden",
+    "connectIntro": "De container van de functie wordt opnieuw aangemaakt met dit netwerk: een lopende aanroep wordt afgebroken.",
+    "network": "Netwerk",
+    "choose": "Kies een netwerk",
+    "noneAvailable": "De functie zit al op elk privénetwerk.",
+    "disconnect": "Loskoppelen",
+    "disconnectOf": "Loskoppelen van {{network}}",
+    "disconnectConfirm": {
+      "title": "{{name}} loskoppelen van {{network}}?",
+      "content": "Eerst wordt het netwerk verbroken, daarna wordt de container opnieuw aangemaakt: de leden van dit netwerk kunnen de functie niet meer aanroepen. Als het opnieuw aanmaken mislukt, wordt de functie gestopt."
+    },
+    "lastHint": "Een functie behoudt minstens één netwerk: verbind eerst een ander netwerk.",
+    "notConnectedHint": "De container van de functie zit niet op dit netwerk: hij is gestopt of moet worden herstart.",
+    "connected": "{{name}} is verbonden met {{network}}.",
+    "disconnected": "{{name}} is losgekoppeld van {{network}}."
+  },
+  "detail": {
+    "back": "Terug naar de functies",
+    "notFound": "Deze functie bestaat niet (meer).",
+    "tabs": {
+      "overview": "Overzicht",
+      "code": "Code",
+      "test": "Test",
+      "configuration": "Configuratie",
+      "secrets": "Geheimen",
+      "credentials": "Aanroepgegevens",
+      "networks": "Netwerken",
+      "triggers": "Triggers"
+    }
+  },
+  "overview": {
+    "invocation": "Aanroep",
+    "endpoint": "Interne URL",
+    "endpointHint": "Alleen bereikbaar voor de leden van de netwerken van de functie, met haar aanroepgegevens (POST, met het event als body).",
+    "auth": "Authenticatie",
+    "networks": "Netwerken",
+    "internet": "Internettoegang",
+    "runtimeTitle": "Runtime",
+    "state": "Status",
+    "runtime": "Runtime",
+    "handler": "Handler",
+    "deployment": "Actieve deployment",
+    "image": "Image",
+    "digest": "Digest",
+    "created": "Aangemaakt",
+    "limits": "Limieten",
+    "limitMemory": "Geheugen: {{value}}",
+    "limitCpus": "CPU: {{value}}",
+    "limitTimeout": "Time-out: {{value}}",
+    "limitTmp": "/tmp: {{value}}",
+    "notDeployed": "Er is nog geen code uitgerold: upload een zip in het tabblad Code.",
+    "modified": "Het compose-project is buiten het paneel bewerkt, dus het paneel voert het nooit meer uit. Herstel het bestand dat het paneel heeft gegenereerd, of purgeer de functie.",
+    "invalid": "Het referentiebestand is onleesbaar: het paneel kan het niet gebruiken. Purgeer de functie.",
+    "unverified": "Er draait een container, maar die komt niet overeen met de referentie van de functie: het paneel gebruikt hem niet. Herstart de functie om hem opnieuw aan te maken."
+  },
+  "code": {
+    "uploadTitle": "Nieuwe code uitrollen",
+    "uploadIntro": "Een zip met de handler ({{handler}}) en zijn dependencies in de root. Hij wordt een nieuwe deployment, die meteen wordt geactiveerd; als die niet start, wordt de vorige opnieuw gestart.",
+    "drop": "Sleep hier een zip naartoe, of klik om er een te kiezen",
+    "dropHint": "Maximaal {{max}}. Alleen opgeslagen en met deflate gecomprimeerde items; geen versleuteld item, apparaat of link die buiten het archief verwijst.",
+    "notZip": "Kies een .zip-bestand.",
+    "tooLarge": "De zip is groter dan {{max}}.",
+    "uploading": "{{name}} wordt geüpload…",
+    "deployed": "Deployment {{id}} is actief.",
+    "deploymentsTitle": "Deployments",
+    "kept_one": "{{count}} deployment wordt bewaard, de actieve meegerekend.",
+    "kept_other": "{{count}} deployments worden bewaard om terug te kunnen draaien, de actieve meegerekend.",
+    "empty": "Nog geen deployment.",
+    "active": "Actief",
+    "zipSize": "Zip: {{size}}",
+    "columns": {
+      "id": "Deployment",
+      "date": "Datum",
+      "files": "Bestanden",
+      "size": "Grootte",
+      "sha256": "SHA-256 van de zip",
+      "actions": "Acties"
+    },
+    "activate": "Activeren",
+    "rollback": "Terugdraaien",
+    "activated": "Deployment {{id}} is actief.",
+    "activateConfirm": {
+      "title": "Deployment {{id}} activeren?",
+      "content": "De bestanden worden geverifieerd, daarna wordt de functie ermee opnieuw aangemaakt: een lopende aanroep wordt afgebroken."
+    },
+    "rollbackConfirm": {
+      "title": "Terugdraaien naar deployment {{id}}?",
+      "content": "De functie gaat terug naar deze oudere code (eerst geverifieerd): een lopende aanroep wordt afgebroken. De huidige deployment blijft bewaard."
+    },
+    "deploying": "Upload van {{name}} voltooid, wordt uitgerold…",
+    "interrupted": "Upload onderbroken: de server heeft de code mogelijk toch uitgerold, controleer de lijst met deployments.",
+    "uploadIntroCustom": "Een zip met het uitvoerbare bestand bootstrap in de hoofdmap, gebouwd voor Linux {{arch}}. Het wordt een nieuwe deployment, direct geactiveerd; start het niet, dan wordt de vorige opnieuw gestart.",
+    "warning": "Waarschuwing"
+  },
+  "test": {
+    "eventTitle": "Testevent",
+    "eventLabel": "Event (JSON)",
+    "eventHelp": "Eén JSON-waarde (object, array, string, getal…), die als event aan de handler wordt doorgegeven.",
+    "eventProblems": {
+      "empty": "Voer een event in, bijv. {}.",
+      "invalid": "Dit is geen geldige JSON.",
+      "tooLarge": "Het event is groter dan {{max}}."
+    },
+    "invoke": "Aanroepen",
+    "format": "Opmaken",
+    "notRunning": "De functie draait niet: start haar voordat je haar aanroept.",
+    "result": "Resultaat",
+    "statusCode": "Status",
+    "duration": "Duur",
+    "durationValue": "{{value}} ms",
+    "requestId": "Verzoek-ID",
+    "functionError": "De functie is mislukt: {{error}}",
+    "payload": "Antwoord",
+    "payloadEmpty": "Leeg antwoord.",
+    "payloadBinary": "Binair antwoord ({{size}}), weergegeven in base64:",
+    "logs": "Logs (einde)",
+    "logsEmpty": "Geen logs."
+  },
+  "configuration": {
+    "resources": "Resources",
+    "code": "Handler en variabelen",
+    "deployScope": "De handler en de variabelen bepalen wat de code met haar geheimen doet: met een API-sleutel vereist het wijzigen ervan de scope functions:deploy naast functions:write.",
+    "noChange": "Niets om op te slaan.",
+    "reset": "Herstellen",
+    "confirm": {
+      "title": "De configuratie van {{name}} opslaan?",
+      "running": "De functie wordt ermee opnieuw aangemaakt: een lopende aanroep wordt afgebroken.",
+      "stopped": "De functie blijft gestopt: de configuratie wordt toegepast bij de volgende start."
+    },
+    "mcp": {
+      "title": "AI-assistenten (MCP)",
+      "label": "Aanroepbaar door MCP-clients",
+      "help": "Een vangrail voor de MCP-tool van de loch-CLI (AI-assistenten): uitgeschakeld weigert de tool deze functie aan te roepen. Het is geen toegangscontrole: om aanroepen te verbieden, geef je de MCP-client een API-sleutel zonder de scope functions:invoke. Wijzigen vereist de scope functions:deploy."
+    }
+  },
+  "secrets": {
+    "title": "Geheimen",
+    "intro": "Geheimen worden als omgevingsvariabelen aan de functie doorgegeven en buiten haar compose-bestand bewaard. Hun waarden worden nooit getoond, teruggegeven, gelogd of geaudit: vervang een waarde om haar te wijzigen.",
+    "add": "Een geheim toevoegen",
+    "addTitle": "Nieuw geheim",
+    "replace": "Vervangen",
+    "replaceOf": "{{name}} vervangen",
+    "replaceTitle": "De waarde van {{name}} vervangen",
+    "remove": "Verwijderen",
+    "removeOf": "{{name}} verwijderen",
+    "removeConfirm": {
+      "title": "Het geheim {{name}} verwijderen?",
+      "content": "De functie ontvangt het niet meer: ze wordt opnieuw aangemaakt."
+    },
+    "empty": "Geen geheim.",
+    "hidden": "Verborgen",
+    "nameLabel": "Naam",
+    "valueLabel": "Waarde",
+    "restart": "De draaiende functie wordt ermee opnieuw aangemaakt.",
+    "saved": "Geheim {{name}} opgeslagen.",
+    "removed": "Geheim {{name}} verwijderd.",
+    "columns": {
+      "name": "Naam",
+      "value": "Waarde",
+      "actions": "Acties"
+    }
+  },
+  "credentials": {
+    "title": "Aanroepgegevens",
+    "warning": "Kopieer deze gegevens nu: ze worden maar één keer getoond. Het paneel bewaart alleen wat nodig is om ze te controleren en kan ze niet opnieuw tonen; vernieuw ze als ze verloren gaan.",
+    "close": "Ik heb de gegevens gekopieerd",
+    "show": "Tonen",
+    "hide": "Verbergen",
+    "curl": "Een testopdracht kopiëren (curl, vanaf een lid van haar netwerken)",
+    "internalOnly": "De interne URL is alleen bereikbaar vanaf de leden van de netwerken van de functie: er is geen gepubliceerde poort.",
+    "sigv4Note": "AWS SDK: endpoint-url http://fn-<name>:8080, regio us-east-1, met dit sleutelpaar.",
+    "fields": {
+      "endpoint": "Interne URL",
+      "region": "Regio",
+      "token": "Bearer-token",
+      "accessKeyId": "Toegangssleutel-ID",
+      "secretAccessKey": "Geheime toegangssleutel"
+    }
+  },
+  "credentialsTab": {
+    "title": "Aanroepgegevens",
+    "intro": "Aanroepers op de netwerken van de functie authenticeren met deze gegevens; de aanroepen van het paneel zelf (tabblad Test, geplande taken) hebben ze niet nodig. Ze kunnen niet opnieuw worden gelezen: vernieuw ze om nieuwe te krijgen.",
+    "bearerStored": "Ingesteld (alleen de hash wordt bewaard)",
+    "rotate": {
+      "title": "De aanroepgegevens van {{name}} vernieuwen?",
+      "content": "Er worden nieuwe gegevens gegenereerd en één keer getoond; de huidige werken meteen niet meer. De functie wordt opnieuw aangemaakt.",
+      "submit": "De gegevens vernieuwen"
+    },
+    "enableSigv4": {
+      "title": "SigV4-aanroepers accepteren voor {{name}}?",
+      "content": "De gegevens worden vernieuwd: een nieuw bearer-token en een SigV4-sleutelpaar worden één keer getoond, de huidige werken niet meer.",
+      "submit": "Inschakelen en vernieuwen"
+    },
+    "disableSigv4": {
+      "title": "Geen SigV4-aanroepers meer accepteren voor {{name}}?",
+      "content": "De gegevens worden vernieuwd zonder sleutelpaar: een nieuw bearer-token wordt één keer getoond, de huidige gegevens werken niet meer.",
+      "submit": "Uitschakelen en vernieuwen"
+    }
+  },
+  "triggers": {
+    "title": "Geplande aanroepen",
+    "intro": "Geplande taken van het type “Functie-aanroep” die deze functie als doel hebben (maximaal {{max}}).",
+    "create": "Een aanroep plannen",
+    "manage": "De geplande taken beheren",
+    "empty": "Geen enkele geplande taak roept deze functie aan.",
+    "event": "Event"
+  },
+  "runtimeCustomVersion": "Go, Rust… (aangepaste runtime, provided.{{version}})",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "De bootstrap is dynamisch gelinkt tegen glibc: hij werkt alleen als hij gebouwd is tegen een glibc die niet nieuwer is dan die van Amazon Linux 2023. Bouw hem statisch (CGO_ENABLED=0) om dit te vermijden."
+  }
+}

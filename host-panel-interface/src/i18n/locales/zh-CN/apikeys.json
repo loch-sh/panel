@@ -1,0 +1,74 @@
+{
+  "title": "API 密钥",
+  "newKey": "新建密钥",
+  "empty": "暂无 API 密钥",
+  "table": {
+    "columns": {
+      "name": "名称",
+      "prefix": "前缀",
+      "permissions": "权限",
+      "expiresAt": "过期时间",
+      "createdAt": "创建时间",
+      "lastUsed": "最后使用",
+      "actions": "操作"
+    },
+    "allScopes": "全部",
+    "expired": "（已过期）"
+  },
+  "revoke": {
+    "title": "确定撤销此密钥？",
+    "description": "此操作不可撤销。",
+    "action": "撤销"
+  },
+  "create": {
+    "title": "创建 API 密钥",
+    "failed": "密钥创建失败",
+    "form": {
+      "name": {
+        "label": "名称",
+        "required": "名称为必填项",
+        "help": "用于识别此密钥的描述性名称（例如 CLI MacBook Pro）",
+        "placeholder": "我的 CLI 密钥"
+      },
+      "expiresInDays": {
+        "label": "有效期（天）",
+        "required": "有效期为必填项",
+        "range": "有效期必须在 {{min}} 到 {{max}} 天之间",
+        "help": "最长有效期：{{max}} 天"
+      },
+      "scopes": {
+        "label": "权限",
+        "required": "至少需要选择一项权限"
+      }
+    }
+  },
+  "created": {
+    "title": "API 密钥已创建",
+    "ok": "我已复制密钥",
+    "warning": "请立即复制此密钥，它将不会再次显示。",
+    "copied": "密钥已复制到剪贴板",
+    "cliHelp": "配置 CLI，然后在提示时粘贴密钥：<configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd>，然后执行 <loginCmd>loch login</loginCmd>",
+    "serverName": "my-server"
+  },
+  "scopes": {
+    "all": "所有权限",
+    "containersRead": "读取（列出、查看详情）",
+    "containersLogs": "日志（下载、实时流）",
+    "containersActions": "操作（启动、停止、重启、强制终止、删除）",
+    "containersShell": "Shell（远程终端）",
+    "containersStats": "统计（实时监控）",
+    "containersProxy": "代理（端口隧道）",
+    "containersCp": "文件复制（cp）",
+    "cron": "计划任务",
+    "sftpRead": "SFTP（读取）",
+    "sftpWrite": "SFTP（创建、编辑、删除）",
+    "hostingRead": "托管（读取）",
+    "hostingWrite": "托管（创建、编辑、部署、删除）",
+    "networksRead": "私有网络（读取）",
+    "networksWrite": "私有网络（创建、加入、移出、删除）",
+    "servicesRead": "数据库（读取）",
+    "servicesWrite": "数据库（创建、新密码、删除）",
+    "servicesExpose": "数据库（发布端口）",
+    "auditRead": "审计日志（读取）"
+  }
+}

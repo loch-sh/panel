@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Iniciar",
+    "restart": "Reiniciar",
+    "stop": "Detener",
+    "kill": "Forzar detención (kill)",
+    "delete": "Eliminar",
+    "detachedTerminal": "Terminal separado",
+    "detailsAndTerminal": "Detalles y terminal"
+  },
+  "stackActions": {
+    "start": "Iniciar el stack",
+    "stop": "Detener el stack",
+    "restart": "Reiniciar el stack",
+    "started": "Stack «{{name}}» iniciado",
+    "stopped": "Stack «{{name}}» detenido",
+    "restarted": "Stack «{{name}}» reiniciado",
+    "partialFailure": "Stack «{{name}}»: no se pudieron procesar {{failed}} de {{total}} contenedores"
+  },
+  "confirm": {
+    "delete": "¿Seguro que quieres eliminar el contenedor «{{name}}»?",
+    "stop": "¿Seguro que quieres detener el contenedor «{{name}}»?",
+    "kill": "¿Seguro que quieres forzar la detención del contenedor «{{name}}»? Esta acción es inmediata y no deja tiempo al proceso para detenerse correctamente.",
+    "stackStop": "¿Seguro que quieres detener todos los contenedores del stack «{{name}}»?",
+    "stackRestart": "¿Seguro que quieres reiniciar todos los contenedores del stack «{{name}}»? Sus servicios no estarán disponibles durante unos instantes."
+  },
+  "list": {
+    "title": "Lista de contenedores",
+    "searchPlaceholder": "Buscar un contenedor, un stack...",
+    "filterActive": "Activos",
+    "filterAll": "Todos",
+    "filterErrors": "Errores",
+    "noStack": "Sin stack",
+    "errorExitsTooltip": "Uno o varios contenedores se detuvieron de forma anómala",
+    "hostingTag": "Alojamiento",
+    "serviceTag": "Servicio",
+    "type": {
+      "label": "Tipo de stack",
+      "all": "Todos",
+      "hosting": "Alojamientos",
+      "services": "Servicios",
+      "other": "Otros"
+    },
+    "stackFilter": "Stack: {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Contenedores",
+    "id": "ID",
+    "name": "Nombre",
+    "state": "Estado",
+    "webRouting": "Enrutamiento web",
+    "actions": "Acciones"
+  },
+  "table": {
+    "copyIdTooltip": "Copiar el ID completo del contenedor",
+    "idCopied": "¡El ID se ha copiado!",
+    "abnormalExit": "Detención anómala"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} activos"
+  },
+  "sidePanel": {
+    "title": "Detalles del contenedor",
+    "fullScreen": "Pantalla completa",
+    "consoleOnly": "Solo consola",
+    "noData": "No hay datos para este contenedor",
+    "heading": "Contenedor {{name}}",
+    "compose": {
+      "title": "Iniciado por compose",
+      "project": "✅ Proyecto {{project}}",
+      "no": "❌ No"
+    },
+    "identifier": "Identificador",
+    "image": "Imagen",
+    "currentState": "Estado actual",
+    "startedAt": {
+      "title": "Inicio",
+      "value": "El {{date}} a las {{time}}"
+    },
+    "restartCount": "Número de reinicios",
+    "network": "Red",
+    "mounts": "Puntos de montaje",
+    "none": "Ninguno",
+    "hostPath": "Ruta física",
+    "logPath": "Ruta de logs",
+    "logs": {
+      "title": "Logs en tiempo real",
+      "show": "Mostrar logs",
+      "close": "Cerrar logs"
+    },
+    "terminal": {
+      "title": "Terminal interactivo de Docker",
+      "open": "Abrir un terminal",
+      "detach": "Separar",
+      "detachPopup": "Separar en una ventana emergente",
+      "unavailable": "El terminal no está disponible (probablemente falta <code>tty:true</code> en el compose o el contenedor no se inició con el argumento <code>-t</code>)."
+    }
+  },
+  "mountTable": {
+    "type": "Tipo",
+    "source": "Origen",
+    "destination": "Destino"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protocolo",
+    "localPort": "Puerto local",
+    "hostPort": "Puerto del host"
+  },
+  "stats": {
+    "open": "Monitorización",
+    "close": "Cerrar monitorización",
+    "live": "En directo",
+    "cpuTotal": "CPU total:",
+    "ramLabel": "RAM:",
+    "netLabel": "Red:",
+    "columns": {
+      "container": "Contenedor",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Red",
+      "pids": "PIDs"
+    }
+  },
+  "logViewer": {
+    "error": "Error"
+  },
+  "popupTerminal": {
+    "missingId": "Falta el ID del contenedor",
+    "windowTitle": "{{appName}} - Terminal",
+    "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  }
+}

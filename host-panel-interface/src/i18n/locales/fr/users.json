@@ -1,0 +1,53 @@
+{
+  "title": "Utilisateurs",
+  "currentUser": "Utilisateur courant",
+  "table": {
+    "columns": {
+      "email": "Email",
+      "name": "Nom",
+      "type": "Type",
+      "permissions": "Permissions",
+      "actions": "Actions"
+    },
+    "permissions": {
+      "allContainers": "Tous les conteneurs",
+      "none": "Aucun",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Admin",
+    "restricted": "Restreint"
+  },
+  "actions": {
+    "makeRestricted": "Transformer en utilisateur restreint",
+    "makeAdmin": "Transformer en admin",
+    "restrictAll": "Interdire tous les conteneurs"
+  },
+  "modals": {
+    "demote": {
+      "title": "Rétrograder en utilisateur restreint",
+      "content": "Êtes-vous sûr de vouloir rétrograder « {{email}} » en utilisateur restreint ? L’utilisateur perdra l’accès à tous les conteneurs.",
+      "ok": "Rétrograder"
+    },
+    "promote": {
+      "title": "Promouvoir en administrateur",
+      "content": "Êtes-vous sûr de vouloir promouvoir « {{email}} » en administrateur ? L’utilisateur aura accès à tous les conteneurs.",
+      "ok": "Promouvoir"
+    },
+    "restrict": {
+      "title": "Interdire tous les conteneurs",
+      "content": "Êtes-vous sûr de vouloir restreindre « {{email}} » ? L’utilisateur ne verra plus aucun conteneur.",
+      "ok": "Restreindre"
+    },
+    "delete": {
+      "title": "Supprimer l’utilisateur",
+      "content": "Êtes-vous sûr de vouloir supprimer « {{email}} » ? Cette action est irréversible et supprimera également ses clés API."
+    }
+  },
+  "sidePanel": {
+    "title": "Édition des droits utilisateur {{name}}",
+    "searchPlaceholder": "Rechercher un conteneur",
+    "validate": "Valider"
+  }
+}

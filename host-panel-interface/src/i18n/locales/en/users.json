@@ -1,0 +1,53 @@
+{
+  "title": "Users",
+  "currentUser": "Current user",
+  "table": {
+    "columns": {
+      "email": "Email",
+      "name": "Name",
+      "type": "Type",
+      "permissions": "Permissions",
+      "actions": "Actions"
+    },
+    "permissions": {
+      "allContainers": "All containers",
+      "none": "None",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Admin",
+    "restricted": "Restricted"
+  },
+  "actions": {
+    "makeRestricted": "Turn into restricted user",
+    "makeAdmin": "Turn into admin",
+    "restrictAll": "Deny all containers"
+  },
+  "modals": {
+    "demote": {
+      "title": "Demote to restricted user",
+      "content": "Are you sure you want to demote “{{email}}” to restricted user? They will lose access to all containers.",
+      "ok": "Demote"
+    },
+    "promote": {
+      "title": "Promote to administrator",
+      "content": "Are you sure you want to promote “{{email}}” to administrator? They will have access to all containers.",
+      "ok": "Promote"
+    },
+    "restrict": {
+      "title": "Deny all containers",
+      "content": "Are you sure you want to restrict “{{email}}”? The user will no longer see any container.",
+      "ok": "Restrict"
+    },
+    "delete": {
+      "title": "Delete user",
+      "content": "Are you sure you want to delete “{{email}}”? This action cannot be undone and will also delete their API keys."
+    }
+  },
+  "sidePanel": {
+    "title": "Edit user permissions {{name}}",
+    "searchPlaceholder": "Search for a container",
+    "validate": "Confirm"
+  }
+}

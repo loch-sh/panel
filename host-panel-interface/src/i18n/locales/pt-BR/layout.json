@@ -1,0 +1,45 @@
+{
+  "menu": {
+    "home": "Início",
+    "containers": "Contêineres",
+    "hostingSites": "Sites",
+    "sftpShort": "SFTP",
+    "domains": "Domínios",
+    "networks": "Redes privadas",
+    "cron": "Tarefas agendadas",
+    "users": "Usuários",
+    "apiKeys": "Chaves de API",
+    "logout": "Sair",
+    "groups": {
+      "compute": "Computação",
+      "serverless": "Serverless",
+      "hosting": "Hospedagem",
+      "network": "Rede",
+      "admin": "Administração",
+      "security": "Segurança",
+      "database": "Bancos de dados",
+      "cache": "Cache",
+      "messaging": "Mensageria",
+      "storage": "Armazenamento",
+      "queue": "Filas"
+    },
+    "auditTrail": "Trilha de auditoria",
+    "services": {
+      "mysql": "MySQL®",
+      "mariadb": "MariaDB®",
+      "postgres": "PostgreSQL®",
+      "mongodb": "MongoDB®",
+      "redis": "Redis®",
+      "valkey": "Valkey™",
+      "rabbitmq": "RabbitMQ®",
+      "nats": "NATS®",
+      "s3": "Loch S3",
+      "elasticmq": "ElasticMQ",
+      "mosquitto": "Eclipse Mosquitto™"
+    },
+    "functions": "Funções"
+  },
+  "openMenu": "Abrir menu",
+  "collapseMenu": "Recolher menu",
+  "expandMenu": "Expandir menu"
+}

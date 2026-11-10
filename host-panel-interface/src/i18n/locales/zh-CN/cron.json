@@ -1,0 +1,163 @@
+{
+  "title": "计划任务",
+  "newJob": "新建任务",
+  "jobTypes": {
+    "dockerAction": "Docker 操作",
+    "dockerExec": "Docker 命令",
+    "http": "HTTP",
+    "httpRequest": "HTTP 请求",
+    "functionInvoke": "函数调用",
+    "function": "函数"
+  },
+  "statuses": {
+    "pending": "等待中",
+    "running": "运行中",
+    "success": "成功",
+    "error": "错误",
+    "skipped": "已跳过执行"
+  },
+  "modes": {
+    "disabled": "已禁用",
+    "once": "单次执行",
+    "recurring": "周期执行",
+    "disabledByPanel": "已被面板禁用"
+  },
+  "dockerActions": {
+    "start": "启动",
+    "stop": "停止",
+    "restart": "重启",
+    "kill": "强制终止"
+  },
+  "table": {
+    "columns": {
+      "name": "名称",
+      "schedule": "执行周期",
+      "type": "类型",
+      "target": "目标",
+      "mode": "模式",
+      "lastStatus": "上次状态",
+      "lastRun": "上次执行",
+      "actions": "操作"
+    },
+    "actions": {
+      "runNow": "立即执行",
+      "suspend": "暂停",
+      "enable": "启用"
+    },
+    "details": {
+      "error": "错误：",
+      "output": "输出：",
+      "lastSkipped": "上次执行（{{date}}）已被跳过：前一次执行仍在进行中。",
+      "functionRun": "{{duration}} ms，响应 {{bytes}} 字节",
+      "functionError": "函数错误：{{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "删除任务",
+      "content": "确定要删除此计划任务吗？"
+    },
+    "suspend": {
+      "title": "暂停任务",
+      "content": "确定要暂停任务“{{name}}”吗？",
+      "ok": "暂停"
+    },
+    "enable": {
+      "title": "启用任务",
+      "content": "确定要启用任务“{{name}}”吗？",
+      "ok": "启用"
+    },
+    "run": {
+      "title": "立即执行",
+      "content": "确定要立即执行任务“{{name}}”吗？",
+      "ok": "执行"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "新建计划任务",
+      "edit": "编辑任务"
+    },
+    "submit": {
+      "update": "更新"
+    },
+    "fields": {
+      "name": {
+        "label": "名称",
+        "required": "名称为必填项",
+        "placeholder": "例如：清除 Symfony 缓存"
+      },
+      "schedule": {
+        "label": "Cron 表达式",
+        "required": "Cron 表达式为必填项",
+        "invalid": "无效的 cron 表达式",
+        "help": "格式：分 时 日 月 周（例如 0 3 * * * 或 @every 5m）"
+      },
+      "type": {
+        "label": "类型"
+      },
+      "enabled": {
+        "label": "启用"
+      },
+      "once": {
+        "label": "单次执行",
+        "tooltip": "首次执行后自动禁用"
+      },
+      "container": {
+        "label": "容器",
+        "required": "容器为必填项",
+        "placeholder": "选择容器"
+      },
+      "action": {
+        "label": "操作",
+        "required": "操作为必填项"
+      },
+      "command": {
+        "label": "命令",
+        "required": "命令为必填项"
+      },
+      "workingDir": {
+        "label": "工作目录",
+        "help": "默认使用容器定义的目录"
+      },
+      "httpMethod": {
+        "label": "方法",
+        "required": "方法为必填项"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "URL 为必填项"
+      },
+      "httpBody": {
+        "label": "请求体"
+      },
+      "httpTimeout": {
+        "label": "超时时间（秒）"
+      },
+      "function": {
+        "label": "函数",
+        "required": "必须选择函数",
+        "placeholder": "选择一个函数",
+        "help": "函数由面板调用，与其页面的“测试”标签页相同。每个函数最多 5 个计划任务。",
+        "none": "无函数"
+      },
+      "functionEvent": {
+        "label": "事件 (JSON)",
+        "help": "作为事件传给处理程序的一个 JSON 值；留空表示 {}。最大 64 KB。",
+        "invalid": "事件必须是一个有效的 JSON 值",
+        "tooLarge": "事件超过 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "周期执行：每 {{interval}}",
+    "yearly": "每年一次，1 月 1 日午夜",
+    "monthly": "每月一次，1 日午夜",
+    "weekly": "每周一次，周日午夜",
+    "daily": "每天一次，午夜",
+    "hourly": "每小时"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "已自动禁用：其调用的函数已被删除。"
+  }
+}

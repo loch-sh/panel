@@ -1,0 +1,74 @@
+{
+  "title": "Chaves de API",
+  "newKey": "Nova chave",
+  "empty": "Nenhuma chave de API",
+  "table": {
+    "columns": {
+      "name": "Nome",
+      "prefix": "Prefixo",
+      "permissions": "Permissões",
+      "expiresAt": "Expira a",
+      "createdAt": "Criada a",
+      "lastUsed": "Última utilização",
+      "actions": "Ações"
+    },
+    "allScopes": "Todas",
+    "expired": "(expirada)"
+  },
+  "revoke": {
+    "title": "Revogar esta chave?",
+    "description": "Esta ação é irreversível.",
+    "action": "Revogar"
+  },
+  "create": {
+    "title": "Criar uma chave de API",
+    "failed": "Falha ao criar a chave",
+    "form": {
+      "name": {
+        "label": "Nome",
+        "required": "O nome é obrigatório",
+        "help": "Um nome descritivo para identificar esta chave (ex.: CLI MacBook Pro)",
+        "placeholder": "A minha chave CLI"
+      },
+      "expiresInDays": {
+        "label": "Período de validade (dias)",
+        "required": "A duração é obrigatória",
+        "range": "A duração deve estar entre {{min}} e {{max}} dias",
+        "help": "Duração máxima: {{max}} dias"
+      },
+      "scopes": {
+        "label": "Permissões",
+        "required": "É necessária pelo menos uma permissão"
+      }
+    }
+  },
+  "created": {
+    "title": "Chave de API criada",
+    "ok": "Já copiei a minha chave",
+    "warning": "Copie esta chave agora. Não voltará a ser apresentada.",
+    "copied": "Chave copiada para a área de transferência",
+    "cliHelp": "Configure a CLI e cole a chave quando lhe for pedida: <configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd> e depois <loginCmd>loch login</loginCmd>",
+    "serverName": "o-meu-servidor"
+  },
+  "scopes": {
+    "all": "Todas as permissões",
+    "containersRead": "Leitura (listar, inspecionar)",
+    "containersLogs": "Registos (transferência, streaming)",
+    "containersActions": "Ações (start, stop, restart, kill, delete)",
+    "containersShell": "Shell (terminal remoto)",
+    "containersStats": "Estatísticas (monitorização em tempo real)",
+    "containersProxy": "Proxy (túnel de portas)",
+    "containersCp": "Cópia de ficheiros (cp)",
+    "cron": "Tarefas cron",
+    "sftpRead": "SFTP (leitura)",
+    "sftpWrite": "SFTP (criar, editar, eliminar)",
+    "hostingRead": "Alojamento (leitura)",
+    "hostingWrite": "Alojamento (criar, editar, implementar, eliminar)",
+    "networksRead": "Redes privadas (leitura)",
+    "networksWrite": "Redes privadas (criar, associar, desassociar, eliminar)",
+    "servicesRead": "Bases de dados (leitura)",
+    "servicesWrite": "Bases de dados (criar, nova palavra-passe, eliminar)",
+    "servicesExpose": "Bases de dados (publicar uma porta)",
+    "auditRead": "Registo de auditoria (leitura)"
+  }
+}

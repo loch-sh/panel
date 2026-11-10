@@ -1,0 +1,69 @@
+{
+  "actions": {
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "confirm": "Bevestigen",
+    "create": "Aanmaken",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "save": "Opslaan",
+    "seeMore": "Meer bekijken",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "refresh": "Vernieuwen",
+    "search": "Zoeken",
+    "download": "Downloaden",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "status": {
+    "loading": "Laden…",
+    "enabled": "Ingeschakeld",
+    "disabled": "Uitgeschakeld",
+    "never": "Nooit",
+    "unknown": "Onbekend"
+  },
+  "language": {
+    "label": "Taal",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pt-PT": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "ja": "日本語",
+    "zh-CN": "简体中文"
+  },
+  "container": {
+    "state": {
+      "running": "Actief",
+      "exited": "Gestopt",
+      "created": "Aangemaakt",
+      "paused": "Gepauzeerd",
+      "restarting": "Wordt herstart",
+      "removing": "Wordt verwijderd",
+      "dead": "Dood"
+    },
+    "status": {
+      "up": "Gestart {{ago}}",
+      "paused": "Gepauzeerd, gestart {{ago}}",
+      "exited": "Gestopt ({{code}}) {{ago}}",
+      "restarting": "Wordt herstart ({{code}}) {{ago}}",
+      "withHealth": "{{status}} ({{health}})"
+    },
+    "health": {
+      "healthy": "gezond",
+      "unhealthy": "ongezond",
+      "starting": "controle bezig"
+    }
+  },
+  "errorBoundary": {
+    "title": "Deze pagina kon niet worden weergegeven",
+    "description": "Er is een onverwachte fout opgetreden. Laad de pagina opnieuw; gebeurt het weer, neem dan contact op met je beheerder.",
+    "chunkTitle": "Er is een nieuwe versie beschikbaar",
+    "chunkDescription": "Het panel is bijgewerkt terwijl deze pagina open was. Laad opnieuw om verder te gaan.",
+    "reload": "Opnieuw laden"
+  }
+}

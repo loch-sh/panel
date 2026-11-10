@@ -1,0 +1,53 @@
+{
+  "title": "Utenti",
+  "currentUser": "Utente corrente",
+  "table": {
+    "columns": {
+      "email": "Email",
+      "name": "Nome",
+      "type": "Tipo",
+      "permissions": "Permessi",
+      "actions": "Azioni"
+    },
+    "permissions": {
+      "allContainers": "Tutti i container",
+      "none": "Nessuno",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Admin",
+    "restricted": "Limitato"
+  },
+  "actions": {
+    "makeRestricted": "Trasforma in utente limitato",
+    "makeAdmin": "Trasforma in admin",
+    "restrictAll": "Vieta tutti i container"
+  },
+  "modals": {
+    "demote": {
+      "title": "Retrocedi a utente limitato",
+      "content": "Vuoi davvero retrocedere «{{email}}» a utente limitato? Perderà l’accesso a tutti i container.",
+      "ok": "Retrocedi"
+    },
+    "promote": {
+      "title": "Promuovi ad amministratore",
+      "content": "Vuoi davvero promuovere «{{email}}» ad amministratore? Avrà accesso a tutti i container.",
+      "ok": "Promuovi"
+    },
+    "restrict": {
+      "title": "Vieta tutti i container",
+      "content": "Vuoi davvero limitare «{{email}}»? L’utente non vedrà più alcun container.",
+      "ok": "Limita"
+    },
+    "delete": {
+      "title": "Elimina utente",
+      "content": "Vuoi davvero eliminare «{{email}}»? Questa azione è irreversibile ed eliminerà anche le sue chiavi API."
+    }
+  },
+  "sidePanel": {
+    "title": "Modifica permessi utente {{name}}",
+    "searchPlaceholder": "Cerca un container",
+    "validate": "Conferma"
+  }
+}

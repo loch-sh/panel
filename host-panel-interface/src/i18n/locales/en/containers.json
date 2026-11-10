@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Start",
+    "restart": "Restart",
+    "stop": "Stop",
+    "kill": "Kill",
+    "delete": "Delete",
+    "detachedTerminal": "Detached terminal",
+    "detailsAndTerminal": "Details and terminal"
+  },
+  "stackActions": {
+    "start": "Start the stack",
+    "stop": "Stop the stack",
+    "restart": "Restart the stack",
+    "started": "Stack “{{name}}” started",
+    "stopped": "Stack “{{name}}” stopped",
+    "restarted": "Stack “{{name}}” restarted",
+    "partialFailure": "Stack “{{name}}”: {{failed}} of {{total}} containers could not be processed"
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete the container “{{name}}”?",
+    "stop": "Are you sure you want to stop the container “{{name}}”?",
+    "kill": "Are you sure you want to kill the container “{{name}}”? This action is immediate and does not give the process time to shut down gracefully.",
+    "stackStop": "Are you sure you want to stop all containers of the stack “{{name}}”?",
+    "stackRestart": "Are you sure you want to restart all containers of the stack “{{name}}”? Its services will be briefly unavailable."
+  },
+  "list": {
+    "title": "Containers",
+    "searchPlaceholder": "Search a container, a stack...",
+    "filterActive": "Active",
+    "filterAll": "All",
+    "filterErrors": "Errors",
+    "noStack": "No stack",
+    "errorExitsTooltip": "One or more containers exited abnormally",
+    "hostingTag": "Hosting",
+    "serviceTag": "Service",
+    "type": {
+      "label": "Stack type",
+      "all": "All",
+      "hosting": "Hosting",
+      "services": "Services",
+      "other": "Other"
+    },
+    "stackFilter": "Stack: {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Containers",
+    "id": "ID",
+    "name": "Name",
+    "state": "State",
+    "webRouting": "Web routing",
+    "actions": "Actions"
+  },
+  "table": {
+    "copyIdTooltip": "Copy the full container ID",
+    "idCopied": "The ID has been copied!",
+    "abnormalExit": "Abnormal exit"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} active"
+  },
+  "sidePanel": {
+    "title": "Container details",
+    "fullScreen": "Full screen",
+    "consoleOnly": "Console only",
+    "noData": "No data for this container",
+    "heading": "Container {{name}}",
+    "compose": {
+      "title": "Started by compose",
+      "project": "✅ Project {{project}}",
+      "no": "❌ No"
+    },
+    "identifier": "Identifier",
+    "image": "Image",
+    "currentState": "Current state",
+    "startedAt": {
+      "title": "Started",
+      "value": "On {{date}} at {{time}}"
+    },
+    "restartCount": "Restart count",
+    "network": "Network",
+    "mounts": "Mount points",
+    "none": "None",
+    "hostPath": "Host path",
+    "logPath": "Log path",
+    "logs": {
+      "title": "Live logs",
+      "show": "Show logs",
+      "close": "Close logs"
+    },
+    "terminal": {
+      "title": "Interactive Docker terminal",
+      "open": "Open a terminal",
+      "detach": "Detach",
+      "detachPopup": "Detach in a popup",
+      "unavailable": "The terminal is not available (<code>tty:true</code> is probably missing in the compose file, or the container was not started with the <code>-t</code> argument)."
+    }
+  },
+  "mountTable": {
+    "type": "Type",
+    "source": "Source",
+    "destination": "Destination"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protocol",
+    "localPort": "Local port",
+    "hostPort": "Host port"
+  },
+  "stats": {
+    "open": "Monitoring",
+    "close": "Close monitoring",
+    "live": "Live",
+    "cpuTotal": "Total CPU:",
+    "ramLabel": "RAM:",
+    "netLabel": "Net:",
+    "columns": {
+      "container": "Container",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Network",
+      "pids": "PIDs"
+    }
+  },
+  "logViewer": {
+    "error": "Error"
+  },
+  "popupTerminal": {
+    "missingId": "Missing container ID",
+    "windowTitle": "{{appName}} - Terminal",
+    "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  }
+}

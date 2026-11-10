@@ -1,0 +1,465 @@
+{
+  "title": "托管",
+  "newStack": "新建托管",
+  "backToList": "返回托管",
+  "empty": "暂无托管",
+  "disabled": "此服务器未启用 Web 托管。",
+  "configError": "无法加载托管配置。",
+  "retry": "重试",
+  "templates": {
+    "php-nginx": {
+      "label": "PHP + Nginx",
+      "description": "运行在 Nginx 之后的 PHP-FPM：速度快，适用于大多数 PHP 应用（WordPress、Laravel、Symfony）。"
+    },
+    "php-apache": {
+      "label": "PHP + Apache",
+      "description": "基于 Apache 的 PHP：支持 .htaccess 文件，适用于依赖它的应用。"
+    },
+    "nginx": {
+      "label": "静态（Nginx）",
+      "description": "由 Nginx 提供静态文件：HTML 网站、单页应用、生成的网站。"
+    },
+    "apache": {
+      "label": "静态（Apache）",
+      "description": "由 Apache 提供静态文件，支持 .htaccess。"
+    },
+    "badges": {
+      "static": "静态"
+    }
+  },
+  "status": {
+    "running": "运行中",
+    "partial": "部分运行",
+    "stopped": "已停止",
+    "not_deployed": "未部署",
+    "withCount": "{{label}}（{{running}}/{{total}}）",
+    "modified": "已手动修改",
+    "modifiedTooltip": "compose 文件已在面板之外被编辑。",
+    "lastOperationFailed": "上次操作失败",
+    "refreshing": "正在更新状态…"
+  },
+  "columns": {
+    "name": "名称",
+    "template": "模板",
+    "phpVersion": "PHP",
+    "domains": "域名",
+    "status": "状态",
+    "actions": "操作"
+  },
+  "php": {
+    "deprecated": "已弃用",
+    "deprecatedTooltip": "此 PHP 版本已不再获得安全更新。",
+    "support": {
+      "activeUntil": "错误修复至 {{date}}",
+      "activeEnded": "错误修复已于 {{date}} 结束",
+      "securityUntil": "安全修复至 {{date}}",
+      "securityEnded": "安全修复已于 {{date}} 结束",
+      "activeTooltip": "活跃支持：修复错误和安全漏洞。",
+      "securityTooltip": "安全支持：仅修复安全漏洞。此日期之后，该版本将不再获得任何更新。"
+    }
+  },
+  "domains": {
+    "none": "无域名",
+    "httpsTooltip": "已启用 HTTPS"
+  },
+  "actions": {
+    "start": "启动",
+    "stop": "停止",
+    "restart": "重启",
+    "redeploy": "重新部署",
+    "delete": "删除",
+    "details": "详情",
+    "busy": "该托管有操作正在进行"
+  },
+  "confirm": {
+    "stop": "停止托管“{{name}}”？网站将无法访问。",
+    "restart": "重启托管“{{name}}”？网站将短暂无法访问。"
+  },
+  "toasts": {
+    "started": "托管“{{name}}”已启动",
+    "stopped": "托管“{{name}}”已停止",
+    "restarted": "托管“{{name}}”已重启",
+    "partialFailure": "托管“{{name}}”：{{total}} 个容器中有 {{failed}} 个失败",
+    "createStarted": "正在创建托管“{{name}}”…",
+    "updateStarted": "正在应用“{{name}}”的新设置…",
+    "deployStarted": "正在重新部署“{{name}}”…",
+    "deleteStarted": "正在删除“{{name}}”…",
+    "deleted": "托管“{{name}}”已删除",
+    "operationSucceeded": "“{{name}}”的操作已完成",
+    "operationFailed": "“{{name}}”的操作失败"
+  },
+  "redeploy": {
+    "title": "重新部署“{{name}}”",
+    "description": "根据当前设置重新创建容器。",
+    "pull": "拉取最新镜像（PHP / Web 服务器补丁）",
+    "submit": "重新部署",
+    "modifiedWarning": "该托管的 compose 文件已在面板之外被编辑。它将按原样部署，包括手动修改。",
+    "modifiedConfirm": "我已了解：部署手动编辑的 compose 文件"
+  },
+  "delete": {
+    "title": "删除“{{name}}”",
+    "description": "容器及其配置将被移除。除非另行选择，站点文件会被保留。",
+    "purge": "同时删除站点文件（{{path}}）",
+    "purgeWarning": "此操作无法撤销。站点“{{site}}”的 SFTP 用户将丢失其全部文件。",
+    "typeName": "输入 <code>{{name}}</code> 以确认",
+    "typeNameMismatch": "名称不匹配",
+    "submit": "删除"
+  },
+  "create": {
+    "title": "新建托管",
+    "submit": "创建托管"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "概览",
+      "settings": "设置",
+      "networks": "网络",
+      "operation": "上次操作",
+      "compose": "Compose"
+    },
+    "notFound": "该托管不存在或已被删除。",
+    "deleting": "正在删除该托管…",
+    "noSpec": "无法读取该托管的设置。",
+    "overview": {
+      "template": "模板",
+      "image": "镜像",
+      "phpVersion": "PHP 版本",
+      "sitePath": "站点目录",
+      "documentRoot": "文档根目录",
+      "documentRootRoot": "站点根目录",
+      "domains": "域名",
+      "https": "HTTPS",
+      "redirectHttps": "HTTP → HTTPS 重定向",
+      "resources": "资源",
+      "resourcesValue": "内存：{{memory}} · CPU：{{cpus}}",
+      "containers": "容器",
+      "noContainers": "没有容器：该托管尚未部署。",
+      "memoryValue": "{{value}} MB",
+      "cpusValue": "{{value}} 个 CPU",
+      "unlimited": "不限制",
+      "disabledModules": "已禁用的 PHP 模块",
+      "noDisabledModules": "无",
+      "routing": "路由",
+      "routingDefault": "默认（镜像）",
+      "routingSymfony": "Symfony",
+      "routingLaravel": "Laravel",
+      "routingCustom": "自定义规则",
+      "usage": "资源使用情况",
+      "usageNotRunning": "没有正在运行的容器：启动托管后即可查看其内存和 CPU 使用情况。",
+      "usageLoading": "正在等待首批数据…",
+      "phpMemory": "PHP 内存",
+      "phpMemoryWeb": "Web：",
+      "phpMemoryCli": "CLI：",
+      "sameAsCli": "与 CLI 相同（{{value}}）",
+      "networks": "网络",
+      "noNetwork": "无"
+    },
+    "secretsMasked": "此 API 密钥下的机密值（环境变量、配置片段）已隐藏：设置为只读。",
+    "compose": {
+      "help": "运行此托管所用的 compose.yaml。这是标准的 Docker Compose 文件：在托管目录中执行 `docker compose up -d` 即可在没有面板的情况下启动。",
+      "modified": "此文件已在面板外被修改，与设置不再一致。保存设置将覆盖它。",
+      "masked": "未显示 compose 文件：此 API 密钥无法读取机密信息。",
+      "copy": "复制",
+      "copied": "已复制",
+      "routingFile": "路由规则",
+      "routingFileHelp": "Web 服务器当前使用的路由文件。"
+    }
+  },
+  "settings": {
+    "modifiedAlert": {
+      "title": "该托管已在面板之外被修改",
+      "description": "保存将重新生成 compose 文件并覆盖手动修改。"
+    },
+    "forceConfirm": {
+      "title": "覆盖手动修改？",
+      "content": "“{{name}}”的 compose 文件已在面板之外被编辑。保存后它将被此表单的设置替换：手动修改将丢失。",
+      "ok": "覆盖手动修改"
+    },
+    "submit": "保存并重新部署",
+    "reset": "放弃修改"
+  },
+  "operation": {
+    "none": "自 API 启动以来尚未执行任何操作。",
+    "kind": {
+      "create": "创建",
+      "update": "更新",
+      "deploy": "部署",
+      "delete": "删除"
+    },
+    "state": {
+      "running": "进行中",
+      "succeeded": "成功",
+      "failed": "失败"
+    },
+    "fields": {
+      "kind": "操作",
+      "state": "状态",
+      "startedAt": "开始时间",
+      "finishedAt": "结束时间",
+      "duration": "耗时"
+    },
+    "durationSeconds": "{{seconds}} 秒",
+    "rolledBack": "已恢复之前的配置。",
+    "failedAlert": "操作失败",
+    "output": "Docker Compose 输出",
+    "noOutput": "无输出"
+  },
+  "form": {
+    "required": "必填",
+    "sections": {
+      "routing": "路由"
+    },
+    "fields": {
+      "template": {
+        "required": "请选择模板",
+        "editHelp": "对于已有托管，只能选择同类模板。"
+      },
+      "name": {
+        "label": "名称",
+        "placeholder": "my-site",
+        "help": "小写字母、数字和连字符（最多 {{max}} 个字符）。创建后无法修改。",
+        "required": "名称为必填项",
+        "tooLong": "最多 {{max}} 个字符",
+        "invalid": "只能包含小写字母、数字和连字符，且不能以连字符开头或结尾",
+        "checkFailed": "无法检查名称是否可用",
+        "taken": {
+          "reserved": "该名称为保留名称",
+          "stack": "已有托管使用该名称",
+          "directory": "已存在同名目录",
+          "compose_project": "已有 Docker Compose 堆栈使用该名称",
+          "container": "已有容器使用该名称",
+          "traefik_router": "已有 Traefik 路由使用该名称",
+          "unknown": "该名称不可用"
+        }
+      },
+      "site": {
+        "label": "站点目录",
+        "tooltip": "位于 {{dir}} 下、存放网站文件的目录。可与 SFTP 用户共享，创建后无法修改。",
+        "new": "新目录",
+        "newHelp": "将创建一个以托管命名的目录：{{path}}",
+        "existing": "已有目录",
+        "select": "选择目录",
+        "noneAvailable": "没有空闲目录：所有已有站点均已被托管使用。",
+        "required": "请选择目录",
+        "readOnly": "托管的站点目录无法修改。"
+      },
+      "documentRoot": {
+        "label": "文档根目录",
+        "tooltip": "由 Web 服务器提供的目录，相对于站点目录。留空则提供站点根目录。",
+        "placeholder": "web",
+        "invalid": "相对路径：由字母、数字及 . _ @ + ~ - 组成、以 / 分隔的段，不能包含“.”或“..”段",
+        "webTooltip": "经典结构：站点文件位于 web/。",
+        "publicTooltip": "Symfony / Laravel 结构：站点文件位于 public/。对于 PHP 模板，还会启用 Symfony 路由。",
+        "symfonyEnabled": "已启用 {{framework}} 路由（见“高级”）。"
+      },
+      "domains": {
+        "label": "域名",
+        "placeholder": "example.cn, www.example.cn",
+        "help": "输入域名后按回车键。最多 {{max}} 个域名。",
+        "invalid": "无效域名：{{domain}}",
+        "duplicate": "重复域名：{{domain}}",
+        "tooMany": "最多 {{max}} 个域名"
+      },
+      "https": {
+        "label": "HTTPS",
+        "help": "请在所有域名的 DNS 都指向此服务器后再启用 HTTPS，否则无法签发证书。"
+      },
+      "redirectHttps": {
+        "label": "将 HTTP 重定向到 HTTPS",
+        "help": "需要启用 HTTPS。"
+      },
+      "phpVersion": {
+        "label": "PHP 版本",
+        "required": "请选择 PHP 版本",
+        "supported": "受支持",
+        "deprecated": "已弃用",
+        "deprecatedWarning": "此 PHP 版本已停止维护：请计划升级。"
+      },
+      "memory": {
+        "label": "内存限制",
+        "unit": "MB",
+        "toggle": "限制内存",
+        "help": "可选。容器达到内存上限时会被 Docker 终止：除非需要限制用量，否则请保持关闭。"
+      },
+      "cpus": {
+        "label": "CPU 限制",
+        "unit": "CPU",
+        "toggle": "限制 CPU",
+        "help": "可选。不设限制时，容器可使用服务器的全部 CPU 核心。"
+      },
+      "memoryLimit": {
+        "label": "memory_limit",
+        "tooltip": "每个 PHP 脚本的最大内存，例如 256M，-1 表示不限制。",
+        "invalid": "应为类似 256M 的大小，或 -1",
+        "help": "Web 限制为空时，也作为 Web 请求的默认值。"
+      },
+      "uploadMaxFilesize": {
+        "label": "upload_max_filesize",
+        "tooltip": "上传文件的最大大小，例如 64M。",
+        "invalid": "应为类似 64M 的大小"
+      },
+      "postMaxSize": {
+        "label": "post_max_size",
+        "tooltip": "请求体的最大大小；必须不小于 upload_max_filesize。",
+        "invalid": "应为类似 64M 的大小",
+        "tooSmall": "必须大于或等于 upload_max_filesize"
+      },
+      "maxExecutionTime": {
+        "label": "max_execution_time",
+        "tooltip": "脚本的最长执行时间，单位为秒（0 表示不限制）。",
+        "unit": "秒",
+        "invalid": "介于 0 到 {{max}} 秒之间",
+        "help": "仅限 Web：命令行（cron）中的 PHP 从不限制执行时间；可用 php -d max_execution_time=N 限制 cron。"
+      },
+      "displayErrors": {
+        "label": "display_errors",
+        "tooltip": "在页面中显示 PHP 错误。生产环境中请保持关闭。"
+      },
+      "timezone": {
+        "label": "时区",
+        "required": "请选择时区"
+      },
+      "env": {
+        "label": "环境变量",
+        "add": "添加变量",
+        "remove": "移除",
+        "namePlaceholder": "NAME",
+        "valuePlaceholder": "值",
+        "nameRequired": "名称为必填项",
+        "nameInvalid": "只能包含字母、数字和下划线，且不能以数字开头",
+        "nameReserved": "该变量由面板管理",
+        "nameDuplicate": "变量重复",
+        "valueInvalid": "值必须为单行",
+        "tooMany": "最多 {{max}} 个变量",
+        "help": "由面板管理的变量（PHP_*、WEB_DOCUMENT_ROOT、APPLICATION_*、CONTAINER_*、LD_*）不能在此设置。"
+      },
+      "phpIni": {
+        "label": "附加 php.ini",
+        "tooltip": "在所有其他 PHP 配置文件之后加载。",
+        "placeholder": "opcache.enable = 1"
+      },
+      "vhost": {
+        "label": "附加虚拟主机指令",
+        "tooltipNginx": "包含在 server 块中的 Nginx 指令。",
+        "tooltipApache": "包含在 VirtualHost 块中的 Apache 指令。",
+        "placeholderNginx": "location /api { … }",
+        "placeholderApache": "Header set X-Frame-Options \"DENY\"",
+        "helpNginx": "插入到镜像的 server 块内：不要粘贴完整的 server { } 块。镜像已定义 location / 和 location ~ \\.php$（fastcgi_pass php）；请在“路由”部分修改它们。示例：",
+        "helpApache": "插入到镜像的 VirtualHost 块内：不要粘贴完整的 VirtualHost 块。请在“路由”部分修改路由。示例："
+      },
+      "bytes": "{{used}} / {{max}} 字节",
+      "snippetTooLarge": "最多 {{max}} 字节",
+      "phpModules": {
+        "label": "PHP 模块",
+        "help": "关闭此站点不需要的模块。",
+        "loading": "正在加载此 PHP 镜像的模块…",
+        "loadingHint": "首次使用时需下载镜像，可能需要一到两分钟。",
+        "error": "无法加载此 PHP 镜像的模块。",
+        "retry": "重试",
+        "search": "筛选模块",
+        "empty": "没有模块",
+        "selectVersion": "请选择 PHP 版本以列出其模块。",
+        "ioncubeTag": "注意",
+        "ioncubeWarning": "ionCube 用于运行加密的 PHP；由于它常被恶意软件（如勒索软件）利用，默认处于禁用状态。",
+        "alsoDisabled": "同时禁用：{{modules}}",
+        "disabledWith": "与 {{module}} 一起禁用"
+      },
+      "routing": {
+        "framework": {
+          "label": "框架",
+          "none": "无",
+          "noneHelp": "镜像路由：文件按原样提供，PHP 文件直接运行。",
+          "phpOnly": "需要 PHP 模板。",
+          "overriddenByCustom": "使用自定义规则时此项不生效：自定义规则会替换框架规则。",
+          "siteRootWarning": "文档根目录不是“public”目录：.env、composer.json、vendor/、var/、storage/ 等项目文件将被公开访问。{{framework}} 需要以其“public”目录作为文档根目录（例如“public”或“web/public”）。"
+        },
+        "symfony": {
+          "helpNginx": "所有请求都回退到 index.php（try_files $uri /index.php$is_args$args）。只运行前端控制器：直接访问 /index.php 及其他 .php 文件将返回 404。",
+          "helpApache": "在文档根目录设置 FallbackResource /index.php：所有对不存在文件的请求都会交给前端控制器。"
+        },
+        "laravel": {
+          "helpNginx": "请求回退到 index.php（try_files $uri $uri/ /index.php?$query_string）；只运行 index.php，其他 .php 文件返回 404，除 .well-known 外的隐藏文件被拒绝，404 页面由 Laravel 处理。",
+          "helpApache": "FallbackResource /index.php 并启用 AllowOverride All（Laravel 的 public/.htaccess 生效），禁止目录列表，拒绝隐藏文件。"
+        },
+        "assetDirs": {
+          "label": "静态资源目录",
+          "help": "文档根目录中仅作为静态文件提供的目录：文件不存在时返回 404，而不会交给前端控制器。",
+          "placeholder": "bundles",
+          "invalid": "无效目录：{{dir}}（由字母、数字及 . _ @ + ~ - 组成、以 / 分隔的段，不能包含“.”或“..”）",
+          "duplicate": "重复目录：{{dir}}",
+          "tooMany": "最多 {{max}} 个目录"
+        },
+        "custom": {
+          "label": "自定义规则",
+          "helpNginx": "您的规则将替换镜像的路由（其 location / 文件），并在 PHP location 之前加载：可以重新定义 location / 并添加正则 location。PHP-FPM 的上游为 php（fastcgi_pass php;）。",
+          "helpApache": "您的规则将替换镜像的路由，并最先加载到 VirtualHost 中。",
+          "noPrefill": "静态模板没有生成的规则：请从空文件开始。"
+        },
+        "rules": {
+          "label": "路由规则",
+          "reset": "重置为生成的规则",
+          "required": "请输入路由规则",
+          "resetConfirm": "用生成的规则替换当前规则？",
+          "prefillInvalid": "生成规则前，请先修正标出的字段（文档根目录、静态资源目录）。"
+        },
+        "familyWarning": "这些规则是为 {{from}} 编写的，而模板现在使用 {{to}}：语法不同，请在保存前检查。",
+        "rulesWrongFamily": "这些规则是为之前的 Web 服务器编写的：请为 {{family}} 重写。"
+      },
+      "phpGroups": {
+        "web": "Web 请求（Nginx / Apache）",
+        "cli": "命令行（cron、控制台）"
+      },
+      "webMemoryLimit": {
+        "label": "Web 内存限制",
+        "tooltip": "Web 请求（PHP-FPM）的内存限制；应用无法通过 ini_set 提高它。留空则使用命令行的限制。",
+        "placeholder": "与 CLI 相同：{{value}}"
+      },
+      "networks": {
+        "label": "网络",
+        "help": "站点加入的私有网络：站点可通过名称（例如 svc-postgres-17）访问其中的服务和站点。共享网络“services”可访问其中的服务实例。",
+        "extra": "更改网络会重新部署站点（中断几秒钟）。"
+      }
+    },
+    "layout": {
+      "type": {
+        "title": "类型",
+        "subtitle": "Web 服务器与 PHP"
+      },
+      "site": {
+        "title": "站点",
+        "subtitle": "名称、文件和域名"
+      },
+      "runtime": {
+        "title": "PHP 与资源",
+        "subtitle": "PHP 版本、限制、设置和模块"
+      },
+      "runtimeStatic": {
+        "title": "资源",
+        "subtitle": "容器的内存和 CPU 限制"
+      },
+      "advanced": {
+        "title": "高级",
+        "subtitle": "路由、环境变量和配置片段"
+      },
+      "review": {
+        "title": "确认",
+        "subtitle": "创建托管前请检查设置",
+        "seconds": "{{value}} 秒"
+      },
+      "advancedNotice": "此处均为可选项：默认值适用于大多数站点。",
+      "previous": "上一步",
+      "next": "下一步",
+      "edit": "编辑",
+      "stepsLabel": "创建步骤",
+      "navigation": "部分",
+      "unsaved": "有未保存的更改",
+      "summary": {
+        "configured": "已配置",
+        "empty": "空",
+        "variables_other": "{{count}} 个变量",
+        "disabledModules_other": "已禁用 {{count}} 个",
+        "allEnabled": "全部启用"
+      }
+    }
+  }
+}

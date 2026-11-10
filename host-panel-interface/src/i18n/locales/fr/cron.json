@@ -1,0 +1,163 @@
+{
+  "title": "Tâches planifiées",
+  "newJob": "Nouvelle tâche",
+  "jobTypes": {
+    "dockerAction": "Action Docker",
+    "dockerExec": "Commande Docker",
+    "http": "HTTP",
+    "httpRequest": "Requête HTTP",
+    "functionInvoke": "Invocation de fonction",
+    "function": "Fonction"
+  },
+  "statuses": {
+    "pending": "En attente",
+    "running": "En cours",
+    "success": "Succès",
+    "error": "Erreur",
+    "skipped": "Exécution sautée"
+  },
+  "modes": {
+    "disabled": "Désactivé",
+    "once": "Exécution unique",
+    "recurring": "Récurrent",
+    "disabledByPanel": "Désactivée par le panel"
+  },
+  "dockerActions": {
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "restart": "Redémarrer",
+    "kill": "Tuer"
+  },
+  "table": {
+    "columns": {
+      "name": "Nom",
+      "schedule": "Planification",
+      "type": "Type",
+      "target": "Cible",
+      "mode": "Mode",
+      "lastStatus": "Dernier statut",
+      "lastRun": "Dernière exécution",
+      "actions": "Actions"
+    },
+    "actions": {
+      "runNow": "Exécuter maintenant",
+      "suspend": "Suspendre",
+      "enable": "Activer"
+    },
+    "details": {
+      "error": "Erreur :",
+      "output": "Sortie :",
+      "lastSkipped": "La dernière exécution, le {{date}}, a été sautée : la précédente était encore en cours.",
+      "functionRun": "{{duration}} ms, réponse de {{bytes}} octets",
+      "functionError": "Erreur de la fonction : {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Supprimer la tâche",
+      "content": "Êtes-vous sûr de vouloir supprimer cette tâche planifiée ?"
+    },
+    "suspend": {
+      "title": "Suspendre la tâche",
+      "content": "Êtes-vous sûr de vouloir suspendre la tâche « {{name}} » ?",
+      "ok": "Suspendre"
+    },
+    "enable": {
+      "title": "Activer la tâche",
+      "content": "Êtes-vous sûr de vouloir activer la tâche « {{name}} » ?",
+      "ok": "Activer"
+    },
+    "run": {
+      "title": "Exécuter maintenant",
+      "content": "Êtes-vous sûr de vouloir exécuter la tâche « {{name}} » maintenant ?",
+      "ok": "Exécuter"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Nouvelle tâche planifiée",
+      "edit": "Modifier la tâche"
+    },
+    "submit": {
+      "update": "Mettre à jour"
+    },
+    "fields": {
+      "name": {
+        "label": "Nom",
+        "required": "Le nom est requis",
+        "placeholder": "Ex : Nettoyage cache Symfony"
+      },
+      "schedule": {
+        "label": "Expression cron",
+        "required": "L'expression cron est requise",
+        "invalid": "Expression cron invalide",
+        "help": "Format : minute heure jour mois jour-semaine (ex : 0 3 * * * ou @every 5m)"
+      },
+      "type": {
+        "label": "Type"
+      },
+      "enabled": {
+        "label": "Activé"
+      },
+      "once": {
+        "label": "Exécution unique",
+        "tooltip": "Se désactive automatiquement après la première exécution"
+      },
+      "container": {
+        "label": "Conteneur",
+        "required": "Le conteneur est requis",
+        "placeholder": "Sélectionner un conteneur"
+      },
+      "action": {
+        "label": "Action",
+        "required": "L'action est requise"
+      },
+      "command": {
+        "label": "Commande",
+        "required": "La commande est requise"
+      },
+      "workingDir": {
+        "label": "Répertoire de travail",
+        "help": "Par défaut, répertoire défini par le conteneur"
+      },
+      "httpMethod": {
+        "label": "Méthode",
+        "required": "La méthode est requise"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "L'URL est requise"
+      },
+      "httpBody": {
+        "label": "Corps de la requête"
+      },
+      "httpTimeout": {
+        "label": "Timeout (secondes)"
+      },
+      "function": {
+        "label": "Fonction",
+        "required": "La fonction est requise",
+        "placeholder": "Sélectionner une fonction",
+        "help": "La fonction est invoquée par le panel, comme depuis l'onglet Test de sa page. Au plus 5 tâches planifiées par fonction.",
+        "none": "Aucune fonction"
+      },
+      "functionEvent": {
+        "label": "Événement (JSON)",
+        "help": "Une valeur JSON transmise au handler comme événement ; vide équivaut à {}. 64 Ko au plus.",
+        "invalid": "L'événement doit être une valeur JSON valide",
+        "tooLarge": "L'événement dépasse 64 Ko"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Exécution récurrente : toutes les {{interval}}",
+    "yearly": "Une fois par an, le 1er janvier à minuit",
+    "monthly": "Une fois par mois, le 1er à minuit",
+    "weekly": "Une fois par semaine, le dimanche à minuit",
+    "daily": "Une fois par jour, à minuit",
+    "hourly": "Toutes les heures"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Désactivée automatiquement : la fonction qu'elle invoquait a été supprimée."
+  }
+}

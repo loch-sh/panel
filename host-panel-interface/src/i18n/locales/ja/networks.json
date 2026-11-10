@@ -1,0 +1,314 @@
+{
+  "title": "プライベートネットワーク",
+  "intro": "サイトとサービスのための分離されたネットワークです。同じネットワークのメンバー同士だけが通信できます。すべてのネットワークは内部ネットワークで、インターネットにはアクセスできません。",
+  "forbidden": "プライベートネットワークは管理者専用です。",
+  "newNetwork": "新しいネットワーク",
+  "empty": "プライベートネットワークはまだありません",
+  "columns": {
+    "name": "名前",
+    "subnet": "サブネット",
+    "gateway": "ゲートウェイ",
+    "members": "メンバー",
+    "properties": "プロパティ",
+    "description": "説明",
+    "actions": "操作"
+  },
+  "tags": {
+    "shared": "共有",
+    "private": "プライベート",
+    "noInternet": "インターネットアクセスなし",
+    "reservedOverlap": "予約済み範囲"
+  },
+  "tagHints": {
+    "shared": "サービスモジュールのネットワークです。このネットワーク上のすべてのサイトが、同じネットワーク上のサービスにアクセスできます。削除できません。",
+    "private": "メンバー同士だけが通信できます。",
+    "noInternet": "内部ネットワークです。メンバーはこのネットワーク経由でインターネットにアクセスできません。",
+    "reservedOverlap": "サブネットが予約済み範囲 {{range}}（Docker の外で使われている LAN または VPN）と重なっています。その範囲のアドレスにはコンテナから到達できない可能性があります。"
+  },
+  "state": {
+    "ok": "正常",
+    "missing": "見つかりません",
+    "compromised": "改ざんの可能性"
+  },
+  "stateHints": {
+    "ok": "Docker ネットワークはパネルが作成したものです。",
+    "missing": "Docker ネットワークがサーバー上に存在しないため、メンバーはこのネットワーク上で起動できません。API の次回起動時に再作成されます。",
+    "compromised": "Docker ネットワークがパネルの作成したものではありません。修正されるまで、メンバーは信頼されません。"
+  },
+  "problems": {
+    "replaced": "ネットワークがパネル外で置き換えられました（ID が異なります）。",
+    "notBridge": "ローカルのブリッジネットワークではありません。",
+    "notInternal": "内部ネットワークではありません。メンバーがインターネットにアクセスできる可能性があります。",
+    "unexpectedOptions": "想定外のオプションがあります（IPv6 または構成ネットワーク）。",
+    "missingLabel": "パネルのラベルがありません。",
+    "unexpectedLabel": "パネルのラベルが別のネットワークを指しています。",
+    "composeProject": "Compose プロジェクトによって作成されています。",
+    "unexpectedSubnet": "サブネットが記録されているものと異なります。",
+    "inspectFailed": "Docker に問い合わせできませんでした。",
+    "other": "想定外の Docker ネットワークです。"
+  },
+  "automatic": "自動",
+  "delete": {
+    "title": "ネットワーク {{name}} を削除しますか？",
+    "content": "Docker ネットワークが削除されます。ネットワークを削除できるのは、メンバーがいなくなってからです。",
+    "submit": "削除",
+    "systemHint": "サービスモジュールの共有ネットワークは削除できません。",
+    "inUseHint": "先にメンバーをデタッチしてください。"
+  },
+  "toasts": {
+    "created": "ネットワーク {{name}} を作成しました。",
+    "deleted": "ネットワーク {{name}} を削除しました。",
+    "descriptionSaved": "説明を保存しました。",
+    "attached": "{{name}} をネットワークに接続しました。",
+    "detached": "{{name}} をネットワークから切断しました。",
+    "siteRedeploying": "{{name}} を新しいネットワークで再デプロイしています…",
+    "siteRedeployed": "{{name}} を新しいネットワークで再デプロイしました。",
+    "siteRedeployFailed": "{{name}} の再デプロイに失敗しました。最後の操作を確認してください。",
+    "disconnected": "コンテナ {{name}} を切断しました。"
+  },
+  "create": {
+    "title": "新しいプライベートネットワーク",
+    "intro": "分離されたネットワークを作成し、サイトやサービスインスタンスをアタッチします。メンバー同士だけが通信できます。",
+    "back": "一覧に戻る",
+    "submit": "ネットワークを作成",
+    "sections": {
+      "name": {
+        "title": "名前",
+        "subtitle": "英小文字、数字、ハイフンで 1〜24 文字、先頭は英字。後から変更できません。"
+      },
+      "description": {
+        "title": "説明",
+        "subtitle": "任意：ネットワークの用途。"
+      },
+      "addressing": {
+        "title": "アドレス設定",
+        "subtitle": "ネットワークの IPv4 範囲。一度だけ設定します（Docker では後から変更できません）。"
+      },
+      "members": {
+        "title": "メンバー",
+        "subtitle": "任意：ネットワーク作成後に接続するサイトとサービスインスタンス。"
+      }
+    },
+    "nameLabel": "名前",
+    "namePlaceholder": "backend",
+    "nameRequired": "名前を入力してください。",
+    "nameInvalid": "英小文字、数字、ハイフンで 1〜24 文字。先頭は英字で、末尾をハイフンにはできません。",
+    "nameReserved": "この名前は予約されています。",
+    "nameTaken": "この名前のネットワークはすでに存在します。",
+    "dockerName": "Docker 名: {{name}}",
+    "descriptionLabel": "説明",
+    "descriptionPlaceholder": "ショップとそのデータベース",
+    "descriptionInvalid": "制御文字は使用できません。200 文字以内で入力してください。",
+    "addressing": {
+      "automatic": {
+        "title": "自動",
+        "description": "Docker が空いているプライベート範囲を選択します。"
+      },
+      "manual": {
+        "title": "サブネットを指定",
+        "description": "範囲を指定します（例：VPN との競合を避ける場合）。"
+      }
+    },
+    "subnetLabel": "サブネット（CIDR）",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "プライベート IPv4 範囲（10.0.0.0/8、172.16.0.0/12、192.168.0.0/16、100.64.0.0/10）、/16〜/28、ネットワークアドレスで記述します。",
+    "subnetRequired": "サブネットを入力するか、「自動」を選択してください。",
+    "subnetProblems": {
+      "format": "IPv4 範囲を CIDR 表記で入力してください（例：10.20.0.0/24）。",
+      "networkAddress": "範囲はネットワークアドレスで記述してください：{{expected}}。",
+      "prefixLength": "プレフィックス長は /16〜/28 の範囲で指定してください。",
+      "privateRange": "範囲はプライベートである必要があります：10.0.0.0/8、172.16.0.0/12、192.168.0.0/16、100.64.0.0/10。",
+      "reserved": "この範囲は予約済み範囲 {{range}}（Docker の外で使われている LAN または VPN）と重なっています。"
+    },
+    "usableHosts_other": "使用可能なアドレス {{count}} 個",
+    "summary": {
+      "title": "概要",
+      "name": "名前",
+      "dockerName": "Docker 名",
+      "subnet": "サブネット",
+      "internet": "インターネットアクセス",
+      "internetNone": "なし（内部ネットワーク）",
+      "note": "ネットワークは空の状態で作成されます。ネットワークのページからサイトやサービスインスタンスをアタッチしてください。",
+      "limit": "プライベートネットワーク",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "メンバー",
+      "membersNone": "なし"
+    },
+    "limitReached": "プライベートネットワークの上限 {{max}} に達しました。先にネットワークを削除してください。",
+    "ranges": {
+      "private": "許可されている範囲",
+      "reserved": "予約済み範囲",
+      "reservedNone": "なし",
+      "reservedHintManual": "予約済み範囲（Docker の外で使われている LAN または VPN）と重なるサブネットは拒否されます。",
+      "reservedHintAutomatic": "Docker が予約済み範囲と重なる範囲を選んだ場合、作成は拒否されます。その場合は手動でサブネットを指定してください。"
+    },
+    "members": {
+      "label": "サイトとサービスインスタンス",
+      "placeholder": "サイトまたはサービスインスタンスを選択",
+      "restart": "選択した各メンバーはこのネットワーク付きで再作成されます。そのコンテナは数秒間停止します（サイトは再デプロイされます）。",
+      "failedHint": "ネットワークは作成されました。「リソースをアタッチ」から再度接続してください。",
+      "failedTitle_other": "{{count}} 件のメンバーを接続できませんでした",
+      "partial_other": "ネットワーク {{name}} を作成しましたが、{{count}} 件のメンバーを接続できませんでした。"
+    }
+  },
+  "detail": {
+    "back": "ネットワーク一覧に戻る",
+    "notFound": "このネットワークは存在しません（削除された可能性があります）。",
+    "info": "情報",
+    "dockerName": "Docker 名",
+    "id": "Docker ID",
+    "subnet": "サブネット",
+    "gateway": "ゲートウェイ",
+    "internet": "インターネットアクセス",
+    "internetNone": "なし（内部ネットワーク）",
+    "internetWarning": "内部ネットワークではありません：メンバーがインターネットにアクセスできます",
+    "created": "作成日時",
+    "createdBy": "{{date}}（{{user}}）",
+    "description": "説明",
+    "descriptionEmpty": "説明なし",
+    "editDescription": "説明を編集",
+    "members": "メンバー",
+    "membersEmpty": "メンバーはまだいません。サイトまたはサービスインスタンスをアタッチしてください。",
+    "attach": "リソースをアタッチ",
+    "systemNote": "サービスモジュールの共有ネットワークです。サービスインスタンスはデフォルトでこのネットワークに参加し、このネットワーク上のすべてのサイトからアクセスできます。"
+  },
+  "members": {
+    "columns": {
+      "kind": "種類",
+      "name": "名前",
+      "container": "コンテナ",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "状態",
+      "actions": "操作"
+    },
+    "kinds": {
+      "site": "サイト",
+      "instance": "サービスインスタンス",
+      "panel": "パネル",
+      "unmanaged": "管理対象外",
+      "function": "関数"
+    },
+    "panelHint": "パネル自体です。メンバーのいずれかに対してポートトンネル（loch proxy）が開いている間、このネットワークに参加します。",
+    "notConnected": "宣言済み・未接続",
+    "notConnectedHint": "compose ファイルではこのネットワークが宣言されていますが、コンテナは接続されていません。停止しているか、再デプロイが必要です。",
+    "notDeclared": "接続済み・未宣言",
+    "notDeclaredHint": "コンテナはこのネットワークに接続されていますが、compose ファイルでは宣言されていません。手動で接続されたものです。",
+    "noContainer": "コンテナなし",
+    "detach": "デタッチ",
+    "lastNetworkHint": "サービスインスタンスには少なくとも 1 つのネットワークが必要です。先に別のネットワークにアタッチしてください。",
+    "detachConfirm": {
+      "title": "{{name}} を {{network}} からデタッチしますか？",
+      "site": "サイトはこのネットワークなしで再デプロイされます。コンテナが再作成され（数秒間停止します）、このネットワークのメンバーにアクセスできなくなります。",
+      "instance": "{{container}} はこのネットワークなしで再起動します。クライアントは数秒間切断され、このネットワーク上のサイトはこのインスタンスにアクセスできなくなります。",
+      "submit": "デタッチ",
+      "function": "関数 {{name}} はこのネットワークなしで再作成されます。このネットワークのメンバーはこの関数を呼び出せなくなります。"
+    },
+    "lastNetworkHintFunction": "関数は少なくとも 1 つのネットワークに接続されている必要があります。先に別のネットワークに接続してください。"
+  },
+  "unmanaged": {
+    "title_other": "パネルで管理されていないコンテナ {{count}} 個がこのネットワーク上にあります",
+    "description": "これらはパネル外（例：CI スタック）からこのネットワークに参加しており、メンバーにアクセスできます。不要であれば切断してください。",
+    "disconnect": "切断",
+    "confirm": {
+      "title": "{{name}} を切断しますか？",
+      "content": "コンテナはただちにネットワークから切断されます。コンテナ自身の compose ファイルでこのネットワークが宣言されていれば、再デプロイ時に再び参加します。",
+      "submit": "切断"
+    }
+  },
+  "attach": {
+    "title": "{{network}} にリソースをアタッチ",
+    "intro": "メンバーのコンテナはこのネットワーク付きで再作成されます。そのコンテナのみ数秒間停止します。",
+    "resource": "リソース",
+    "placeholder": "サイトまたはサービスインスタンスを選択",
+    "sites": "サイト",
+    "instances": "サービスインスタンス",
+    "noResource": "アタッチできるサイトまたはサービスインスタンスがありません。",
+    "submit": "アタッチ",
+    "disabled": {
+      "unauthenticated": "認証なし：共有ネットワークには参加できません",
+      "modified": "手動で編集済み",
+      "operation": "操作中"
+    },
+    "restart": {
+      "site": "サイト {{name}} が再デプロイされます。コンテナが再作成されます（数秒間停止します）。",
+      "instance": "{{container}} が再起動します。サイトの接続が数秒間切断されます。",
+      "function": "関数 {{name}} はこのネットワーク付きで再作成されます。実行中の呼び出しは中断されます。"
+    },
+    "functions": "関数"
+  },
+  "select": {
+    "placeholder": "ネットワークを選択",
+    "unavailable": "利用不可",
+    "createLink": "プライベートネットワークを作成",
+    "loadFailed": "ネットワークの一覧を取得できません。"
+  },
+  "tabs": {
+    "private": "プライベートネットワーク",
+    "docker": "その他の Docker ネットワーク"
+  },
+  "docker": {
+    "intro": "パネルが管理していない Docker ネットワークです。Docker 自身のもの（bridge、host、none）、Compose スタックのもの（CI/CD でデプロイされたもの、リバースプロキシなど）、手動で作成されたものがあります。読み取り専用で表示されます。",
+    "empty": "その他の Docker ネットワークはありません",
+    "columns": {
+      "origin": "作成元",
+      "driver": "ドライバー",
+      "containers": "コンテナ"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose: {{project}}",
+      "other": "その他"
+    },
+    "originHints": {
+      "docker": "Docker 自身が作成しました。",
+      "compose": "Compose プロジェクトが作成しました（CI/CD でデプロイされたスタックなど）。",
+      "other": "手動または別のツールで作成されました。"
+    },
+    "internet": "インターネットアクセス",
+    "internetHint": "内部ネットワークではありません。コンテナはこのネットワーク経由でインターネットに到達できます。",
+    "internetYes": "あり（内部ではない）",
+    "back": "Docker ネットワークに戻る",
+    "title": "Docker ネットワーク",
+    "notFound": "この Docker ネットワークは存在しない（もう存在しない）か、パネルのネットワークです。",
+    "readOnly": "このネットワークはパネルで管理されていないため、読み取り専用で表示されます。",
+    "containersEmpty": "このネットワークにコンテナはありません。",
+    "containersTitle_other": "{{count}} 個のコンテナ"
+  },
+  "site": {
+    "title": "パネルのネットワーク",
+    "intro": "サイトはこれらのネットワークの他のメンバー（サービスインスタンス、サイト）に到達できます。ネットワークを接続または切断するとサイトが再デプロイされ、数秒間再起動します。",
+    "connect": "ネットワークを接続",
+    "disconnect": "切断",
+    "empty": "サイトはどのパネルのネットワークにも接続されていません。",
+    "columns": {
+      "type": "種類",
+      "state": "状態",
+      "warnings": "警告"
+    },
+    "connected": "接続済み",
+    "connectedHint": "サイトのコンテナはこのネットワーク上にあります。",
+    "unknown": "不明なネットワーク",
+    "unknownHint": "サイトの設定に、パネルが認識していない（もう存在しない）ネットワークが指定されています。",
+    "modifiedHint": "compose ファイルが手動で編集されているため、パネルからネットワークを変更できません。",
+    "busyHint": "このサイトで操作が実行中です。",
+    "connectModal": {
+      "title": "{{name}} をネットワークに接続",
+      "network": "ネットワーク",
+      "placeholder": "ネットワークを選択",
+      "none": "サイトはすでにすべてのパネルのネットワークに接続されています。",
+      "submit": "接続"
+    },
+    "toasts": {
+      "connected": "{{name}} を {{network}} に接続しました。",
+      "disconnected": "{{name}} を {{network}} から切断しました。"
+    },
+    "other": {
+      "title": "その他の Docker ネットワーク",
+      "intro": "サイトのコンテナが参加している、パネルが管理していないネットワーク（リバースプロキシのネットワークなど）です。読み取り専用です。",
+      "empty": "サイトのコンテナは他の Docker ネットワークに参加していません。",
+      "loadFailed": "その他の Docker ネットワークを一覧表示できません。"
+    }
+  }
+}

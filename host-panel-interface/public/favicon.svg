@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="loch.sh Panel icon">
+<rect x="0" y="0" width="512" height="512" rx="112" fill="#0F1B26"></rect>
+<rect x="120" y="128" width="272" height="188" rx="28" fill="none" stroke="#F4F1EA" stroke-width="22"></rect>
+<line x1="120" y1="178" x2="392" y2="178" stroke="#F4F1EA" stroke-width="16" opacity="0.55"></line>
+<rect x="166" y="236" width="40" height="46" rx="10" fill="#4FD1C5" opacity="0.35"></rect>
+<rect x="236" y="216" width="40" height="66" rx="10" fill="#4FD1C5" opacity="0.6"></rect>
+<rect x="306" y="200" width="40" height="82" rx="10" fill="#4FD1C5"></rect>
+<path d="M88 374 q 42 -26 84 0 t 84 0 t 84 0 t 84 0" fill="none" stroke="#4FD1C5" stroke-width="18" stroke-linecap="round"></path>
+<path d="M130 420 q 42 -26 84 0 t 84 0 t 84 0" fill="none" stroke="#4FD1C5" stroke-width="18" stroke-linecap="round" opacity="0.45"></path>
+</svg>

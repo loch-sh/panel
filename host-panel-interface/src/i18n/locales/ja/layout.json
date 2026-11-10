@@ -1,0 +1,45 @@
+{
+  "menu": {
+    "home": "ホーム",
+    "containers": "コンテナ",
+    "hostingSites": "サイト",
+    "sftpShort": "SFTP",
+    "domains": "ドメイン",
+    "networks": "プライベートネットワーク",
+    "cron": "スケジュールタスク",
+    "users": "ユーザー",
+    "apiKeys": "API キー",
+    "logout": "ログアウト",
+    "groups": {
+      "compute": "コンピュート",
+      "serverless": "サーバーレス",
+      "hosting": "ホスティング",
+      "network": "ネットワーク",
+      "admin": "管理",
+      "security": "セキュリティ",
+      "database": "データベース",
+      "cache": "キャッシュ",
+      "messaging": "メッセージング",
+      "storage": "ストレージ",
+      "queue": "キュー"
+    },
+    "auditTrail": "監査証跡",
+    "services": {
+      "mysql": "MySQL®",
+      "mariadb": "MariaDB®",
+      "postgres": "PostgreSQL®",
+      "mongodb": "MongoDB®",
+      "redis": "Redis®",
+      "valkey": "Valkey™",
+      "rabbitmq": "RabbitMQ®",
+      "nats": "NATS®",
+      "s3": "Loch S3",
+      "elasticmq": "ElasticMQ",
+      "mosquitto": "Eclipse Mosquitto™"
+    },
+    "functions": "関数"
+  },
+  "openMenu": "メニューを開く",
+  "collapseMenu": "メニューを折りたたむ",
+  "expandMenu": "メニューを展開"
+}

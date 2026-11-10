@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Démarrer",
+    "restart": "Relancer",
+    "stop": "Arrêter",
+    "kill": "Tuer",
+    "delete": "Supprimer",
+    "detachedTerminal": "Terminal détaché",
+    "detailsAndTerminal": "Détail et terminal"
+  },
+  "stackActions": {
+    "start": "Démarrer la stack",
+    "stop": "Arrêter la stack",
+    "restart": "Relancer la stack",
+    "started": "Stack « {{name}} » démarrée",
+    "stopped": "Stack « {{name}} » arrêtée",
+    "restarted": "Stack « {{name}} » relancée",
+    "partialFailure": "Stack « {{name}} » : {{failed}} conteneur(s) sur {{total}} n'ont pas pu être traités"
+  },
+  "confirm": {
+    "delete": "Êtes-vous sûr de vouloir supprimer le conteneur « {{name}} » ?",
+    "stop": "Êtes-vous sûr de vouloir arrêter le conteneur « {{name}} » ?",
+    "kill": "Êtes-vous sûr de vouloir tuer le conteneur « {{name}} » ? Cette action est immédiate et ne laisse pas le temps au processus de s'arrêter proprement.",
+    "stackStop": "Êtes-vous sûr de vouloir arrêter tous les conteneurs de la stack « {{name}} » ?",
+    "stackRestart": "Êtes-vous sûr de vouloir relancer tous les conteneurs de la stack « {{name}} » ? Ses services seront brièvement indisponibles."
+  },
+  "list": {
+    "title": "Liste des conteneurs",
+    "searchPlaceholder": "Rechercher un conteneur, une stack...",
+    "filterActive": "Actifs",
+    "filterAll": "Tous",
+    "filterErrors": "Erreurs",
+    "noStack": "Sans stack",
+    "errorExitsTooltip": "Un ou plusieurs conteneurs ont un arrêt anormal",
+    "hostingTag": "Hébergement",
+    "serviceTag": "Service",
+    "type": {
+      "label": "Type de stack",
+      "all": "Tous",
+      "hosting": "Hébergements",
+      "services": "Services",
+      "other": "Autres"
+    },
+    "stackFilter": "Stack : {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Conteneurs",
+    "id": "ID",
+    "name": "Nom",
+    "state": "État",
+    "webRouting": "Routage Web",
+    "actions": "Actions"
+  },
+  "table": {
+    "copyIdTooltip": "Copier l’id complet du conteneur",
+    "idCopied": "L’identifiant a bien été copié !",
+    "abnormalExit": "Arrêt anormal"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} actifs"
+  },
+  "sidePanel": {
+    "title": "Détail conteneur",
+    "fullScreen": "Plein écran",
+    "consoleOnly": "Console uniquement",
+    "noData": "Pas de données pour ce conteneur",
+    "heading": "Conteneur {{name}}",
+    "compose": {
+      "title": "Lancé par compose",
+      "project": "✅ Projet {{project}}",
+      "no": "❌ Non"
+    },
+    "identifier": "Identifiant",
+    "image": "Image",
+    "currentState": "État actuel",
+    "startedAt": {
+      "title": "Démarrage",
+      "value": "Le {{date}} à {{time}}"
+    },
+    "restartCount": "Nombre de redémarrages",
+    "network": "Réseau",
+    "mounts": "Points de montage",
+    "none": "Aucun",
+    "hostPath": "Chemin physique",
+    "logPath": "Chemin logs",
+    "logs": {
+      "title": "Logs en temps réel",
+      "show": "Afficher les logs",
+      "close": "Fermer les logs"
+    },
+    "terminal": {
+      "title": "Terminal interactif docker",
+      "open": "Ouvrir un terminal",
+      "detach": "Détacher",
+      "detachPopup": "Détacher dans une popup",
+      "unavailable": "Le terminal n’est pas disponible (manque probablement <code>tty:true</code> dans le compose ou le conteneur n’a pas été lancé avec l’argument <code>-t</code>)."
+    }
+  },
+  "mountTable": {
+    "type": "Type",
+    "source": "Source",
+    "destination": "Destination"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protocole",
+    "localPort": "Port Local",
+    "hostPort": "Port Host"
+  },
+  "stats": {
+    "open": "Monitoring",
+    "close": "Fermer le monitoring",
+    "live": "Live",
+    "cpuTotal": "CPU total :",
+    "ramLabel": "RAM :",
+    "netLabel": "Net :",
+    "columns": {
+      "container": "Conteneur",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Réseau",
+      "pids": "PIDs"
+    }
+  },
+  "logViewer": {
+    "error": "Erreur"
+  },
+  "popupTerminal": {
+    "missingId": "ID conteneur manquant",
+    "windowTitle": "{{appName}} - Terminal",
+    "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  }
+}

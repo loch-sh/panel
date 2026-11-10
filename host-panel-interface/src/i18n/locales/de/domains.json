@@ -1,0 +1,29 @@
+{
+  "title": "Domänenübersicht",
+  "toolbar": {
+    "searchPlaceholder": "Domain oder Container suchen...",
+    "tldPlaceholder": "Nach TLD filtern",
+    "activeOnly": "Aktiv",
+    "all": "Alle",
+    "views": {
+      "table": "Tabelle",
+      "graph": "Graph"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "Domain",
+      "router": "Router",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "Dienst",
+      "container": "Container",
+      "state": "Status",
+      "image": "Image"
+    }
+  },
+  "graph": {
+    "empty": "Keine Traefik-Domain gefunden"
+  }
+}

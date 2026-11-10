@@ -1,0 +1,507 @@
+{
+  "disabled": "Datenbanken sind auf diesem Server deaktiviert.",
+  "configError": "Das Datenbankmodul ist aktiviert, konnte aber nicht starten: Prüfen Sie die API-Logs.",
+  "engineDisabled": "Diese Engine ist auf diesem Server nicht aktiviert.",
+  "engines": {
+    "mysql": "MySQL®",
+    "mariadb": "MariaDB®",
+    "postgres": "PostgreSQL®",
+    "mongodb": "MongoDB®",
+    "redis": "Redis®",
+    "valkey": "Valkey™",
+    "rabbitmq": "RabbitMQ®",
+    "nats": "NATS®",
+    "s3": "Loch S3",
+    "elasticmq": "ElasticMQ",
+    "mosquitto": "Eclipse Mosquitto™"
+  },
+  "actions": {
+    "resetPassword": "Neues Passwort",
+    "retire": "Instanz entfernen",
+    "edit": "Bearbeiten",
+    "purge": "Löschen"
+  },
+  "instances": {
+    "columns": {
+      "version": "Version",
+      "state": "Status",
+      "host": "Interne Adresse",
+      "actions": "Aktionen",
+      "exposure": "Veröffentlichter Port"
+    },
+    "modified": "Manuell geändert",
+    "modifiedHint": "Ihre Dateien wurden außerhalb des Panels geändert: Sie bleibt auch ohne Datenbank bestehen.",
+    "state": {
+      "ready": "Läuft",
+      "starting": "Startet",
+      "unhealthy": "Fehlerhaft",
+      "stopped": "Gestoppt",
+      "missing": "Nicht gestartet",
+      "conflict": "Konflikt",
+      "other": "Unbekannt",
+      "unverified": "Nicht verifiziert",
+      "restarting": "Neustart",
+      "paused": "Pausiert"
+    },
+    "notReadyHint": "Die Instanz läuft nicht oder ist fehlerhaft: Ihre Datenbanken können nicht aufgelistet werden.",
+    "tls": "TLS",
+    "noTls": "unverschlüsselt",
+    "notExposed": "Nur intern",
+    "exposureHint": "Auf einer Adresse des Servers veröffentlicht: Clients außerhalb von Docker können sich verbinden.",
+    "exposureTlsHint": "TLS erforderlich. SHA-256-Fingerabdruck des Zertifikats: {{fingerprint}}",
+    "exposureError": "Änderung fehlgeschlagen",
+    "exposureErrorHint": "Die letzte Änderung des veröffentlichten Ports ist fehlgeschlagen: Der vorherige bleibt bestehen. Prüfen Sie die API-Logs.",
+    "tlsOptional": "TLS optional",
+    "exposureTlsOptionalHint": "TLS angeboten, aber nicht verlangt: Clients ohne TLS senden Passwort und Daten im Klartext. SHA-256-Fingerabdruck des Zertifikats: {{fingerprint}}"
+  },
+  "resources": {
+    "columns": {
+      "actions": "Aktionen"
+    },
+    "unmanaged": "Nicht verwaltet",
+    "unmanagedHint": "Außerhalb des Panels erstellt: Sie kann hier nicht gelöscht werden und hält die Instanz am Laufen."
+  },
+  "create": {
+    "nameRequired": "Geben Sie einen Namen ein."
+  },
+  "credentials": {
+    "title": "Verbindungsdaten",
+    "warning": "Kopieren Sie das Passwort jetzt: Es wird nicht erneut angezeigt. Wenn Sie es verlieren, erzeugen Sie ein neues.",
+    "fields": {
+      "host": "Host",
+      "port": "Port",
+      "database": "Datenbank",
+      "user": "Benutzer",
+      "password": "Passwort",
+      "uri": "Verbindungs-URI",
+      "external": "Externe Adresse",
+      "tlsFingerprint": "Zertifikats-Fingerabdruck (SHA-256)",
+      "vhost": "Virtueller Host",
+      "endpoint": "Endpunkt",
+      "region": "Region",
+      "bucket": "Bucket",
+      "accessKeyId": "Zugriffsschlüssel-ID",
+      "secretAccessKey": "Geheimer Zugriffsschlüssel",
+      "pathStyle": "Pfadbasierte URLs",
+      "queueUrlPrefix": "Präfix der Queue-URLs"
+    },
+    "internalOnly": "Der Host ist nur von den Sites erreichbar, die mit dem Dienste-Netzwerk verbunden sind.",
+    "close": "Ich habe das Passwort kopiert",
+    "show": "Anzeigen",
+    "hide": "Ausblenden",
+    "laravelEnv": "Laravel-.env-Zeilen kopieren (enthält das Geheimnis)",
+    "noAuth": "Keine Authentifizierung: Jede mit dem Dienstnetzwerk verbundene Site kann die Warteschlangen dieser Instanz nutzen, leeren oder löschen. Beliebige Zugangsdaten werden akzeptiert (SDKs benötigen welche, z. B. \"x\")."
+  },
+  "delete": {
+    "confirmLabel": "Geben Sie zur Bestätigung {{name}} ein:"
+  },
+  "rotate": {
+    "title": "Neues Passwort für {{name}} erzeugen?",
+    "content": "Das aktuelle Passwort funktioniert nicht mehr und offene Verbindungen werden getrennt: Aktualisieren Sie die Websites, die es verwenden.",
+    "submit": "Erzeugen"
+  },
+  "retire": {
+    "title": "Instanz {{engine}} {{version}} entfernen?",
+    "content": "Die Instanz enthält keine Datenbank. Ihre Container und Daten werden gelöscht.",
+    "submit": "Entfernen"
+  },
+  "toasts": {
+    "passwordReset": "Neues Passwort erzeugt.",
+    "retired": "Instanz entfernt.",
+    "updated": "Instanz aktualisiert.",
+    "purged": "Instanz gelöscht."
+  },
+  "wording": {
+    "database": {
+      "title": "{{engine}}-Datenbanken",
+      "intro": "Jede Version läuft in einer einzigen Instanz, die alle Sites teilen. Sie startet mit ihrer ersten Datenbank und wird mit ihren Daten entfernt, wenn die letzte gelöscht wird.",
+      "newResource": "Neue Datenbank",
+      "empty": "Noch keine {{engine}}-Datenbank.",
+      "resourceColumn": "Datenbank und Benutzer",
+      "countColumn": "Datenbanken",
+      "resourcesEmpty": "Keine Datenbank in dieser Instanz.",
+      "createTitle": "Neue {{engine}}-Datenbank",
+      "nameHelp": "Für die Datenbank und ihren Benutzer: Kleinbuchstaben, Ziffern und _, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "nameInvalid": "Nur Kleinbuchstaben, Ziffern und _, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "created": "Datenbank erstellt.",
+      "deleted": "Datenbank gelöscht.",
+      "instanceRetired": "Datenbank gelöscht; die Instanz wurde entfernt.",
+      "retireBlocked": "Datenbank gelöscht; die leere Instanz wurde behalten (Dateien manuell geändert oder Entfernen fehlgeschlagen).",
+      "deleteTitle": "Datenbank {{name}} löschen?",
+      "deleteContent": "Die Datenbank und ihr Benutzer werden endgültig gelöscht. Offene Verbindungen werden geschlossen.",
+      "deleteLast": "Es ist die letzte Datenbank von {{engine}} {{version}}: Die Instanz wird mit ihren Daten ebenfalls entfernt.",
+      "createFirst": "Datenbank erstellen"
+    },
+    "vhost": {
+      "title": "Virtuelle {{engine}}-Hosts",
+      "intro": "Jede Version läuft in einem einzigen Broker, den alle Sites teilen. Eine Ressource ist ein virtueller Host mit einem gleichnamigen Benutzer, von den anderen isoliert und begrenzt (Verbindungen, Queues, Queue-Größe).",
+      "newResource": "Neuer virtueller Host",
+      "empty": "Noch kein virtueller {{engine}}-Host.",
+      "resourceColumn": "Virtueller Host und Benutzer",
+      "countColumn": "Virtuelle Hosts",
+      "resourcesEmpty": "Kein virtueller Host in dieser Instanz.",
+      "createTitle": "Neuer virtueller {{engine}}-Host",
+      "nameHelp": "Für den virtuellen Host und seinen Benutzer: Kleinbuchstaben, Ziffern und _, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "nameInvalid": "Nur Kleinbuchstaben, Ziffern und _, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "created": "Virtueller Host erstellt.",
+      "deleted": "Virtueller Host gelöscht.",
+      "instanceRetired": "Virtueller Host gelöscht; der Broker wurde entfernt.",
+      "retireBlocked": "Virtueller Host gelöscht; der leere Broker wurde behalten (Dateien manuell geändert oder Entfernen fehlgeschlagen).",
+      "deleteTitle": "Virtuellen Host {{name}} löschen?",
+      "deleteContent": "Der virtuelle Host, seine Queues und Nachrichten sowie sein Benutzer werden endgültig gelöscht. Offene Verbindungen werden geschlossen.",
+      "deleteLast": "Es ist der letzte virtuelle Host von {{engine}} {{version}}: Der Broker wird mit seinen Daten ebenfalls entfernt.",
+      "createFirst": "Virtuellen Host erstellen"
+    },
+    "dedicated": {
+      "title": "{{engine}}-Instanzen",
+      "intro": "Jede Instanz läuft in einem eigenen Container, bei der Erstellung dimensioniert, mit einem einzigen Benutzer. Beim Löschen werden ihre Daten gelöscht.",
+      "newResource": "Neue Instanz",
+      "empty": "Noch keine {{engine}}-Instanz.",
+      "resourceColumn": "Instanz",
+      "countColumn": "Instanzen",
+      "resourcesEmpty": "Keine Instanz.",
+      "createTitle": "Neue {{engine}}-Instanz",
+      "nameHelp": "Wird Hostname und Benutzer: Kleinbuchstaben und Ziffern, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "nameInvalid": "Nur Kleinbuchstaben und Ziffern, beginnend mit einem Buchstaben (max. {{max}} Zeichen).",
+      "created": "Instanz erstellt.",
+      "deleted": "Instanz mit ihren Daten gelöscht.",
+      "instanceRetired": "Instanz mit ihren Daten gelöscht.",
+      "retireBlocked": "Instanz gelöscht.",
+      "deleteTitle": "Instanz {{name}} löschen?",
+      "deleteContent": "Der Container und alle seine Daten werden endgültig gelöscht. Offene Verbindungen werden geschlossen.",
+      "deleteLast": "Der Container und seine Daten werden gelöscht.",
+      "createFirst": "Instanz erstellen"
+    }
+  },
+  "createPage": {
+    "back": "Zurück zur Liste",
+    "recommended": "Empfohlen",
+    "instanceRunning": "Instanz läuft",
+    "default": "Standard",
+    "nameLabel": "Name",
+    "submit": "Erstellen",
+    "sections": {
+      "version": {
+        "title": "Version",
+        "subtitle": "Die Version der Engine, einmalig gewählt (später nicht änderbar)."
+      },
+      "options": {
+        "title": "Größe und Einstellungen",
+        "subtitle": "Für den Container reservierte Ressourcen und Engine-Einstellungen."
+      },
+      "name": {
+        "title": "Name"
+      }
+    },
+    "summary": {
+      "title": "Zusammenfassung",
+      "engine": "Engine",
+      "type": "Typ",
+      "shared": "Geteilte Instanz",
+      "dedicated": "Eigener Container",
+      "name": "Name",
+      "address": "Interne Adresse",
+      "startNote": "Die Instanz {{engine}} {{version}} läuft noch nicht: Sie startet mit dieser Ressource (bis zu zwei Minuten).",
+      "sharedNote": "Wird in der laufenden Instanz {{engine}} {{version}} erstellt.",
+      "dedicatedNote": "Für diese Ressource wird ein eigener Container gestartet (bis zu einer Minute).",
+      "passwordNote": "Das Passwort wird nach der Erstellung einmal angezeigt.",
+      "restartNote": "Beim Speichern wird die Instanz neu gestartet: ihre Clients werden einige Sekunden getrennt."
+    },
+    "nameTaken": "Es gibt bereits eine Instanz mit diesem Namen.",
+    "fixed": "Bei der Erstellung festgelegt",
+    "noChange": "Keine Änderung.",
+    "editTitle": "{{name}} bearbeiten",
+    "editIntro": "Ändern Sie Größe oder Einstellungen dieser Instanz. Sie wird damit neu erstellt: einige Sekunden nicht verfügbar, Daten bleiben erhalten.",
+    "notFound": "Diese Instanz existiert nicht (mehr).",
+    "saveConfirm": {
+      "title": "Änderungen auf {{name}} anwenden?",
+      "content": "Die Instanz startet mit den neuen Einstellungen neu (einige Sekunden nicht verfügbar). Startet sie nicht, werden die vorherigen Einstellungen wiederhergestellt."
+    },
+    "legacyAuth": {
+      "label": "Legacy-Authentifizierung",
+      "help": {
+        "mysql": "Für ältere Clients (altes PHP oder Tools), die mit „Authentication requires secure connection“ scheitern: Der Benutzer authentifiziert sich mit mysql_native_password statt caching_sha2_password. Kann später nicht geändert werden (außer durch Neuanlegen der Datenbank).",
+        "postgres": "Für ältere Clients ohne SCRAM: Das Passwort wird als md5 statt SCRAM-SHA-256 gespeichert (seit PostgreSQL 18 veraltet). Kann später nicht geändert werden (außer durch Neuanlegen der Datenbank)."
+      },
+      "warning": "Schwächerer Mechanismus: Wer das Netzwerk beobachtet, erfährt mehr über den Austausch. Das Passwort bleibt zufällig; nur für Clients aktivieren, die es brauchen.",
+      "summary": "Authentifizierung",
+      "mechanism": {
+        "mysql": "mysql_native_password (Legacy)",
+        "postgres": "md5 (Legacy)"
+      }
+    },
+    "custom": {
+      "title": "Benutzerdefiniert",
+      "description": "Jede Größe von {{min}} bis {{max}}",
+      "unit": "GB",
+      "inputLabel": "Benutzerdefiniert: {{option}} in GB"
+    },
+    "unauthenticated": "ElasticMQ hat keine Authentifizierung: Jede Site im selben Netzwerk kann die Warteschlangen der Instanz nutzen, leeren oder löschen. Speichern Sie dort keine sensiblen Daten."
+  },
+  "options": {
+    "memory": {
+      "label": "Arbeitsspeicher",
+      "help": "Für den Container reservierter Arbeitsspeicher.",
+      "detail": {
+        "data": "{{size}} für die Daten",
+        "streams": "{{size}} für Streams im Speicher"
+      }
+    },
+    "storage": {
+      "label": "Stream-Speicher",
+      "help": "Speicherplatz für JetStream (persistente Streams)."
+    },
+    "policy": {
+      "label": "Wenn der Speicher voll ist",
+      "help": "Was der Server tut, wenn die Daten seinen Speicher füllen.",
+      "values": {
+        "noeviction": {
+          "label": "Schreibzugriffe ablehnen",
+          "description": "Es werden nie Daten entfernt: Schreibzugriffe schlagen fehl, bis Speicher frei wird."
+        },
+        "allkeys-lru": {
+          "label": "Am längsten unbenutzte entfernen",
+          "description": "Jeder Schlüssel kann entfernt werden, der am längsten unbenutzte zuerst (Cache)."
+        },
+        "allkeys-lfu": {
+          "label": "Am seltensten benutzte entfernen",
+          "description": "Jeder Schlüssel kann entfernt werden, der am seltensten benutzte zuerst."
+        },
+        "volatile-lru": {
+          "label": "Ablaufende Schlüssel entfernen (LRU)",
+          "description": "Nur Schlüssel mit Ablaufzeit werden entfernt, die am längsten unbenutzten zuerst."
+        },
+        "volatile-lfu": {
+          "label": "Ablaufende Schlüssel entfernen (LFU)",
+          "description": "Nur Schlüssel mit Ablaufzeit werden entfernt, die am seltensten benutzten zuerst."
+        },
+        "volatile-ttl": {
+          "label": "Bald ablaufende entfernen",
+          "description": "Nur Schlüssel mit Ablaufzeit werden entfernt, die am nächsten am Ablauf zuerst."
+        }
+      }
+    },
+    "persistence": {
+      "label": "Persistenz",
+      "help": "Wie die Daten einen Neustart überstehen.",
+      "values": {
+        "aof": {
+          "label": "Journal (AOF)",
+          "description": "Jeder Schreibzugriff wird protokolliert und jede Sekunde geschrieben: höchstens eine Sekunde Verlust."
+        },
+        "rdb": {
+          "label": "Snapshots",
+          "description": "Regelmäßige Snapshots: Schreibzugriffe seit dem letzten können verloren gehen."
+        },
+        "none": {
+          "label": "Keine",
+          "description": "Nur Speicher: Die Daten gehen bei jedem Neustart verloren."
+        },
+        "on": {
+          "label": "Auf der Festplatte",
+          "description": "Gespeicherte Nachrichten und persistente Sitzungen überstehen einen Neustart."
+        },
+        "off": {
+          "label": "Nur im Speicher",
+          "description": "Beim Neustart verloren; weniger Schreibzugriffe."
+        }
+      }
+    },
+    "scripting": {
+      "label": "Lua-Skripte",
+      "help": "EVAL und Funktionen (manche Bibliotheken brauchen sie).",
+      "values": {
+        "on": {
+          "label": "Erlaubt",
+          "description": "Skripte und Funktionen sind nutzbar."
+        },
+        "off": {
+          "label": "Deaktiviert",
+          "description": "Kleinere Angriffsfläche; Skripte werden abgelehnt."
+        }
+      }
+    },
+    "modules": {
+      "label": "Redis-Module",
+      "help": "JSON, Suche, Zeitreihen und probabilistische Strukturen aus Redis 8.",
+      "values": {
+        "off": {
+          "label": "Deaktiviert",
+          "description": "Nur Basisbefehle (kleinere Angriffsfläche)."
+        },
+        "on": {
+          "label": "Aktiviert",
+          "description": "JSON, Suche, Zeitreihen, Bloom-Filter…"
+        }
+      }
+    },
+    "quota": {
+      "label": "Speicherkontingent",
+      "help": "Maximaler Platz für Objekte, ihre Versionen und laufende Uploads. Wird es unter den belegten Platz gesenkt, werden neue Schreibvorgänge abgelehnt; nichts wird gelöscht."
+    },
+    "encryption": {
+      "label": "Serverseitige Verschlüsselung",
+      "help": "Jedes geschriebene Objekt wird auf der Festplatte verschlüsselt (SSE-S3, AES-256-GCM), mit einem für diese Instanz erzeugten Schlüssel. Wird bei der Erstellung gewählt.",
+      "values": {
+        "off": {
+          "label": "Deaktiviert",
+          "description": "Objekte werden so gespeichert, wie sie gesendet werden."
+        },
+        "on": {
+          "label": "Aktiviert",
+          "description": "Im Ruhezustand verschlüsselt; der Schlüssel bleibt auf dem Server, getrennt von den Daten. Etwas mehr CPU."
+        }
+      }
+    },
+    "message-size": {
+      "label": "Maximale Nachrichtengröße",
+      "help": "Größere Nachrichten werden abgelehnt."
+    },
+    "payload": {
+      "label": "Maximale Nachrichtengröße",
+      "help": "NATS empfiehlt kleine Nachrichten: große kosten Speicher für jeden Client."
+    },
+    "queued": {
+      "label": "Wartende Nachrichten pro Client",
+      "help": "Nachrichten, die für einen getrennten oder langsamen Client (QoS 1 und 2) aufbewahrt werden, bevor neue verworfen werden."
+    },
+    "limits": {
+      "label": "SQS-Grenzen",
+      "help": "Erlaubte Nachrichtengröße, Verzögerungen und Zeitlimits.",
+      "values": {
+        "strict": {
+          "label": "Strikt",
+          "description": "Dieselben Grenzen wie Amazon SQS: Was hier funktioniert, funktioniert auf AWS."
+        },
+        "relaxed": {
+          "label": "Gelockert",
+          "description": "Größere Nachrichten und längere Verzögerungen, als Amazon SQS erlaubt (Entwicklung, Migrationen)."
+        }
+      }
+    }
+  },
+  "dedicated": {
+    "columns": {
+      "name": "Name",
+      "version": "Version",
+      "size": "Größe"
+    }
+  },
+  "forbidden": "Dienste sind Administratoren vorbehalten.",
+  "purge": {
+    "title": "{{name}} löschen?",
+    "content": "Die Dateien dieser Instanz wurden außerhalb des Panels bearbeitet; das Panel führt sie nicht aus. Das Löschen entfernt ihre Container und ALLE ihre Daten, einschließlich jeder enthaltenen Datenbank: Nichts kann wiederhergestellt werden (außer die Archivierung ist auf dem Server aktiviert). Die bearbeiteten Dateien werden nie ausgeführt.",
+    "confirmLabel": "Geben Sie zur Bestätigung den Namen der Instanz ein:",
+    "submit": "Endgültig löschen"
+  },
+  "networks": {
+    "column": "Netzwerke",
+    "label": "Netzwerke",
+    "edit": "Netzwerke ändern",
+    "sectionTitle": "Netzwerke",
+    "help": "Private Netzwerke, denen die Instanz beitritt: Nur die Sites in einem davon erreichen sie.",
+    "accessTitle": "Netzwerkzugriff",
+    "accessSubtitle": "Netzwerke und veröffentlichter Port der Instanz. Jede Änderung wird sofort angewendet und startet die Instanz neu.",
+    "modalTitle": "Netzwerke von {{name}}",
+    "required": "Wählen Sie mindestens ein Netzwerk.",
+    "privateRequired": "{{engine}} hat keine Authentifizierung: Es kann dem gemeinsamen Netzwerk nicht beitreten. Wählen Sie ein privates Netzwerk: Nur dessen Sites erreichen die Instanz.",
+    "unauthenticatedShared": "Keine Authentifizierung: nicht im gemeinsamen Netzwerk",
+    "existingInstance": "Die Instanz {{engine}} {{version}} läuft bereits: Die Datenbank wird in ihren Netzwerken erstellt. Ändern Sie diese über die Liste der Instanzen.",
+    "restart": "Beim Speichern wird {{container}} neu erstellt: Seine Clients werden für einige Sekunden getrennt. Sites, die kein Netzwerk mehr mit ihm teilen, verlieren den Zugriff darauf.",
+    "saved": "Netzwerke von {{name}} aktualisiert."
+  },
+  "exposure": {
+    "edit": "Veröffentlichten Port konfigurieren",
+    "title": "Veröffentlichter Port von {{name}}",
+    "intro": "Veröffentlichen Sie den Port auf einer Adresse des Servers, damit sich Clients außerhalb von Docker verbinden können. Wird sofort angewendet: Die Instanz startet neu (einige Sekunden nicht verfügbar).",
+    "current": "Veröffentlicht auf",
+    "tls": "Verschlüsselung",
+    "fingerprint": "SHA-256-Fingerabdruck des Zertifikats",
+    "notPublished": "Nicht veröffentlicht: Nur die Sites in ihren Netzwerken erreichen die Instanz.",
+    "address": "Adresse",
+    "addressHelp": "Vom Server erlaubt: {{cidrs}}",
+    "addressNone": "Die Serverkonfiguration erlaubt keine Adresse (SERVICES_EXPOSE_ALLOWED_CIDRS): Der Port kann nicht veröffentlicht werden.",
+    "addressRequired": "Geben Sie eine Adresse ein.",
+    "addressInvalid": "Geben Sie eine IP-Adresse ein, z. B. 127.0.0.1.",
+    "addressNotAllowed": "Diese Adresse ist in der Serverkonfiguration nicht erlaubt.",
+    "port": "Port",
+    "portHelp": "Von {{min}} bis {{max}}.",
+    "portRequired": "Geben Sie einen Port ein.",
+    "portRange": "Der Port muss zwischen {{min}} und {{max}} liegen.",
+    "portReserved": "Dieser Port ist auf diesem Server reserviert.",
+    "tlsOptional": "TLS optional",
+    "tlsOptionalHelp": "Bietet TLS an, ohne es zu verlangen, für Clients, die es nicht nutzen können. Clients ohne TLS senden Passwort und Daten im Klartext.",
+    "loopbackOnly": {
+      "deprecated": "Diese Version wird nicht mehr unterstützt: Sie kann nur auf einer Loopback-Adresse (127.0.0.1) veröffentlicht werden.",
+      "unauthenticated": "Diese Engine hat keine Authentifizierung: Sie kann nur auf einer Loopback-Adresse (127.0.0.1) veröffentlicht werden.",
+      "noTls": "Diese Engine kann TLS nicht verlangen: Sie kann nur auf einer Loopback-Adresse (127.0.0.1) veröffentlicht werden."
+    },
+    "loopbackNote": "Loopback-Adresse: nur vom Server selbst erreichbar (z. B. über einen SSH-Tunnel).",
+    "tlsRequired": "TLS wird von allen Clients dieser Instanz verlangt, einschließlich der Sites innerhalb von Docker: Prüfen Sie vor dem Veröffentlichen, dass sie sich mit TLS verbinden.",
+    "noEncryption": "TLS ist auf diesem Server deaktiviert: Passwörter und Daten werden im Klartext über das Netzwerk übertragen.",
+    "submit": "Veröffentlichen",
+    "close": "Port schließen",
+    "closeConfirm": {
+      "title": "Port von {{name}} schließen?",
+      "content": "Die Instanz startet ohne veröffentlichten Port neu: Clients außerhalb von Docker können sich nicht mehr verbinden.",
+      "submit": "Port schließen"
+    },
+    "toasts": {
+      "published": "Port auf {{address}} veröffentlicht.",
+      "closed": "Port geschlossen."
+    }
+  },
+  "support": {
+    "active": "Support: {{date}}",
+    "security": "Sicherheit: {{date}}",
+    "activeUntil": "Aktiver Support bis {{date}}",
+    "activeEnded": "Aktiver Support beendet am {{date}}",
+    "activeTooltip": "Fehlerbehebungen durch die Maintainer.",
+    "securityUntil": "Sicherheitssupport bis {{date}}",
+    "securityEnded": "Sicherheitssupport beendet am {{date}}",
+    "securityTooltip": "Sicherheitsupdates durch die Maintainer (End of Life).",
+    "securityEndedTooltip": "Keine Sicherheitsupdates mehr: Wechseln Sie zu einer neueren Version.",
+    "ended": "Sicherheitssupport beendet",
+    "pinned": "Fixiert",
+    "pinnedTooltip": "Angeboten, weil die Serverkonfiguration diese Version fixiert."
+  },
+  "update": {
+    "available": "Update verfügbar",
+    "availableHint": "Für diese Instanz ist ein neueres Image oder eine neuere Version verfügbar.",
+    "action": "Aktualisieren",
+    "title": "{{name}} aktualisieren",
+    "current": "Aktuelle Version",
+    "choose": "Aktualisieren auf",
+    "none": "Diese Instanz ist auf dem neuesten Stand.",
+    "image": "Neuestes Image von {{engine}} {{version}}",
+    "imageHint": "Gleiche Version mit den neuesten Korrekturen: Das Datenformat ändert sich nicht.",
+    "restartWarning": "Die Instanz wird neu gestartet: Offene Verbindungen werden getrennt und Clients müssen sich neu verbinden. Das Herunterladen des Images und der Neustart können einige Minuten dauern.",
+    "rollbackNote": "Startet die Instanz nicht, wird die vorherige Version wiederhergestellt.",
+    "noDowngrade": "Es gibt keinen Weg zurück: Von {{engine}} {{version}} geschriebene Daten sind für eine ältere Version möglicherweise nicht lesbar. Die Daten werden vor der Änderung nicht gesichert: Erstellen Sie zuerst ein Backup.",
+    "submit": "Aktualisieren",
+    "updated": "{{name}} aktualisiert ({{engine}} {{version}}).",
+    "upToDate": "{{name}} ist bereits auf dem neuesten Stand.",
+    "startFailed": "Die Instanz ist mit dem Update nicht gestartet: Die vorherige Version wurde wiederhergestellt."
+  },
+  "catalog": {
+    "check": "Nach Updates suchen",
+    "checked": "Versionen geprüft {{when}}",
+    "never": "Versionen noch nicht geprüft: Integrierte Liste wird verwendet.",
+    "failed": "Letzte Prüfung unvollständig für: {{engines}}. Die angezeigten Versionen und Daten sind möglicherweise veraltet.",
+    "done": "Versionen geprüft.",
+    "throttled": "Eine Prüfung wurde gerade ausgeführt: Versuchen Sie es in einigen Sekunden erneut."
+  },
+  "presentation": {
+    "mysql": "MySQL® ist eine relationale Open-Source-Datenbank, die von Webanwendungen und Content-Management-Systemen wie WordPress häufig genutzt wird. Erstellen Sie eine Datenbank, um einen Benutzer und die Verbindungsdaten für Ihre Website zu erhalten.",
+    "mariadb": "MariaDB® ist eine relationale Open-Source-Datenbank, die als Fork von MySQL entstanden und weitgehend kompatibel geblieben ist. Sie wird häufig von PHP-Anwendungen und Content-Management-Systemen genutzt. Erstellen Sie eine Datenbank, um einen Benutzer und die Verbindungsdaten für Ihre Website zu erhalten.",
+    "postgres": "PostgreSQL® ist eine relationale Open-Source-Datenbank, bekannt für ihre Standardtreue, Transaktionen und umfangreichen SQL-Funktionen. Sie eignet sich für die meisten Webanwendungen, vom Content-Management bis zur Unternehmenssoftware. Erstellen Sie eine Datenbank, um einen Benutzer und die Verbindungsdaten für Ihre Website zu erhalten.",
+    "mongodb": "MongoDB® ist eine dokumentenorientierte Datenbank: Sie speichert Daten als flexible, JSON-ähnliche Dokumente statt in Tabellen. Sie eignet sich für Anwendungen, deren Daten verschachtelt sind oder ihre Struktur oft ändern. Erstellen Sie eine Datenbank, um einen Benutzer und die Verbindungsdaten für Ihre Website zu erhalten.",
+    "redis": "Redis® ist ein In-Memory-Key-Value-Speicher, der häufig für Caching, Sitzungen, Warteschlangen und Zähler genutzt wird. Die Daten liegen im Arbeitsspeicher und können auf die Festplatte geschrieben werden. Erstellen Sie eine Instanz: Sie läuft in einem eigenen Container mit dem Arbeitsspeicher Ihrer Wahl.",
+    "valkey": "Valkey™ ist ein Open-Source-In-Memory-Key-Value-Speicher, ein Fork von Redis, der unter dem Dach der Linux Foundation gepflegt wird. Er funktioniert mit Redis-Clients und wird häufig für Caching, Sitzungen und Warteschlangen genutzt. Erstellen Sie eine Instanz: Sie läuft in einem eigenen Container mit dem Arbeitsspeicher Ihrer Wahl.",
+    "rabbitmq": "RabbitMQ® ist ein Open-Source-Message-Broker, der auf dem AMQP-Protokoll aufbaut. Anwendungen nutzen seine Warteschlangen, um Aufgaben an Hintergrund-Worker zu übergeben und Nachrichten zuverlässig auszutauschen. Erstellen Sie einen virtuellen Host, um einen isolierten Bereich mit eigenem Benutzer zu erhalten.",
+    "nats": "NATS® ist ein Open-Source-Messaging-System und ein CNCF-Projekt mit Publish-Subscribe, Request-Reply und, mit JetStream, persistenten Streams. Dienste nutzen es, um Nachrichten in Echtzeit auszutauschen. Erstellen Sie eine Instanz, um Nachrichten zu veröffentlichen und zu empfangen.",
+    "s3": "Loch S3 ist ein mit der Amazon-S3-API kompatibler Objektspeicher, entwickelt von Loch.sh. Anwendungen speichern und liefern damit Dateien wie Uploads, Medien und Backups über jeden S3-Client oder jedes S3-SDK. Erstellen Sie eine Instanz, um einen Bucket und seine Zugangsschlüssel zu erhalten.",
+    "elasticmq": "ElasticMQ ist eine Open-Source-Nachrichtenwarteschlange, kompatibel mit der Amazon-SQS-API. Für SQS geschriebene Anwendungen können ohne AWS-Konto Nachrichten senden und empfangen, was für Entwicklung und Tests praktisch ist. Erstellen Sie eine Instanz, um einen eigenen Warteschlangenserver zu erhalten.",
+    "mosquitto": "Eclipse Mosquitto™ ist ein Open-Source-MQTT-Broker der Eclipse Foundation. MQTT ist ein schlankes Publish-Subscribe-Protokoll, das von vernetzten Geräten, Sensoren und Dashboards häufig genutzt wird. Erstellen Sie eine Instanz, um einen Broker mit eigenem Benutzer zu erhalten."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "title": "ドメインマップ",
+  "toolbar": {
+    "searchPlaceholder": "ドメイン、コンテナを検索…",
+    "tldPlaceholder": "TLD で絞り込み",
+    "activeOnly": "稼働中",
+    "all": "すべて",
+    "views": {
+      "table": "テーブル",
+      "graph": "グラフ"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "ドメイン",
+      "router": "ルーター",
+      "entrypoints": "エントリーポイント",
+      "tls": "TLS",
+      "middlewares": "ミドルウェア",
+      "service": "サービス",
+      "container": "コンテナ",
+      "state": "状態",
+      "image": "イメージ"
+    }
+  },
+  "graph": {
+    "empty": "Traefik ドメインが見つかりません"
+  }
+}

@@ -1,0 +1,467 @@
+{
+  "title": "Hosting",
+  "newStack": "New hosting",
+  "backToList": "Back to hosting",
+  "empty": "No hosting yet",
+  "disabled": "Web hosting is not enabled on this server.",
+  "configError": "Unable to load the hosting configuration.",
+  "retry": "Retry",
+  "templates": {
+    "php-nginx": {
+      "label": "PHP + Nginx",
+      "description": "PHP-FPM behind Nginx: fast, suited to most PHP applications (WordPress, Laravel, Symfony)."
+    },
+    "php-apache": {
+      "label": "PHP + Apache",
+      "description": "PHP with Apache: supports .htaccess files, for applications that rely on them."
+    },
+    "nginx": {
+      "label": "Static (Nginx)",
+      "description": "Nginx serving static files: HTML sites, single-page applications, generated sites."
+    },
+    "apache": {
+      "label": "Static (Apache)",
+      "description": "Apache serving static files, with .htaccess support."
+    },
+    "badges": {
+      "static": "Static"
+    }
+  },
+  "status": {
+    "running": "Running",
+    "partial": "Partially running",
+    "stopped": "Stopped",
+    "not_deployed": "Not deployed",
+    "withCount": "{{label}} ({{running}}/{{total}})",
+    "modified": "Modified manually",
+    "modifiedTooltip": "The compose file was edited outside the panel.",
+    "lastOperationFailed": "Last operation failed",
+    "refreshing": "Updating status…"
+  },
+  "columns": {
+    "name": "Name",
+    "template": "Template",
+    "phpVersion": "PHP",
+    "domains": "Domains",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "php": {
+    "deprecated": "Deprecated",
+    "deprecatedTooltip": "This PHP version no longer receives security updates.",
+    "support": {
+      "activeUntil": "Bug fixes until {{date}}",
+      "activeEnded": "Bug fixes ended on {{date}}",
+      "securityUntil": "Security fixes until {{date}}",
+      "securityEnded": "Security fixes ended on {{date}}",
+      "activeTooltip": "Active support: bugs and security issues are fixed.",
+      "securityTooltip": "Security support: only security issues are fixed. After this date, the version receives no updates at all."
+    }
+  },
+  "domains": {
+    "none": "No domain",
+    "httpsTooltip": "HTTPS enabled"
+  },
+  "actions": {
+    "start": "Start",
+    "stop": "Stop",
+    "restart": "Restart",
+    "redeploy": "Redeploy",
+    "delete": "Delete",
+    "details": "Details",
+    "busy": "An operation is in progress on this hosting"
+  },
+  "confirm": {
+    "stop": "Stop the hosting \"{{name}}\"? The website will be unavailable.",
+    "restart": "Restart the hosting \"{{name}}\"? The website will be briefly unavailable."
+  },
+  "toasts": {
+    "started": "Hosting \"{{name}}\" started",
+    "stopped": "Hosting \"{{name}}\" stopped",
+    "restarted": "Hosting \"{{name}}\" restarted",
+    "partialFailure": "Hosting \"{{name}}\": {{failed}} of {{total}} containers failed",
+    "createStarted": "Creating the hosting \"{{name}}\"…",
+    "updateStarted": "Applying the new settings of \"{{name}}\"…",
+    "deployStarted": "Redeploying \"{{name}}\"…",
+    "deleteStarted": "Deleting \"{{name}}\"…",
+    "deleted": "Hosting \"{{name}}\" deleted",
+    "operationSucceeded": "Operation completed on \"{{name}}\"",
+    "operationFailed": "Operation failed on \"{{name}}\""
+  },
+  "redeploy": {
+    "title": "Redeploy \"{{name}}\"",
+    "description": "Recreates the container from the current settings.",
+    "pull": "Pull the latest image (update PHP / web server patches)",
+    "submit": "Redeploy",
+    "modifiedWarning": "The compose file of this hosting was edited outside the panel. It will be deployed as is, manual changes included.",
+    "modifiedConfirm": "I understand: deploy the manually edited compose file"
+  },
+  "delete": {
+    "title": "Delete \"{{name}}\"",
+    "description": "The container and its configuration will be removed. The site files are kept unless you choose otherwise.",
+    "purge": "Also delete the site files ({{path}})",
+    "purgeWarning": "This cannot be undone. SFTP users of the site \"{{site}}\" will lose all their files.",
+    "typeName": "Type <code>{{name}}</code> to confirm",
+    "typeNameMismatch": "The name does not match",
+    "submit": "Delete"
+  },
+  "create": {
+    "title": "New hosting",
+    "submit": "Create the hosting"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Overview",
+      "settings": "Settings",
+      "networks": "Networks",
+      "operation": "Last operation",
+      "compose": "Compose"
+    },
+    "notFound": "This hosting does not exist or has been deleted.",
+    "deleting": "This hosting is being deleted…",
+    "noSpec": "The settings of this hosting cannot be read.",
+    "overview": {
+      "template": "Template",
+      "image": "Image",
+      "phpVersion": "PHP version",
+      "sitePath": "Site directory",
+      "documentRoot": "Document root",
+      "documentRootRoot": "Site root",
+      "domains": "Domains",
+      "https": "HTTPS",
+      "redirectHttps": "HTTP → HTTPS redirect",
+      "resources": "Resources",
+      "resourcesValue": "Memory: {{memory}} · CPU: {{cpus}}",
+      "containers": "Containers",
+      "noContainers": "No container: the hosting is not deployed.",
+      "memoryValue": "{{value}} MB",
+      "cpusValue": "{{value}} CPU",
+      "unlimited": "Unlimited",
+      "disabledModules": "Disabled PHP modules",
+      "noDisabledModules": "None",
+      "routing": "Routing",
+      "routingDefault": "Image default",
+      "routingSymfony": "Symfony",
+      "routingLaravel": "Laravel",
+      "routingCustom": "Custom rules",
+      "usage": "Resource usage",
+      "usageNotRunning": "No running container: start the hosting to see its memory and CPU usage.",
+      "usageLoading": "Waiting for the first measures…",
+      "phpMemory": "PHP memory",
+      "phpMemoryWeb": "Web:",
+      "phpMemoryCli": "CLI:",
+      "sameAsCli": "same as CLI ({{value}})",
+      "networks": "Networks",
+      "noNetwork": "None"
+    },
+    "secretsMasked": "Secret values (environment variables, configuration snippets) are hidden for this API key: the settings are read-only.",
+    "compose": {
+      "help": "The compose.yaml used to run this hosting. It is a standard Docker Compose file: running `docker compose up -d` in the hosting directory boots it without the panel.",
+      "modified": "This file was edited outside the panel: it no longer matches the settings. Saving the settings will overwrite it.",
+      "masked": "The compose file is not shown: this API key cannot read secrets.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "routingFile": "Routing rules",
+      "routingFileHelp": "Routing file currently used by the web server."
+    }
+  },
+  "settings": {
+    "modifiedAlert": {
+      "title": "This hosting was modified outside the panel",
+      "description": "Saving will regenerate the compose file and overwrite the manual changes."
+    },
+    "forceConfirm": {
+      "title": "Overwrite the manual changes?",
+      "content": "The compose file of \"{{name}}\" was edited outside the panel. Saving replaces it with the settings of this form: the manual changes will be lost.",
+      "ok": "Overwrite manual changes"
+    },
+    "submit": "Save and redeploy",
+    "reset": "Discard changes"
+  },
+  "operation": {
+    "none": "No operation has been run since the API started.",
+    "kind": {
+      "create": "Creation",
+      "update": "Update",
+      "deploy": "Deployment",
+      "delete": "Deletion"
+    },
+    "state": {
+      "running": "In progress",
+      "succeeded": "Succeeded",
+      "failed": "Failed"
+    },
+    "fields": {
+      "kind": "Operation",
+      "state": "State",
+      "startedAt": "Started",
+      "finishedAt": "Finished",
+      "duration": "Duration"
+    },
+    "durationSeconds": "{{seconds}} s",
+    "rolledBack": "The previous configuration was restored.",
+    "failedAlert": "The operation failed",
+    "output": "Docker Compose output",
+    "noOutput": "No output"
+  },
+  "form": {
+    "required": "Required",
+    "sections": {
+      "routing": "Routing"
+    },
+    "fields": {
+      "template": {
+        "required": "Choose a template",
+        "editHelp": "Only templates of the same kind can be selected for an existing hosting."
+      },
+      "name": {
+        "label": "Name",
+        "placeholder": "my-site",
+        "help": "Lowercase letters, digits and dashes (max {{max}} characters). Cannot be changed later.",
+        "required": "Name is required",
+        "tooLong": "At most {{max}} characters",
+        "invalid": "Only lowercase letters, digits and dashes, not starting or ending with a dash",
+        "checkFailed": "Unable to check the name availability",
+        "taken": {
+          "reserved": "This name is reserved",
+          "stack": "A hosting already uses this name",
+          "directory": "A directory with this name already exists",
+          "compose_project": "A Docker Compose stack already uses this name",
+          "container": "A container already uses this name",
+          "traefik_router": "A Traefik router already uses this name",
+          "unknown": "This name is not available"
+        }
+      },
+      "site": {
+        "label": "Site directory",
+        "tooltip": "Directory under {{dir}} holding the website files. It can be shared with SFTP users and cannot be changed later.",
+        "new": "New directory",
+        "newHelp": "A directory named after the hosting will be created: {{path}}",
+        "existing": "Existing directory",
+        "select": "Select a directory",
+        "noneAvailable": "No free directory: every existing site is already used by a hosting.",
+        "required": "Select a directory",
+        "readOnly": "The site directory of a hosting cannot be changed."
+      },
+      "documentRoot": {
+        "label": "Document root",
+        "tooltip": "Directory served by the web server, relative to the site directory. Leave empty to serve the site root.",
+        "placeholder": "web",
+        "invalid": "Relative path: letters, digits and . _ @ + ~ - in segments separated by /, without \".\" or \"..\" segments",
+        "webTooltip": "Classic layout: the site files are in web/.",
+        "publicTooltip": "Symfony / Laravel layout: the site files are in public/. On PHP templates, also enables Symfony routing.",
+        "symfonyEnabled": "{{framework}} routing enabled (see Advanced)."
+      },
+      "domains": {
+        "label": "Domains",
+        "placeholder": "example.com, www.example.com",
+        "help": "Type a domain then press Enter. At most {{max}} domains.",
+        "invalid": "Invalid domain: {{domain}}",
+        "duplicate": "Duplicate domain: {{domain}}",
+        "tooMany": "At most {{max}} domains"
+      },
+      "https": {
+        "label": "HTTPS",
+        "help": "Enable HTTPS once the DNS of every domain points to this server, otherwise the certificate cannot be issued."
+      },
+      "redirectHttps": {
+        "label": "Redirect HTTP to HTTPS",
+        "help": "Requires HTTPS."
+      },
+      "phpVersion": {
+        "label": "PHP version",
+        "required": "Select a PHP version",
+        "supported": "Supported",
+        "deprecated": "Deprecated",
+        "deprecatedWarning": "This PHP version is no longer maintained: plan an upgrade."
+      },
+      "memory": {
+        "label": "Memory limit",
+        "unit": "MB",
+        "toggle": "Limit memory",
+        "help": "Optional. When the container reaches its memory limit, Docker kills it: leave this off unless you need to cap usage."
+      },
+      "cpus": {
+        "label": "CPU limit",
+        "unit": "CPU",
+        "toggle": "Limit CPU",
+        "help": "Optional. Without a limit, the container can use every CPU core of the server."
+      },
+      "memoryLimit": {
+        "label": "memory_limit",
+        "tooltip": "Maximum memory per PHP script, e.g. 256M, or -1 for unlimited.",
+        "invalid": "Expected a size such as 256M, or -1",
+        "help": "Also the default for web requests when the web limit is empty."
+      },
+      "uploadMaxFilesize": {
+        "label": "upload_max_filesize",
+        "tooltip": "Maximum size of an uploaded file, e.g. 64M.",
+        "invalid": "Expected a size such as 64M"
+      },
+      "postMaxSize": {
+        "label": "post_max_size",
+        "tooltip": "Maximum size of a request body; must be at least upload_max_filesize.",
+        "invalid": "Expected a size such as 64M",
+        "tooSmall": "Must be greater than or equal to upload_max_filesize"
+      },
+      "maxExecutionTime": {
+        "label": "max_execution_time",
+        "tooltip": "Maximum execution time of a script, in seconds (0 = unlimited).",
+        "unit": "s",
+        "invalid": "Between 0 and {{max}} seconds",
+        "help": "Web only: PHP in the command line (crons) is never time-limited; limit a cron with php -d max_execution_time=N."
+      },
+      "displayErrors": {
+        "label": "display_errors",
+        "tooltip": "Show PHP errors in the pages. Keep disabled in production."
+      },
+      "timezone": {
+        "label": "Time zone",
+        "required": "Select a time zone"
+      },
+      "env": {
+        "label": "Environment variables",
+        "add": "Add a variable",
+        "remove": "Remove",
+        "namePlaceholder": "NAME",
+        "valuePlaceholder": "value",
+        "nameRequired": "Name is required",
+        "nameInvalid": "Letters, digits and underscores, not starting with a digit",
+        "nameReserved": "This variable is managed by the panel",
+        "nameDuplicate": "Duplicate variable",
+        "valueInvalid": "The value must fit on a single line",
+        "tooMany": "At most {{max}} variables",
+        "help": "Variables managed by the panel (PHP_*, WEB_DOCUMENT_ROOT, APPLICATION_*, CONTAINER_*, LD_*) cannot be set here."
+      },
+      "phpIni": {
+        "label": "Additional php.ini",
+        "tooltip": "Loaded after every other PHP configuration file.",
+        "placeholder": "opcache.enable = 1"
+      },
+      "vhost": {
+        "label": "Additional virtual host directives",
+        "tooltipNginx": "Nginx directives included inside the server block.",
+        "tooltipApache": "Apache directives included inside the VirtualHost block.",
+        "placeholderNginx": "location /api { … }",
+        "placeholderApache": "Header set X-Frame-Options \"DENY\"",
+        "helpNginx": "Inserted inside the server block of the image: do not paste a full server { } block. The image already defines location / and location ~ \\.php$ (fastcgi_pass php); change them in the Routing section. Example:",
+        "helpApache": "Inserted inside the VirtualHost block of the image: do not paste a full VirtualHost block. Change the routing in the Routing section. Example:"
+      },
+      "bytes": "{{used}} / {{max}} bytes",
+      "snippetTooLarge": "At most {{max}} bytes",
+      "phpModules": {
+        "label": "PHP modules",
+        "help": "Switch off the modules this site does not need.",
+        "loading": "Loading the modules of this PHP image…",
+        "loadingHint": "The first time, the image is downloaded: this can take a minute or two.",
+        "error": "Unable to load the modules of this PHP image.",
+        "retry": "Retry",
+        "search": "Filter modules",
+        "empty": "No module",
+        "selectVersion": "Select a PHP version to list its modules.",
+        "ioncubeTag": "Caution",
+        "ioncubeWarning": "ionCube runs encoded PHP; it is disabled by default because it is commonly used by malware (e.g. ransomware).",
+        "alsoDisabled": "Also disabled: {{modules}}",
+        "disabledWith": "Disabled together with {{module}}"
+      },
+      "routing": {
+        "framework": {
+          "label": "Framework",
+          "none": "None",
+          "noneHelp": "Image routing: files are served as they are and PHP files run directly.",
+          "phpOnly": "Requires a PHP template.",
+          "overriddenByCustom": "Inactive while custom rules are used: they replace the framework rules.",
+          "siteRootWarning": "The document root is not a \"public\" directory: project files such as .env, composer.json, vendor/, var/ or storage/ would be served. {{framework}} expects its \"public\" directory as document root (e.g. \"public\" or \"web/public\")."
+        },
+        "symfony": {
+          "helpNginx": "Every request falls back to index.php (try_files $uri /index.php$is_args$args). Only the front controller runs: /index.php called directly and other .php files return 404.",
+          "helpApache": "FallbackResource /index.php on the document root: every request for a missing file reaches the front controller."
+        },
+        "laravel": {
+          "helpNginx": "Requests fall back to index.php (try_files $uri $uri/ /index.php?$query_string); only index.php runs, other .php files return 404, dotfiles are denied except .well-known, and 404 pages are handled by Laravel.",
+          "helpApache": "FallbackResource /index.php with AllowOverride All (Laravel's public/.htaccess applies), no directory listing, dotfiles denied."
+        },
+        "assetDirs": {
+          "label": "Asset directories",
+          "help": "Directories inside the document root served as static files only: a missing file returns 404 instead of reaching the front controller.",
+          "placeholder": "bundles",
+          "invalid": "Invalid directory: {{dir}} (letters, digits and . _ @ + ~ - in segments separated by /, without \".\" or \"..\")",
+          "duplicate": "Duplicate directory: {{dir}}",
+          "tooMany": "At most {{max}} directories"
+        },
+        "custom": {
+          "label": "Customize the rules",
+          "helpNginx": "Your rules replace the routing of the image (its location / file), included before the PHP location: you may redefine location / and add regex locations. PHP-FPM is the upstream php (fastcgi_pass php;).",
+          "helpApache": "Your rules replace the routing of the image and are included first inside the VirtualHost.",
+          "noPrefill": "No generated rules for static templates: start from an empty file."
+        },
+        "rules": {
+          "label": "Routing rules",
+          "reset": "Reset to generated rules",
+          "required": "Enter the routing rules",
+          "resetConfirm": "Replace the current rules with the generated rules?",
+          "prefillInvalid": "Fix the highlighted fields (document root, asset directories) before generating the rules."
+        },
+        "familyWarning": "These rules were written for {{from}} and the template now uses {{to}}: the syntax differs, review them before saving.",
+        "rulesWrongFamily": "These rules are written for the previous web server: rewrite them for {{family}}."
+      },
+      "phpGroups": {
+        "web": "Web requests (Nginx / Apache)",
+        "cli": "Command line (crons, console)"
+      },
+      "webMemoryLimit": {
+        "label": "Web memory limit",
+        "tooltip": "Memory limit of web requests (PHP-FPM); the application cannot raise it with ini_set. Leave empty to use the command line limit.",
+        "placeholder": "Same as CLI: {{value}}"
+      },
+      "networks": {
+        "label": "Networks",
+        "help": "Private networks the site joins: it reaches the services and the sites on them by their name (e.g. svc-postgres-17). The shared network \"services\" gives access to the service instances on it.",
+        "extra": "Changing the networks redeploys the site (a few seconds of downtime)."
+      }
+    },
+    "layout": {
+      "type": {
+        "title": "Type",
+        "subtitle": "Web server and PHP"
+      },
+      "site": {
+        "title": "Site",
+        "subtitle": "Name, files and domains"
+      },
+      "runtime": {
+        "title": "PHP & resources",
+        "subtitle": "PHP version, limits, settings and modules"
+      },
+      "runtimeStatic": {
+        "title": "Resources",
+        "subtitle": "Memory and CPU limits of the container"
+      },
+      "advanced": {
+        "title": "Advanced",
+        "subtitle": "Routing, environment and configuration snippets"
+      },
+      "review": {
+        "title": "Review",
+        "subtitle": "Check the settings before creating the hosting",
+        "seconds": "{{value}} s"
+      },
+      "advancedNotice": "Everything here is optional: the defaults suit most sites.",
+      "previous": "Previous",
+      "next": "Next",
+      "edit": "Edit",
+      "stepsLabel": "Creation steps",
+      "navigation": "Sections",
+      "unsaved": "Unsaved changes",
+      "summary": {
+        "configured": "Configured",
+        "empty": "Empty",
+        "variables_one": "{{count}} variable",
+        "variables_other": "{{count}} variables",
+        "disabledModules_one": "{{count}} disabled",
+        "disabledModules_other": "{{count}} disabled",
+        "allEnabled": "All enabled"
+      }
+    }
+  }
+}

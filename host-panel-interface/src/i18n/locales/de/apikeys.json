@@ -1,0 +1,74 @@
+{
+  "title": "API-Schlüssel",
+  "newKey": "Neuer Schlüssel",
+  "empty": "Keine API-Schlüssel",
+  "table": {
+    "columns": {
+      "name": "Name",
+      "prefix": "Präfix",
+      "permissions": "Berechtigungen",
+      "expiresAt": "Läuft ab am",
+      "createdAt": "Erstellt am",
+      "lastUsed": "Zuletzt verwendet",
+      "actions": "Aktionen"
+    },
+    "allScopes": "Alle",
+    "expired": "(abgelaufen)"
+  },
+  "revoke": {
+    "title": "Diesen Schlüssel widerrufen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "action": "Widerrufen"
+  },
+  "create": {
+    "title": "API-Schlüssel erstellen",
+    "failed": "Schlüssel konnte nicht erstellt werden",
+    "form": {
+      "name": {
+        "label": "Name",
+        "required": "Name ist erforderlich",
+        "help": "Ein aussagekräftiger Name zur Identifizierung dieses Schlüssels (z. B. CLI MacBook Pro)",
+        "placeholder": "Mein CLI-Schlüssel"
+      },
+      "expiresInDays": {
+        "label": "Gültigkeitsdauer (Tage)",
+        "required": "Dauer ist erforderlich",
+        "range": "Die Dauer muss zwischen {{min}} und {{max}} Tagen liegen",
+        "help": "Maximale Dauer: {{max}} Tage"
+      },
+      "scopes": {
+        "label": "Berechtigungen",
+        "required": "Mindestens eine Berechtigung ist erforderlich"
+      }
+    }
+  },
+  "created": {
+    "title": "API-Schlüssel erstellt",
+    "ok": "Ich habe meinen Schlüssel kopiert",
+    "warning": "Kopieren Sie diesen Schlüssel jetzt. Er wird nicht erneut angezeigt.",
+    "copied": "Schlüssel in die Zwischenablage kopiert",
+    "cliHelp": "Konfigurieren Sie die CLI und fügen Sie den Schlüssel ein, wenn Sie dazu aufgefordert werden: <configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd>, dann <loginCmd>loch login</loginCmd>",
+    "serverName": "mein-server"
+  },
+  "scopes": {
+    "all": "Alle Berechtigungen",
+    "containersRead": "Lesen (auflisten, inspizieren)",
+    "containersLogs": "Logs (herunterladen, Streaming)",
+    "containersActions": "Aktionen (start, stop, restart, kill, delete)",
+    "containersShell": "Shell (Remote-Terminal)",
+    "containersStats": "Statistiken (Echtzeit-Monitoring)",
+    "containersProxy": "Proxy (Port-Tunnel)",
+    "containersCp": "Dateikopie (cp)",
+    "cron": "Cron-Jobs",
+    "sftpRead": "SFTP (Lesen)",
+    "sftpWrite": "SFTP (Erstellen, Bearbeiten, Löschen)",
+    "hostingRead": "Hosting (lesen)",
+    "hostingWrite": "Hosting (erstellen, bearbeiten, bereitstellen, löschen)",
+    "networksRead": "Private Netzwerke (lesen)",
+    "networksWrite": "Private Netzwerke (erstellen, anbinden, trennen, löschen)",
+    "servicesRead": "Datenbanken (lesen)",
+    "servicesWrite": "Datenbanken (erstellen, neues Passwort, löschen)",
+    "servicesExpose": "Datenbanken (Port veröffentlichen)",
+    "auditRead": "Audit-Trail (lesen)"
+  }
+}

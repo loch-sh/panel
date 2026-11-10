@@ -1,0 +1,74 @@
+{
+  "title": "API-sleutels",
+  "newKey": "Nieuwe sleutel",
+  "empty": "Geen API-sleutels",
+  "table": {
+    "columns": {
+      "name": "Naam",
+      "prefix": "Prefix",
+      "permissions": "Rechten",
+      "expiresAt": "Verloopt op",
+      "createdAt": "Aangemaakt op",
+      "lastUsed": "Laatst gebruikt",
+      "actions": "Acties"
+    },
+    "allScopes": "Alle",
+    "expired": "(verlopen)"
+  },
+  "revoke": {
+    "title": "Deze sleutel intrekken?",
+    "description": "Deze actie kan niet ongedaan worden gemaakt.",
+    "action": "Intrekken"
+  },
+  "create": {
+    "title": "API-sleutel aanmaken",
+    "failed": "Aanmaken van de sleutel mislukt",
+    "form": {
+      "name": {
+        "label": "Naam",
+        "required": "Naam is verplicht",
+        "help": "Een beschrijvende naam om deze sleutel te herkennen (bijv. CLI MacBook Pro)",
+        "placeholder": "Mijn CLI-sleutel"
+      },
+      "expiresInDays": {
+        "label": "Geldigheidsduur (dagen)",
+        "required": "Duur is verplicht",
+        "range": "Duur moet tussen {{min}} en {{max}} dagen liggen",
+        "help": "Maximale duur: {{max}} dagen"
+      },
+      "scopes": {
+        "label": "Rechten",
+        "required": "Minimaal één recht is verplicht"
+      }
+    }
+  },
+  "created": {
+    "title": "API-sleutel aangemaakt",
+    "ok": "Ik heb mijn sleutel gekopieerd",
+    "warning": "Kopieer deze sleutel nu. Hij wordt niet opnieuw getoond.",
+    "copied": "Sleutel gekopieerd naar klembord",
+    "cliHelp": "Configureer de CLI en plak de sleutel wanneer daarom wordt gevraagd: <configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd> en daarna <loginCmd>loch login</loginCmd>",
+    "serverName": "mijn-server"
+  },
+  "scopes": {
+    "all": "Alle rechten",
+    "containersRead": "Lezen (lijst, inspecteren)",
+    "containersLogs": "Logs (downloaden, streaming)",
+    "containersActions": "Acties (start, stop, restart, kill, delete)",
+    "containersShell": "Shell (externe terminal)",
+    "containersStats": "Statistieken (realtime monitoring)",
+    "containersProxy": "Proxy (poorttunnel)",
+    "containersCp": "Bestanden kopiëren (cp)",
+    "cron": "Cronjobs",
+    "sftpRead": "SFTP (lezen)",
+    "sftpWrite": "SFTP (aanmaken, bewerken, verwijderen)",
+    "hostingRead": "Hosting (lezen)",
+    "hostingWrite": "Hosting (aanmaken, bewerken, uitrollen, verwijderen)",
+    "networksRead": "Privénetwerken (lezen)",
+    "networksWrite": "Privénetwerken (aanmaken, koppelen, ontkoppelen, verwijderen)",
+    "servicesRead": "Databases (lezen)",
+    "servicesWrite": "Databases (aanmaken, nieuw wachtwoord, verwijderen)",
+    "servicesExpose": "Databases (een poort publiceren)",
+    "auditRead": "Audit trail (lezen)"
+  }
+}

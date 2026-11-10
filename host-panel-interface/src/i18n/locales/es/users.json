@@ -1,0 +1,53 @@
+{
+  "title": "Usuarios",
+  "currentUser": "Usuario actual",
+  "table": {
+    "columns": {
+      "email": "Correo electrónico",
+      "name": "Nombre",
+      "type": "Tipo",
+      "permissions": "Permisos",
+      "actions": "Acciones"
+    },
+    "permissions": {
+      "allContainers": "Todos los contenedores",
+      "none": "Ninguno",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Admin",
+    "restricted": "Restringido"
+  },
+  "actions": {
+    "makeRestricted": "Convertir en usuario restringido",
+    "makeAdmin": "Convertir en administrador",
+    "restrictAll": "Prohibir todos los contenedores"
+  },
+  "modals": {
+    "demote": {
+      "title": "Degradar a usuario restringido",
+      "content": "¿Seguro que quiere degradar a «{{email}}» a usuario restringido? Perderá el acceso a todos los contenedores.",
+      "ok": "Degradar"
+    },
+    "promote": {
+      "title": "Promover a administrador",
+      "content": "¿Seguro que quiere promover a «{{email}}» a administrador? Tendrá acceso a todos los contenedores.",
+      "ok": "Promover"
+    },
+    "restrict": {
+      "title": "Prohibir todos los contenedores",
+      "content": "¿Seguro que quiere restringir a «{{email}}»? El usuario ya no verá ningún contenedor.",
+      "ok": "Restringir"
+    },
+    "delete": {
+      "title": "Eliminar usuario",
+      "content": "¿Seguro que quiere eliminar a «{{email}}»? Esta acción es irreversible y también eliminará sus claves API."
+    }
+  },
+  "sidePanel": {
+    "title": "Editar permisos del usuario {{name}}",
+    "searchPlaceholder": "Buscar un contenedor",
+    "validate": "Validar"
+  }
+}

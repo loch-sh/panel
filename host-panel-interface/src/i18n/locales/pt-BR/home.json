@@ -1,0 +1,58 @@
+{
+  "title": "Bem-vindo ao console de administração",
+  "cards": {
+    "resourceOverview": {
+      "title": "Visão geral dos recursos",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "carregando",
+      "unavailable": "indisponível",
+      "resources": {
+        "containers": "Contêineres",
+        "stacks": "Stacks",
+        "hosting": "Sites hospedados",
+        "database": "Bancos de dados",
+        "cache": "Cache",
+        "messaging": "Mensageria",
+        "queue": "Filas",
+        "storage": "Armazenamento",
+        "functions": "Funções",
+        "cron": "Tarefas agendadas",
+        "networks": "Redes privadas",
+        "sftp": "Usuários SFTP",
+        "domains": "Domínios",
+        "apiKeys": "Chaves de API"
+      }
+    },
+    "containerCount": {
+      "title": "Número de contêineres"
+    },
+    "profile": {
+      "adminTitle": "Perfil de administrador",
+      "userTitle": "Perfil de usuário",
+      "adminAccess": "Você tem acesso a todos os contêineres (exceto os de sistema).",
+      "noAccess": "Seu administrador ainda não configurou nenhum acesso.",
+      "restrictedAccess": "Você tem acesso aos seguintes contêineres: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Últimas stacks implantadas",
+      "empty": "Nenhuma stack",
+      "abnormalExit": "Encerramento anormal"
+    },
+    "latestDomains": {
+      "title": "Últimos domínios",
+      "empty": "Nenhum domínio"
+    },
+    "errorContainers": {
+      "title": "Contêineres encerrados com erro",
+      "empty": "Nenhum contêiner com erro"
+    },
+    "support": {
+      "title": "Suporte técnico",
+      "emergency": "📲 Emergência: {{phone}}",
+      "openTicket": "📕 Abrir um chamado de incidente"
+    },
+    "serviceStatus": {
+      "title": "Status dos serviços"
+    }
+  }
+}

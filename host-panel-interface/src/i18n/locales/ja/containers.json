@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "起動",
+    "restart": "再起動",
+    "stop": "停止",
+    "kill": "強制終了 (kill)",
+    "delete": "削除",
+    "detachedTerminal": "別ウィンドウのターミナル",
+    "detailsAndTerminal": "詳細とターミナル"
+  },
+  "stackActions": {
+    "start": "スタックを起動",
+    "stop": "スタックを停止",
+    "restart": "スタックを再起動",
+    "started": "スタック「{{name}}」を起動しました",
+    "stopped": "スタック「{{name}}」を停止しました",
+    "restarted": "スタック「{{name}}」を再起動しました",
+    "partialFailure": "スタック「{{name}}」：{{total}} 個中 {{failed}} 個のコンテナを処理できませんでした"
+  },
+  "confirm": {
+    "delete": "コンテナ「{{name}}」を削除してもよろしいですか？",
+    "stop": "コンテナ「{{name}}」を停止してもよろしいですか？",
+    "kill": "コンテナ「{{name}}」を強制終了 (kill) してもよろしいですか？この操作は即座に実行され、プロセスが正常に終了する時間は与えられません。",
+    "stackStop": "スタック「{{name}}」のすべてのコンテナを停止してもよろしいですか？",
+    "stackRestart": "スタック「{{name}}」のすべてのコンテナを再起動してもよろしいですか？サービスが一時的に利用できなくなります。"
+  },
+  "list": {
+    "title": "コンテナ",
+    "searchPlaceholder": "コンテナ、スタックを検索…",
+    "filterActive": "稼働中",
+    "filterAll": "すべて",
+    "filterErrors": "エラー",
+    "noStack": "スタックなし",
+    "errorExitsTooltip": "1 つ以上のコンテナが異常終了しました",
+    "hostingTag": "ホスティング",
+    "serviceTag": "サービス",
+    "type": {
+      "label": "スタックの種類",
+      "all": "すべて",
+      "hosting": "ホスティング",
+      "services": "サービス",
+      "other": "その他"
+    },
+    "stackFilter": "スタック: {{name}}"
+  },
+  "columns": {
+    "stack": "スタック",
+    "containers": "コンテナ",
+    "id": "ID",
+    "name": "名前",
+    "state": "状態",
+    "webRouting": "Web ルーティング",
+    "actions": "操作"
+  },
+  "table": {
+    "copyIdTooltip": "コンテナの完全な ID をコピー",
+    "idCopied": "ID をコピーしました！",
+    "abnormalExit": "異常終了"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} 稼働中"
+  },
+  "sidePanel": {
+    "title": "コンテナの詳細",
+    "fullScreen": "全画面",
+    "consoleOnly": "コンソールのみ",
+    "noData": "このコンテナのデータはありません",
+    "heading": "コンテナ {{name}}",
+    "compose": {
+      "title": "Compose による起動",
+      "project": "✅ プロジェクト {{project}}",
+      "no": "❌ いいえ"
+    },
+    "identifier": "識別子",
+    "image": "イメージ",
+    "currentState": "現在の状態",
+    "startedAt": {
+      "title": "起動日時",
+      "value": "{{date}} {{time}}"
+    },
+    "restartCount": "再起動回数",
+    "network": "ネットワーク",
+    "mounts": "マウントポイント",
+    "none": "なし",
+    "hostPath": "ホストのパス",
+    "logPath": "ログのパス",
+    "logs": {
+      "title": "ライブログ",
+      "show": "ログを表示",
+      "close": "ログを閉じる"
+    },
+    "terminal": {
+      "title": "Docker 対話型ターミナル",
+      "open": "ターミナルを開く",
+      "detach": "切り離す",
+      "detachPopup": "ポップアップで切り離す",
+      "unavailable": "ターミナルを利用できません（compose ファイルに <code>tty:true</code> が指定されていないか、コンテナが <code>-t</code> 引数なしで起動された可能性があります）。"
+    }
+  },
+  "mountTable": {
+    "type": "種類",
+    "source": "ソース",
+    "destination": "宛先"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "プロトコル",
+    "localPort": "ローカルポート",
+    "hostPort": "ホストポート"
+  },
+  "stats": {
+    "open": "モニタリング",
+    "close": "モニタリングを閉じる",
+    "live": "ライブ",
+    "cpuTotal": "CPU 合計：",
+    "ramLabel": "RAM：",
+    "netLabel": "ネット：",
+    "columns": {
+      "container": "コンテナ",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "ネットワーク",
+      "pids": "PID"
+    }
+  },
+  "logViewer": {
+    "error": "エラー"
+  },
+  "popupTerminal": {
+    "missingId": "コンテナ ID がありません",
+    "windowTitle": "{{appName}} - ターミナル",
+    "windowTitleWithName": "{{appName}} - ターミナル #{{name}}"
+  }
+}

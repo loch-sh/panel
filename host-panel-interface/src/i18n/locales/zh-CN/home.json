@@ -1,0 +1,58 @@
+{
+  "title": "欢迎使用管理控制台",
+  "cards": {
+    "resourceOverview": {
+      "title": "资源概览",
+      "tileLabel": "{{label}}：{{value}}",
+      "loading": "加载中",
+      "unavailable": "不可用",
+      "resources": {
+        "containers": "容器",
+        "stacks": "堆栈",
+        "hosting": "托管站点",
+        "database": "数据库",
+        "cache": "缓存",
+        "messaging": "消息",
+        "queue": "队列",
+        "storage": "存储",
+        "functions": "函数",
+        "cron": "计划任务",
+        "networks": "私有网络",
+        "sftp": "SFTP 用户",
+        "domains": "域名",
+        "apiKeys": "API 密钥"
+      }
+    },
+    "containerCount": {
+      "title": "容器数量"
+    },
+    "profile": {
+      "adminTitle": "管理员资料",
+      "userTitle": "用户资料",
+      "adminAccess": "您可以访问所有容器（系统容器除外）。",
+      "noAccess": "管理员尚未为您配置任何访问权限。",
+      "restrictedAccess": "您可以访问以下容器：{{containers}}"
+    },
+    "latestStacks": {
+      "title": "最近部署的堆栈",
+      "empty": "暂无堆栈",
+      "abnormalExit": "异常退出"
+    },
+    "latestDomains": {
+      "title": "最新域名",
+      "empty": "暂无域名"
+    },
+    "errorContainers": {
+      "title": "异常退出的容器",
+      "empty": "暂无异常容器"
+    },
+    "support": {
+      "title": "技术支持",
+      "emergency": "📲 紧急联系：{{phone}}",
+      "openTicket": "📕 提交故障工单"
+    },
+    "serviceStatus": {
+      "title": "服务状态"
+    }
+  }
+}

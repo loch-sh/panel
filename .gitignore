@@ -1,0 +1,11 @@
+# Local data of the dev compose (SFTPGo)
+/data/
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Claude Code local state
+.claude/scheduled_tasks.lock
+.claude/settings.local.json

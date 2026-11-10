@@ -1,0 +1,58 @@
+{
+  "title": "Bienvenue sur la console d'administration",
+  "cards": {
+    "resourceOverview": {
+      "title": "Aperçu des ressources",
+      "tileLabel": "{{label}} : {{value}}",
+      "loading": "chargement",
+      "unavailable": "indisponible",
+      "resources": {
+        "containers": "Conteneurs",
+        "stacks": "Stacks",
+        "hosting": "Sites hébergés",
+        "database": "Bases de données",
+        "cache": "Cache",
+        "messaging": "Messagerie",
+        "queue": "Files d'attente",
+        "storage": "Stockage",
+        "functions": "Fonctions",
+        "cron": "Tâches planifiées",
+        "networks": "Réseaux privés",
+        "sftp": "Utilisateurs SFTP",
+        "domains": "Domaines",
+        "apiKeys": "Clés API"
+      }
+    },
+    "containerCount": {
+      "title": "Nombre de conteneurs"
+    },
+    "profile": {
+      "adminTitle": "Profil administrateur",
+      "userTitle": "Profil utilisateur",
+      "adminAccess": "Vous avez accès à tous les conteneurs (sauf systèmes).",
+      "noAccess": "Aucun accès n'a pour l'instant été défini par votre administrateur.",
+      "restrictedAccess": "Vous avez accès aux conteneurs suivants : {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Dernières stacks déployées",
+      "empty": "Aucune stack",
+      "abnormalExit": "Arrêt anormal"
+    },
+    "latestDomains": {
+      "title": "Derniers domaines",
+      "empty": "Aucun domaine"
+    },
+    "errorContainers": {
+      "title": "Conteneurs en arrêt incorrect",
+      "empty": "Aucun conteneur en erreur"
+    },
+    "support": {
+      "title": "Support technique",
+      "emergency": "📲 Urgence : {{phone}}",
+      "openTicket": "📕 Ouvrir un ticket d'incident"
+    },
+    "serviceStatus": {
+      "title": "État des services"
+    }
+  }
+}

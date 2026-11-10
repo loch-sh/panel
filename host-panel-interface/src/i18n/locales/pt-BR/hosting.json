@@ -1,0 +1,469 @@
+{
+  "title": "Hospedagem",
+  "newStack": "Nova hospedagem",
+  "backToList": "Voltar para a hospedagem",
+  "empty": "Ainda não há nenhuma hospedagem",
+  "disabled": "A hospedagem web não está ativada neste servidor.",
+  "configError": "Não foi possível carregar a configuração da hospedagem.",
+  "retry": "Tentar novamente",
+  "templates": {
+    "php-nginx": {
+      "label": "PHP + Nginx",
+      "description": "PHP-FPM atrás do Nginx: rápido, adequado à maioria dos aplicativos PHP (WordPress, Laravel, Symfony)."
+    },
+    "php-apache": {
+      "label": "PHP + Apache",
+      "description": "PHP com Apache: suporta arquivos .htaccess, para aplicativos que dependem deles."
+    },
+    "nginx": {
+      "label": "Estático (Nginx)",
+      "description": "Nginx servindo arquivos estáticos: sites HTML, aplicativos de página única, sites gerados."
+    },
+    "apache": {
+      "label": "Estático (Apache)",
+      "description": "Apache servindo arquivos estáticos, com suporte a .htaccess."
+    },
+    "badges": {
+      "static": "Estático"
+    }
+  },
+  "status": {
+    "running": "Em execução",
+    "partial": "Parcialmente em execução",
+    "stopped": "Parada",
+    "not_deployed": "Não implantada",
+    "withCount": "{{label}} ({{running}}/{{total}})",
+    "modified": "Modificada manualmente",
+    "modifiedTooltip": "O arquivo compose foi editado fora do painel.",
+    "lastOperationFailed": "A última operação falhou",
+    "refreshing": "Atualizando o status…"
+  },
+  "columns": {
+    "name": "Nome",
+    "template": "Modelo",
+    "phpVersion": "PHP",
+    "domains": "Domínios",
+    "status": "Status",
+    "actions": "Ações"
+  },
+  "php": {
+    "deprecated": "Obsoleta",
+    "deprecatedTooltip": "Esta versão do PHP não recebe mais atualizações de segurança.",
+    "support": {
+      "activeUntil": "Correções até {{date}}",
+      "activeEnded": "Correções encerradas em {{date}}",
+      "securityUntil": "Segurança até {{date}}",
+      "securityEnded": "Segurança encerrada em {{date}}",
+      "activeTooltip": "Suporte ativo: bugs e falhas de segurança são corrigidos.",
+      "securityTooltip": "Suporte de segurança: apenas falhas de segurança são corrigidas. Após essa data, a versão não recebe mais atualizações."
+    }
+  },
+  "domains": {
+    "none": "Nenhum domínio",
+    "httpsTooltip": "HTTPS ativado"
+  },
+  "actions": {
+    "start": "Iniciar",
+    "stop": "Parar",
+    "restart": "Reiniciar",
+    "redeploy": "Reimplantar",
+    "delete": "Excluir",
+    "details": "Detalhes",
+    "busy": "Há uma operação em andamento nesta hospedagem"
+  },
+  "confirm": {
+    "stop": "Parar a hospedagem \"{{name}}\"? O site ficará indisponível.",
+    "restart": "Reiniciar a hospedagem \"{{name}}\"? O site ficará indisponível por alguns instantes."
+  },
+  "toasts": {
+    "started": "Hospedagem \"{{name}}\" iniciada",
+    "stopped": "Hospedagem \"{{name}}\" parada",
+    "restarted": "Hospedagem \"{{name}}\" reiniciada",
+    "partialFailure": "Hospedagem \"{{name}}\": {{failed}} de {{total}} contêineres falharam",
+    "createStarted": "Criando a hospedagem \"{{name}}\"…",
+    "updateStarted": "Aplicando as novas configurações de \"{{name}}\"…",
+    "deployStarted": "Reimplantando \"{{name}}\"…",
+    "deleteStarted": "Excluindo \"{{name}}\"…",
+    "deleted": "Hospedagem \"{{name}}\" excluída",
+    "operationSucceeded": "Operação concluída em \"{{name}}\"",
+    "operationFailed": "A operação falhou em \"{{name}}\""
+  },
+  "redeploy": {
+    "title": "Reimplantar \"{{name}}\"",
+    "description": "Recria o contêiner a partir das configurações atuais.",
+    "pull": "Baixar a imagem mais recente (correções do PHP / servidor web)",
+    "submit": "Reimplantar",
+    "modifiedWarning": "O arquivo compose desta hospedagem foi editado fora do painel. Ele será implantado como está, incluindo as alterações manuais.",
+    "modifiedConfirm": "Entendi: implantar o arquivo compose editado manualmente"
+  },
+  "delete": {
+    "title": "Excluir \"{{name}}\"",
+    "description": "O contêiner e sua configuração serão removidos. Os arquivos do site são mantidos, a menos que você escolha o contrário.",
+    "purge": "Excluir também os arquivos do site ({{path}})",
+    "purgeWarning": "Esta ação não pode ser desfeita. Os usuários SFTP do site \"{{site}}\" perderão todos os seus arquivos.",
+    "typeName": "Digite <code>{{name}}</code> para confirmar",
+    "typeNameMismatch": "O nome não corresponde",
+    "submit": "Excluir"
+  },
+  "create": {
+    "title": "Nova hospedagem",
+    "submit": "Criar a hospedagem"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Visão geral",
+      "settings": "Configurações",
+      "networks": "Redes",
+      "operation": "Última operação",
+      "compose": "Compose"
+    },
+    "notFound": "Esta hospedagem não existe ou foi excluída.",
+    "deleting": "Esta hospedagem está sendo excluída…",
+    "noSpec": "Não foi possível ler as configurações desta hospedagem.",
+    "overview": {
+      "template": "Modelo",
+      "image": "Imagem",
+      "phpVersion": "Versão do PHP",
+      "sitePath": "Diretório do site",
+      "documentRoot": "Raiz de documentos",
+      "documentRootRoot": "Raiz do site",
+      "domains": "Domínios",
+      "https": "HTTPS",
+      "redirectHttps": "Redirecionamento HTTP → HTTPS",
+      "resources": "Recursos",
+      "resourcesValue": "Memória: {{memory}} · CPU: {{cpus}}",
+      "containers": "Contêineres",
+      "noContainers": "Nenhum contêiner: a hospedagem não está implantada.",
+      "memoryValue": "{{value}} MB",
+      "cpusValue": "{{value}} CPU",
+      "unlimited": "Ilimitado",
+      "disabledModules": "Módulos PHP desativados",
+      "noDisabledModules": "Nenhum",
+      "routing": "Roteamento",
+      "routingDefault": "Padrão (imagem)",
+      "routingSymfony": "Symfony",
+      "routingLaravel": "Laravel",
+      "routingCustom": "Regras personalizadas",
+      "usage": "Consumo de recursos",
+      "usageNotRunning": "Nenhum contêiner em execução: inicie a hospedagem para ver o consumo de memória e CPU.",
+      "usageLoading": "Aguardando as primeiras medições…",
+      "phpMemory": "Memória do PHP",
+      "phpMemoryWeb": "Web:",
+      "phpMemoryCli": "CLI:",
+      "sameAsCli": "igual à CLI ({{value}})",
+      "networks": "Redes",
+      "noNetwork": "Nenhuma"
+    },
+    "secretsMasked": "Os valores secretos (variáveis de ambiente, trechos de configuração) estão ocultos para esta chave de API: as configurações são somente leitura.",
+    "compose": {
+      "help": "O compose.yaml usado para executar esta hospedagem. É um arquivo Docker Compose padrão: `docker compose up -d` no diretório da hospedagem a inicia sem o painel.",
+      "modified": "Este arquivo foi editado fora do painel: ele não corresponde mais às configurações. Salvar as configurações vai sobrescrevê-lo.",
+      "masked": "O arquivo compose não é exibido: esta chave de API não pode ler segredos.",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "routingFile": "Regras de roteamento",
+      "routingFileHelp": "Arquivo de roteamento usado atualmente pelo servidor web."
+    }
+  },
+  "settings": {
+    "modifiedAlert": {
+      "title": "Esta hospedagem foi modificada fora do painel",
+      "description": "Ao salvar, o arquivo compose será gerado novamente e as alterações manuais serão sobrescritas."
+    },
+    "forceConfirm": {
+      "title": "Sobrescrever as alterações manuais?",
+      "content": "O arquivo compose de \"{{name}}\" foi editado fora do painel. Ao salvar, ele é substituído pelas configurações deste formulário: as alterações manuais serão perdidas.",
+      "ok": "Sobrescrever as alterações manuais"
+    },
+    "submit": "Salvar e reimplantar",
+    "reset": "Descartar as alterações"
+  },
+  "operation": {
+    "none": "Nenhuma operação foi executada desde que a API foi iniciada.",
+    "kind": {
+      "create": "Criação",
+      "update": "Atualização",
+      "deploy": "Implantação",
+      "delete": "Exclusão"
+    },
+    "state": {
+      "running": "Em andamento",
+      "succeeded": "Concluída",
+      "failed": "Falhou"
+    },
+    "fields": {
+      "kind": "Operação",
+      "state": "Estado",
+      "startedAt": "Início",
+      "finishedAt": "Fim",
+      "duration": "Duração"
+    },
+    "durationSeconds": "{{seconds}} s",
+    "rolledBack": "A configuração anterior foi restaurada.",
+    "failedAlert": "A operação falhou",
+    "output": "Saída do Docker Compose",
+    "noOutput": "Sem saída"
+  },
+  "form": {
+    "required": "Obrigatório",
+    "sections": {
+      "routing": "Roteamento"
+    },
+    "fields": {
+      "template": {
+        "required": "Escolha um modelo",
+        "editHelp": "Para uma hospedagem existente, só é possível escolher modelos do mesmo tipo."
+      },
+      "name": {
+        "label": "Nome",
+        "placeholder": "meu-site",
+        "help": "Letras minúsculas, números e hifens (máx. {{max}} caracteres). Não pode ser alterado depois.",
+        "required": "O nome é obrigatório",
+        "tooLong": "No máximo {{max}} caracteres",
+        "invalid": "Apenas letras minúsculas, números e hifens, sem hífen no início ou no fim",
+        "checkFailed": "Não foi possível verificar a disponibilidade do nome",
+        "taken": {
+          "reserved": "Este nome é reservado",
+          "stack": "Uma hospedagem já usa este nome",
+          "directory": "Já existe um diretório com este nome",
+          "compose_project": "Uma stack Docker Compose já usa este nome",
+          "container": "Um contêiner já usa este nome",
+          "traefik_router": "Um roteador Traefik já usa este nome",
+          "unknown": "Este nome não está disponível"
+        }
+      },
+      "site": {
+        "label": "Diretório do site",
+        "tooltip": "Diretório em {{dir}} que contém os arquivos do site. Pode ser compartilhado com usuários SFTP e não pode ser alterado depois.",
+        "new": "Novo diretório",
+        "newHelp": "Será criado um diretório com o nome da hospedagem: {{path}}",
+        "existing": "Diretório existente",
+        "select": "Selecione um diretório",
+        "noneAvailable": "Nenhum diretório livre: todos os sites existentes já são usados por uma hospedagem.",
+        "required": "Selecione um diretório",
+        "readOnly": "O diretório do site de uma hospedagem não pode ser alterado."
+      },
+      "documentRoot": {
+        "label": "Raiz de documentos",
+        "tooltip": "Diretório servido pelo servidor web, relativo ao diretório do site. Deixe vazio para servir a raiz do site.",
+        "placeholder": "web",
+        "invalid": "Caminho relativo: letras, números e . _ @ + ~ - em segmentos separados por /, sem segmentos \".\" ou \"..\"",
+        "webTooltip": "Estrutura clássica: os arquivos do site ficam em web/.",
+        "publicTooltip": "Estrutura Symfony / Laravel: os arquivos do site ficam em public/. Nos modelos PHP, também ativa o roteamento do Symfony.",
+        "symfonyEnabled": "Roteamento do {{framework}} ativado (veja Avançado)."
+      },
+      "domains": {
+        "label": "Domínios",
+        "placeholder": "exemplo.com.br, www.exemplo.com.br",
+        "help": "Digite um domínio e pressione Enter. No máximo {{max}} domínios.",
+        "invalid": "Domínio inválido: {{domain}}",
+        "duplicate": "Domínio duplicado: {{domain}}",
+        "tooMany": "No máximo {{max}} domínios"
+      },
+      "https": {
+        "label": "HTTPS",
+        "help": "Ative o HTTPS quando o DNS de cada domínio apontar para este servidor; caso contrário, o certificado não poderá ser emitido."
+      },
+      "redirectHttps": {
+        "label": "Redirecionar HTTP para HTTPS",
+        "help": "Requer HTTPS."
+      },
+      "phpVersion": {
+        "label": "Versão do PHP",
+        "required": "Selecione uma versão do PHP",
+        "supported": "Suportadas",
+        "deprecated": "Obsoletas",
+        "deprecatedWarning": "Esta versão do PHP não é mais mantida: planeje uma atualização."
+      },
+      "memory": {
+        "label": "Limite de memória",
+        "unit": "MB",
+        "toggle": "Limitar a memória",
+        "help": "Opcional. Quando o contêiner atinge o limite de memória, o Docker o encerra: deixe desativado, a menos que precise limitar o consumo."
+      },
+      "cpus": {
+        "label": "Limite de CPU",
+        "unit": "CPU",
+        "toggle": "Limitar a CPU",
+        "help": "Opcional. Sem limite, o contêiner pode usar todos os núcleos de CPU do servidor."
+      },
+      "memoryLimit": {
+        "label": "memory_limit",
+        "tooltip": "Memória máxima por script PHP, por ex. 256M, ou -1 para ilimitada.",
+        "invalid": "Esperado um tamanho como 256M, ou -1",
+        "help": "Também é o padrão das requisições web quando o limite web está vazio."
+      },
+      "uploadMaxFilesize": {
+        "label": "upload_max_filesize",
+        "tooltip": "Tamanho máximo de um arquivo enviado, por ex. 64M.",
+        "invalid": "Esperado um tamanho como 64M"
+      },
+      "postMaxSize": {
+        "label": "post_max_size",
+        "tooltip": "Tamanho máximo do corpo de uma requisição; deve ser pelo menos igual a upload_max_filesize.",
+        "invalid": "Esperado um tamanho como 64M",
+        "tooSmall": "Deve ser maior ou igual a upload_max_filesize"
+      },
+      "maxExecutionTime": {
+        "label": "max_execution_time",
+        "tooltip": "Tempo máximo de execução de um script, em segundos (0 = ilimitado).",
+        "unit": "s",
+        "invalid": "Entre 0 e {{max}} segundos",
+        "help": "Somente web: o PHP na linha de comando (crons) nunca tem limite de tempo; limite um cron com php -d max_execution_time=N."
+      },
+      "displayErrors": {
+        "label": "display_errors",
+        "tooltip": "Exibe os erros do PHP nas páginas. Mantenha desativado em produção."
+      },
+      "timezone": {
+        "label": "Fuso horário",
+        "required": "Selecione um fuso horário"
+      },
+      "env": {
+        "label": "Variáveis de ambiente",
+        "add": "Adicionar uma variável",
+        "remove": "Remover",
+        "namePlaceholder": "NOME",
+        "valuePlaceholder": "valor",
+        "nameRequired": "O nome é obrigatório",
+        "nameInvalid": "Letras, números e sublinhados, sem começar com um número",
+        "nameReserved": "Esta variável é gerenciada pelo painel",
+        "nameDuplicate": "Variável duplicada",
+        "valueInvalid": "O valor deve caber em uma única linha",
+        "tooMany": "No máximo {{max}} variáveis",
+        "help": "As variáveis gerenciadas pelo painel (PHP_*, WEB_DOCUMENT_ROOT, APPLICATION_*, CONTAINER_*, LD_*) não podem ser definidas aqui."
+      },
+      "phpIni": {
+        "label": "php.ini adicional",
+        "tooltip": "Carregado depois de todos os outros arquivos de configuração do PHP.",
+        "placeholder": "opcache.enable = 1"
+      },
+      "vhost": {
+        "label": "Diretivas adicionais do host virtual",
+        "tooltipNginx": "Diretivas do Nginx incluídas no bloco server.",
+        "tooltipApache": "Diretivas do Apache incluídas no bloco VirtualHost.",
+        "placeholderNginx": "location /api { … }",
+        "placeholderApache": "Header set X-Frame-Options \"DENY\"",
+        "helpNginx": "Inserido dentro do bloco server da imagem: não cole um bloco server { } completo. A imagem já define location / e location ~ \\.php$ (fastcgi_pass php); altere-as na seção Roteamento. Exemplo:",
+        "helpApache": "Inserido dentro do bloco VirtualHost da imagem: não cole um bloco VirtualHost completo. Altere o roteamento na seção Roteamento. Exemplo:"
+      },
+      "bytes": "{{used}} / {{max}} bytes",
+      "snippetTooLarge": "No máximo {{max}} bytes",
+      "phpModules": {
+        "label": "Módulos PHP",
+        "help": "Desative os módulos de que este site não precisa.",
+        "loading": "Carregando os módulos desta imagem PHP…",
+        "loadingHint": "Na primeira vez, a imagem é baixada: isso pode levar um ou dois minutos.",
+        "error": "Não foi possível carregar os módulos desta imagem PHP.",
+        "retry": "Tentar novamente",
+        "search": "Filtrar módulos",
+        "empty": "Nenhum módulo",
+        "selectVersion": "Selecione uma versão do PHP para listar seus módulos.",
+        "ioncubeTag": "Atenção",
+        "ioncubeWarning": "O ionCube executa PHP codificado; ele vem desativado por padrão porque é muito usado por malware (por ex. ransomware).",
+        "alsoDisabled": "Também desativados: {{modules}}",
+        "disabledWith": "Desativado junto com {{module}}"
+      },
+      "routing": {
+        "framework": {
+          "label": "Framework",
+          "none": "Nenhum",
+          "noneHelp": "Roteamento da imagem: os arquivos são servidos como estão e os arquivos PHP são executados diretamente.",
+          "phpOnly": "Requer um modelo PHP.",
+          "overriddenByCustom": "Inativo enquanto regras personalizadas forem usadas: elas substituem as regras do framework.",
+          "siteRootWarning": "A raiz de documentos não é um diretório \"public\": arquivos do projeto como .env, composer.json, vendor/, var/ ou storage/ seriam servidos. O {{framework}} espera seu diretório \"public\" como raiz de documentos (por ex. \"public\" ou \"web/public\")."
+        },
+        "symfony": {
+          "helpNginx": "Todas as requisições recorrem ao index.php (try_files $uri /index.php$is_args$args). Só o controlador frontal é executado: /index.php chamado diretamente e os outros arquivos .php retornam 404.",
+          "helpApache": "FallbackResource /index.php na raiz de documentos: toda requisição de um arquivo inexistente chega ao controlador frontal."
+        },
+        "laravel": {
+          "helpNginx": "As requisições recorrem ao index.php (try_files $uri $uri/ /index.php?$query_string); só o index.php é executado, os outros arquivos .php retornam 404, arquivos ocultos são negados exceto .well-known e as páginas 404 são tratadas pelo Laravel.",
+          "helpApache": "FallbackResource /index.php com AllowOverride All (o public/.htaccess do Laravel se aplica), sem listagem de diretórios, arquivos ocultos negados."
+        },
+        "assetDirs": {
+          "label": "Diretórios de assets",
+          "help": "Diretórios da raiz de documentos servidos apenas como arquivos estáticos: um arquivo inexistente retorna 404 em vez de chegar ao controlador frontal.",
+          "placeholder": "bundles",
+          "invalid": "Diretório inválido: {{dir}} (letras, números e . _ @ + ~ - em segmentos separados por /, sem \".\" ou \"..\")",
+          "duplicate": "Diretório duplicado: {{dir}}",
+          "tooMany": "No máximo {{max}} diretórios"
+        },
+        "custom": {
+          "label": "Personalizar as regras",
+          "helpNginx": "Suas regras substituem o roteamento da imagem (o arquivo location /), incluído antes da location PHP: você pode redefinir location / e adicionar locations com regex. O PHP-FPM é o upstream php (fastcgi_pass php;).",
+          "helpApache": "Suas regras substituem o roteamento da imagem e são incluídas primeiro dentro do VirtualHost.",
+          "noPrefill": "Não há regras geradas para modelos estáticos: comece com um arquivo vazio."
+        },
+        "rules": {
+          "label": "Regras de roteamento",
+          "reset": "Redefinir para as regras geradas",
+          "required": "Informe as regras de roteamento",
+          "resetConfirm": "Substituir as regras atuais pelas regras geradas?",
+          "prefillInvalid": "Corrija os campos destacados (raiz de documentos, diretórios de assets) antes de gerar as regras."
+        },
+        "familyWarning": "Estas regras foram escritas para {{from}} e o modelo agora usa {{to}}: a sintaxe é diferente, revise-as antes de salvar.",
+        "rulesWrongFamily": "Estas regras foram escritas para o servidor web anterior: reescreva-as para {{family}}."
+      },
+      "phpGroups": {
+        "web": "Requisições web (Nginx / Apache)",
+        "cli": "Linha de comando (crons, console)"
+      },
+      "webMemoryLimit": {
+        "label": "Limite de memória web",
+        "tooltip": "Limite de memória das requisições web (PHP-FPM); a aplicação não pode aumentá-lo com ini_set. Deixe vazio para usar o limite da linha de comando.",
+        "placeholder": "Igual à CLI: {{value}}"
+      },
+      "networks": {
+        "label": "Redes",
+        "help": "Redes privadas das quais o site participa: ele acessa os serviços e os sites que estão nelas pelo nome (por ex. svc-postgres-17). A rede compartilhada \"services\" dá acesso às instâncias de serviço que estão nela.",
+        "extra": "Alterar as redes reimplanta o site (alguns segundos de indisponibilidade)."
+      }
+    },
+    "layout": {
+      "type": {
+        "title": "Tipo",
+        "subtitle": "Servidor web e PHP"
+      },
+      "site": {
+        "title": "Site",
+        "subtitle": "Nome, arquivos e domínios"
+      },
+      "runtime": {
+        "title": "PHP e recursos",
+        "subtitle": "Versão do PHP, limites, configurações e módulos"
+      },
+      "runtimeStatic": {
+        "title": "Recursos",
+        "subtitle": "Limites de memória e CPU do contêiner"
+      },
+      "advanced": {
+        "title": "Avançado",
+        "subtitle": "Roteamento, ambiente e trechos de configuração"
+      },
+      "review": {
+        "title": "Revisão",
+        "subtitle": "Confira as configurações antes de criar a hospedagem",
+        "seconds": "{{value}} s"
+      },
+      "advancedNotice": "Tudo aqui é opcional: os valores padrão servem para a maioria dos sites.",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "edit": "Editar",
+      "stepsLabel": "Etapas de criação",
+      "navigation": "Seções",
+      "unsaved": "Alterações não salvas",
+      "summary": {
+        "configured": "Configurado",
+        "empty": "Vazio",
+        "variables_one": "{{count}} variável",
+        "variables_many": "{{count}} de variáveis",
+        "variables_other": "{{count}} variáveis",
+        "disabledModules_one": "{{count}} desativado",
+        "disabledModules_many": "{{count}} de desativados",
+        "disabledModules_other": "{{count}} desativados",
+        "allEnabled": "Todos ativados"
+      }
+    }
+  }
+}

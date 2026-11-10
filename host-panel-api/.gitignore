@@ -1,0 +1,5 @@
+.env
+data/*
+log/*
+/server
+.DS_Store

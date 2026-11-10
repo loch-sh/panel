@@ -1,0 +1,324 @@
+{
+  "title": "Réseaux privés",
+  "intro": "Des réseaux isolés pour vos sites et services : seuls les membres d'un même réseau se joignent. Chaque réseau est interne : il ne donne aucun accès à Internet.",
+  "forbidden": "Les réseaux privés sont réservés aux administrateurs.",
+  "newNetwork": "Nouveau réseau",
+  "empty": "Aucun réseau privé pour l'instant",
+  "columns": {
+    "name": "Nom",
+    "subnet": "Sous-réseau",
+    "gateway": "Passerelle",
+    "members": "Membres",
+    "properties": "Propriétés",
+    "description": "Description",
+    "actions": "Actions"
+  },
+  "tags": {
+    "shared": "Partagé",
+    "private": "Privé",
+    "noInternet": "Sans accès Internet",
+    "reservedOverlap": "Plage réservée"
+  },
+  "tagHints": {
+    "shared": "Réseau du module services : chaque site qui y est connecté joint les services qui s'y trouvent. Il ne peut pas être supprimé.",
+    "private": "Seuls ses membres se joignent entre eux.",
+    "noInternet": "Réseau interne : ses membres ne peuvent pas joindre Internet par ce réseau.",
+    "reservedOverlap": "Son sous-réseau chevauche la plage réservée {{range}} (un LAN ou un VPN utilisé hors de Docker) : les adresses de cette plage peuvent être injoignables depuis ses conteneurs."
+  },
+  "state": {
+    "ok": "OK",
+    "missing": "Absent",
+    "compromised": "Compromis"
+  },
+  "stateHints": {
+    "ok": "Le réseau Docker est bien celui créé par le panel.",
+    "missing": "Le réseau Docker n'existe pas sur le serveur : ses membres ne peuvent pas y démarrer. L'API le recrée à son prochain démarrage.",
+    "compromised": "Le réseau Docker n'est pas celui créé par le panel : ses membres ne sont pas considérés comme fiables tant qu'il n'est pas corrigé."
+  },
+  "problems": {
+    "replaced": "Le réseau a été remplacé en dehors du panel (ID différent).",
+    "notBridge": "Ce n'est pas un réseau bridge local.",
+    "notInternal": "Il n'est pas interne : ses membres pourraient joindre Internet.",
+    "unexpectedOptions": "Il a des options inattendues (IPv6 ou réseau de configuration).",
+    "missingLabel": "Le label du panel est absent.",
+    "unexpectedLabel": "Son label du panel désigne un autre réseau.",
+    "composeProject": "Il a été créé par un projet Compose.",
+    "unexpectedSubnet": "Son sous-réseau n'est pas celui enregistré.",
+    "inspectFailed": "Impossible d'interroger Docker.",
+    "other": "Réseau Docker inattendu."
+  },
+  "automatic": "Automatique",
+  "delete": {
+    "title": "Supprimer le réseau {{name}} ?",
+    "content": "Le réseau Docker est supprimé. Un réseau ne peut être supprimé qu'une fois qu'il n'a plus aucun membre.",
+    "submit": "Supprimer",
+    "systemHint": "Le réseau partagé du module services ne peut pas être supprimé.",
+    "inUseHint": "Détachez d'abord ses membres."
+  },
+  "toasts": {
+    "created": "Réseau {{name}} créé.",
+    "deleted": "Réseau {{name}} supprimé.",
+    "descriptionSaved": "Description enregistrée.",
+    "attached": "{{name}} est connecté au réseau.",
+    "detached": "{{name}} est déconnecté du réseau.",
+    "siteRedeploying": "{{name}} est en cours de redéploiement avec ses nouveaux réseaux…",
+    "siteRedeployed": "{{name}} a été redéployé avec ses nouveaux réseaux.",
+    "siteRedeployFailed": "Le redéploiement de {{name}} a échoué : consultez sa dernière opération.",
+    "disconnected": "Conteneur {{name}} déconnecté."
+  },
+  "create": {
+    "title": "Nouveau réseau privé",
+    "intro": "Créez un réseau isolé, puis attachez-y des sites et des instances de service : seuls ses membres se joignent entre eux.",
+    "back": "Retour à la liste",
+    "submit": "Créer le réseau",
+    "sections": {
+      "name": {
+        "title": "Nom",
+        "subtitle": "1 à 24 lettres minuscules, chiffres ou tirets, en commençant par une lettre. Il ne pourra plus être modifié."
+      },
+      "description": {
+        "title": "Description",
+        "subtitle": "Facultatif : à quoi sert le réseau."
+      },
+      "addressing": {
+        "title": "Adressage",
+        "subtitle": "La plage IPv4 du réseau, fixée une fois pour toutes (Docker ne permet pas de la modifier ensuite)."
+      },
+      "members": {
+        "title": "Membres",
+        "subtitle": "Facultatif : sites et instances de services à attacher une fois le réseau créé."
+      }
+    },
+    "nameLabel": "Nom",
+    "namePlaceholder": "backend",
+    "nameRequired": "Saisissez un nom.",
+    "nameInvalid": "1 à 24 lettres minuscules, chiffres ou tirets, en commençant par une lettre et sans finir par un tiret.",
+    "nameReserved": "Ce nom est réservé.",
+    "nameTaken": "Un réseau portant ce nom existe déjà.",
+    "dockerName": "Nom Docker : {{name}}",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Boutique et sa base de données",
+    "descriptionInvalid": "Aucun caractère de contrôle, 200 caractères au maximum.",
+    "addressing": {
+      "automatic": {
+        "title": "Automatique",
+        "description": "Docker choisit une plage privée libre."
+      },
+      "manual": {
+        "title": "Sous-réseau manuel",
+        "description": "Choisissez la plage, par ex. pour éviter un conflit avec un VPN."
+      }
+    },
+    "subnetLabel": "Sous-réseau (CIDR)",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "Une plage IPv4 privée (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 ou 100.64.0.0/10), de /16 à /28, écrite avec son adresse réseau.",
+    "subnetRequired": "Saisissez un sous-réseau, ou choisissez Automatique.",
+    "subnetProblems": {
+      "format": "Écrivez une plage IPv4 en notation CIDR, par ex. 10.20.0.0/24.",
+      "networkAddress": "Écrivez la plage avec son adresse réseau : {{expected}}.",
+      "prefixLength": "La longueur du préfixe doit être comprise entre /16 et /28.",
+      "privateRange": "La plage doit être privée : 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 ou 100.64.0.0/10.",
+      "reserved": "La plage chevauche la plage réservée {{range}} (un LAN ou un VPN utilisé hors de Docker)."
+    },
+    "usableHosts_one": "{{count}} adresse utilisable",
+    "usableHosts_many": "{{count}} adresses utilisables",
+    "usableHosts_other": "{{count}} adresses utilisables",
+    "summary": {
+      "title": "Récapitulatif",
+      "name": "Nom",
+      "dockerName": "Nom Docker",
+      "subnet": "Sous-réseau",
+      "internet": "Accès Internet",
+      "internetNone": "Aucun (réseau interne)",
+      "note": "Le réseau démarre vide : attachez-y des sites et des instances de service depuis sa page.",
+      "limit": "Réseaux privés",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "Membres",
+      "membersNone": "Aucun"
+    },
+    "limitReached": "La limite de {{max}} réseaux privés est atteinte : supprimez d'abord un réseau.",
+    "ranges": {
+      "private": "Plages autorisées",
+      "reserved": "Plages réservées",
+      "reservedNone": "Aucune",
+      "reservedHintManual": "Un sous-réseau qui chevauche une plage réservée (un LAN ou un VPN utilisé hors de Docker) est refusé.",
+      "reservedHintAutomatic": "Si Docker choisit une plage qui chevauche une plage réservée, la création est refusée : choisissez alors un sous-réseau manuel."
+    },
+    "members": {
+      "label": "Sites et instances de services",
+      "placeholder": "Choisissez des sites ou des instances de services",
+      "restart": "Chaque membre choisi est recréé avec ce réseau : quelques secondes d'interruption pour son conteneur (un site est redéployé).",
+      "failedHint": "Le réseau a été créé : attachez-les de nouveau avec « Attacher une ressource ».",
+      "failedTitle_one": "{{count}} membre n'a pas pu être attaché",
+      "failedTitle_many": "{{count}} membres n'ont pas pu être attachés",
+      "failedTitle_other": "{{count}} membres n'ont pas pu être attachés",
+      "partial_one": "Réseau {{name}} créé, mais {{count}} membre n'a pas pu être attaché.",
+      "partial_many": "Réseau {{name}} créé, mais {{count}} membres n'ont pas pu être attachés.",
+      "partial_other": "Réseau {{name}} créé, mais {{count}} membres n'ont pas pu être attachés."
+    }
+  },
+  "detail": {
+    "back": "Retour aux réseaux",
+    "notFound": "Ce réseau n'existe pas (ou plus).",
+    "info": "Informations",
+    "dockerName": "Nom Docker",
+    "id": "ID Docker",
+    "subnet": "Sous-réseau",
+    "gateway": "Passerelle",
+    "internet": "Accès Internet",
+    "internetNone": "Aucun (réseau interne)",
+    "internetWarning": "Non interne : les membres peuvent joindre Internet",
+    "created": "Créé",
+    "createdBy": "{{date}} par {{user}}",
+    "description": "Description",
+    "descriptionEmpty": "Aucune description",
+    "editDescription": "Modifier la description",
+    "members": "Membres",
+    "membersEmpty": "Aucun membre pour l'instant : attachez un site ou une instance de service.",
+    "attach": "Attacher une ressource",
+    "systemNote": "Réseau partagé du module services : les instances de service le rejoignent par défaut, et chaque site qui y est connecté les joint."
+  },
+  "members": {
+    "columns": {
+      "kind": "Type",
+      "name": "Nom",
+      "container": "Conteneur",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "État",
+      "actions": "Actions"
+    },
+    "kinds": {
+      "site": "Site",
+      "instance": "Instance de service",
+      "panel": "Panel",
+      "unmanaged": "Non géré",
+      "function": "Fonction"
+    },
+    "panelHint": "Le panel lui-même : il rejoint le réseau tant qu'un tunnel de ports (loch proxy) est ouvert vers l'un de ses membres.",
+    "notConnected": "Déclaré mais non connecté",
+    "notConnectedHint": "Son fichier compose déclare ce réseau, mais son conteneur n'y est pas : il est arrêté, ou doit être redéployé.",
+    "notDeclared": "Connecté mais non déclaré",
+    "notDeclaredHint": "Le conteneur est sur le réseau, mais son fichier compose ne le déclare pas : il a été connecté à la main.",
+    "noContainer": "Aucun conteneur",
+    "detach": "Détacher",
+    "lastNetworkHint": "Une instance de service garde au moins un réseau : attachez-la d'abord à un autre réseau.",
+    "detachConfirm": {
+      "title": "Détacher {{name}} de {{network}} ?",
+      "site": "Le site est redéployé sans ce réseau : ses conteneurs sont recréés (quelques secondes d'interruption) et il ne joint plus les membres de ce réseau.",
+      "instance": "{{container}} redémarre sans ce réseau : ses clients sont déconnectés quelques secondes, et les sites de ce réseau n'y ont plus accès.",
+      "submit": "Détacher",
+      "function": "La fonction {{name}} est recréée sans ce réseau : les membres de ce réseau ne peuvent plus l'invoquer."
+    },
+    "lastNetworkHintFunction": "Une fonction garde au moins un réseau : attachez-la d'abord à un autre réseau."
+  },
+  "unmanaged": {
+    "title_one": "{{count}} conteneur non géré par le panel est sur ce réseau",
+    "title_many": "{{count}} conteneurs non gérés par le panel sont sur ce réseau",
+    "title_other": "{{count}} conteneurs non gérés par le panel sont sur ce réseau",
+    "description": "Ils l'ont rejoint en dehors du panel (par ex. une stack de CI) et joignent ses membres. Déconnectez-les s'ils ne doivent pas y avoir accès.",
+    "disconnect": "Déconnecter",
+    "confirm": {
+      "title": "Déconnecter {{name}} ?",
+      "content": "Le conteneur est déconnecté du réseau immédiatement. Il le rejoint de nouveau si son propre fichier compose le déclare et qu'il est redéployé.",
+      "submit": "Déconnecter"
+    }
+  },
+  "attach": {
+    "title": "Attacher une ressource à {{network}}",
+    "intro": "Le conteneur du membre est recréé avec ce réseau : quelques secondes d'interruption pour ce seul conteneur.",
+    "resource": "Ressource",
+    "placeholder": "Choisissez un site ou une instance de service",
+    "sites": "Sites",
+    "instances": "Instances de service",
+    "noResource": "Aucun site ni instance de service à attacher.",
+    "submit": "Attacher",
+    "disabled": {
+      "unauthenticated": "Sans authentification : ne peut pas rejoindre le réseau partagé",
+      "modified": "Modifié à la main",
+      "operation": "Opération en cours"
+    },
+    "restart": {
+      "site": "Le site {{name}} est redéployé : ses conteneurs sont recréés (quelques secondes d'interruption).",
+      "instance": "{{container}} redémarre : ses sites perdent leur connexion quelques secondes.",
+      "function": "La fonction {{name}} est recréée avec ce réseau : une invocation en cours est interrompue."
+    },
+    "functions": "Fonctions"
+  },
+  "select": {
+    "placeholder": "Choisissez des réseaux",
+    "unavailable": "Indisponible",
+    "createLink": "Créer un réseau privé",
+    "loadFailed": "Impossible de lister les réseaux."
+  },
+  "tabs": {
+    "private": "Réseaux privés",
+    "docker": "Autres réseaux Docker"
+  },
+  "docker": {
+    "intro": "Réseaux Docker que le panel ne gère pas : ceux de Docker lui-même (bridge, host, none), ceux des stacks Compose (par exemple déployées par la CI/CD, le reverse proxy) et ceux créés à la main. Ils sont affichés en lecture seule.",
+    "empty": "Aucun autre réseau Docker",
+    "columns": {
+      "origin": "Origine",
+      "driver": "Pilote",
+      "containers": "Conteneurs"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose : {{project}}",
+      "other": "Autre"
+    },
+    "originHints": {
+      "docker": "Créé par Docker lui-même.",
+      "compose": "Créé par un projet Compose (par exemple une stack déployée par la CI/CD).",
+      "other": "Créé à la main ou par un autre outil."
+    },
+    "internet": "Accès à Internet",
+    "internetHint": "Non interne : ses conteneurs peuvent atteindre Internet par ce réseau.",
+    "internetYes": "Oui (non interne)",
+    "back": "Retour aux réseaux Docker",
+    "title": "Réseau Docker",
+    "notFound": "Ce réseau Docker n'existe pas (ou plus), ou c'est un réseau du panel.",
+    "readOnly": "Ce réseau n'est pas géré par le panel : il est affiché en lecture seule.",
+    "containersEmpty": "Aucun conteneur sur ce réseau.",
+    "containersTitle_one": "{{count}} conteneur",
+    "containersTitle_many": "{{count}} conteneurs",
+    "containersTitle_other": "{{count}} conteneurs"
+  },
+  "site": {
+    "title": "Réseaux du panel",
+    "intro": "Le site joint les autres membres de ces réseaux (instances de services, sites). Connecter ou déconnecter un réseau redéploie le site : il redémarre pendant quelques secondes.",
+    "connect": "Connecter un réseau",
+    "disconnect": "Déconnecter",
+    "empty": "Le site n'est sur aucun réseau du panel.",
+    "columns": {
+      "type": "Type",
+      "state": "État",
+      "warnings": "Avertissements"
+    },
+    "connected": "Connecté",
+    "connectedHint": "Le conteneur du site est sur ce réseau.",
+    "unknown": "Réseau inconnu",
+    "unknownHint": "Les paramètres du site nomment un réseau que le panel ne connaît pas (ou plus).",
+    "modifiedHint": "Le fichier compose a été modifié à la main : les réseaux ne peuvent pas être changés depuis le panel.",
+    "busyHint": "Une opération est en cours sur ce site.",
+    "connectModal": {
+      "title": "Connecter {{name}} à un réseau",
+      "network": "Réseau",
+      "placeholder": "Choisissez un réseau",
+      "none": "Le site est déjà sur tous les réseaux du panel.",
+      "submit": "Connecter"
+    },
+    "toasts": {
+      "connected": "{{name}} est connecté à {{network}}.",
+      "disconnected": "{{name}} est déconnecté de {{network}}."
+    },
+    "other": {
+      "title": "Autres réseaux Docker",
+      "intro": "Réseaux non gérés par le panel sur lesquels se trouve le conteneur du site (par exemple le réseau du reverse proxy). Lecture seule.",
+      "empty": "Le conteneur du site n'est sur aucun autre réseau Docker.",
+      "loadFailed": "Impossible de lister les autres réseaux Docker."
+    }
+  }
+}

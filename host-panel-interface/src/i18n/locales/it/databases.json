@@ -1,0 +1,507 @@
+{
+  "disabled": "I database sono disattivati su questo server.",
+  "configError": "Il modulo database è attivo ma non è riuscito ad avviarsi: controlla i log dell'API.",
+  "engineDisabled": "Questo motore non è attivo su questo server.",
+  "engines": {
+    "mysql": "MySQL®",
+    "mariadb": "MariaDB®",
+    "postgres": "PostgreSQL®",
+    "mongodb": "MongoDB®",
+    "redis": "Redis®",
+    "valkey": "Valkey™",
+    "rabbitmq": "RabbitMQ®",
+    "nats": "NATS®",
+    "s3": "Loch S3",
+    "elasticmq": "ElasticMQ",
+    "mosquitto": "Eclipse Mosquitto™"
+  },
+  "actions": {
+    "resetPassword": "Nuova password",
+    "retire": "Rimuovi istanza",
+    "edit": "Modifica",
+    "purge": "Elimina"
+  },
+  "instances": {
+    "columns": {
+      "version": "Versione",
+      "state": "Stato",
+      "host": "Indirizzo interno",
+      "actions": "Azioni",
+      "exposure": "Porta pubblicata"
+    },
+    "modified": "Modificata a mano",
+    "modifiedHint": "I suoi file sono stati modificati fuori dal pannello: viene mantenuta anche senza database.",
+    "state": {
+      "ready": "In esecuzione",
+      "starting": "Avvio in corso",
+      "unhealthy": "Non integra",
+      "stopped": "Arrestata",
+      "missing": "Non avviata",
+      "conflict": "Conflitto",
+      "other": "Sconosciuto",
+      "unverified": "Non verificata",
+      "restarting": "Riavvio",
+      "paused": "In pausa"
+    },
+    "notReadyHint": "L'istanza non è in esecuzione o non è integra: i suoi database non possono essere elencati.",
+    "tls": "TLS",
+    "noTls": "non cifrata",
+    "notExposed": "Solo interna",
+    "exposureHint": "Pubblicata su un indirizzo del server: i client esterni a Docker possono connettersi.",
+    "exposureTlsHint": "TLS obbligatorio. Impronta SHA-256 del certificato: {{fingerprint}}",
+    "exposureError": "Modifica non riuscita",
+    "exposureErrorHint": "L'ultima modifica della porta pubblicata non è riuscita: resta quella precedente. Controlla i log dell'API.",
+    "tlsOptional": "TLS facoltativo",
+    "exposureTlsOptionalHint": "TLS offerto ma non obbligatorio: i client senza TLS inviano password e dati in chiaro. Impronta SHA-256 del certificato: {{fingerprint}}"
+  },
+  "resources": {
+    "columns": {
+      "actions": "Azioni"
+    },
+    "unmanaged": "Non gestito",
+    "unmanagedHint": "Creato fuori dal pannello: non può essere eliminato qui e mantiene attiva l'istanza."
+  },
+  "create": {
+    "nameRequired": "Inserisci un nome."
+  },
+  "credentials": {
+    "title": "Dati di connessione",
+    "warning": "Copia ora la password: non verrà più mostrata. Se la perdi, generane una nuova.",
+    "fields": {
+      "host": "Host",
+      "port": "Porta",
+      "database": "Database",
+      "user": "Utente",
+      "password": "Password",
+      "uri": "URI di connessione",
+      "external": "Indirizzo esterno",
+      "tlsFingerprint": "Impronta del certificato (SHA-256)",
+      "vhost": "Host virtuale",
+      "endpoint": "Endpoint",
+      "region": "Regione",
+      "bucket": "Bucket",
+      "accessKeyId": "ID chiave di accesso",
+      "secretAccessKey": "Chiave di accesso segreta",
+      "pathStyle": "URL in stile percorso",
+      "queueUrlPrefix": "Prefisso degli URL delle code"
+    },
+    "internalOnly": "L'host è raggiungibile solo dai siti collegati alla rete dei servizi.",
+    "close": "Ho copiato la password",
+    "show": "Mostra",
+    "hide": "Nascondi",
+    "laravelEnv": "Copia le righe .env di Laravel (contiene il segreto)",
+    "noAuth": "Nessuna autenticazione: qualsiasi sito collegato alla rete dei servizi può usare, svuotare o eliminare le code di questa istanza. Sono accettate credenziali qualsiasi (gli SDK ne richiedono, ad es. \"x\")."
+  },
+  "delete": {
+    "confirmLabel": "Digita {{name}} per confermare:"
+  },
+  "rotate": {
+    "title": "Generare una nuova password per {{name}}?",
+    "content": "La password attuale smette di funzionare e le connessioni aperte vengono chiuse: aggiorna i siti che la usano.",
+    "submit": "Genera"
+  },
+  "retire": {
+    "title": "Rimuovere l'istanza {{engine}} {{version}}?",
+    "content": "L'istanza non contiene database. I suoi container e dati vengono eliminati.",
+    "submit": "Rimuovi"
+  },
+  "toasts": {
+    "passwordReset": "Nuova password generata.",
+    "retired": "Istanza rimossa.",
+    "updated": "Istanza aggiornata.",
+    "purged": "Istanza eliminata."
+  },
+  "wording": {
+    "database": {
+      "title": "Database {{engine}}",
+      "intro": "Ogni versione gira in un'unica istanza condivisa da tutti i siti. Si avvia con il primo database e viene rimossa, con i suoi dati, quando l'ultimo viene eliminato.",
+      "newResource": "Nuovo database",
+      "empty": "Ancora nessun database {{engine}}.",
+      "resourceColumn": "Database e utente",
+      "countColumn": "Database",
+      "resourcesEmpty": "Nessun database in questa istanza.",
+      "createTitle": "Nuovo database {{engine}}",
+      "nameHelp": "Usato per il database e il suo utente: lettere minuscole, cifre e _, iniziando con una lettera (max {{max}} caratteri).",
+      "nameInvalid": "Usa solo lettere minuscole, cifre e _, iniziando con una lettera (max {{max}} caratteri).",
+      "created": "Database creato.",
+      "deleted": "Database eliminato.",
+      "instanceRetired": "Database eliminato; l'istanza è stata rimossa.",
+      "retireBlocked": "Database eliminato; l'istanza vuota è stata mantenuta (file modificati a mano o rimozione non riuscita).",
+      "deleteTitle": "Eliminare il database {{name}}?",
+      "deleteContent": "Il database e il suo utente vengono eliminati definitivamente. Le connessioni aperte vengono chiuse.",
+      "deleteLast": "È l'ultimo database di {{engine}} {{version}}: anche l'istanza viene rimossa, con i suoi dati.",
+      "createFirst": "Crea un database"
+    },
+    "vhost": {
+      "title": "Host virtuali {{engine}}",
+      "intro": "Ogni versione gira in un unico broker condiviso da tutti i siti. Una risorsa è un host virtuale con un utente dello stesso nome, isolato dagli altri e limitato (connessioni, code, dimensione delle code).",
+      "newResource": "Nuovo host virtuale",
+      "empty": "Ancora nessun host virtuale {{engine}}.",
+      "resourceColumn": "Host virtuale e utente",
+      "countColumn": "Host virtuali",
+      "resourcesEmpty": "Nessun host virtuale in questa istanza.",
+      "createTitle": "Nuovo host virtuale {{engine}}",
+      "nameHelp": "Usato per l'host virtuale e il suo utente: lettere minuscole, cifre e _, iniziando con una lettera (max {{max}} caratteri).",
+      "nameInvalid": "Usa solo lettere minuscole, cifre e _, iniziando con una lettera (max {{max}} caratteri).",
+      "created": "Host virtuale creato.",
+      "deleted": "Host virtuale eliminato.",
+      "instanceRetired": "Host virtuale eliminato; il broker è stato rimosso.",
+      "retireBlocked": "Host virtuale eliminato; il broker vuoto è stato mantenuto (file modificati a mano o rimozione non riuscita).",
+      "deleteTitle": "Eliminare l'host virtuale {{name}}?",
+      "deleteContent": "L'host virtuale, le sue code e i messaggi, e il suo utente vengono eliminati definitivamente. Le connessioni aperte vengono chiuse.",
+      "deleteLast": "È l'ultimo host virtuale di {{engine}} {{version}}: anche il broker viene rimosso, con i suoi dati.",
+      "createFirst": "Crea un host virtuale"
+    },
+    "dedicated": {
+      "title": "Istanze {{engine}}",
+      "intro": "Ogni istanza gira in un proprio container, dimensionato alla creazione, con un solo utente. Eliminarla elimina i suoi dati.",
+      "newResource": "Nuova istanza",
+      "empty": "Ancora nessuna istanza {{engine}}.",
+      "resourceColumn": "Istanza",
+      "countColumn": "Istanze",
+      "resourcesEmpty": "Nessuna istanza.",
+      "createTitle": "Nuova istanza {{engine}}",
+      "nameHelp": "Diventa il nome host e l'utente: lettere minuscole e cifre, iniziando con una lettera (max {{max}} caratteri).",
+      "nameInvalid": "Usa solo lettere minuscole e cifre, iniziando con una lettera (max {{max}} caratteri).",
+      "created": "Istanza creata.",
+      "deleted": "Istanza eliminata, con i suoi dati.",
+      "instanceRetired": "Istanza eliminata, con i suoi dati.",
+      "retireBlocked": "Istanza eliminata.",
+      "deleteTitle": "Eliminare l'istanza {{name}}?",
+      "deleteContent": "Il container e tutti i suoi dati vengono eliminati definitivamente. Le connessioni aperte vengono chiuse.",
+      "deleteLast": "Il container e i suoi dati vengono eliminati.",
+      "createFirst": "Crea un'istanza"
+    }
+  },
+  "createPage": {
+    "back": "Torna all'elenco",
+    "recommended": "Consigliata",
+    "instanceRunning": "Istanza avviata",
+    "default": "Predefinito",
+    "nameLabel": "Nome",
+    "submit": "Crea",
+    "sections": {
+      "version": {
+        "title": "Versione",
+        "subtitle": "La versione del motore, scelta una volta (non può essere cambiata in seguito)."
+      },
+      "options": {
+        "title": "Dimensione e impostazioni",
+        "subtitle": "Risorse riservate al container e impostazioni del motore."
+      },
+      "name": {
+        "title": "Nome"
+      }
+    },
+    "summary": {
+      "title": "Riepilogo",
+      "engine": "Motore",
+      "type": "Tipo",
+      "shared": "Istanza condivisa",
+      "dedicated": "Container dedicato",
+      "name": "Nome",
+      "address": "Indirizzo interno",
+      "startNote": "L'istanza {{engine}} {{version}} non è ancora avviata: si avvia con questa risorsa (fino a due minuti).",
+      "sharedNote": "Creata nell'istanza {{engine}} {{version}} già avviata.",
+      "dedicatedNote": "Viene avviato un container solo per questa risorsa (fino a un minuto).",
+      "passwordNote": "La password viene mostrata una sola volta, dopo la creazione.",
+      "restartNote": "Il salvataggio riavvia l'istanza: i suoi client vengono disconnessi per qualche secondo."
+    },
+    "nameTaken": "Esiste già un'istanza con questo nome.",
+    "fixed": "Definito alla creazione",
+    "noChange": "Nessuna modifica.",
+    "editTitle": "Modifica {{name}}",
+    "editIntro": "Modifica la dimensione o le impostazioni di questa istanza. Viene ricreata con esse: qualche secondo di indisponibilità, dati conservati.",
+    "notFound": "Questa istanza non esiste (più).",
+    "saveConfirm": {
+      "title": "Applicare le modifiche a {{name}}?",
+      "content": "L'istanza si riavvia con le nuove impostazioni (qualche secondo di indisponibilità). Se non si avvia, vengono ripristinate le impostazioni precedenti."
+    },
+    "legacyAuth": {
+      "label": "Autenticazione legacy",
+      "help": {
+        "mysql": "Per client datati (vecchio PHP o strumenti) che falliscono con «Authentication requires secure connection»: l'utente si autentica con mysql_native_password invece di caching_sha2_password. Non può essere modificata in seguito (salvo ricreando il database).",
+        "postgres": "Per client datati senza SCRAM: la password è memorizzata in md5 invece di SCRAM-SHA-256 (deprecato da PostgreSQL 18). Non può essere modificata in seguito (salvo ricreando il database)."
+      },
+      "warning": "Meccanismo più debole: chi osserva la rete ricava più informazioni dallo scambio. La password resta casuale; attivala solo per i client che ne hanno bisogno.",
+      "summary": "Autenticazione",
+      "mechanism": {
+        "mysql": "mysql_native_password (legacy)",
+        "postgres": "md5 (legacy)"
+      }
+    },
+    "custom": {
+      "title": "Personalizzato",
+      "description": "Qualsiasi dimensione da {{min}} a {{max}}",
+      "unit": "GB",
+      "inputLabel": "{{option}} personalizzata, in GB"
+    },
+    "unauthenticated": "ElasticMQ non ha autenticazione: qualsiasi sito sulla stessa rete può usare, svuotare o eliminare le code dell'istanza. Non inserirvi dati sensibili."
+  },
+  "options": {
+    "memory": {
+      "label": "Memoria",
+      "help": "Memoria riservata al container.",
+      "detail": {
+        "data": "{{size}} per i dati",
+        "streams": "{{size}} per gli stream in memoria"
+      }
+    },
+    "storage": {
+      "label": "Archiviazione degli stream",
+      "help": "Spazio su disco per JetStream (stream persistenti)."
+    },
+    "policy": {
+      "label": "Quando la memoria è piena",
+      "help": "Cosa fa il server quando i dati riempiono la sua memoria.",
+      "values": {
+        "noeviction": {
+          "label": "Rifiuta le scritture",
+          "description": "Nessun dato viene rimosso: le scritture falliscono finché non si libera memoria."
+        },
+        "allkeys-lru": {
+          "label": "Rimuovi le meno recenti",
+          "description": "Qualsiasi chiave può essere rimossa, la meno usata di recente per prima (cache)."
+        },
+        "allkeys-lfu": {
+          "label": "Rimuovi le meno usate",
+          "description": "Qualsiasi chiave può essere rimossa, la meno usata per prima."
+        },
+        "volatile-lru": {
+          "label": "Rimuovi chiavi con scadenza (LRU)",
+          "description": "Solo le chiavi con scadenza vengono rimosse, le meno usate di recente per prime."
+        },
+        "volatile-lfu": {
+          "label": "Rimuovi chiavi con scadenza (LFU)",
+          "description": "Solo le chiavi con scadenza vengono rimosse, le meno usate per prime."
+        },
+        "volatile-ttl": {
+          "label": "Rimuovi le più vicine alla scadenza",
+          "description": "Solo le chiavi con scadenza vengono rimosse, le più vicine alla scadenza per prime."
+        }
+      }
+    },
+    "persistence": {
+      "label": "Persistenza",
+      "help": "Come i dati sopravvivono a un riavvio.",
+      "values": {
+        "aof": {
+          "label": "Journal (AOF)",
+          "description": "Ogni scrittura viene registrata e salvata ogni secondo: al massimo un secondo perso."
+        },
+        "rdb": {
+          "label": "Snapshot",
+          "description": "Snapshot periodici: le scritture dall'ultimo possono andare perse."
+        },
+        "none": {
+          "label": "Nessuna",
+          "description": "Solo memoria: i dati vanno persi a ogni riavvio."
+        },
+        "on": {
+          "label": "Su disco",
+          "description": "I messaggi conservati e le sessioni persistenti sopravvivono a un riavvio."
+        },
+        "off": {
+          "label": "Solo in memoria",
+          "description": "Persi al riavvio; meno scritture su disco."
+        }
+      }
+    },
+    "scripting": {
+      "label": "Script Lua",
+      "help": "EVAL e funzioni (alcune librerie ne hanno bisogno).",
+      "values": {
+        "on": {
+          "label": "Consentiti",
+          "description": "Script e funzioni sono utilizzabili."
+        },
+        "off": {
+          "label": "Disattivati",
+          "description": "Superficie di attacco ridotta; gli script vengono rifiutati."
+        }
+      }
+    },
+    "modules": {
+      "label": "Moduli Redis",
+      "help": "JSON, ricerca, serie temporali e strutture probabilistiche inclusi in Redis 8.",
+      "values": {
+        "off": {
+          "label": "Disattivati",
+          "description": "Solo comandi di base (superficie di attacco ridotta)."
+        },
+        "on": {
+          "label": "Attivati",
+          "description": "JSON, ricerca, serie temporali, filtri di Bloom…"
+        }
+      }
+    },
+    "quota": {
+      "label": "Quota di archiviazione",
+      "help": "Spazio massimo occupato dagli oggetti, dalle loro versioni e dai caricamenti in corso. Abbassarla sotto lo spazio usato rifiuta le nuove scritture; nulla viene eliminato."
+    },
+    "encryption": {
+      "label": "Cifratura lato server",
+      "help": "Ogni oggetto scritto viene cifrato su disco (SSE-S3, AES-256-GCM) con una chiave generata per questa istanza. Scelta alla creazione.",
+      "values": {
+        "off": {
+          "label": "Disattivata",
+          "description": "Gli oggetti sono salvati così come inviati."
+        },
+        "on": {
+          "label": "Attivata",
+          "description": "Cifrati a riposo; la chiave resta sul server, separata dai dati. Un po' più di CPU."
+        }
+      }
+    },
+    "message-size": {
+      "label": "Dimensione massima di un messaggio",
+      "help": "I messaggi più grandi vengono rifiutati."
+    },
+    "payload": {
+      "label": "Dimensione massima di un messaggio",
+      "help": "NATS consiglia messaggi piccoli: quelli grandi costano memoria per ogni client."
+    },
+    "queued": {
+      "label": "Messaggi in attesa per client",
+      "help": "Messaggi conservati per un client disconnesso o lento (QoS 1 e 2) prima che i nuovi vengano scartati."
+    },
+    "limits": {
+      "label": "Limiti SQS",
+      "help": "Dimensione dei messaggi, ritardi e tempi consentiti.",
+      "values": {
+        "strict": {
+          "label": "Rigidi",
+          "description": "Gli stessi limiti di Amazon SQS: ciò che funziona qui funziona su AWS."
+        },
+        "relaxed": {
+          "label": "Allentati",
+          "description": "Messaggi più grandi e ritardi più lunghi di quanto consenta Amazon SQS (sviluppo, migrazioni)."
+        }
+      }
+    }
+  },
+  "dedicated": {
+    "columns": {
+      "name": "Nome",
+      "version": "Versione",
+      "size": "Dimensione"
+    }
+  },
+  "forbidden": "I servizi sono riservati agli amministratori.",
+  "purge": {
+    "title": "Eliminare {{name}}?",
+    "content": "I file di questa istanza sono stati modificati al di fuori del pannello, che non li esegue. Eliminarla rimuove i suoi container e TUTTI i suoi dati, compreso ogni database che contiene: non si può recuperare nulla (a meno che l'archiviazione sia attiva sul server). I file modificati non vengono mai eseguiti.",
+    "confirmLabel": "Digita il nome dell'istanza per confermare:",
+    "submit": "Elimina definitivamente"
+  },
+  "networks": {
+    "column": "Reti",
+    "label": "Reti",
+    "edit": "Modifica le reti",
+    "sectionTitle": "Reti",
+    "help": "Reti private a cui l'istanza si collega: solo i siti presenti su una di esse la raggiungono.",
+    "accessTitle": "Accesso di rete",
+    "accessSubtitle": "Reti e porta pubblicata dell'istanza. Ogni modifica viene applicata subito e riavvia l'istanza.",
+    "modalTitle": "Reti di {{name}}",
+    "required": "Scegli almeno una rete.",
+    "privateRequired": "{{engine}} non ha autenticazione: non può collegarsi alla rete condivisa. Scegli una rete privata: solo i suoi siti raggiungono l'istanza.",
+    "unauthenticatedShared": "Nessuna autenticazione: non sulla rete condivisa",
+    "existingInstance": "L'istanza {{engine}} {{version}} è già in esecuzione: il database viene creato sulle sue reti. Modificale dall'elenco delle istanze.",
+    "restart": "Il salvataggio ricrea {{container}}: i suoi client vengono disconnessi per alcuni secondi. I siti che non condividono più una rete con essa ne perdono l'accesso.",
+    "saved": "Reti di {{name}} aggiornate."
+  },
+  "exposure": {
+    "edit": "Configura la porta pubblicata",
+    "title": "Porta pubblicata di {{name}}",
+    "intro": "Pubblica la porta su un indirizzo del server affinché i client esterni a Docker possano connettersi. Applicata subito: l'istanza si riavvia (alcuni secondi di indisponibilità).",
+    "current": "Pubblicata su",
+    "tls": "Cifratura",
+    "fingerprint": "Impronta SHA-256 del certificato",
+    "notPublished": "Non pubblicata: solo i siti sulle sue reti raggiungono l'istanza.",
+    "address": "Indirizzo",
+    "addressHelp": "Consentiti dal server: {{cidrs}}",
+    "addressNone": "La configurazione del server non consente alcun indirizzo (SERVICES_EXPOSE_ALLOWED_CIDRS): la porta non può essere pubblicata.",
+    "addressRequired": "Inserisci un indirizzo.",
+    "addressInvalid": "Inserisci un indirizzo IP, ad es. 127.0.0.1.",
+    "addressNotAllowed": "Questo indirizzo non è consentito dalla configurazione del server.",
+    "port": "Porta",
+    "portHelp": "Da {{min}} a {{max}}.",
+    "portRequired": "Inserisci una porta.",
+    "portRange": "La porta deve essere compresa tra {{min}} e {{max}}.",
+    "portReserved": "Questa porta è riservata su questo server.",
+    "tlsOptional": "TLS facoltativo",
+    "tlsOptionalHelp": "Offre TLS senza richiederlo, per i client che non possono usarlo. I client senza TLS inviano password e dati in chiaro.",
+    "loopbackOnly": {
+      "deprecated": "Questa versione non è più supportata: può essere pubblicata solo su un indirizzo di loopback (127.0.0.1).",
+      "unauthenticated": "Questo motore non ha autenticazione: può essere pubblicato solo su un indirizzo di loopback (127.0.0.1).",
+      "noTls": "Questo motore non può richiedere TLS: può essere pubblicato solo su un indirizzo di loopback (127.0.0.1)."
+    },
+    "loopbackNote": "Indirizzo di loopback: raggiungibile solo dal server stesso (ad es. tramite un tunnel SSH).",
+    "tlsRequired": "TLS sarà richiesto a tutti i client di questa istanza, compresi i siti all'interno di Docker: verifica che si connettano con TLS prima di pubblicare.",
+    "noEncryption": "TLS è disattivato su questo server: password e dati attraversano la rete in chiaro.",
+    "submit": "Pubblica",
+    "close": "Chiudi la porta",
+    "closeConfirm": {
+      "title": "Chiudere la porta di {{name}}?",
+      "content": "L'istanza si riavvia senza porta pubblicata: i client esterni a Docker non possono più connettersi.",
+      "submit": "Chiudi la porta"
+    },
+    "toasts": {
+      "published": "Porta pubblicata su {{address}}.",
+      "closed": "Porta chiusa."
+    }
+  },
+  "support": {
+    "active": "Supporto: {{date}}",
+    "security": "Sicurezza: {{date}}",
+    "activeUntil": "Supporto attivo fino al {{date}}",
+    "activeEnded": "Supporto attivo terminato il {{date}}",
+    "activeTooltip": "Correzioni di bug da parte dei manutentori.",
+    "securityUntil": "Supporto di sicurezza fino al {{date}}",
+    "securityEnded": "Supporto di sicurezza terminato il {{date}}",
+    "securityTooltip": "Correzioni di sicurezza da parte dei manutentori (fine vita).",
+    "securityEndedTooltip": "Nessuna correzione di sicurezza: passa a una versione più recente.",
+    "ended": "Supporto di sicurezza terminato",
+    "pinned": "Fissata",
+    "pinnedTooltip": "Proposta perché la configurazione del server fissa questa versione."
+  },
+  "update": {
+    "available": "Aggiornamento disponibile",
+    "availableHint": "Per questa istanza è disponibile un'immagine o una versione più recente.",
+    "action": "Aggiorna",
+    "title": "Aggiorna {{name}}",
+    "current": "Versione attuale",
+    "choose": "Aggiorna a",
+    "none": "Questa istanza è aggiornata.",
+    "image": "Ultima immagine di {{engine}} {{version}}",
+    "imageHint": "Stessa versione, con le ultime correzioni: il formato dei dati non cambia.",
+    "restartWarning": "L'istanza si riavvia: le connessioni aperte vengono interrotte e i client devono riconnettersi. Il download dell'immagine e il riavvio possono richiedere alcuni minuti.",
+    "rollbackNote": "Se l'istanza non si avvia, viene ripristinata la versione precedente.",
+    "noDowngrade": "Non si può tornare indietro: i dati scritti da {{engine}} {{version}} potrebbero non essere leggibili da una versione precedente. I dati non vengono salvati prima della modifica: esegui prima un backup.",
+    "submit": "Aggiorna",
+    "updated": "{{name}} aggiornata ({{engine}} {{version}}).",
+    "upToDate": "{{name}} è già aggiornata.",
+    "startFailed": "L'istanza non si è avviata con l'aggiornamento: è stata ripristinata la versione precedente."
+  },
+  "catalog": {
+    "check": "Cerca aggiornamenti",
+    "checked": "Versioni verificate {{when}}",
+    "never": "Versioni non ancora verificate: in uso l'elenco integrato.",
+    "failed": "Ultima verifica incompleta per: {{engines}}. Le versioni e le date mostrate potrebbero non essere aggiornate.",
+    "done": "Versioni verificate.",
+    "throttled": "Una verifica è appena stata eseguita: riprova tra qualche secondo."
+  },
+  "presentation": {
+    "mysql": "MySQL® è un database relazionale open source, molto usato dalle applicazioni web e dai sistemi di gestione dei contenuti come WordPress. Crea un database per ottenere un utente e i dati di connessione del tuo sito.",
+    "mariadb": "MariaDB® è un database relazionale open source nato come fork di MySQL e rimasto in gran parte compatibile con esso. È usato comunemente dalle applicazioni PHP e dai sistemi di gestione dei contenuti. Crea un database per ottenere un utente e i dati di connessione del tuo sito.",
+    "postgres": "PostgreSQL® è un database relazionale open source, noto per il rispetto degli standard, le transazioni e le ampie funzionalità SQL. È adatto alla maggior parte delle applicazioni web, dalla gestione dei contenuti ai software gestionali. Crea un database per ottenere un utente e i dati di connessione del tuo sito.",
+    "mongodb": "MongoDB® è un database a documenti: memorizza i dati come documenti flessibili simili a JSON invece che in tabelle. È adatto alle applicazioni i cui dati sono annidati o cambiano spesso struttura. Crea un database per ottenere un utente e i dati di connessione del tuo sito.",
+    "redis": "Redis® è un archivio chiave-valore in memoria, usato comunemente per cache, sessioni, code e contatori. I dati risiedono in memoria e possono essere salvati su disco. Crea un'istanza: gira in un proprio container con la memoria che scegli.",
+    "valkey": "Valkey™ è un archivio chiave-valore in memoria open source, fork di Redis mantenuto nell'ambito della Linux Foundation. Funziona con i client Redis ed è usato comunemente per cache, sessioni e code. Crea un'istanza: gira in un proprio container con la memoria che scegli.",
+    "rabbitmq": "RabbitMQ® è un broker di messaggi open source basato sul protocollo AMQP. Le applicazioni usano le sue code per affidare attività a worker in background e scambiarsi messaggi in modo affidabile. Crea un host virtuale per ottenere uno spazio isolato con un proprio utente.",
+    "nats": "NATS® è un sistema di messaggistica open source e un progetto della CNCF, che offre publish-subscribe, request-reply e, con JetStream, stream persistenti. I servizi lo usano per scambiarsi messaggi in tempo reale. Crea un'istanza per iniziare a pubblicare e ricevere messaggi.",
+    "s3": "Loch S3 è uno storage a oggetti compatibile con l'API Amazon S3, sviluppato da Loch.sh. Le applicazioni vi archiviano e servono file come upload, media e backup con qualsiasi client o SDK S3. Crea un'istanza per ottenere un bucket e le sue chiavi di accesso.",
+    "elasticmq": "ElasticMQ è una coda di messaggi open source compatibile con l'API Amazon SQS. Le applicazioni scritte per SQS possono inviare e ricevere messaggi senza un account AWS, il che è comodo per sviluppo e test. Crea un'istanza per ottenere un server di code tutto tuo.",
+    "mosquitto": "Eclipse Mosquitto™ è un broker MQTT open source della Eclipse Foundation. MQTT è un protocollo publish-subscribe leggero, molto usato da dispositivi connessi, sensori e dashboard. Crea un'istanza per ottenere un broker con un proprio utente."
+  }
+}

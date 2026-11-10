@@ -1,0 +1,29 @@
+{
+  "title": "域名地图",
+  "toolbar": {
+    "searchPlaceholder": "搜索域名、容器...",
+    "tldPlaceholder": "按顶级域名筛选",
+    "activeOnly": "运行中",
+    "all": "全部",
+    "views": {
+      "table": "表格",
+      "graph": "关系图"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "域名",
+      "router": "路由",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "服务",
+      "container": "容器",
+      "state": "状态",
+      "image": "镜像"
+    }
+  },
+  "graph": {
+    "empty": "未找到 Traefik 域名"
+  }
+}

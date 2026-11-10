@@ -1,0 +1,507 @@
+{
+  "disabled": "此服务器已禁用数据库功能。",
+  "configError": "数据库模块已启用，但无法启动：请查看 API 日志。",
+  "engineDisabled": "此服务器未启用该引擎。",
+  "engines": {
+    "mysql": "MySQL®",
+    "mariadb": "MariaDB®",
+    "postgres": "PostgreSQL®",
+    "mongodb": "MongoDB®",
+    "redis": "Redis®",
+    "valkey": "Valkey™",
+    "rabbitmq": "RabbitMQ®",
+    "nats": "NATS®",
+    "s3": "Loch S3",
+    "elasticmq": "ElasticMQ",
+    "mosquitto": "Eclipse Mosquitto™"
+  },
+  "actions": {
+    "resetPassword": "新密码",
+    "retire": "移除实例",
+    "edit": "编辑",
+    "purge": "删除"
+  },
+  "instances": {
+    "columns": {
+      "version": "版本",
+      "state": "状态",
+      "host": "内部地址",
+      "actions": "操作",
+      "exposure": "发布端口"
+    },
+    "modified": "已手动修改",
+    "modifiedHint": "其文件已在面板外被修改：即使没有数据库也会保留。",
+    "state": {
+      "ready": "运行中",
+      "starting": "启动中",
+      "unhealthy": "异常",
+      "stopped": "已停止",
+      "missing": "未运行",
+      "conflict": "冲突",
+      "other": "未知",
+      "unverified": "未验证",
+      "restarting": "重启中",
+      "paused": "已暂停"
+    },
+    "notReadyHint": "实例未运行或状态异常：无法列出其数据库。",
+    "tls": "TLS",
+    "noTls": "未加密",
+    "notExposed": "仅内部",
+    "exposureHint": "已发布在服务器的某个地址上：Docker 外部的客户端可以连接。",
+    "exposureTlsHint": "必须使用 TLS。证书 SHA-256 指纹：{{fingerprint}}",
+    "exposureError": "更改失败",
+    "exposureErrorHint": "发布端口的最近一次更改失败：保留之前的配置。请查看 API 日志。",
+    "tlsOptional": "TLS 可选",
+    "exposureTlsOptionalHint": "提供 TLS 但不强制：不使用 TLS 的客户端会以明文发送密码和数据。证书 SHA-256 指纹：{{fingerprint}}"
+  },
+  "resources": {
+    "columns": {
+      "actions": "操作"
+    },
+    "unmanaged": "非托管",
+    "unmanagedHint": "在面板外创建：无法在此删除，并会使实例保持运行。"
+  },
+  "create": {
+    "nameRequired": "请输入名称。"
+  },
+  "credentials": {
+    "title": "连接信息",
+    "warning": "请立即复制密码：它不会再次显示。如果丢失，请重新生成。",
+    "fields": {
+      "host": "主机",
+      "port": "端口",
+      "database": "数据库",
+      "user": "用户",
+      "password": "密码",
+      "uri": "连接 URI",
+      "external": "外部地址",
+      "tlsFingerprint": "证书指纹（SHA-256）",
+      "vhost": "虚拟主机",
+      "endpoint": "端点",
+      "region": "区域",
+      "bucket": "存储桶",
+      "accessKeyId": "访问密钥 ID",
+      "secretAccessKey": "秘密访问密钥",
+      "pathStyle": "路径样式 URL",
+      "queueUrlPrefix": "队列 URL 前缀"
+    },
+    "internalOnly": "此主机只能从连接到服务网络的站点访问。",
+    "close": "我已复制密码",
+    "show": "显示",
+    "hide": "隐藏",
+    "laravelEnv": "复制 Laravel 的 .env 配置行（包含密钥）",
+    "noAuth": "无认证：连接到服务网络的任何站点都可以使用、清空或删除此实例的队列。任何凭据都会被接受（SDK 需要提供，例如 \"x\"）。"
+  },
+  "delete": {
+    "confirmLabel": "输入 {{name}} 以确认："
+  },
+  "rotate": {
+    "title": "为 {{name}} 生成新密码？",
+    "content": "当前密码将失效，已打开的连接会被断开：请更新使用该密码的站点。",
+    "submit": "生成"
+  },
+  "retire": {
+    "title": "移除 {{engine}} {{version}} 实例？",
+    "content": "该实例中没有数据库，其容器和数据将被删除。",
+    "submit": "移除"
+  },
+  "toasts": {
+    "passwordReset": "已生成新密码。",
+    "retired": "实例已移除。",
+    "updated": "实例已更新。",
+    "purged": "实例已删除。"
+  },
+  "wording": {
+    "database": {
+      "title": "{{engine}} 数据库",
+      "intro": "每个版本运行在由所有站点共享的单一实例中。它随第一个数据库启动，并在删除最后一个数据库时连同数据一起移除。",
+      "newResource": "新建数据库",
+      "empty": "还没有 {{engine}} 数据库。",
+      "resourceColumn": "数据库和用户",
+      "countColumn": "数据库",
+      "resourcesEmpty": "此实例中没有数据库。",
+      "createTitle": "新建 {{engine}} 数据库",
+      "nameHelp": "用于数据库及其用户：小写字母、数字和 _，以字母开头（最多 {{max}} 个字符）。",
+      "nameInvalid": "只能使用小写字母、数字和 _，并以字母开头（最多 {{max}} 个字符）。",
+      "created": "数据库已创建。",
+      "deleted": "数据库已删除。",
+      "instanceRetired": "数据库已删除；实例已移除。",
+      "retireBlocked": "数据库已删除；空实例被保留（文件被手动修改或移除失败）。",
+      "deleteTitle": "删除数据库 {{name}}？",
+      "deleteContent": "数据库及其用户将被永久删除。已打开的连接将被关闭。",
+      "deleteLast": "这是 {{engine}} {{version}} 的最后一个数据库：实例也会连同数据一起移除。",
+      "createFirst": "创建数据库"
+    },
+    "vhost": {
+      "title": "{{engine}} 虚拟主机",
+      "intro": "每个版本运行在由所有站点共享的单一代理中。一个资源是一个虚拟主机及同名用户，与其他资源隔离并受限（连接数、队列数、队列大小）。",
+      "newResource": "新建虚拟主机",
+      "empty": "还没有 {{engine}} 虚拟主机。",
+      "resourceColumn": "虚拟主机和用户",
+      "countColumn": "虚拟主机",
+      "resourcesEmpty": "此实例中没有虚拟主机。",
+      "createTitle": "新建 {{engine}} 虚拟主机",
+      "nameHelp": "用于虚拟主机及其用户：小写字母、数字和 _，以字母开头（最多 {{max}} 个字符）。",
+      "nameInvalid": "只能使用小写字母、数字和 _，并以字母开头（最多 {{max}} 个字符）。",
+      "created": "虚拟主机已创建。",
+      "deleted": "虚拟主机已删除。",
+      "instanceRetired": "虚拟主机已删除；代理已移除。",
+      "retireBlocked": "虚拟主机已删除；空代理被保留（文件被手动修改或移除失败）。",
+      "deleteTitle": "删除虚拟主机 {{name}}？",
+      "deleteContent": "虚拟主机及其队列、消息和用户将被永久删除。已打开的连接将被关闭。",
+      "deleteLast": "这是 {{engine}} {{version}} 的最后一个虚拟主机：代理也会连同数据一起移除。",
+      "createFirst": "创建虚拟主机"
+    },
+    "dedicated": {
+      "title": "{{engine}} 实例",
+      "intro": "每个实例运行在创建时确定规格的独立容器中，只有一个用户。删除实例会删除其数据。",
+      "newResource": "新建实例",
+      "empty": "还没有 {{engine}} 实例。",
+      "resourceColumn": "实例",
+      "countColumn": "实例",
+      "resourcesEmpty": "没有实例。",
+      "createTitle": "新建 {{engine}} 实例",
+      "nameHelp": "将成为主机名和用户名：小写字母和数字，以字母开头（最多 {{max}} 个字符）。",
+      "nameInvalid": "只能使用小写字母和数字，并以字母开头（最多 {{max}} 个字符）。",
+      "created": "实例已创建。",
+      "deleted": "实例及其数据已删除。",
+      "instanceRetired": "实例及其数据已删除。",
+      "retireBlocked": "实例已删除。",
+      "deleteTitle": "删除实例 {{name}}？",
+      "deleteContent": "容器及其所有数据将被永久删除。已打开的连接将被关闭。",
+      "deleteLast": "容器及其数据将被删除。",
+      "createFirst": "创建实例"
+    }
+  },
+  "createPage": {
+    "back": "返回列表",
+    "recommended": "推荐",
+    "instanceRunning": "实例运行中",
+    "default": "默认",
+    "nameLabel": "名称",
+    "submit": "创建",
+    "sections": {
+      "version": {
+        "title": "版本",
+        "subtitle": "引擎版本只能选择一次（之后无法更改）。"
+      },
+      "options": {
+        "title": "规格与设置",
+        "subtitle": "为容器保留的资源以及引擎设置。"
+      },
+      "name": {
+        "title": "名称"
+      }
+    },
+    "summary": {
+      "title": "摘要",
+      "engine": "引擎",
+      "type": "类型",
+      "shared": "共享实例",
+      "dedicated": "专用容器",
+      "name": "名称",
+      "address": "内部地址",
+      "startNote": "{{engine}} {{version}} 实例尚未运行：它将随此资源启动（最多两分钟）。",
+      "sharedNote": "将在运行中的 {{engine}} {{version}} 实例中创建。",
+      "dedicatedNote": "将为此资源单独启动一个容器（最多一分钟）。",
+      "passwordNote": "密码仅在创建后显示一次。",
+      "restartNote": "保存会重启实例：其客户端将断开几秒。"
+    },
+    "nameTaken": "已存在同名实例。",
+    "fixed": "创建时设定",
+    "noChange": "没有需要修改的内容。",
+    "editTitle": "编辑 {{name}}",
+    "editIntro": "修改此实例的规格或设置。实例将按新设置重新创建：短暂不可用几秒，数据保留。",
+    "notFound": "该实例不存在（或已不存在）。",
+    "saveConfirm": {
+      "title": "将修改应用到 {{name}}？",
+      "content": "实例将以新设置重启（几秒不可用）。如果无法启动，将恢复之前的设置。"
+    },
+    "legacyAuth": {
+      "label": "旧版认证",
+      "help": {
+        "mysql": "适用于报错“Authentication requires secure connection”的旧客户端（旧版 PHP 或工具）：用户使用 mysql_native_password 而不是 caching_sha2_password 进行认证。之后无法更改（除非重新创建数据库）。",
+        "postgres": "适用于不支持 SCRAM 的旧客户端：密码以 md5 而不是 SCRAM-SHA-256 存储（自 PostgreSQL 18 起已弃用）。之后无法更改（除非重新创建数据库）。"
+      },
+      "warning": "较弱的机制：观察网络的人可以从交换中获得更多信息。密码仍为随机生成；仅为需要的客户端启用。",
+      "summary": "认证",
+      "mechanism": {
+        "mysql": "mysql_native_password（旧版）",
+        "postgres": "md5（旧版）"
+      }
+    },
+    "custom": {
+      "title": "自定义",
+      "description": "{{min}} 到 {{max}} 之间的任意大小",
+      "unit": "GB",
+      "inputLabel": "自定义{{option}}（GB）"
+    },
+    "unauthenticated": "ElasticMQ 没有认证：同一网络中的任何站点都可以使用、清空或删除该实例的队列。请勿存放敏感数据。"
+  },
+  "options": {
+    "memory": {
+      "label": "内存",
+      "help": "为容器保留的内存。",
+      "detail": {
+        "data": "其中 {{size}} 用于数据",
+        "streams": "其中 {{size}} 用于内存中的流"
+      }
+    },
+    "storage": {
+      "label": "流存储",
+      "help": "JetStream（持久流）的磁盘空间。"
+    },
+    "policy": {
+      "label": "内存已满时",
+      "help": "数据占满内存时服务器的行为。",
+      "values": {
+        "noeviction": {
+          "label": "拒绝写入",
+          "description": "从不删除数据：在释放内存之前写入都会失败。"
+        },
+        "allkeys-lru": {
+          "label": "淘汰最久未用的键",
+          "description": "任何键都可能被淘汰，最久未使用的优先（缓存）。"
+        },
+        "allkeys-lfu": {
+          "label": "淘汰最少使用的键",
+          "description": "任何键都可能被淘汰，使用最少的优先。"
+        },
+        "volatile-lru": {
+          "label": "淘汰有过期时间的键（LRU）",
+          "description": "只淘汰设置了过期时间的键，最久未使用的优先。"
+        },
+        "volatile-lfu": {
+          "label": "淘汰有过期时间的键（LFU）",
+          "description": "只淘汰设置了过期时间的键，使用最少的优先。"
+        },
+        "volatile-ttl": {
+          "label": "淘汰最先过期的键",
+          "description": "只淘汰设置了过期时间的键，最接近过期的优先。"
+        }
+      }
+    },
+    "persistence": {
+      "label": "持久化",
+      "help": "数据在重启后如何保留。",
+      "values": {
+        "aof": {
+          "label": "日志（AOF）",
+          "description": "每次写入都会记录并每秒落盘：最多丢失一秒的数据。"
+        },
+        "rdb": {
+          "label": "快照",
+          "description": "定期快照：上次快照之后的写入可能丢失。"
+        },
+        "none": {
+          "label": "无",
+          "description": "仅内存：每次重启都会丢失数据。"
+        },
+        "on": {
+          "label": "保存在磁盘",
+          "description": "保留消息和持久会话在重启后仍然存在。"
+        },
+        "off": {
+          "label": "仅内存",
+          "description": "重启后丢失；磁盘写入更少。"
+        }
+      }
+    },
+    "scripting": {
+      "label": "Lua 脚本",
+      "help": "EVAL 和函数（部分库需要）。",
+      "values": {
+        "on": {
+          "label": "允许",
+          "description": "可以使用脚本和函数。"
+        },
+        "off": {
+          "label": "禁用",
+          "description": "攻击面更小；脚本会被拒绝。"
+        }
+      }
+    },
+    "modules": {
+      "label": "Redis 模块",
+      "help": "Redis 8 自带的 JSON、搜索、时间序列和概率数据结构。",
+      "values": {
+        "off": {
+          "label": "禁用",
+          "description": "仅基础命令（攻击面更小）。"
+        },
+        "on": {
+          "label": "启用",
+          "description": "JSON、搜索、时间序列、布隆过滤器等"
+        }
+      }
+    },
+    "quota": {
+      "label": "存储配额",
+      "help": "对象、其版本以及进行中的上传可占用的最大空间。将其降到已用空间以下会拒绝新的写入，不会删除任何数据。"
+    },
+    "encryption": {
+      "label": "服务器端加密",
+      "help": "写入的每个对象都会使用为此实例生成的密钥在磁盘上加密（SSE-S3，AES-256-GCM）。在创建时选择。",
+      "values": {
+        "off": {
+          "label": "已禁用",
+          "description": "对象按发送时的原样存储。"
+        },
+        "on": {
+          "label": "已启用",
+          "description": "静态加密；密钥保存在服务器上，与数据分开。CPU 占用略有增加。"
+        }
+      }
+    },
+    "message-size": {
+      "label": "最大消息大小",
+      "help": "更大的消息会被拒绝。"
+    },
+    "payload": {
+      "label": "最大消息大小",
+      "help": "NATS 建议使用小消息：大消息会为每个客户端占用内存。"
+    },
+    "queued": {
+      "label": "每个客户端的排队消息",
+      "help": "为断开或缓慢的客户端（QoS 1 和 2）保留的消息数，超过后新消息会被丢弃。"
+    },
+    "limits": {
+      "label": "SQS 限制",
+      "help": "允许的消息大小、延迟和超时。",
+      "values": {
+        "strict": {
+          "label": "严格",
+          "description": "与 Amazon SQS 相同的限制：在这里可用的在 AWS 上也可用。"
+        },
+        "relaxed": {
+          "label": "宽松",
+          "description": "允许比 Amazon SQS 更大的消息和更长的延迟（开发、迁移）。"
+        }
+      }
+    }
+  },
+  "dedicated": {
+    "columns": {
+      "name": "名称",
+      "version": "版本",
+      "size": "规格"
+    }
+  },
+  "forbidden": "服务仅限管理员使用。",
+  "purge": {
+    "title": "删除 {{name}}？",
+    "content": "此实例的文件已在面板外被修改，面板不会执行它们。删除会移除其容器以及所有数据（包括其中的每个数据库），且无法恢复（除非服务器启用了归档）。被修改的文件永远不会被执行。",
+    "confirmLabel": "输入实例名称以确认：",
+    "submit": "永久删除"
+  },
+  "networks": {
+    "column": "网络",
+    "label": "网络",
+    "edit": "更改网络",
+    "sectionTitle": "网络",
+    "help": "实例加入的私有网络：只有位于其中某个网络的站点才能访问它。",
+    "accessTitle": "网络访问",
+    "accessSubtitle": "实例的网络和发布端口。每次更改都会立即应用并重启实例。",
+    "modalTitle": "{{name}} 的网络",
+    "required": "请至少选择一个网络。",
+    "privateRequired": "{{engine}} 没有认证：无法加入共享网络。请选择私有网络：只有其中的站点才能访问该实例。",
+    "unauthenticatedShared": "无认证：不在共享网络中",
+    "existingInstance": "{{engine}} {{version}} 实例已在运行：数据库将创建在其网络上。请在实例列表中更改网络。",
+    "restart": "保存后将重新创建 {{container}}：其客户端会断开几秒钟。不再与其共享网络的站点将无法访问它。",
+    "saved": "{{name}} 的网络已更新。"
+  },
+  "exposure": {
+    "edit": "配置发布端口",
+    "title": "{{name}} 的发布端口",
+    "intro": "在服务器的某个地址上发布端口，使 Docker 外部的客户端可以连接。立即生效：实例将重启（几秒钟不可用）。",
+    "current": "发布于",
+    "tls": "加密",
+    "fingerprint": "证书 SHA-256 指纹",
+    "notPublished": "未发布：只有其网络中的站点才能访问该实例。",
+    "address": "地址",
+    "addressHelp": "服务器允许的地址：{{cidrs}}",
+    "addressNone": "服务器配置不允许任何地址（SERVICES_EXPOSE_ALLOWED_CIDRS）：无法发布端口。",
+    "addressRequired": "请输入地址。",
+    "addressInvalid": "请输入 IP 地址，例如 127.0.0.1。",
+    "addressNotAllowed": "服务器配置不允许此地址。",
+    "port": "端口",
+    "portHelp": "从 {{min}} 到 {{max}}。",
+    "portRequired": "请输入端口。",
+    "portRange": "端口必须在 {{min}} 到 {{max}} 之间。",
+    "portReserved": "此端口在该服务器上为保留端口。",
+    "tlsOptional": "TLS 可选",
+    "tlsOptionalHelp": "提供 TLS 但不强制，供无法使用 TLS 的客户端连接。不使用 TLS 的客户端会以明文发送密码和数据。",
+    "loopbackOnly": {
+      "deprecated": "此版本已停止支持：只能发布在回环地址（127.0.0.1）上。",
+      "unauthenticated": "此引擎没有认证：只能发布在回环地址（127.0.0.1）上。",
+      "noTls": "此引擎无法强制 TLS：只能发布在回环地址（127.0.0.1）上。"
+    },
+    "loopbackNote": "回环地址：只能从服务器本机访问（例如通过 SSH 隧道）。",
+    "tlsRequired": "此实例的所有客户端（包括 Docker 内的站点）都将被要求使用 TLS：发布前请确认它们使用 TLS 连接。",
+    "noEncryption": "此服务器已禁用 TLS：密码和数据将以明文在网络中传输。",
+    "submit": "发布",
+    "close": "关闭端口",
+    "closeConfirm": {
+      "title": "关闭 {{name}} 的端口？",
+      "content": "实例将在没有发布端口的情况下重启：Docker 外部的客户端将无法再连接。",
+      "submit": "关闭端口"
+    },
+    "toasts": {
+      "published": "端口已发布在 {{address}}。",
+      "closed": "端口已关闭。"
+    }
+  },
+  "support": {
+    "active": "支持：{{date}}",
+    "security": "安全：{{date}}",
+    "activeUntil": "活跃支持至 {{date}}",
+    "activeEnded": "活跃支持已于 {{date}} 结束",
+    "activeTooltip": "由维护者提供的错误修复。",
+    "securityUntil": "安全支持至 {{date}}",
+    "securityEnded": "安全支持已于 {{date}} 结束",
+    "securityTooltip": "由维护者提供的安全修复（生命周期结束）。",
+    "securityEndedTooltip": "不再提供安全修复：请迁移到更新的版本。",
+    "ended": "安全支持已结束",
+    "pinned": "已固定",
+    "pinnedTooltip": "因服务器配置固定了此版本而提供。"
+  },
+  "update": {
+    "available": "有可用更新",
+    "availableHint": "此实例有更新的镜像或版本可用。",
+    "action": "更新",
+    "title": "更新 {{name}}",
+    "current": "当前版本",
+    "choose": "更新到",
+    "none": "此实例已是最新。",
+    "image": "{{engine}} {{version}} 的最新镜像",
+    "imageHint": "相同版本，包含最新修复：数据格式不变。",
+    "restartWarning": "实例将重启：已打开的连接会断开，客户端需要重新连接。拉取镜像和重启可能需要几分钟。",
+    "rollbackNote": "如果实例无法启动，将恢复之前的版本。",
+    "noDowngrade": "无法回退：{{engine}} {{version}} 写入的数据可能无法被旧版本读取。变更前不会备份数据：请先进行备份。",
+    "submit": "更新",
+    "updated": "{{name}} 已更新（{{engine}} {{version}}）。",
+    "upToDate": "{{name}} 已是最新。",
+    "startFailed": "实例更新后未能启动：已恢复之前的版本。"
+  },
+  "catalog": {
+    "check": "检查更新",
+    "checked": "版本检查于 {{when}}",
+    "never": "尚未检查版本：正在使用内置列表。",
+    "failed": "以下引擎的上次检查不完整：{{engines}}。显示的版本和日期可能已过时。",
+    "done": "版本已检查。",
+    "throttled": "刚刚已执行过检查：请几秒后重试。"
+  },
+  "presentation": {
+    "mysql": "MySQL® 是一款开源关系型数据库，被 Web 应用和 WordPress 等内容管理系统广泛使用。创建数据库即可获得供站点使用的用户和连接信息。",
+    "mariadb": "MariaDB® 是一款开源关系型数据库，最初是 MySQL 的分支，至今仍与其高度兼容。它常被 PHP 应用和内容管理系统使用。创建数据库即可获得供站点使用的用户和连接信息。",
+    "postgres": "PostgreSQL® 是一款开源关系型数据库，以遵循标准、支持事务和丰富的 SQL 功能著称。它适用于大多数 Web 应用，从内容管理到企业软件。创建数据库即可获得供站点使用的用户和连接信息。",
+    "mongodb": "MongoDB® 是一款文档数据库：它以类似 JSON 的灵活文档而非表格来存储数据。它适合数据结构嵌套或经常变化的应用。创建数据库即可获得供站点使用的用户和连接信息。",
+    "redis": "Redis® 是一款内存键值存储，常用于缓存、会话、队列和计数器。数据保存在内存中，也可以持久化到磁盘。创建实例后，它会在独立容器中运行，内存大小由您选择。",
+    "valkey": "Valkey™ 是一款开源内存键值存储，源自 Redis 的分支，由 Linux 基金会维护。它兼容 Redis 客户端，常用于缓存、会话和队列。创建实例后，它会在独立容器中运行，内存大小由您选择。",
+    "rabbitmq": "RabbitMQ® 是一款基于 AMQP 协议的开源消息代理。应用通过它的队列把任务交给后台 worker 处理，并可靠地交换消息。创建虚拟主机即可获得一个带独立用户的隔离空间。",
+    "nats": "NATS® 是一款开源消息系统，也是 CNCF 项目，提供发布-订阅、请求-响应，以及通过 JetStream 实现的持久化流。各服务用它实时交换消息。创建实例即可开始发布和接收消息。",
+    "s3": "Loch S3 是由 Loch.sh 开发的、与 Amazon S3 API 兼容的对象存储。应用可以使用任意 S3 客户端或 SDK 存储和分发上传文件、媒体和备份等文件。创建实例即可获得一个存储桶及其访问密钥。",
+    "elasticmq": "ElasticMQ 是一款与 Amazon SQS API 兼容的开源消息队列。为 SQS 编写的应用无需 AWS 账号即可收发消息，便于开发和测试。创建实例即可获得一台专属的队列服务器。",
+    "mosquitto": "Eclipse Mosquitto™ 是 Eclipse 基金会推出的开源 MQTT 代理。MQTT 是一种轻量级的发布-订阅协议，广泛用于联网设备、传感器和仪表盘。创建实例即可获得一个带独立用户的代理。"
+  }
+}

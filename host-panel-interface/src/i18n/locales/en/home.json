@@ -1,0 +1,58 @@
+{
+  "title": "Welcome to the admin console",
+  "cards": {
+    "resourceOverview": {
+      "title": "Resource overview",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "loading",
+      "unavailable": "unavailable",
+      "resources": {
+        "containers": "Containers",
+        "stacks": "Stacks",
+        "hosting": "Hosted sites",
+        "database": "Databases",
+        "cache": "Cache",
+        "messaging": "Messaging",
+        "queue": "Queues",
+        "storage": "Storage",
+        "functions": "Functions",
+        "cron": "Scheduled tasks",
+        "networks": "Private networks",
+        "sftp": "SFTP users",
+        "domains": "Domains",
+        "apiKeys": "API keys"
+      }
+    },
+    "containerCount": {
+      "title": "Number of containers"
+    },
+    "profile": {
+      "adminTitle": "Administrator profile",
+      "userTitle": "User profile",
+      "adminAccess": "You have access to all containers (except system ones).",
+      "noAccess": "No access has been set up by your administrator yet.",
+      "restrictedAccess": "You have access to the following containers: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Latest deployed stacks",
+      "empty": "No stacks",
+      "abnormalExit": "Abnormal exit"
+    },
+    "latestDomains": {
+      "title": "Latest domains",
+      "empty": "No domains"
+    },
+    "errorContainers": {
+      "title": "Containers that exited with an error",
+      "empty": "No containers in error"
+    },
+    "support": {
+      "title": "Technical support",
+      "emergency": "📲 Emergency: {{phone}}",
+      "openTicket": "📕 Open an incident ticket"
+    },
+    "serviceStatus": {
+      "title": "Service status"
+    }
+  }
+}

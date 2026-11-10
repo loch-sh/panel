@@ -1,0 +1,29 @@
+{
+  "title": "Domain map",
+  "toolbar": {
+    "searchPlaceholder": "Search for a domain, a container...",
+    "tldPlaceholder": "Filter by TLD",
+    "activeOnly": "Active",
+    "all": "All",
+    "views": {
+      "table": "Table",
+      "graph": "Graph"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "Domain",
+      "router": "Router",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "Service",
+      "container": "Container",
+      "state": "State",
+      "image": "Image"
+    }
+  },
+  "graph": {
+    "empty": "No Traefik domain found"
+  }
+}

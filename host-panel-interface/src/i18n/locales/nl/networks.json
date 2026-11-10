@@ -1,0 +1,319 @@
+{
+  "title": "Privénetwerken",
+  "intro": "Geïsoleerde netwerken voor je sites en services: alleen de leden van een netwerk bereiken elkaar. Elk netwerk is intern: het geeft geen toegang tot internet.",
+  "forbidden": "Privénetwerken zijn voorbehouden aan beheerders.",
+  "newNetwork": "Nieuw netwerk",
+  "empty": "Nog geen privénetwerk",
+  "columns": {
+    "name": "Naam",
+    "subnet": "Subnet",
+    "gateway": "Gateway",
+    "members": "Leden",
+    "properties": "Eigenschappen",
+    "description": "Beschrijving",
+    "actions": "Acties"
+  },
+  "tags": {
+    "shared": "Gedeeld",
+    "private": "Privé",
+    "noInternet": "Geen internettoegang",
+    "reservedOverlap": "Gereserveerd bereik"
+  },
+  "tagHints": {
+    "shared": "Netwerk van de servicesmodule: elke site erop bereikt de services erop. Het kan niet worden verwijderd.",
+    "private": "Alleen de leden bereiken elkaar.",
+    "noInternet": "Intern netwerk: de leden kunnen er het internet niet via bereiken.",
+    "reservedOverlap": "Het subnet overlapt het gereserveerde bereik {{range}} (een LAN of VPN dat buiten Docker wordt gebruikt): adressen in dat bereik zijn mogelijk onbereikbaar vanuit de containers."
+  },
+  "state": {
+    "ok": "OK",
+    "missing": "Ontbreekt",
+    "compromised": "Gecompromitteerd"
+  },
+  "stateHints": {
+    "ok": "Het Docker-netwerk is het netwerk dat het paneel heeft aangemaakt.",
+    "missing": "Het Docker-netwerk bestaat niet op de server: de leden kunnen er niet op starten. De API maakt het bij de volgende start opnieuw aan.",
+    "compromised": "Het Docker-netwerk is niet het netwerk dat het paneel heeft aangemaakt: de leden worden niet vertrouwd totdat dit is opgelost."
+  },
+  "problems": {
+    "replaced": "Het netwerk is buiten het paneel vervangen (ander ID).",
+    "notBridge": "Het is geen lokaal bridge-netwerk.",
+    "notInternal": "Het is niet intern: de leden zouden het internet kunnen bereiken.",
+    "unexpectedOptions": "Het heeft onverwachte opties (IPv6 of een configuratienetwerk).",
+    "missingLabel": "Het label van het paneel ontbreekt.",
+    "unexpectedLabel": "Het label van het paneel verwijst naar een ander netwerk.",
+    "composeProject": "Het is aangemaakt door een Compose-project.",
+    "unexpectedSubnet": "Het subnet is niet het geregistreerde subnet.",
+    "inspectFailed": "Docker kon niet worden bevraagd.",
+    "other": "Onverwacht Docker-netwerk."
+  },
+  "automatic": "Automatisch",
+  "delete": {
+    "title": "Het netwerk {{name}} verwijderen?",
+    "content": "Het Docker-netwerk wordt verwijderd. Een netwerk kan pas worden verwijderd als het geen leden meer heeft.",
+    "submit": "Verwijderen",
+    "systemHint": "Het gedeelde netwerk van de servicesmodule kan niet worden verwijderd.",
+    "inUseHint": "Ontkoppel eerst de leden."
+  },
+  "toasts": {
+    "created": "Netwerk {{name}} aangemaakt.",
+    "deleted": "Netwerk {{name}} verwijderd.",
+    "descriptionSaved": "Beschrijving opgeslagen.",
+    "attached": "{{name}} is met het netwerk verbonden.",
+    "detached": "{{name}} is van het netwerk losgekoppeld.",
+    "siteRedeploying": "{{name}} wordt opnieuw uitgerold met de nieuwe netwerken…",
+    "siteRedeployed": "{{name}} is opnieuw uitgerold met de nieuwe netwerken.",
+    "siteRedeployFailed": "Het opnieuw uitrollen van {{name}} is mislukt: bekijk de laatste bewerking.",
+    "disconnected": "Container {{name}} losgekoppeld."
+  },
+  "create": {
+    "title": "Nieuw privénetwerk",
+    "intro": "Maak een geïsoleerd netwerk aan en koppel er daarna sites en service-instanties aan: alleen de leden bereiken elkaar.",
+    "back": "Terug naar de lijst",
+    "submit": "Netwerk aanmaken",
+    "sections": {
+      "name": {
+        "title": "Naam",
+        "subtitle": "1 tot 24 kleine letters, cijfers of streepjes, beginnend met een letter. Kan later niet worden gewijzigd."
+      },
+      "description": {
+        "title": "Beschrijving",
+        "subtitle": "Optioneel: waarvoor het netwerk dient."
+      },
+      "addressing": {
+        "title": "Adressering",
+        "subtitle": "Het IPv4-bereik van het netwerk, eenmalig ingesteld (Docker kan het later niet wijzigen)."
+      },
+      "members": {
+        "title": "Leden",
+        "subtitle": "Optioneel: sites en service-instanties die worden gekoppeld zodra het netwerk is aangemaakt."
+      }
+    },
+    "nameLabel": "Naam",
+    "namePlaceholder": "backend",
+    "nameRequired": "Voer een naam in.",
+    "nameInvalid": "1 tot 24 kleine letters, cijfers of streepjes, beginnend met een letter en niet eindigend op een streepje.",
+    "nameReserved": "Deze naam is gereserveerd.",
+    "nameTaken": "Er bestaat al een netwerk met deze naam.",
+    "dockerName": "Docker-naam: {{name}}",
+    "descriptionLabel": "Beschrijving",
+    "descriptionPlaceholder": "Webshop en zijn database",
+    "descriptionInvalid": "Geen controletekens, maximaal 200 tekens.",
+    "addressing": {
+      "automatic": {
+        "title": "Automatisch",
+        "description": "Docker kiest een vrij privébereik."
+      },
+      "manual": {
+        "title": "Handmatig subnet",
+        "description": "Kies het bereik, bijv. om een conflict met een vpn te vermijden."
+      }
+    },
+    "subnetLabel": "Subnet (CIDR)",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "Een privé-IPv4-bereik (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 of 100.64.0.0/10), van /16 tot /28, geschreven met het netwerkadres.",
+    "subnetRequired": "Voer een subnet in, of kies Automatisch.",
+    "subnetProblems": {
+      "format": "Schrijf een IPv4-bereik in CIDR-notatie, bijv. 10.20.0.0/24.",
+      "networkAddress": "Schrijf het bereik met het netwerkadres: {{expected}}.",
+      "prefixLength": "De prefixlengte moet tussen /16 en /28 liggen.",
+      "privateRange": "Het bereik moet privé zijn: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 of 100.64.0.0/10.",
+      "reserved": "Het bereik overlapt het gereserveerde bereik {{range}} (een LAN of VPN dat buiten Docker wordt gebruikt)."
+    },
+    "usableHosts_one": "{{count}} bruikbaar adres",
+    "usableHosts_other": "{{count}} bruikbare adressen",
+    "summary": {
+      "title": "Samenvatting",
+      "name": "Naam",
+      "dockerName": "Docker-naam",
+      "subnet": "Subnet",
+      "internet": "Internettoegang",
+      "internetNone": "Geen (intern netwerk)",
+      "note": "Het netwerk begint leeg: koppel sites en service-instanties vanaf de netwerkpagina.",
+      "limit": "Privénetwerken",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "Leden",
+      "membersNone": "Geen"
+    },
+    "limitReached": "De limiet van {{max}} privénetwerken is bereikt: verwijder eerst een netwerk.",
+    "ranges": {
+      "private": "Toegestane bereiken",
+      "reserved": "Gereserveerde bereiken",
+      "reservedNone": "Geen",
+      "reservedHintManual": "Een subnet dat een gereserveerd bereik (een LAN of VPN dat buiten Docker wordt gebruikt) overlapt, wordt geweigerd.",
+      "reservedHintAutomatic": "Als Docker een bereik kiest dat een gereserveerd bereik overlapt, wordt het aanmaken geweigerd: kies dan een handmatig subnet."
+    },
+    "members": {
+      "label": "Sites en service-instanties",
+      "placeholder": "Kies sites of service-instanties",
+      "restart": "Elk gekozen lid wordt opnieuw aangemaakt met dit netwerk: een paar seconden onderbreking voor de container (een site wordt opnieuw uitgerold).",
+      "failedHint": "Het netwerk is aangemaakt: koppel ze opnieuw met ‘Resource koppelen’.",
+      "failedTitle_one": "{{count}} lid kon niet worden gekoppeld",
+      "failedTitle_other": "{{count}} leden konden niet worden gekoppeld",
+      "partial_one": "Netwerk {{name}} aangemaakt, maar {{count}} lid kon niet worden gekoppeld.",
+      "partial_other": "Netwerk {{name}} aangemaakt, maar {{count}} leden konden niet worden gekoppeld."
+    }
+  },
+  "detail": {
+    "back": "Terug naar de netwerken",
+    "notFound": "Dit netwerk bestaat niet (meer).",
+    "info": "Informatie",
+    "dockerName": "Docker-naam",
+    "id": "Docker-ID",
+    "subnet": "Subnet",
+    "gateway": "Gateway",
+    "internet": "Internettoegang",
+    "internetNone": "Geen (intern netwerk)",
+    "internetWarning": "Niet intern: de leden kunnen het internet bereiken",
+    "created": "Aangemaakt",
+    "createdBy": "{{date}} door {{user}}",
+    "description": "Beschrijving",
+    "descriptionEmpty": "Geen beschrijving",
+    "editDescription": "Beschrijving bewerken",
+    "members": "Leden",
+    "membersEmpty": "Nog geen leden: koppel een site of een service-instantie.",
+    "attach": "Resource koppelen",
+    "systemNote": "Gedeeld netwerk van de servicesmodule: service-instanties nemen er standaard aan deel en elke site erop bereikt ze."
+  },
+  "members": {
+    "columns": {
+      "kind": "Type",
+      "name": "Naam",
+      "container": "Container",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "Status",
+      "actions": "Acties"
+    },
+    "kinds": {
+      "site": "Site",
+      "instance": "Service-instantie",
+      "panel": "Paneel",
+      "unmanaged": "Niet beheerd",
+      "function": "Functie"
+    },
+    "panelHint": "Het paneel zelf: het neemt deel aan het netwerk zolang er een poorttunnel (loch proxy) naar een van de leden openstaat.",
+    "notConnected": "Gedeclareerd maar niet verbonden",
+    "notConnectedHint": "Het compose-bestand declareert dit netwerk, maar de container zit er niet op: hij is gestopt of moet opnieuw worden uitgerold.",
+    "notDeclared": "Verbonden maar niet gedeclareerd",
+    "notDeclaredHint": "De container zit op het netwerk, maar het compose-bestand declareert het niet: hij is handmatig verbonden.",
+    "noContainer": "Geen container",
+    "detach": "Ontkoppelen",
+    "lastNetworkHint": "Een service-instantie behoudt minstens één netwerk: koppel haar eerst aan een ander netwerk.",
+    "detachConfirm": {
+      "title": "{{name}} ontkoppelen van {{network}}?",
+      "site": "De site wordt zonder dit netwerk opnieuw uitgerold: de containers worden opnieuw aangemaakt (enkele seconden onderbreking) en ze bereikt de leden van dit netwerk niet meer.",
+      "instance": "{{container}} herstart zonder dit netwerk: de clients worden enkele seconden losgekoppeld en de sites van dit netwerk verliezen de toegang ertoe.",
+      "submit": "Ontkoppelen",
+      "function": "De functie {{name}} wordt zonder dit netwerk opnieuw aangemaakt: de leden van dit netwerk kunnen haar niet meer aanroepen."
+    },
+    "lastNetworkHintFunction": "Een functie behoudt minstens één netwerk: koppel haar eerst aan een ander netwerk."
+  },
+  "unmanaged": {
+    "title_one": "{{count}} container die niet door het paneel wordt beheerd, zit op dit netwerk",
+    "title_other": "{{count}} containers die niet door het paneel worden beheerd, zitten op dit netwerk",
+    "description": "Ze zijn er buiten het paneel bij gekomen (bijv. een CI-stack) en bereiken de leden. Koppel ze los als dat niet de bedoeling is.",
+    "disconnect": "Loskoppelen",
+    "confirm": {
+      "title": "{{name}} loskoppelen?",
+      "content": "De container wordt nu van het netwerk losgekoppeld. Hij komt er weer bij als zijn eigen compose-bestand het netwerk declareert en hij opnieuw wordt uitgerold.",
+      "submit": "Loskoppelen"
+    }
+  },
+  "attach": {
+    "title": "Resource koppelen aan {{network}}",
+    "intro": "De container van het lid wordt opnieuw aangemaakt met dit netwerk: enkele seconden onderbreking, alleen voor die container.",
+    "resource": "Resource",
+    "placeholder": "Kies een site of een service-instantie",
+    "sites": "Sites",
+    "instances": "Service-instanties",
+    "noResource": "Geen site of service-instantie om te koppelen.",
+    "submit": "Koppelen",
+    "disabled": {
+      "unauthenticated": "Geen authenticatie: kan niet aan het gedeelde netwerk deelnemen",
+      "modified": "Handmatig gewijzigd",
+      "operation": "Bewerking bezig"
+    },
+    "restart": {
+      "site": "De site {{name}} wordt opnieuw uitgerold: de containers worden opnieuw aangemaakt (enkele seconden onderbreking).",
+      "instance": "{{container}} herstart: de sites verliezen enkele seconden de verbinding.",
+      "function": "De functie {{name}} wordt opnieuw aangemaakt met dit netwerk: een lopende aanroep wordt afgebroken."
+    },
+    "functions": "Functies"
+  },
+  "select": {
+    "placeholder": "Kies netwerken",
+    "unavailable": "Niet beschikbaar",
+    "createLink": "Een privénetwerk aanmaken",
+    "loadFailed": "De netwerken kunnen niet worden weergegeven."
+  },
+  "tabs": {
+    "private": "Privénetwerken",
+    "docker": "Andere Docker-netwerken"
+  },
+  "docker": {
+    "intro": "Docker-netwerken die het panel niet beheert: die van Docker zelf (bridge, host, none), die van Compose-stacks (bijv. uitgerold door CI/CD, de reverse proxy) en met de hand aangemaakte. Ze worden alleen-lezen getoond.",
+    "empty": "Geen ander Docker-netwerk",
+    "columns": {
+      "origin": "Herkomst",
+      "driver": "Driver",
+      "containers": "Containers"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose: {{project}}",
+      "other": "Overig"
+    },
+    "originHints": {
+      "docker": "Door Docker zelf aangemaakt.",
+      "compose": "Aangemaakt door een Compose-project (bijv. een stack uitgerold door CI/CD).",
+      "other": "Met de hand of door een ander hulpmiddel aangemaakt."
+    },
+    "internet": "Internettoegang",
+    "internetHint": "Niet intern: de containers kunnen er het internet mee bereiken.",
+    "internetYes": "Ja (niet intern)",
+    "back": "Terug naar de Docker-netwerken",
+    "title": "Docker-netwerk",
+    "notFound": "Dit Docker-netwerk bestaat niet (meer), of het is een netwerk van het panel.",
+    "readOnly": "Dit netwerk wordt niet door het panel beheerd: het wordt alleen-lezen getoond.",
+    "containersEmpty": "Geen container op dit netwerk.",
+    "containersTitle_one": "{{count}} container",
+    "containersTitle_other": "{{count}} containers"
+  },
+  "site": {
+    "title": "Netwerken van het panel",
+    "intro": "De site bereikt de andere leden van deze netwerken (service-instanties, sites). Een netwerk koppelen of ontkoppelen rolt de site opnieuw uit: hij herstart een paar seconden.",
+    "connect": "Netwerk koppelen",
+    "disconnect": "Ontkoppelen",
+    "empty": "De site zit op geen enkel netwerk van het panel.",
+    "columns": {
+      "type": "Type",
+      "state": "Status",
+      "warnings": "Waarschuwingen"
+    },
+    "connected": "Gekoppeld",
+    "connectedHint": "De container van de site zit op dit netwerk.",
+    "unknown": "Onbekend netwerk",
+    "unknownHint": "De instellingen van de site noemen een netwerk dat het panel niet (meer) kent.",
+    "modifiedHint": "Het compose-bestand is met de hand bewerkt: de netwerken kunnen niet vanuit het panel worden gewijzigd.",
+    "busyHint": "Er loopt een bewerking op deze site.",
+    "connectModal": {
+      "title": "{{name}} aan een netwerk koppelen",
+      "network": "Netwerk",
+      "placeholder": "Kies een netwerk",
+      "none": "De site zit al op elk netwerk van het panel.",
+      "submit": "Koppelen"
+    },
+    "toasts": {
+      "connected": "{{name}} is gekoppeld aan {{network}}.",
+      "disconnected": "{{name}} is ontkoppeld van {{network}}."
+    },
+    "other": {
+      "title": "Andere Docker-netwerken",
+      "intro": "Netwerken die het panel niet beheert waarop de container van de site zit (bijv. het netwerk van de reverse proxy). Alleen-lezen.",
+      "empty": "De container van de site zit op geen ander Docker-netwerk.",
+      "loadFailed": "De andere Docker-netwerken kunnen niet worden opgesomd."
+    }
+  }
+}

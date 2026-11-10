@@ -1,0 +1,74 @@
+{
+  "title": "Chiavi API",
+  "newKey": "Nuova chiave",
+  "empty": "Nessuna chiave API",
+  "table": {
+    "columns": {
+      "name": "Nome",
+      "prefix": "Prefisso",
+      "permissions": "Permessi",
+      "expiresAt": "Scade il",
+      "createdAt": "Creata il",
+      "lastUsed": "Ultimo utilizzo",
+      "actions": "Azioni"
+    },
+    "allScopes": "Tutti",
+    "expired": "(scaduta)"
+  },
+  "revoke": {
+    "title": "Revocare questa chiave?",
+    "description": "Questa azione è irreversibile.",
+    "action": "Revoca"
+  },
+  "create": {
+    "title": "Crea una chiave API",
+    "failed": "Impossibile creare la chiave",
+    "form": {
+      "name": {
+        "label": "Nome",
+        "required": "Il nome è obbligatorio",
+        "help": "Un nome descrittivo per identificare questa chiave (es.: CLI MacBook Pro)",
+        "placeholder": "La mia chiave CLI"
+      },
+      "expiresInDays": {
+        "label": "Durata di validità (giorni)",
+        "required": "La durata è obbligatoria",
+        "range": "La durata deve essere compresa tra {{min}} e {{max}} giorni",
+        "help": "Durata massima: {{max}} giorni"
+      },
+      "scopes": {
+        "label": "Permessi",
+        "required": "È richiesto almeno un permesso"
+      }
+    }
+  },
+  "created": {
+    "title": "Chiave API creata",
+    "ok": "Ho copiato la mia chiave",
+    "warning": "Copia questa chiave ora. Non verrà più mostrata.",
+    "copied": "Chiave copiata negli appunti",
+    "cliHelp": "Configura la CLI, poi incolla la chiave quando richiesto: <configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd> poi <loginCmd>loch login</loginCmd>",
+    "serverName": "mio-server"
+  },
+  "scopes": {
+    "all": "Tutti i permessi",
+    "containersRead": "Lettura (elencare, ispezionare)",
+    "containersLogs": "Log (scaricare, streaming)",
+    "containersActions": "Azioni (start, stop, restart, kill, delete)",
+    "containersShell": "Shell (terminale remoto)",
+    "containersStats": "Statistiche (monitoraggio in tempo reale)",
+    "containersProxy": "Proxy (tunnel di porte)",
+    "containersCp": "Copia di file (cp)",
+    "cron": "Attività cron",
+    "sftpRead": "SFTP (lettura)",
+    "sftpWrite": "SFTP (creazione, modifica, eliminazione)",
+    "hostingRead": "Hosting (lettura)",
+    "hostingWrite": "Hosting (creazione, modifica, distribuzione, eliminazione)",
+    "networksRead": "Reti private (lettura)",
+    "networksWrite": "Reti private (creazione, collegamento, scollegamento, eliminazione)",
+    "servicesRead": "Database (lettura)",
+    "servicesWrite": "Database (creazione, nuova password, eliminazione)",
+    "servicesExpose": "Database (pubblicazione di una porta)",
+    "auditRead": "Audit trail (lettura)"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "title": "Mapa de dominios",
+  "toolbar": {
+    "searchPlaceholder": "Buscar un dominio, un contenedor...",
+    "tldPlaceholder": "Filtrar por TLD",
+    "activeOnly": "Activos",
+    "all": "Todos",
+    "views": {
+      "table": "Tabla",
+      "graph": "Grafo"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "Dominio",
+      "router": "Router",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "Servicio",
+      "container": "Contenedor",
+      "state": "Estado",
+      "image": "Imagen"
+    }
+  },
+  "graph": {
+    "empty": "No se encontró ningún dominio Traefik"
+  }
+}

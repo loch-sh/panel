@@ -1,0 +1,69 @@
+{
+  "actions": {
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "create": "Erstellen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
+    "seeMore": "Mehr anzeigen",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "refresh": "Aktualisieren",
+    "search": "Suchen",
+    "download": "Herunterladen",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "status": {
+    "loading": "Wird geladen…",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "never": "Nie",
+    "unknown": "Unbekannt"
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pt-PT": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "ja": "日本語",
+    "zh-CN": "简体中文"
+  },
+  "container": {
+    "state": {
+      "running": "Läuft",
+      "exited": "Beendet",
+      "created": "Erstellt",
+      "paused": "Pausiert",
+      "restarting": "Neustart",
+      "removing": "Wird entfernt",
+      "dead": "Tot"
+    },
+    "status": {
+      "up": "Gestartet {{ago}}",
+      "paused": "Pausiert, gestartet {{ago}}",
+      "exited": "Beendet ({{code}}) {{ago}}",
+      "restarting": "Neustart ({{code}}) {{ago}}",
+      "withHealth": "{{status}} ({{health}})"
+    },
+    "health": {
+      "healthy": "gesund",
+      "unhealthy": "fehlerhaft",
+      "starting": "Prüfung läuft"
+    }
+  },
+  "errorBoundary": {
+    "title": "Diese Seite konnte nicht angezeigt werden",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Laden Sie die Seite neu; tritt er erneut auf, wenden Sie sich an Ihren Administrator.",
+    "chunkTitle": "Eine neue Version ist verfügbar",
+    "chunkDescription": "Das Panel wurde aktualisiert, während diese Seite geöffnet war. Laden Sie neu, um fortzufahren.",
+    "reload": "Neu laden"
+  }
+}

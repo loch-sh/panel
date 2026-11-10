@@ -1,0 +1,507 @@
+{
+  "disabled": "Databases are disabled on this server.",
+  "configError": "The databases module is enabled but could not start: check the API logs.",
+  "engineDisabled": "This engine is not enabled on this server.",
+  "engines": {
+    "mysql": "MySQL®",
+    "mariadb": "MariaDB®",
+    "postgres": "PostgreSQL®",
+    "mongodb": "MongoDB®",
+    "redis": "Redis®",
+    "valkey": "Valkey™",
+    "rabbitmq": "RabbitMQ®",
+    "nats": "NATS®",
+    "s3": "Loch S3",
+    "elasticmq": "ElasticMQ",
+    "mosquitto": "Eclipse Mosquitto™"
+  },
+  "actions": {
+    "resetPassword": "New password",
+    "retire": "Remove instance",
+    "edit": "Edit",
+    "purge": "Delete"
+  },
+  "instances": {
+    "columns": {
+      "version": "Version",
+      "state": "State",
+      "host": "Internal address",
+      "actions": "Actions",
+      "exposure": "Published port"
+    },
+    "modified": "Edited by hand",
+    "modifiedHint": "Its files were edited outside the panel: it is kept even when it holds no database.",
+    "state": {
+      "ready": "Running",
+      "starting": "Starting",
+      "unhealthy": "Unhealthy",
+      "stopped": "Stopped",
+      "missing": "Not running",
+      "conflict": "Conflict",
+      "other": "Unknown",
+      "unverified": "Unverified",
+      "restarting": "Restarting",
+      "paused": "Paused"
+    },
+    "notReadyHint": "The instance is not running or not healthy: its databases cannot be listed.",
+    "tls": "TLS",
+    "noTls": "not encrypted",
+    "notExposed": "Internal only",
+    "exposureHint": "Published on an address of the server: clients outside Docker can connect.",
+    "exposureTlsHint": "TLS required. Certificate SHA-256 fingerprint: {{fingerprint}}",
+    "exposureError": "Change failed",
+    "exposureErrorHint": "The last change of the published port failed: the previous one is kept. See the API logs.",
+    "tlsOptional": "TLS optional",
+    "exposureTlsOptionalHint": "TLS offered but not required: plain clients send their password and data in clear. Certificate SHA-256 fingerprint: {{fingerprint}}"
+  },
+  "resources": {
+    "columns": {
+      "actions": "Actions"
+    },
+    "unmanaged": "Not managed",
+    "unmanagedHint": "Created outside the panel: it cannot be deleted here and keeps the instance running."
+  },
+  "create": {
+    "nameRequired": "Enter a name."
+  },
+  "credentials": {
+    "title": "Connection details",
+    "warning": "Copy the password now: it will not be shown again. If you lose it, generate a new one.",
+    "fields": {
+      "host": "Host",
+      "port": "Port",
+      "database": "Database",
+      "user": "User",
+      "password": "Password",
+      "uri": "Connection URI",
+      "external": "External address",
+      "tlsFingerprint": "Certificate fingerprint (SHA-256)",
+      "vhost": "Virtual host",
+      "endpoint": "Endpoint",
+      "region": "Region",
+      "bucket": "Bucket",
+      "accessKeyId": "Access key ID",
+      "secretAccessKey": "Secret access key",
+      "pathStyle": "Path-style URLs",
+      "queueUrlPrefix": "Queue URL prefix"
+    },
+    "internalOnly": "The host is only reachable from the sites connected to the services network.",
+    "close": "I have copied the password",
+    "show": "Show",
+    "hide": "Hide",
+    "laravelEnv": "Copy the Laravel .env lines (contains the secret)",
+    "noAuth": "No authentication: every site connected to the services network can use, purge or delete the queues of this instance. Any credentials are accepted (SDKs need some, e.g. \"x\")."
+  },
+  "delete": {
+    "confirmLabel": "Type {{name}} to confirm:"
+  },
+  "rotate": {
+    "title": "Generate a new password for {{name}}?",
+    "content": "The current password stops working and open connections are closed: update the sites that use it.",
+    "submit": "Generate"
+  },
+  "retire": {
+    "title": "Remove the {{engine}} {{version}} instance?",
+    "content": "The instance holds no database. Its containers and data are deleted.",
+    "submit": "Remove"
+  },
+  "toasts": {
+    "passwordReset": "New password generated.",
+    "retired": "Instance removed.",
+    "updated": "Instance updated.",
+    "purged": "Instance deleted."
+  },
+  "wording": {
+    "database": {
+      "title": "{{engine}} databases",
+      "intro": "Each version runs a single instance shared by every site. It starts with its first database and is removed, with its data, when its last database is deleted.",
+      "newResource": "New database",
+      "empty": "No {{engine}} database yet.",
+      "resourceColumn": "Database and user",
+      "countColumn": "Databases",
+      "resourcesEmpty": "No database in this instance.",
+      "createTitle": "New {{engine}} database",
+      "nameHelp": "Used for the database and its user: lowercase letters, digits and _, starting with a letter ({{max}} characters max).",
+      "nameInvalid": "Use lowercase letters, digits and _ only, starting with a letter ({{max}} characters max).",
+      "created": "Database created.",
+      "deleted": "Database deleted.",
+      "instanceRetired": "Database deleted; the instance was removed.",
+      "retireBlocked": "Database deleted; the empty instance was kept (files edited by hand or removal failed).",
+      "deleteTitle": "Delete the database {{name}}?",
+      "deleteContent": "The database and its user are deleted permanently. Open connections are closed.",
+      "deleteLast": "It is the last database of {{engine}} {{version}}: the instance is removed too, with its data.",
+      "createFirst": "Create a database"
+    },
+    "vhost": {
+      "title": "{{engine}} virtual hosts",
+      "intro": "Each version runs a single broker shared by every site. A resource is a virtual host and a user of the same name, isolated from the others and bounded (connections, queues, queue size).",
+      "newResource": "New virtual host",
+      "empty": "No {{engine}} virtual host yet.",
+      "resourceColumn": "Virtual host and user",
+      "countColumn": "Virtual hosts",
+      "resourcesEmpty": "No virtual host in this instance.",
+      "createTitle": "New {{engine}} virtual host",
+      "nameHelp": "Used for the virtual host and its user: lowercase letters, digits and _, starting with a letter ({{max}} characters max).",
+      "nameInvalid": "Use lowercase letters, digits and _ only, starting with a letter ({{max}} characters max).",
+      "created": "Virtual host created.",
+      "deleted": "Virtual host deleted.",
+      "instanceRetired": "Virtual host deleted; the broker was removed.",
+      "retireBlocked": "Virtual host deleted; the empty broker was kept (files edited by hand or removal failed).",
+      "deleteTitle": "Delete the virtual host {{name}}?",
+      "deleteContent": "The virtual host, its queues and messages, and its user are deleted permanently. Open connections are closed.",
+      "deleteLast": "It is the last virtual host of {{engine}} {{version}}: the broker is removed too, with its data.",
+      "createFirst": "Create a virtual host"
+    },
+    "dedicated": {
+      "title": "{{engine}} instances",
+      "intro": "Each instance runs in a container of its own, sized when it is created, with a single user. Deleting it deletes its data.",
+      "newResource": "New instance",
+      "empty": "No {{engine}} instance yet.",
+      "resourceColumn": "Instance",
+      "countColumn": "Instances",
+      "resourcesEmpty": "No instance.",
+      "createTitle": "New {{engine}} instance",
+      "nameHelp": "Becomes the host name and the user: lowercase letters and digits, starting with a letter ({{max}} characters max).",
+      "nameInvalid": "Use lowercase letters and digits only, starting with a letter ({{max}} characters max).",
+      "created": "Instance created.",
+      "deleted": "Instance deleted, with its data.",
+      "instanceRetired": "Instance deleted, with its data.",
+      "retireBlocked": "Instance deleted.",
+      "deleteTitle": "Delete the instance {{name}}?",
+      "deleteContent": "The container and all its data are deleted permanently. Open connections are closed.",
+      "deleteLast": "The container and its data are deleted.",
+      "createFirst": "Create an instance"
+    }
+  },
+  "createPage": {
+    "back": "Back to the list",
+    "recommended": "Recommended",
+    "instanceRunning": "Instance running",
+    "default": "Default",
+    "nameLabel": "Name",
+    "submit": "Create",
+    "sections": {
+      "version": {
+        "title": "Version",
+        "subtitle": "The engine version, chosen once (it cannot be changed later)."
+      },
+      "options": {
+        "title": "Size and settings",
+        "subtitle": "Resources reserved for the container and engine settings."
+      },
+      "name": {
+        "title": "Name"
+      }
+    },
+    "summary": {
+      "title": "Summary",
+      "engine": "Engine",
+      "type": "Type",
+      "shared": "Shared instance",
+      "dedicated": "Dedicated container",
+      "name": "Name",
+      "address": "Internal address",
+      "startNote": "The {{engine}} {{version}} instance is not running yet: it is started with this resource (up to two minutes).",
+      "sharedNote": "Created in the running {{engine}} {{version}} instance.",
+      "dedicatedNote": "A container is started for this resource only (up to a minute).",
+      "passwordNote": "The password is shown once, after the creation.",
+      "restartNote": "Saving restarts the instance: its clients are disconnected for a few seconds."
+    },
+    "nameTaken": "An instance with this name already exists.",
+    "fixed": "Set at creation",
+    "noChange": "Nothing to change.",
+    "editTitle": "Edit {{name}}",
+    "editIntro": "Change the size or settings of this instance. It is recreated with them: a few seconds of unavailability, data kept.",
+    "notFound": "This instance does not exist (any more).",
+    "saveConfirm": {
+      "title": "Apply the changes to {{name}}?",
+      "content": "The instance restarts with the new settings (a few seconds of unavailability). If it does not start, the previous settings are restored."
+    },
+    "legacyAuth": {
+      "label": "Legacy authentication",
+      "help": {
+        "mysql": "For older clients (old PHP or tools) that fail with “Authentication requires secure connection”: the user authenticates with mysql_native_password instead of caching_sha2_password. It cannot be changed afterwards (except by recreating the database).",
+        "postgres": "For older clients without SCRAM: the password is stored as md5 instead of SCRAM-SHA-256 (deprecated since PostgreSQL 18). It cannot be changed afterwards (except by recreating the database)."
+      },
+      "warning": "Weaker mechanism: a network observer learns more from the exchange. The password stays random; enable it only for clients that need it.",
+      "summary": "Authentication",
+      "mechanism": {
+        "mysql": "mysql_native_password (legacy)",
+        "postgres": "md5 (legacy)"
+      }
+    },
+    "custom": {
+      "title": "Custom",
+      "description": "Any size from {{min}} to {{max}}",
+      "unit": "GB",
+      "inputLabel": "Custom {{option}} in GB"
+    },
+    "unauthenticated": "ElasticMQ has no authentication: every site on the same network can use, purge or delete the queues of the instance. Do not store sensitive data in it."
+  },
+  "options": {
+    "memory": {
+      "label": "Memory",
+      "help": "Memory reserved for the container.",
+      "detail": {
+        "data": "{{size}} for the data",
+        "streams": "{{size}} for in-memory streams"
+      }
+    },
+    "storage": {
+      "label": "Stream storage",
+      "help": "Disk space for JetStream (persistent streams)."
+    },
+    "policy": {
+      "label": "When memory is full",
+      "help": "What the server does once the data fills its memory.",
+      "values": {
+        "noeviction": {
+          "label": "Refuse writes",
+          "description": "No data is ever removed: writes fail until memory is freed."
+        },
+        "allkeys-lru": {
+          "label": "Evict least recently used",
+          "description": "Any key may be removed, the least recently used first (cache)."
+        },
+        "allkeys-lfu": {
+          "label": "Evict least frequently used",
+          "description": "Any key may be removed, the least frequently used first."
+        },
+        "volatile-lru": {
+          "label": "Evict expiring keys (LRU)",
+          "description": "Only keys with an expiry are removed, least recently used first."
+        },
+        "volatile-lfu": {
+          "label": "Evict expiring keys (LFU)",
+          "description": "Only keys with an expiry are removed, least frequently used first."
+        },
+        "volatile-ttl": {
+          "label": "Evict keys expiring soonest",
+          "description": "Only keys with an expiry are removed, the closest to expiring first."
+        }
+      }
+    },
+    "persistence": {
+      "label": "Persistence",
+      "help": "How the data survives a restart.",
+      "values": {
+        "aof": {
+          "label": "Journal (AOF)",
+          "description": "Every write is logged and flushed every second: at most one second lost."
+        },
+        "rdb": {
+          "label": "Snapshots",
+          "description": "Periodic snapshots: the writes since the last one can be lost."
+        },
+        "none": {
+          "label": "None",
+          "description": "Memory only: the data is lost at every restart."
+        },
+        "on": {
+          "label": "Kept on disk",
+          "description": "Retained messages and persistent sessions survive a restart."
+        },
+        "off": {
+          "label": "Memory only",
+          "description": "Lost at restart; less disk activity."
+        }
+      }
+    },
+    "scripting": {
+      "label": "Lua scripts",
+      "help": "EVAL and functions (some libraries need them).",
+      "values": {
+        "on": {
+          "label": "Allowed",
+          "description": "Scripts and functions can be used."
+        },
+        "off": {
+          "label": "Disabled",
+          "description": "Smaller attack surface; scripts are refused."
+        }
+      }
+    },
+    "modules": {
+      "label": "Redis modules",
+      "help": "JSON, search, time series and probabilistic structures bundled with Redis 8.",
+      "values": {
+        "off": {
+          "label": "Disabled",
+          "description": "Core commands only (smaller attack surface)."
+        },
+        "on": {
+          "label": "Enabled",
+          "description": "JSON, search, time series, Bloom filters..."
+        }
+      }
+    },
+    "quota": {
+      "label": "Storage quota",
+      "help": "Maximum space used by the objects, their versions and the uploads in progress. Lowering it below the space used refuses new writes; nothing is deleted."
+    },
+    "encryption": {
+      "label": "Server-side encryption",
+      "help": "Every object written is encrypted on disk (SSE-S3, AES-256-GCM) with a key generated for this instance. Chosen at creation.",
+      "values": {
+        "off": {
+          "label": "Disabled",
+          "description": "Objects are stored as sent."
+        },
+        "on": {
+          "label": "Enabled",
+          "description": "Encrypted at rest; the key stays on the server, apart from the data. Slightly more CPU."
+        }
+      }
+    },
+    "message-size": {
+      "label": "Maximum message size",
+      "help": "Larger messages are refused."
+    },
+    "payload": {
+      "label": "Maximum message size",
+      "help": "NATS advises small messages: large ones cost memory for every client."
+    },
+    "queued": {
+      "label": "Queued messages per client",
+      "help": "Messages kept for a disconnected or slow client (QoS 1 and 2) before new ones are dropped."
+    },
+    "limits": {
+      "label": "SQS limits",
+      "help": "Message size, delays and timeouts allowed.",
+      "values": {
+        "strict": {
+          "label": "Strict",
+          "description": "Same limits as Amazon SQS: what works here works on AWS."
+        },
+        "relaxed": {
+          "label": "Relaxed",
+          "description": "Larger messages and longer delays than Amazon SQS allows (development, migrations)."
+        }
+      }
+    }
+  },
+  "dedicated": {
+    "columns": {
+      "name": "Name",
+      "version": "Version",
+      "size": "Size"
+    }
+  },
+  "forbidden": "Services are reserved for administrators.",
+  "purge": {
+    "title": "Delete {{name}}?",
+    "content": "The files of this instance were edited outside the panel, which does not run them. Deleting it removes its containers and ALL its data, every database it holds included: nothing can be recovered (unless archiving is enabled on the server). The edited files are never run.",
+    "confirmLabel": "Type the instance name to confirm:",
+    "submit": "Delete permanently"
+  },
+  "networks": {
+    "column": "Networks",
+    "label": "Networks",
+    "edit": "Change the networks",
+    "sectionTitle": "Networks",
+    "help": "Private networks the instance joins: only the sites on one of them reach it.",
+    "accessTitle": "Network access",
+    "accessSubtitle": "Networks and published port of the instance. Each change is applied right away and restarts the instance.",
+    "modalTitle": "Networks of {{name}}",
+    "required": "Choose at least one network.",
+    "privateRequired": "{{engine}} has no authentication: it cannot join the shared network. Choose a private network: only its sites reach the instance.",
+    "unauthenticatedShared": "No authentication: not on the shared network",
+    "existingInstance": "The {{engine}} {{version}} instance already runs: the database is created on its networks. Change them from the list of instances.",
+    "restart": "Saving recreates {{container}}: its clients are disconnected for a few seconds. Sites that no longer share a network with it lose access to it.",
+    "saved": "Networks of {{name}} updated."
+  },
+  "exposure": {
+    "edit": "Configure the published port",
+    "title": "Published port of {{name}}",
+    "intro": "Publish the port on an address of the server so that clients outside Docker can connect. Applied right away: the instance restarts (a few seconds of unavailability).",
+    "current": "Published on",
+    "tls": "Encryption",
+    "fingerprint": "Certificate SHA-256 fingerprint",
+    "notPublished": "Not published: only the sites on its networks reach the instance.",
+    "address": "Address",
+    "addressHelp": "Allowed by the server: {{cidrs}}",
+    "addressNone": "The server configuration allows no address (SERVICES_EXPOSE_ALLOWED_CIDRS): the port cannot be published.",
+    "addressRequired": "Enter an address.",
+    "addressInvalid": "Enter an IP address, e.g. 127.0.0.1.",
+    "addressNotAllowed": "This address is not allowed by the server configuration.",
+    "port": "Port",
+    "portHelp": "From {{min}} to {{max}}.",
+    "portRequired": "Enter a port.",
+    "portRange": "The port must be between {{min}} and {{max}}.",
+    "portReserved": "This port is reserved on this server.",
+    "tlsOptional": "TLS optional",
+    "tlsOptionalHelp": "Offers TLS without requiring it, for clients that cannot use it. Plain clients send their password and data in clear.",
+    "loopbackOnly": {
+      "deprecated": "This version is out of support: it can only be published on a loopback address (127.0.0.1).",
+      "unauthenticated": "This engine has no authentication: it can only be published on a loopback address (127.0.0.1).",
+      "noTls": "This engine cannot require TLS: it can only be published on a loopback address (127.0.0.1)."
+    },
+    "loopbackNote": "Loopback address: reachable from the server itself only (e.g. through an SSH tunnel).",
+    "tlsRequired": "TLS will be required from every client of this instance, the sites inside Docker included: check that they connect with TLS before publishing.",
+    "noEncryption": "TLS is disabled on this server: passwords and data cross the network in clear.",
+    "submit": "Publish",
+    "close": "Close the port",
+    "closeConfirm": {
+      "title": "Close the port of {{name}}?",
+      "content": "The instance restarts without a published port: clients outside Docker can no longer connect.",
+      "submit": "Close the port"
+    },
+    "toasts": {
+      "published": "Port published on {{address}}.",
+      "closed": "Port closed."
+    }
+  },
+  "support": {
+    "active": "Support: {{date}}",
+    "security": "Security: {{date}}",
+    "activeUntil": "Active support until {{date}}",
+    "activeEnded": "Active support ended {{date}}",
+    "activeTooltip": "Bug fixes from the maintainers.",
+    "securityUntil": "Security support until {{date}}",
+    "securityEnded": "Security support ended {{date}}",
+    "securityTooltip": "Security fixes from the maintainers (end of life).",
+    "securityEndedTooltip": "No more security fixes: move to a newer version.",
+    "ended": "Security support ended",
+    "pinned": "Pinned",
+    "pinnedTooltip": "Offered because the server configuration pins this version."
+  },
+  "update": {
+    "available": "Update available",
+    "availableHint": "A newer image or a newer version is available for this instance.",
+    "action": "Update",
+    "title": "Update {{name}}",
+    "current": "Current version",
+    "choose": "Update to",
+    "none": "This instance is up to date.",
+    "image": "Latest image of {{engine}} {{version}}",
+    "imageHint": "Same version, with the latest fixes: the data format does not change.",
+    "restartWarning": "The instance restarts: open connections are dropped and clients must reconnect. Pulling the image and restarting can take a few minutes.",
+    "rollbackNote": "If the instance does not start, the previous version is restored.",
+    "noDowngrade": "There is no way back: data written by {{engine}} {{version}} may not be readable by an older version. The data is not backed up before the change: make a backup first.",
+    "submit": "Update",
+    "updated": "{{name}} updated ({{engine}} {{version}}).",
+    "upToDate": "{{name}} is already up to date.",
+    "startFailed": "The instance did not start with the update: the previous version was restored."
+  },
+  "catalog": {
+    "check": "Check for updates",
+    "checked": "Versions checked {{when}}",
+    "never": "Versions not checked yet: built-in list in use.",
+    "failed": "Last check incomplete for: {{engines}}. The versions and dates shown may be out of date.",
+    "done": "Versions checked.",
+    "throttled": "A check just ran: try again in a few seconds."
+  },
+  "presentation": {
+    "mysql": "MySQL® is an open-source relational database, widely used by web applications and content management systems such as WordPress. Create a database to get a user and the connection details for your site.",
+    "mariadb": "MariaDB® is an open-source relational database that started as a fork of MySQL and remains largely compatible with it. It is commonly used by PHP applications and content management systems. Create a database to get a user and the connection details for your site.",
+    "postgres": "PostgreSQL® is an open-source relational database known for its standards compliance, transactions and extensive SQL features. It suits most web applications, from content management to business software. Create a database to get a user and the connection details for your site.",
+    "mongodb": "MongoDB® is a document database: it stores data as flexible JSON-like documents instead of tables. It suits applications whose data is nested or changes shape often. Create a database to get a user and the connection details for your site.",
+    "redis": "Redis® is an in-memory key-value store, commonly used for caching, sessions, queues and counters. Data lives in memory and can be persisted to disk. Create an instance: it runs in its own container with the memory you choose.",
+    "valkey": "Valkey™ is an open-source in-memory key-value store, forked from Redis and maintained under the Linux Foundation. It works with Redis clients and is commonly used for caching, sessions and queues. Create an instance: it runs in its own container with the memory you choose.",
+    "rabbitmq": "RabbitMQ® is an open-source message broker built around the AMQP protocol. Applications use its queues to hand work over to background workers and to exchange messages reliably. Create a virtual host to get an isolated space with its own user.",
+    "nats": "NATS® is an open-source messaging system and a CNCF project, offering publish-subscribe, request-reply and, with JetStream, persistent streams. Services use it to exchange messages in real time. Create an instance to start publishing and receiving messages.",
+    "s3": "Loch S3 is object storage compatible with the Amazon S3 API, developed by Loch.sh. Applications store and serve files such as uploads, media and backups with any S3 client or SDK. Create an instance to get a bucket and its access keys.",
+    "elasticmq": "ElasticMQ is an open-source message queue compatible with the Amazon SQS API. Applications written for SQS can send and receive messages without an AWS account, which is handy for development and testing. Create an instance to get a queue server of your own.",
+    "mosquitto": "Eclipse Mosquitto™ is an open-source MQTT broker from the Eclipse Foundation. MQTT is a lightweight publish-subscribe protocol, widely used by connected devices, sensors and dashboards. Create an instance to get a broker with its own user."
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "title": "ホスティング",
+  "newStack": "新しいホスティング",
+  "backToList": "ホスティングに戻る",
+  "empty": "ホスティングはまだありません",
+  "disabled": "このサーバーでは Web ホスティングが有効になっていません。",
+  "configError": "ホスティングの設定を読み込めません。",
+  "retry": "再試行",
+  "templates": {
+    "php-nginx": {
+      "label": "PHP + Nginx",
+      "description": "Nginx の背後で動作する PHP-FPM。高速で、ほとんどの PHP アプリケーション（WordPress、Laravel、Symfony）に適しています。"
+    },
+    "php-apache": {
+      "label": "PHP + Apache",
+      "description": "Apache で動作する PHP。.htaccess ファイルに対応しており、それを必要とするアプリケーション向けです。"
+    },
+    "nginx": {
+      "label": "静的（Nginx）",
+      "description": "Nginx で静的ファイルを配信します。HTML サイト、シングルページアプリケーション、生成されたサイト向けです。"
+    },
+    "apache": {
+      "label": "静的（Apache）",
+      "description": "Apache で静的ファイルを配信します。.htaccess に対応しています。"
+    },
+    "badges": {
+      "static": "静的"
+    }
+  },
+  "status": {
+    "running": "実行中",
+    "partial": "一部実行中",
+    "stopped": "停止",
+    "not_deployed": "未デプロイ",
+    "withCount": "{{label}}（{{running}}/{{total}}）",
+    "modified": "手動で変更済み",
+    "modifiedTooltip": "compose ファイルがパネル外で編集されています。",
+    "lastOperationFailed": "前回の処理が失敗しました",
+    "refreshing": "ステータスを更新中…"
+  },
+  "columns": {
+    "name": "名前",
+    "template": "テンプレート",
+    "phpVersion": "PHP",
+    "domains": "ドメイン",
+    "status": "ステータス",
+    "actions": "操作"
+  },
+  "php": {
+    "deprecated": "非推奨",
+    "deprecatedTooltip": "この PHP バージョンはセキュリティ更新を受けられなくなりました。",
+    "support": {
+      "activeUntil": "バグ修正：{{date}} まで",
+      "activeEnded": "バグ修正：{{date}} に終了",
+      "securityUntil": "セキュリティ修正：{{date}} まで",
+      "securityEnded": "セキュリティ修正：{{date}} に終了",
+      "activeTooltip": "アクティブサポート：バグとセキュリティ問題が修正されます。",
+      "securityTooltip": "セキュリティサポート：セキュリティ問題のみ修正されます。この日以降、更新は一切提供されません。"
+    }
+  },
+  "domains": {
+    "none": "ドメインなし",
+    "httpsTooltip": "HTTPS 有効"
+  },
+  "actions": {
+    "start": "起動",
+    "stop": "停止",
+    "restart": "再起動",
+    "redeploy": "再デプロイ",
+    "delete": "削除",
+    "details": "詳細",
+    "busy": "このホスティングでは処理が実行中です"
+  },
+  "confirm": {
+    "stop": "ホスティング「{{name}}」を停止しますか？Web サイトは利用できなくなります。",
+    "restart": "ホスティング「{{name}}」を再起動しますか？Web サイトは一時的に利用できなくなります。"
+  },
+  "toasts": {
+    "started": "ホスティング「{{name}}」を起動しました",
+    "stopped": "ホスティング「{{name}}」を停止しました",
+    "restarted": "ホスティング「{{name}}」を再起動しました",
+    "partialFailure": "ホスティング「{{name}}」：{{total}} 個中 {{failed}} 個のコンテナが失敗しました",
+    "createStarted": "ホスティング「{{name}}」を作成しています…",
+    "updateStarted": "「{{name}}」の新しい設定を適用しています…",
+    "deployStarted": "「{{name}}」を再デプロイしています…",
+    "deleteStarted": "「{{name}}」を削除しています…",
+    "deleted": "ホスティング「{{name}}」を削除しました",
+    "operationSucceeded": "「{{name}}」の処理が完了しました",
+    "operationFailed": "「{{name}}」の処理が失敗しました"
+  },
+  "redeploy": {
+    "title": "「{{name}}」を再デプロイ",
+    "description": "現在の設定でコンテナを再作成します。",
+    "pull": "最新のイメージを取得する（PHP / Web サーバーの修正を適用）",
+    "submit": "再デプロイ",
+    "modifiedWarning": "このホスティングの compose ファイルはパネル外で編集されています。手動での変更を含め、そのままデプロイされます。",
+    "modifiedConfirm": "理解しました：手動で編集された compose ファイルをデプロイする"
+  },
+  "delete": {
+    "title": "「{{name}}」を削除",
+    "description": "コンテナとその設定が削除されます。特に指定しない限り、サイトのファイルは保持されます。",
+    "purge": "サイトのファイルも削除する（{{path}}）",
+    "purgeWarning": "この操作は元に戻せません。サイト「{{site}}」の SFTP ユーザーはすべてのファイルを失います。",
+    "typeName": "確認のため <code>{{name}}</code> と入力してください",
+    "typeNameMismatch": "名前が一致しません",
+    "submit": "削除"
+  },
+  "create": {
+    "title": "新しいホスティング",
+    "submit": "ホスティングを作成"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "概要",
+      "settings": "設定",
+      "networks": "ネットワーク",
+      "operation": "前回の処理",
+      "compose": "Compose"
+    },
+    "notFound": "このホスティングは存在しないか、削除されました。",
+    "deleting": "このホスティングを削除しています…",
+    "noSpec": "このホスティングの設定を読み取れません。",
+    "overview": {
+      "template": "テンプレート",
+      "image": "イメージ",
+      "phpVersion": "PHP バージョン",
+      "sitePath": "サイトディレクトリ",
+      "documentRoot": "ドキュメントルート",
+      "documentRootRoot": "サイトのルート",
+      "domains": "ドメイン",
+      "https": "HTTPS",
+      "redirectHttps": "HTTP → HTTPS リダイレクト",
+      "resources": "リソース",
+      "resourcesValue": "メモリ：{{memory}} · CPU：{{cpus}}",
+      "containers": "コンテナ",
+      "noContainers": "コンテナがありません。ホスティングはデプロイされていません。",
+      "memoryValue": "{{value}} MB",
+      "cpusValue": "{{value}} CPU",
+      "unlimited": "無制限",
+      "disabledModules": "無効な PHP モジュール",
+      "noDisabledModules": "なし",
+      "routing": "ルーティング",
+      "routingDefault": "既定（イメージ）",
+      "routingSymfony": "Symfony",
+      "routingLaravel": "Laravel",
+      "routingCustom": "カスタムルール",
+      "usage": "リソース使用量",
+      "usageNotRunning": "実行中のコンテナがありません。ホスティングを起動するとメモリと CPU の使用量が表示されます。",
+      "usageLoading": "最初の計測値を待っています…",
+      "phpMemory": "PHP メモリ",
+      "phpMemoryWeb": "Web：",
+      "phpMemoryCli": "CLI：",
+      "sameAsCli": "CLI と同じ（{{value}}）",
+      "networks": "ネットワーク",
+      "noNetwork": "なし"
+    },
+    "secretsMasked": "この API キーでは秘密の値（環境変数、設定スニペット）が非表示のため、設定は読み取り専用です。",
+    "compose": {
+      "help": "このホスティングの実行に使用される compose.yaml です。標準の Docker Compose ファイルのため、ホスティングのディレクトリで `docker compose up -d` を実行すればパネルなしで起動できます。",
+      "modified": "このファイルはパネル外で編集されたため、設定と一致しません。設定を保存すると上書きされます。",
+      "masked": "この API キーはシークレットを読み取れないため、compose ファイルは表示されません。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "routingFile": "ルーティングルール",
+      "routingFileHelp": "Web サーバーが現在使用しているルーティングファイルです。"
+    }
+  },
+  "settings": {
+    "modifiedAlert": {
+      "title": "このホスティングはパネル外で変更されています",
+      "description": "保存すると compose ファイルが再生成され、手動での変更は上書きされます。"
+    },
+    "forceConfirm": {
+      "title": "手動での変更を上書きしますか？",
+      "content": "「{{name}}」の compose ファイルはパネル外で編集されています。保存すると、このフォームの設定で置き換えられ、手動での変更は失われます。",
+      "ok": "手動での変更を上書き"
+    },
+    "submit": "保存して再デプロイ",
+    "reset": "変更を破棄"
+  },
+  "operation": {
+    "none": "API の起動以降、処理は実行されていません。",
+    "kind": {
+      "create": "作成",
+      "update": "更新",
+      "deploy": "デプロイ",
+      "delete": "削除"
+    },
+    "state": {
+      "running": "実行中",
+      "succeeded": "成功",
+      "failed": "失敗"
+    },
+    "fields": {
+      "kind": "処理",
+      "state": "状態",
+      "startedAt": "開始",
+      "finishedAt": "終了",
+      "duration": "所要時間"
+    },
+    "durationSeconds": "{{seconds}} 秒",
+    "rolledBack": "以前の設定に戻しました。",
+    "failedAlert": "処理が失敗しました",
+    "output": "Docker Compose の出力",
+    "noOutput": "出力なし"
+  },
+  "form": {
+    "required": "必須",
+    "sections": {
+      "routing": "ルーティング"
+    },
+    "fields": {
+      "template": {
+        "required": "テンプレートを選択してください",
+        "editHelp": "既存のホスティングでは、同じ種類のテンプレートのみ選択できます。"
+      },
+      "name": {
+        "label": "名前",
+        "placeholder": "my-site",
+        "help": "小文字の英字、数字、ハイフン（最大 {{max}} 文字）。後から変更できません。",
+        "required": "名前は必須です",
+        "tooLong": "最大 {{max}} 文字です",
+        "invalid": "小文字の英字、数字、ハイフンのみ使用でき、先頭と末尾にハイフンは使えません",
+        "checkFailed": "名前が使用可能か確認できません",
+        "taken": {
+          "reserved": "この名前は予約されています",
+          "stack": "この名前はすでにホスティングで使用されています",
+          "directory": "この名前のディレクトリがすでに存在します",
+          "compose_project": "この名前はすでに Docker Compose スタックで使用されています",
+          "container": "この名前はすでにコンテナで使用されています",
+          "traefik_router": "この名前はすでに Traefik ルーターで使用されています",
+          "unknown": "この名前は使用できません"
+        }
+      },
+      "site": {
+        "label": "サイトディレクトリ",
+        "tooltip": "{{dir}} 配下の、Web サイトのファイルを格納するディレクトリです。SFTP ユーザーと共有でき、後から変更できません。",
+        "new": "新しいディレクトリ",
+        "newHelp": "ホスティング名のディレクトリが作成されます：{{path}}",
+        "existing": "既存のディレクトリ",
+        "select": "ディレクトリを選択",
+        "noneAvailable": "空いているディレクトリがありません。既存のサイトはすべてホスティングで使用されています。",
+        "required": "ディレクトリを選択してください",
+        "readOnly": "ホスティングのサイトディレクトリは変更できません。"
+      },
+      "documentRoot": {
+        "label": "ドキュメントルート",
+        "tooltip": "Web サーバーが配信するディレクトリで、サイトディレクトリからの相対パスです。空欄にするとサイトのルートを配信します。",
+        "placeholder": "web",
+        "invalid": "相対パス：英字、数字、. _ @ + ~ - からなるセグメントを / で区切って指定し、「.」や「..」のセグメントは使えません",
+        "webTooltip": "従来の構成：サイトのファイルは web/ にあります。",
+        "publicTooltip": "Symfony / Laravel の構成：サイトのファイルは public/ にあります。PHP テンプレートでは Symfony ルーティングも有効になります。",
+        "symfonyEnabled": "{{framework}} ルーティングを有効にしました（詳細設定を参照）。"
+      },
+      "domains": {
+        "label": "ドメイン",
+        "placeholder": "example.jp, www.example.jp",
+        "help": "ドメインを入力して Enter キーを押してください。最大 {{max}} 個です。",
+        "invalid": "無効なドメイン：{{domain}}",
+        "duplicate": "重複したドメイン：{{domain}}",
+        "tooMany": "ドメインは最大 {{max}} 個です"
+      },
+      "https": {
+        "label": "HTTPS",
+        "help": "すべてのドメインの DNS がこのサーバーを指してから HTTPS を有効にしてください。そうしないと証明書を発行できません。"
+      },
+      "redirectHttps": {
+        "label": "HTTP を HTTPS にリダイレクト",
+        "help": "HTTPS が必要です。"
+      },
+      "phpVersion": {
+        "label": "PHP バージョン",
+        "required": "PHP バージョンを選択してください",
+        "supported": "サポート対象",
+        "deprecated": "非推奨",
+        "deprecatedWarning": "この PHP バージョンはメンテナンスが終了しています。アップグレードを計画してください。"
+      },
+      "memory": {
+        "label": "メモリ上限",
+        "unit": "MB",
+        "toggle": "メモリを制限する",
+        "help": "任意です。コンテナがメモリ上限に達すると Docker はコンテナを強制終了します。使用量を抑える必要がなければ無効のままにしてください。"
+      },
+      "cpus": {
+        "label": "CPU 上限",
+        "unit": "CPU",
+        "toggle": "CPU を制限する",
+        "help": "任意です。制限しない場合、コンテナはサーバーのすべての CPU コアを使用できます。"
+      },
+      "memoryLimit": {
+        "label": "memory_limit",
+        "tooltip": "PHP スクリプトあたりの最大メモリ。例：256M。無制限にする場合は -1。",
+        "invalid": "256M のようなサイズ、または -1 を指定してください",
+        "help": "Web の上限が空欄の場合、Web リクエストの既定値にもなります。"
+      },
+      "uploadMaxFilesize": {
+        "label": "upload_max_filesize",
+        "tooltip": "アップロードできるファイルの最大サイズ。例：64M。",
+        "invalid": "64M のようなサイズを指定してください"
+      },
+      "postMaxSize": {
+        "label": "post_max_size",
+        "tooltip": "リクエスト本文の最大サイズ。upload_max_filesize 以上にする必要があります。",
+        "invalid": "64M のようなサイズを指定してください",
+        "tooSmall": "upload_max_filesize 以上にしてください"
+      },
+      "maxExecutionTime": {
+        "label": "max_execution_time",
+        "tooltip": "スクリプトの最大実行時間（秒）。0 は無制限です。",
+        "unit": "秒",
+        "invalid": "0〜{{max}} 秒の範囲で指定してください",
+        "help": "Web のみ：コマンドライン（cron）の PHP には時間制限がありません。cron を制限するには php -d max_execution_time=N を使用してください。"
+      },
+      "displayErrors": {
+        "label": "display_errors",
+        "tooltip": "PHP のエラーをページに表示します。本番環境では無効のままにしてください。"
+      },
+      "timezone": {
+        "label": "タイムゾーン",
+        "required": "タイムゾーンを選択してください"
+      },
+      "env": {
+        "label": "環境変数",
+        "add": "変数を追加",
+        "remove": "削除",
+        "namePlaceholder": "NAME",
+        "valuePlaceholder": "値",
+        "nameRequired": "名前は必須です",
+        "nameInvalid": "英字、数字、アンダースコアのみ使用でき、数字で始めることはできません",
+        "nameReserved": "この変数はパネルで管理されています",
+        "nameDuplicate": "変数が重複しています",
+        "valueInvalid": "値は 1 行で入力してください",
+        "tooMany": "変数は最大 {{max}} 個です",
+        "help": "パネルで管理される変数（PHP_*、WEB_DOCUMENT_ROOT、APPLICATION_*、CONTAINER_*、LD_*）はここでは設定できません。"
+      },
+      "phpIni": {
+        "label": "追加の php.ini",
+        "tooltip": "他のすべての PHP 設定ファイルの後に読み込まれます。",
+        "placeholder": "opcache.enable = 1"
+      },
+      "vhost": {
+        "label": "追加のバーチャルホストディレクティブ",
+        "tooltipNginx": "server ブロック内に含まれる Nginx ディレクティブです。",
+        "tooltipApache": "VirtualHost ブロック内に含まれる Apache ディレクティブです。",
+        "placeholderNginx": "location /api { … }",
+        "placeholderApache": "Header set X-Frame-Options \"DENY\"",
+        "helpNginx": "イメージの server ブロック内に挿入されます。server { } ブロック全体を貼り付けないでください。イメージにはすでに location / と location ~ \\.php$（fastcgi_pass php）が定義されています。これらはルーティングセクションで変更してください。例：",
+        "helpApache": "イメージの VirtualHost ブロック内に挿入されます。VirtualHost ブロック全体を貼り付けないでください。ルーティングはルーティングセクションで変更してください。例："
+      },
+      "bytes": "{{used}} / {{max}} バイト",
+      "snippetTooLarge": "最大 {{max}} バイトです",
+      "phpModules": {
+        "label": "PHP モジュール",
+        "help": "このサイトで不要なモジュールを無効にしてください。",
+        "loading": "この PHP イメージのモジュールを読み込んでいます…",
+        "loadingHint": "初回はイメージをダウンロードするため、1〜2 分かかることがあります。",
+        "error": "この PHP イメージのモジュールを読み込めません。",
+        "retry": "再試行",
+        "search": "モジュールを絞り込む",
+        "empty": "モジュールなし",
+        "selectVersion": "モジュールを表示するには PHP バージョンを選択してください。",
+        "ioncubeTag": "注意",
+        "ioncubeWarning": "ionCube はエンコードされた PHP を実行します。マルウェア（ランサムウェアなど）によく利用されるため、既定で無効になっています。",
+        "alsoDisabled": "同時に無効化：{{modules}}",
+        "disabledWith": "{{module}} と同時に無効化されています"
+      },
+      "routing": {
+        "framework": {
+          "label": "フレームワーク",
+          "none": "なし",
+          "noneHelp": "イメージのルーティング：ファイルはそのまま配信され、PHP ファイルは直接実行されます。",
+          "phpOnly": "PHP テンプレートが必要です。",
+          "overriddenByCustom": "カスタムルールの使用中は無効です（フレームワークのルールを置き換えます）。",
+          "siteRootWarning": "ドキュメントルートが「public」ディレクトリではありません。.env、composer.json、vendor/、var/、storage/ などのプロジェクトファイルが配信されてしまいます。{{framework}} では「public」ディレクトリをドキュメントルートにします（例：「public」や「web/public」）。"
+        },
+        "symfony": {
+          "helpNginx": "すべてのリクエストは index.php にフォールバックします（try_files $uri /index.php$is_args$args）。実行されるのはフロントコントローラーのみで、/index.php への直接アクセスやその他の .php ファイルは 404 を返します。",
+          "helpApache": "ドキュメントルートに FallbackResource /index.php を設定します。存在しないファイルへのリクエストはすべてフロントコントローラーに届きます。"
+        },
+        "laravel": {
+          "helpNginx": "リクエストは index.php にフォールバックします（try_files $uri $uri/ /index.php?$query_string）。実行されるのは index.php のみで、その他の .php ファイルは 404 を返し、.well-known 以外の隠しファイルは拒否され、404 ページは Laravel が処理します。",
+          "helpApache": "FallbackResource /index.php と AllowOverride All（Laravel の public/.htaccess が適用されます）、ディレクトリ一覧なし、隠しファイルは拒否。"
+        },
+        "assetDirs": {
+          "label": "アセットディレクトリ",
+          "help": "静的ファイルとしてのみ配信する、ドキュメントルート内のディレクトリです。ファイルが存在しない場合はフロントコントローラーに渡さず 404 を返します。",
+          "placeholder": "bundles",
+          "invalid": "無効なディレクトリ：{{dir}}（英字、数字、. _ @ + ~ - からなるセグメントを / で区切り、「.」や「..」は使えません）",
+          "duplicate": "重複したディレクトリ：{{dir}}",
+          "tooMany": "ディレクトリは最大 {{max}} 個です"
+        },
+        "custom": {
+          "label": "ルールをカスタマイズ",
+          "helpNginx": "指定したルールはイメージのルーティング（location / のファイル）を置き換え、PHP の location より前に読み込まれます。location / の再定義や正規表現の location の追加ができます。PHP-FPM のアップストリームは php です（fastcgi_pass php;）。",
+          "helpApache": "指定したルールはイメージのルーティングを置き換え、VirtualHost 内の最初に読み込まれます。",
+          "noPrefill": "静的テンプレートには生成されたルールがありません。空のファイルから始めてください。"
+        },
+        "rules": {
+          "label": "ルーティングルール",
+          "reset": "生成されたルールに戻す",
+          "required": "ルーティングルールを入力してください",
+          "resetConfirm": "現在のルールを、生成されたルールで置き換えますか？",
+          "prefillInvalid": "ルールを生成する前に、指摘された項目（ドキュメントルート、アセットディレクトリ）を修正してください。"
+        },
+        "familyWarning": "これらのルールは {{from}} 向けに書かれていますが、テンプレートは現在 {{to}} を使用しています。構文が異なるため、保存する前に確認してください。",
+        "rulesWrongFamily": "これらのルールは以前の Web サーバー向けに書かれています。{{family}} 向けに書き直してください。"
+      },
+      "phpGroups": {
+        "web": "Web リクエスト（Nginx / Apache）",
+        "cli": "コマンドライン（cron、コンソール）"
+      },
+      "webMemoryLimit": {
+        "label": "Web のメモリ上限",
+        "tooltip": "Web リクエスト（PHP-FPM）のメモリ上限です。アプリケーションは ini_set で引き上げられません。空欄の場合はコマンドラインの上限を使用します。",
+        "placeholder": "CLI と同じ：{{value}}"
+      },
+      "networks": {
+        "label": "ネットワーク",
+        "help": "サイトが参加するプライベートネットワークです。そのネットワーク上のサービスやサイトに名前（例: svc-postgres-17）でアクセスできます。共有ネットワーク「services」では、そのネットワーク上のサービスインスタンスにアクセスできます。",
+        "extra": "ネットワークを変更するとサイトが再デプロイされます（数秒間停止します）。"
+      }
+    },
+    "layout": {
+      "type": {
+        "title": "種類",
+        "subtitle": "Web サーバーと PHP"
+      },
+      "site": {
+        "title": "サイト",
+        "subtitle": "名前、ファイル、ドメイン"
+      },
+      "runtime": {
+        "title": "PHP とリソース",
+        "subtitle": "PHP バージョン、制限、設定、モジュール"
+      },
+      "runtimeStatic": {
+        "title": "リソース",
+        "subtitle": "コンテナのメモリと CPU の制限"
+      },
+      "advanced": {
+        "title": "詳細設定",
+        "subtitle": "ルーティング、環境変数、設定スニペット"
+      },
+      "review": {
+        "title": "確認",
+        "subtitle": "ホスティングを作成する前に設定を確認してください",
+        "seconds": "{{value}} 秒"
+      },
+      "advancedNotice": "ここはすべて任意です。ほとんどのサイトは既定値で問題ありません。",
+      "previous": "戻る",
+      "next": "次へ",
+      "edit": "編集",
+      "stepsLabel": "作成手順",
+      "navigation": "セクション",
+      "unsaved": "未保存の変更があります",
+      "summary": {
+        "configured": "設定済み",
+        "empty": "空",
+        "variables_other": "{{count}} 個の変数",
+        "disabledModules_other": "{{count}} 個を無効化",
+        "allEnabled": "すべて有効"
+      }
+    }
+  }
+}

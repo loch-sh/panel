@@ -1,0 +1,163 @@
+{
+  "title": "Geplante Aufgaben",
+  "newJob": "Neue Aufgabe",
+  "jobTypes": {
+    "dockerAction": "Docker-Aktion",
+    "dockerExec": "Docker-Befehl",
+    "http": "HTTP",
+    "httpRequest": "HTTP-Anfrage",
+    "functionInvoke": "Funktionsaufruf",
+    "function": "Funktion"
+  },
+  "statuses": {
+    "pending": "Ausstehend",
+    "running": "Läuft",
+    "success": "Erfolgreich",
+    "error": "Fehler",
+    "skipped": "Ausführung übersprungen"
+  },
+  "modes": {
+    "disabled": "Deaktiviert",
+    "once": "Einmalige Ausführung",
+    "recurring": "Wiederkehrend",
+    "disabledByPanel": "Vom Panel deaktiviert"
+  },
+  "dockerActions": {
+    "start": "Starten",
+    "stop": "Stoppen",
+    "restart": "Neu starten",
+    "kill": "Beenden (kill)"
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "schedule": "Zeitplan",
+      "type": "Typ",
+      "target": "Ziel",
+      "mode": "Modus",
+      "lastStatus": "Letzter Status",
+      "lastRun": "Letzte Ausführung",
+      "actions": "Aktionen"
+    },
+    "actions": {
+      "runNow": "Jetzt ausführen",
+      "suspend": "Pausieren",
+      "enable": "Aktivieren"
+    },
+    "details": {
+      "error": "Fehler:",
+      "output": "Ausgabe:",
+      "lastSkipped": "Die letzte Ausführung am {{date}} wurde übersprungen: Die vorherige lief noch.",
+      "functionRun": "{{duration}} ms, Antwort mit {{bytes}} Bytes",
+      "functionError": "Funktionsfehler: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Aufgabe löschen",
+      "content": "Möchten Sie diese geplante Aufgabe wirklich löschen?"
+    },
+    "suspend": {
+      "title": "Aufgabe pausieren",
+      "content": "Möchten Sie die Aufgabe „{{name}}“ wirklich pausieren?",
+      "ok": "Pausieren"
+    },
+    "enable": {
+      "title": "Aufgabe aktivieren",
+      "content": "Möchten Sie die Aufgabe „{{name}}“ wirklich aktivieren?",
+      "ok": "Aktivieren"
+    },
+    "run": {
+      "title": "Jetzt ausführen",
+      "content": "Möchten Sie die Aufgabe „{{name}}“ wirklich jetzt ausführen?",
+      "ok": "Ausführen"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Neue geplante Aufgabe",
+      "edit": "Aufgabe bearbeiten"
+    },
+    "submit": {
+      "update": "Aktualisieren"
+    },
+    "fields": {
+      "name": {
+        "label": "Name",
+        "required": "Der Name ist erforderlich",
+        "placeholder": "z. B. Symfony-Cache leeren"
+      },
+      "schedule": {
+        "label": "Cron-Ausdruck",
+        "required": "Der Cron-Ausdruck ist erforderlich",
+        "invalid": "Ungültiger Cron-Ausdruck",
+        "help": "Format: Minute Stunde Tag Monat Wochentag (z. B. 0 3 * * * oder @every 5m)"
+      },
+      "type": {
+        "label": "Typ"
+      },
+      "enabled": {
+        "label": "Aktiviert"
+      },
+      "once": {
+        "label": "Einmalige Ausführung",
+        "tooltip": "Wird nach der ersten Ausführung automatisch deaktiviert"
+      },
+      "container": {
+        "label": "Container",
+        "required": "Der Container ist erforderlich",
+        "placeholder": "Container auswählen"
+      },
+      "action": {
+        "label": "Aktion",
+        "required": "Die Aktion ist erforderlich"
+      },
+      "command": {
+        "label": "Befehl",
+        "required": "Der Befehl ist erforderlich"
+      },
+      "workingDir": {
+        "label": "Arbeitsverzeichnis",
+        "help": "Standardmäßig das vom Container festgelegte Verzeichnis"
+      },
+      "httpMethod": {
+        "label": "Methode",
+        "required": "Die Methode ist erforderlich"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "Die URL ist erforderlich"
+      },
+      "httpBody": {
+        "label": "Anfragetext"
+      },
+      "httpTimeout": {
+        "label": "Timeout (Sekunden)"
+      },
+      "function": {
+        "label": "Funktion",
+        "required": "Die Funktion ist erforderlich",
+        "placeholder": "Funktion auswählen",
+        "help": "Die Funktion wird vom Panel aufgerufen, wie über den Tab „Test“ ihrer Seite. Höchstens 5 geplante Aufgaben pro Funktion.",
+        "none": "Keine Funktion"
+      },
+      "functionEvent": {
+        "label": "Ereignis (JSON)",
+        "help": "Ein JSON-Wert, der dem Handler als Ereignis übergeben wird; leer bedeutet {}. Höchstens 64 KB.",
+        "invalid": "Das Ereignis muss ein gültiger JSON-Wert sein",
+        "tooLarge": "Das Ereignis ist größer als 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Wiederkehrende Ausführung: alle {{interval}}",
+    "yearly": "Einmal im Jahr, am 1. Januar um Mitternacht",
+    "monthly": "Einmal im Monat, am 1. um Mitternacht",
+    "weekly": "Einmal pro Woche, sonntags um Mitternacht",
+    "daily": "Einmal täglich, um Mitternacht",
+    "hourly": "Stündlich"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Automatisch deaktiviert: Die aufgerufene Funktion wurde gelöscht."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "title": "Bienvenido a la consola de administración",
+  "cards": {
+    "resourceOverview": {
+      "title": "Resumen de recursos",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "cargando",
+      "unavailable": "no disponible",
+      "resources": {
+        "containers": "Contenedores",
+        "stacks": "Stacks",
+        "hosting": "Sitios alojados",
+        "database": "Bases de datos",
+        "cache": "Caché",
+        "messaging": "Mensajería",
+        "queue": "Colas",
+        "storage": "Almacenamiento",
+        "functions": "Funciones",
+        "cron": "Tareas programadas",
+        "networks": "Redes privadas",
+        "sftp": "Usuarios SFTP",
+        "domains": "Dominios",
+        "apiKeys": "Claves API"
+      }
+    },
+    "containerCount": {
+      "title": "Número de contenedores"
+    },
+    "profile": {
+      "adminTitle": "Perfil de administrador",
+      "userTitle": "Perfil de usuario",
+      "adminAccess": "Tiene acceso a todos los contenedores (excepto los del sistema).",
+      "noAccess": "Su administrador aún no ha definido ningún acceso.",
+      "restrictedAccess": "Tiene acceso a los siguientes contenedores: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Últimos stacks desplegados",
+      "empty": "Ningún stack",
+      "abnormalExit": "Parada anómala"
+    },
+    "latestDomains": {
+      "title": "Últimos dominios",
+      "empty": "Ningún dominio"
+    },
+    "errorContainers": {
+      "title": "Contenedores detenidos con error",
+      "empty": "Ningún contenedor con error"
+    },
+    "support": {
+      "title": "Soporte técnico",
+      "emergency": "📲 Urgencias: {{phone}}",
+      "openTicket": "📕 Abrir un ticket de incidencia"
+    },
+    "serviceStatus": {
+      "title": "Estado de los servicios"
+    }
+  }
+}

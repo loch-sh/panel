@@ -1,0 +1,69 @@
+{
+  "actions": {
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "create": "Créer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "seeMore": "Voir plus",
+    "copy": "Copier",
+    "copied": "Copié",
+    "refresh": "Rafraîchir",
+    "search": "Rechercher",
+    "download": "Télécharger",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "status": {
+    "loading": "Chargement…",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "never": "Jamais",
+    "unknown": "Inconnu"
+  },
+  "language": {
+    "label": "Langue",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pt-PT": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "ja": "日本語",
+    "zh-CN": "简体中文"
+  },
+  "container": {
+    "state": {
+      "running": "En cours",
+      "exited": "Arrêté",
+      "created": "Créé",
+      "paused": "En pause",
+      "restarting": "Redémarrage",
+      "removing": "Suppression",
+      "dead": "Mort"
+    },
+    "status": {
+      "up": "Démarré {{ago}}",
+      "paused": "En pause, démarré {{ago}}",
+      "exited": "Arrêté ({{code}}) {{ago}}",
+      "restarting": "Redémarrage ({{code}}) {{ago}}",
+      "withHealth": "{{status}} ({{health}})"
+    },
+    "health": {
+      "healthy": "sain",
+      "unhealthy": "défaillant",
+      "starting": "vérification en cours"
+    }
+  },
+  "errorBoundary": {
+    "title": "Cette page n'a pas pu s'afficher",
+    "description": "Une erreur inattendue s'est produite. Rechargez la page ; si le problème persiste, contactez votre administrateur.",
+    "chunkTitle": "Une nouvelle version est disponible",
+    "chunkDescription": "Le panel a été mis à jour pendant que cette page était ouverte. Rechargez pour continuer.",
+    "reload": "Recharger"
+  }
+}

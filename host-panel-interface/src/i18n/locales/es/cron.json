@@ -1,0 +1,163 @@
+{
+  "title": "Tareas programadas",
+  "newJob": "Nueva tarea",
+  "jobTypes": {
+    "dockerAction": "Acción Docker",
+    "dockerExec": "Comando Docker",
+    "http": "HTTP",
+    "httpRequest": "Petición HTTP",
+    "functionInvoke": "Invocación de función",
+    "function": "Función"
+  },
+  "statuses": {
+    "pending": "Pendiente",
+    "running": "En curso",
+    "success": "Éxito",
+    "error": "Error",
+    "skipped": "Ejecución omitida"
+  },
+  "modes": {
+    "disabled": "Desactivada",
+    "once": "Ejecución única",
+    "recurring": "Recurrente",
+    "disabledByPanel": "Desactivada por el panel"
+  },
+  "dockerActions": {
+    "start": "Iniciar",
+    "stop": "Detener",
+    "restart": "Reiniciar",
+    "kill": "Forzar detención (kill)"
+  },
+  "table": {
+    "columns": {
+      "name": "Nombre",
+      "schedule": "Programación",
+      "type": "Tipo",
+      "target": "Destino",
+      "mode": "Modo",
+      "lastStatus": "Último estado",
+      "lastRun": "Última ejecución",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "runNow": "Ejecutar ahora",
+      "suspend": "Suspender",
+      "enable": "Activar"
+    },
+    "details": {
+      "error": "Error:",
+      "output": "Salida:",
+      "lastSkipped": "La última ejecución, el {{date}}, se omitió: la anterior seguía en curso.",
+      "functionRun": "{{duration}} ms, respuesta de {{bytes}} bytes",
+      "functionError": "Error de la función: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Eliminar la tarea",
+      "content": "¿Seguro que desea eliminar esta tarea programada?"
+    },
+    "suspend": {
+      "title": "Suspender la tarea",
+      "content": "¿Seguro que desea suspender la tarea «{{name}}»?",
+      "ok": "Suspender"
+    },
+    "enable": {
+      "title": "Activar la tarea",
+      "content": "¿Seguro que desea activar la tarea «{{name}}»?",
+      "ok": "Activar"
+    },
+    "run": {
+      "title": "Ejecutar ahora",
+      "content": "¿Seguro que desea ejecutar la tarea «{{name}}» ahora?",
+      "ok": "Ejecutar"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Nueva tarea programada",
+      "edit": "Editar la tarea"
+    },
+    "submit": {
+      "update": "Actualizar"
+    },
+    "fields": {
+      "name": {
+        "label": "Nombre",
+        "required": "El nombre es obligatorio",
+        "placeholder": "Ej.: Limpieza de caché de Symfony"
+      },
+      "schedule": {
+        "label": "Expresión cron",
+        "required": "La expresión cron es obligatoria",
+        "invalid": "Expresión cron no válida",
+        "help": "Formato: minuto hora día mes día-semana (ej.: 0 3 * * * o @every 5m)"
+      },
+      "type": {
+        "label": "Tipo"
+      },
+      "enabled": {
+        "label": "Activada"
+      },
+      "once": {
+        "label": "Ejecución única",
+        "tooltip": "Se desactiva automáticamente tras la primera ejecución"
+      },
+      "container": {
+        "label": "Contenedor",
+        "required": "El contenedor es obligatorio",
+        "placeholder": "Seleccionar un contenedor"
+      },
+      "action": {
+        "label": "Acción",
+        "required": "La acción es obligatoria"
+      },
+      "command": {
+        "label": "Comando",
+        "required": "El comando es obligatorio"
+      },
+      "workingDir": {
+        "label": "Directorio de trabajo",
+        "help": "Por defecto, el directorio definido por el contenedor"
+      },
+      "httpMethod": {
+        "label": "Método",
+        "required": "El método es obligatorio"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "La URL es obligatoria"
+      },
+      "httpBody": {
+        "label": "Cuerpo de la petición"
+      },
+      "httpTimeout": {
+        "label": "Tiempo de espera (segundos)"
+      },
+      "function": {
+        "label": "Función",
+        "required": "La función es obligatoria",
+        "placeholder": "Seleccionar una función",
+        "help": "El panel invoca la función, como desde la pestaña Prueba de su página. Como máximo 5 tareas programadas por función.",
+        "none": "Ninguna función"
+      },
+      "functionEvent": {
+        "label": "Evento (JSON)",
+        "help": "Un valor JSON que se pasa al handler como evento; vacío equivale a {}. Como máximo 64 KB.",
+        "invalid": "El evento debe ser un valor JSON válido",
+        "tooLarge": "El evento supera los 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Ejecución recurrente: cada {{interval}}",
+    "yearly": "Una vez al año, el 1 de enero a medianoche",
+    "monthly": "Una vez al mes, el día 1 a medianoche",
+    "weekly": "Una vez por semana, el domingo a medianoche",
+    "daily": "Una vez al día, a medianoche",
+    "hourly": "Cada hora"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Desactivada automáticamente: se eliminó la función que invocaba."
+  }
+}

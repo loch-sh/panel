@@ -1,0 +1,58 @@
+{
+  "title": "管理コンソールへようこそ",
+  "cards": {
+    "resourceOverview": {
+      "title": "リソースの概要",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "読み込み中",
+      "unavailable": "利用不可",
+      "resources": {
+        "containers": "コンテナ",
+        "stacks": "スタック",
+        "hosting": "ホスティングサイト",
+        "database": "データベース",
+        "cache": "キャッシュ",
+        "messaging": "メッセージング",
+        "queue": "キュー",
+        "storage": "ストレージ",
+        "functions": "関数",
+        "cron": "スケジュールタスク",
+        "networks": "プライベートネットワーク",
+        "sftp": "SFTP ユーザー",
+        "domains": "ドメイン",
+        "apiKeys": "API キー"
+      }
+    },
+    "containerCount": {
+      "title": "コンテナ数"
+    },
+    "profile": {
+      "adminTitle": "管理者プロファイル",
+      "userTitle": "ユーザープロファイル",
+      "adminAccess": "すべてのコンテナ（システムコンテナを除く）にアクセスできます。",
+      "noAccess": "管理者によるアクセス権の設定はまだ行われていません。",
+      "restrictedAccess": "次のコンテナにアクセスできます：{{containers}}"
+    },
+    "latestStacks": {
+      "title": "最近デプロイされたスタック",
+      "empty": "スタックはありません",
+      "abnormalExit": "異常終了"
+    },
+    "latestDomains": {
+      "title": "最近のドメイン",
+      "empty": "ドメインはありません"
+    },
+    "errorContainers": {
+      "title": "エラーで終了したコンテナ",
+      "empty": "エラー状態のコンテナはありません"
+    },
+    "support": {
+      "title": "テクニカルサポート",
+      "emergency": "📲 緊急連絡先：{{phone}}",
+      "openTicket": "📕 インシデントチケットを作成"
+    },
+    "serviceStatus": {
+      "title": "サービスの状態"
+    }
+  }
+}

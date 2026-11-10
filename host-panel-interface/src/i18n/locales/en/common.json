@@ -1,0 +1,69 @@
+{
+  "actions": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "create": "Create",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "seeMore": "See more",
+    "copy": "Copy",
+    "copied": "Copied",
+    "refresh": "Refresh",
+    "search": "Search",
+    "download": "Download",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "status": {
+    "loading": "Loading…",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "never": "Never",
+    "unknown": "Unknown"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pt-PT": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "ja": "日本語",
+    "zh-CN": "简体中文"
+  },
+  "container": {
+    "state": {
+      "running": "Running",
+      "exited": "Exited",
+      "created": "Created",
+      "paused": "Paused",
+      "restarting": "Restarting",
+      "removing": "Removing",
+      "dead": "Dead"
+    },
+    "status": {
+      "up": "Started {{ago}}",
+      "paused": "Paused, started {{ago}}",
+      "exited": "Exited ({{code}}) {{ago}}",
+      "restarting": "Restarting ({{code}}) {{ago}}",
+      "withHealth": "{{status}} ({{health}})"
+    },
+    "health": {
+      "healthy": "healthy",
+      "unhealthy": "unhealthy",
+      "starting": "health check starting"
+    }
+  },
+  "errorBoundary": {
+    "title": "This page failed to display",
+    "description": "An unexpected error occurred. Reload the page; if it happens again, contact your administrator.",
+    "chunkTitle": "A new version is available",
+    "chunkDescription": "The panel was updated while this page was open. Reload to continue.",
+    "reload": "Reload"
+  }
+}

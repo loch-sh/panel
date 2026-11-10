@@ -1,0 +1,53 @@
+{
+  "title": "用户",
+  "currentUser": "当前用户",
+  "table": {
+    "columns": {
+      "email": "邮箱",
+      "name": "名称",
+      "type": "类型",
+      "permissions": "权限",
+      "actions": "操作"
+    },
+    "permissions": {
+      "allContainers": "所有容器",
+      "none": "无",
+      "more": "{{list}}（+{{extra}}）"
+    }
+  },
+  "profiles": {
+    "admin": "管理员",
+    "restricted": "受限用户"
+  },
+  "actions": {
+    "makeRestricted": "设为受限用户",
+    "makeAdmin": "设为管理员",
+    "restrictAll": "禁止访问所有容器"
+  },
+  "modals": {
+    "demote": {
+      "title": "降级为受限用户",
+      "content": "确定要将“{{email}}”降级为受限用户吗？该用户将失去对所有容器的访问权限。",
+      "ok": "降级"
+    },
+    "promote": {
+      "title": "升级为管理员",
+      "content": "确定要将“{{email}}”升级为管理员吗？该用户将可以访问所有容器。",
+      "ok": "升级"
+    },
+    "restrict": {
+      "title": "禁止访问所有容器",
+      "content": "确定要限制“{{email}}”吗？该用户将无法再看到任何容器。",
+      "ok": "限制"
+    },
+    "delete": {
+      "title": "删除用户",
+      "content": "确定要删除“{{email}}”吗？此操作不可撤销，并将同时删除其 API 密钥。"
+    }
+  },
+  "sidePanel": {
+    "title": "编辑用户权限 {{name}}",
+    "searchPlaceholder": "搜索容器",
+    "validate": "确认"
+  }
+}

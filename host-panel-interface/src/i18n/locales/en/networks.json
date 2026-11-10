@@ -1,0 +1,319 @@
+{
+  "title": "Private networks",
+  "intro": "Isolated networks for your sites and services: only the members of a network reach each other. Every network is internal: it gives no Internet access.",
+  "forbidden": "Private networks are reserved for administrators.",
+  "newNetwork": "New network",
+  "empty": "No private network yet",
+  "columns": {
+    "name": "Name",
+    "subnet": "Subnet",
+    "gateway": "Gateway",
+    "members": "Members",
+    "properties": "Properties",
+    "description": "Description",
+    "actions": "Actions"
+  },
+  "tags": {
+    "shared": "Shared",
+    "private": "Private",
+    "noInternet": "No Internet access",
+    "reservedOverlap": "Reserved range"
+  },
+  "tagHints": {
+    "shared": "Network of the services module: every site on it reaches the services on it. It cannot be deleted.",
+    "private": "Only its members reach each other.",
+    "noInternet": "Internal network: its members cannot reach the Internet through it.",
+    "reservedOverlap": "Its subnet overlaps the reserved range {{range}} (a LAN or VPN used outside Docker): addresses of that range may be unreachable from its containers."
+  },
+  "state": {
+    "ok": "OK",
+    "missing": "Missing",
+    "compromised": "Compromised"
+  },
+  "stateHints": {
+    "ok": "The Docker network is the one the panel created.",
+    "missing": "The Docker network does not exist on the server: its members cannot start on it. The API recreates it at its next start.",
+    "compromised": "The Docker network is not the one the panel created: its members are not trusted until it is fixed."
+  },
+  "problems": {
+    "replaced": "The network was replaced outside the panel (different ID).",
+    "notBridge": "It is not a local bridge network.",
+    "notInternal": "It is not internal: its members could reach the Internet.",
+    "unexpectedOptions": "It has unexpected options (IPv6 or a configuration network).",
+    "missingLabel": "The panel label is missing.",
+    "unexpectedLabel": "Its panel label names another network.",
+    "composeProject": "It was created by a Compose project.",
+    "unexpectedSubnet": "Its subnet is not the recorded one.",
+    "inspectFailed": "Docker could not be queried.",
+    "other": "Unexpected Docker network."
+  },
+  "automatic": "Automatic",
+  "delete": {
+    "title": "Delete the network {{name}}?",
+    "content": "The Docker network is removed. A network can only be deleted once it has no member left.",
+    "submit": "Delete",
+    "systemHint": "The shared network of the services module cannot be deleted.",
+    "inUseHint": "Detach its members first."
+  },
+  "toasts": {
+    "created": "Network {{name}} created.",
+    "deleted": "Network {{name}} deleted.",
+    "descriptionSaved": "Description saved.",
+    "attached": "{{name}} is connected to the network.",
+    "detached": "{{name}} is disconnected from the network.",
+    "siteRedeploying": "{{name}} is being redeployed with its new networks…",
+    "siteRedeployed": "{{name}} was redeployed with its new networks.",
+    "siteRedeployFailed": "The redeployment of {{name}} failed: see its last operation.",
+    "disconnected": "Container {{name}} disconnected."
+  },
+  "create": {
+    "title": "New private network",
+    "intro": "Create an isolated network, then attach sites and service instances to it: only its members reach each other.",
+    "back": "Back to the list",
+    "submit": "Create the network",
+    "sections": {
+      "name": {
+        "title": "Name",
+        "subtitle": "1 to 24 lowercase letters, digits or dashes, starting with a letter. It cannot be changed later."
+      },
+      "description": {
+        "title": "Description",
+        "subtitle": "Optional: what the network is for."
+      },
+      "addressing": {
+        "title": "Addressing",
+        "subtitle": "The IPv4 range of the network, set once (Docker cannot change it later)."
+      },
+      "members": {
+        "title": "Members",
+        "subtitle": "Optional: sites and service instances to attach once the network is created."
+      }
+    },
+    "nameLabel": "Name",
+    "namePlaceholder": "backend",
+    "nameRequired": "Enter a name.",
+    "nameInvalid": "1 to 24 lowercase letters, digits or dashes, starting with a letter and not ending with a dash.",
+    "nameReserved": "This name is reserved.",
+    "nameTaken": "A network with this name already exists.",
+    "dockerName": "Docker name: {{name}}",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Shop and its database",
+    "descriptionInvalid": "No control characters, at most 200 characters.",
+    "addressing": {
+      "automatic": {
+        "title": "Automatic",
+        "description": "Docker picks a free private range."
+      },
+      "manual": {
+        "title": "Manual subnet",
+        "description": "Choose the range, e.g. to avoid a conflict with a VPN."
+      }
+    },
+    "subnetLabel": "Subnet (CIDR)",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "A private IPv4 range (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 or 100.64.0.0/10), from /16 to /28, written with its network address.",
+    "subnetRequired": "Enter a subnet, or choose Automatic.",
+    "subnetProblems": {
+      "format": "Write an IPv4 range in CIDR notation, e.g. 10.20.0.0/24.",
+      "networkAddress": "Write the range with its network address: {{expected}}.",
+      "prefixLength": "The prefix length must be between /16 and /28.",
+      "privateRange": "The range must be private: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 or 100.64.0.0/10.",
+      "reserved": "The range overlaps the reserved range {{range}} (a LAN or VPN used outside Docker)."
+    },
+    "usableHosts_one": "{{count}} usable address",
+    "usableHosts_other": "{{count}} usable addresses",
+    "summary": {
+      "title": "Summary",
+      "name": "Name",
+      "dockerName": "Docker name",
+      "subnet": "Subnet",
+      "internet": "Internet access",
+      "internetNone": "None (internal network)",
+      "note": "The network starts empty: attach sites and service instances from its page.",
+      "limit": "Private networks",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "Members",
+      "membersNone": "None"
+    },
+    "limitReached": "The limit of {{max}} private networks is reached: delete a network first.",
+    "ranges": {
+      "private": "Allowed ranges",
+      "reserved": "Reserved ranges",
+      "reservedNone": "None",
+      "reservedHintManual": "A subnet overlapping a reserved range (a LAN or VPN used outside Docker) is refused.",
+      "reservedHintAutomatic": "If Docker picks a range overlapping a reserved range, the creation is refused: choose a manual subnet then."
+    },
+    "members": {
+      "label": "Sites and service instances",
+      "placeholder": "Choose sites or service instances",
+      "restart": "Each selected member is recreated with this network: a few seconds of downtime for its container (a site is redeployed).",
+      "failedHint": "The network was created: attach them again with \"Attach a resource\".",
+      "failedTitle_one": "{{count}} member could not be attached",
+      "failedTitle_other": "{{count}} members could not be attached",
+      "partial_one": "Network {{name}} created, but {{count}} member could not be attached.",
+      "partial_other": "Network {{name}} created, but {{count}} members could not be attached."
+    }
+  },
+  "detail": {
+    "back": "Back to the networks",
+    "notFound": "This network does not exist (any more).",
+    "info": "Information",
+    "dockerName": "Docker name",
+    "id": "Docker ID",
+    "subnet": "Subnet",
+    "gateway": "Gateway",
+    "internet": "Internet access",
+    "internetNone": "None (internal network)",
+    "internetWarning": "Not internal: the members can reach the Internet",
+    "created": "Created",
+    "createdBy": "{{date}} by {{user}}",
+    "description": "Description",
+    "descriptionEmpty": "No description",
+    "editDescription": "Edit the description",
+    "members": "Members",
+    "membersEmpty": "No member yet: attach a site or a service instance.",
+    "attach": "Attach a resource",
+    "systemNote": "Shared network of the services module: service instances join it by default, and every site on it reaches them."
+  },
+  "members": {
+    "columns": {
+      "kind": "Type",
+      "name": "Name",
+      "container": "Container",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "State",
+      "actions": "Actions"
+    },
+    "kinds": {
+      "site": "Site",
+      "instance": "Service instance",
+      "panel": "Panel",
+      "unmanaged": "Not managed",
+      "function": "Function"
+    },
+    "panelHint": "The panel itself: it joins the network while a port tunnel (loch proxy) is open to one of its members.",
+    "notConnected": "Declared but not connected",
+    "notConnectedHint": "Its compose file declares this network, but its container is not on it: it is stopped, or must be redeployed.",
+    "notDeclared": "Connected but not declared",
+    "notDeclaredHint": "The container is on the network, but its compose file does not declare it: it was connected by hand.",
+    "noContainer": "No container",
+    "detach": "Detach",
+    "lastNetworkHint": "A service instance keeps at least one network: attach it to another network first.",
+    "detachConfirm": {
+      "title": "Detach {{name}} from {{network}}?",
+      "site": "The site is redeployed without this network: its containers are recreated (a few seconds of downtime) and it no longer reaches the members of this network.",
+      "instance": "{{container}} restarts without this network: its clients are disconnected for a few seconds, and the sites of this network lose access to it.",
+      "submit": "Detach",
+      "function": "The function {{name}} is recreated without this network: the members of this network can no longer invoke it."
+    },
+    "lastNetworkHintFunction": "A function keeps at least one network: attach it to another network first."
+  },
+  "unmanaged": {
+    "title_one": "{{count}} container not managed by the panel is on this network",
+    "title_other": "{{count}} containers not managed by the panel are on this network",
+    "description": "They joined it outside the panel (e.g. a CI stack) and reach its members. Disconnect them if they should not.",
+    "disconnect": "Disconnect",
+    "confirm": {
+      "title": "Disconnect {{name}}?",
+      "content": "The container is disconnected from the network now. It joins it again if its own compose file declares it and it is redeployed.",
+      "submit": "Disconnect"
+    }
+  },
+  "attach": {
+    "title": "Attach a resource to {{network}}",
+    "intro": "The member's container is recreated with this network: a few seconds of downtime for that container only.",
+    "resource": "Resource",
+    "placeholder": "Choose a site or a service instance",
+    "sites": "Sites",
+    "instances": "Service instances",
+    "noResource": "No site or service instance to attach.",
+    "submit": "Attach",
+    "disabled": {
+      "unauthenticated": "No authentication: cannot join the shared network",
+      "modified": "Edited by hand",
+      "operation": "Operation in progress"
+    },
+    "restart": {
+      "site": "The site {{name}} is redeployed: its containers are recreated (a few seconds of downtime).",
+      "instance": "{{container}} restarts: its sites lose their connection for a few seconds.",
+      "function": "The function {{name}} is recreated with this network: an invocation in progress is cut."
+    },
+    "functions": "Functions"
+  },
+  "select": {
+    "placeholder": "Choose networks",
+    "unavailable": "Unavailable",
+    "createLink": "Create a private network",
+    "loadFailed": "The networks cannot be listed."
+  },
+  "tabs": {
+    "private": "Private networks",
+    "docker": "Other Docker networks"
+  },
+  "docker": {
+    "intro": "Docker networks the panel does not manage: Docker's own (bridge, host, none), those of Compose stacks (e.g. deployed by CI/CD, the reverse proxy) and those created by hand. They are shown read-only.",
+    "empty": "No other Docker network",
+    "columns": {
+      "origin": "Origin",
+      "driver": "Driver",
+      "containers": "Containers"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose: {{project}}",
+      "other": "Other"
+    },
+    "originHints": {
+      "docker": "Created by Docker itself.",
+      "compose": "Created by a Compose project (e.g. a stack deployed by CI/CD).",
+      "other": "Created by hand or by another tool."
+    },
+    "internet": "Internet access",
+    "internetHint": "Not internal: its containers can reach the Internet through it.",
+    "internetYes": "Yes (not internal)",
+    "back": "Back to the Docker networks",
+    "title": "Docker network",
+    "notFound": "This Docker network does not exist (any more), or it is a panel network.",
+    "readOnly": "This network is not managed by the panel: it is shown read-only.",
+    "containersEmpty": "No container on this network.",
+    "containersTitle_one": "{{count}} container",
+    "containersTitle_other": "{{count}} containers"
+  },
+  "site": {
+    "title": "Panel networks",
+    "intro": "The site reaches the other members of these networks (service instances, sites). Connecting or disconnecting a network redeploys the site: it restarts for a few seconds.",
+    "connect": "Connect a network",
+    "disconnect": "Disconnect",
+    "empty": "The site is on no panel network.",
+    "columns": {
+      "type": "Type",
+      "state": "State",
+      "warnings": "Warnings"
+    },
+    "connected": "Connected",
+    "connectedHint": "The site's container is on this network.",
+    "unknown": "Unknown network",
+    "unknownHint": "The site's settings name a network the panel does not know (any more).",
+    "modifiedHint": "The compose file was edited by hand: the networks cannot be changed from the panel.",
+    "busyHint": "An operation is in progress on this site.",
+    "connectModal": {
+      "title": "Connect {{name}} to a network",
+      "network": "Network",
+      "placeholder": "Choose a network",
+      "none": "The site is already on every panel network.",
+      "submit": "Connect"
+    },
+    "toasts": {
+      "connected": "{{name}} is connected to {{network}}.",
+      "disconnected": "{{name}} is disconnected from {{network}}."
+    },
+    "other": {
+      "title": "Other Docker networks",
+      "intro": "Networks the panel does not manage that the site's container is on (e.g. the reverse proxy network). Read-only.",
+      "empty": "The site's container is on no other Docker network.",
+      "loadFailed": "The other Docker networks cannot be listed."
+    }
+  }
+}

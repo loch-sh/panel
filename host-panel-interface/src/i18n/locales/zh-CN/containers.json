@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "启动",
+    "restart": "重启",
+    "stop": "停止",
+    "kill": "强制终止",
+    "delete": "删除",
+    "detachedTerminal": "独立终端",
+    "detailsAndTerminal": "详情与终端"
+  },
+  "stackActions": {
+    "start": "启动堆栈",
+    "stop": "停止堆栈",
+    "restart": "重启堆栈",
+    "started": "堆栈“{{name}}”已启动",
+    "stopped": "堆栈“{{name}}”已停止",
+    "restarted": "堆栈“{{name}}”已重启",
+    "partialFailure": "堆栈“{{name}}”：{{total}} 个容器中有 {{failed}} 个无法处理"
+  },
+  "confirm": {
+    "delete": "确定要删除容器“{{name}}”吗？",
+    "stop": "确定要停止容器“{{name}}”吗？",
+    "kill": "确定要强制终止容器“{{name}}”吗？此操作将立即生效，进程没有时间正常关闭。",
+    "stackStop": "确定要停止堆栈“{{name}}”中的所有容器吗？",
+    "stackRestart": "确定要重启堆栈“{{name}}”中的所有容器吗？其服务将短暂不可用。"
+  },
+  "list": {
+    "title": "容器",
+    "searchPlaceholder": "搜索容器、堆栈...",
+    "filterActive": "运行中",
+    "filterAll": "全部",
+    "filterErrors": "异常",
+    "noStack": "无堆栈",
+    "errorExitsTooltip": "一个或多个容器异常退出",
+    "hostingTag": "托管",
+    "serviceTag": "服务",
+    "type": {
+      "label": "堆栈类型",
+      "all": "全部",
+      "hosting": "托管",
+      "services": "服务",
+      "other": "其他"
+    },
+    "stackFilter": "堆栈：{{name}}"
+  },
+  "columns": {
+    "stack": "堆栈",
+    "containers": "容器",
+    "id": "ID",
+    "name": "名称",
+    "state": "状态",
+    "webRouting": "Web 路由",
+    "actions": "操作"
+  },
+  "table": {
+    "copyIdTooltip": "复制完整容器 ID",
+    "idCopied": "ID 已复制！",
+    "abnormalExit": "异常退出"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} 运行中"
+  },
+  "sidePanel": {
+    "title": "容器详情",
+    "fullScreen": "全屏",
+    "consoleOnly": "仅控制台",
+    "noData": "该容器暂无数据",
+    "heading": "容器 {{name}}",
+    "compose": {
+      "title": "由 Compose 启动",
+      "project": "✅ 项目 {{project}}",
+      "no": "❌ 否"
+    },
+    "identifier": "标识符",
+    "image": "镜像",
+    "currentState": "当前状态",
+    "startedAt": {
+      "title": "启动时间",
+      "value": "{{date}} {{time}}"
+    },
+    "restartCount": "重启次数",
+    "network": "网络",
+    "mounts": "挂载点",
+    "none": "无",
+    "hostPath": "宿主机路径",
+    "logPath": "日志路径",
+    "logs": {
+      "title": "实时日志",
+      "show": "查看日志",
+      "close": "关闭日志"
+    },
+    "terminal": {
+      "title": "Docker 交互式终端",
+      "open": "打开终端",
+      "detach": "分离",
+      "detachPopup": "在弹出窗口中分离",
+      "unavailable": "终端不可用（可能是 compose 文件中缺少 <code>tty:true</code>，或容器启动时未使用 <code>-t</code> 参数）。"
+    }
+  },
+  "mountTable": {
+    "type": "类型",
+    "source": "源",
+    "destination": "目标"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "协议",
+    "localPort": "本地端口",
+    "hostPort": "宿主机端口"
+  },
+  "stats": {
+    "open": "监控",
+    "close": "关闭监控",
+    "live": "实时",
+    "cpuTotal": "CPU 总计：",
+    "ramLabel": "内存：",
+    "netLabel": "网络：",
+    "columns": {
+      "container": "容器",
+      "cpu": "CPU",
+      "ram": "内存",
+      "network": "网络",
+      "pids": "PID 数"
+    }
+  },
+  "logViewer": {
+    "error": "错误"
+  },
+  "popupTerminal": {
+    "missingId": "缺少容器 ID",
+    "windowTitle": "{{appName}} - 终端",
+    "windowTitleWithName": "{{appName}} - 终端 #{{name}}"
+  }
+}

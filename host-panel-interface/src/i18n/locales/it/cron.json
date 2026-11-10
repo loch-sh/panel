@@ -1,0 +1,163 @@
+{
+  "title": "Attività pianificate",
+  "newJob": "Nuova attività",
+  "jobTypes": {
+    "dockerAction": "Azione Docker",
+    "dockerExec": "Comando Docker",
+    "http": "HTTP",
+    "httpRequest": "Richiesta HTTP",
+    "functionInvoke": "Invocazione di funzione",
+    "function": "Funzione"
+  },
+  "statuses": {
+    "pending": "In attesa",
+    "running": "In corso",
+    "success": "Riuscito",
+    "error": "Errore",
+    "skipped": "Esecuzione saltata"
+  },
+  "modes": {
+    "disabled": "Disattivata",
+    "once": "Esecuzione singola",
+    "recurring": "Ricorrente",
+    "disabledByPanel": "Disattivata dal pannello"
+  },
+  "dockerActions": {
+    "start": "Avvia",
+    "stop": "Arresta",
+    "restart": "Riavvia",
+    "kill": "Termina forzatamente (kill)"
+  },
+  "table": {
+    "columns": {
+      "name": "Nome",
+      "schedule": "Pianificazione",
+      "type": "Tipo",
+      "target": "Destinazione",
+      "mode": "Modalità",
+      "lastStatus": "Ultimo stato",
+      "lastRun": "Ultima esecuzione",
+      "actions": "Azioni"
+    },
+    "actions": {
+      "runNow": "Esegui ora",
+      "suspend": "Sospendi",
+      "enable": "Attiva"
+    },
+    "details": {
+      "error": "Errore:",
+      "output": "Output:",
+      "lastSkipped": "L'ultima esecuzione, il {{date}}, è stata saltata: la precedente era ancora in corso.",
+      "functionRun": "{{duration}} ms, risposta di {{bytes}} byte",
+      "functionError": "Errore della funzione: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Elimina l'attività",
+      "content": "Sei sicuro di voler eliminare questa attività pianificata?"
+    },
+    "suspend": {
+      "title": "Sospendi l'attività",
+      "content": "Sei sicuro di voler sospendere l'attività «{{name}}»?",
+      "ok": "Sospendi"
+    },
+    "enable": {
+      "title": "Attiva l'attività",
+      "content": "Sei sicuro di voler attivare l'attività «{{name}}»?",
+      "ok": "Attiva"
+    },
+    "run": {
+      "title": "Esegui ora",
+      "content": "Sei sicuro di voler eseguire ora l'attività «{{name}}»?",
+      "ok": "Esegui"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Nuova attività pianificata",
+      "edit": "Modifica l'attività"
+    },
+    "submit": {
+      "update": "Aggiorna"
+    },
+    "fields": {
+      "name": {
+        "label": "Nome",
+        "required": "Il nome è obbligatorio",
+        "placeholder": "Es.: Pulizia cache Symfony"
+      },
+      "schedule": {
+        "label": "Espressione cron",
+        "required": "L'espressione cron è obbligatoria",
+        "invalid": "Espressione cron non valida",
+        "help": "Formato: minuto ora giorno mese giorno-settimana (es.: 0 3 * * * o @every 5m)"
+      },
+      "type": {
+        "label": "Tipo"
+      },
+      "enabled": {
+        "label": "Attivata"
+      },
+      "once": {
+        "label": "Esecuzione singola",
+        "tooltip": "Si disattiva automaticamente dopo la prima esecuzione"
+      },
+      "container": {
+        "label": "Container",
+        "required": "Il container è obbligatorio",
+        "placeholder": "Seleziona un container"
+      },
+      "action": {
+        "label": "Azione",
+        "required": "L'azione è obbligatoria"
+      },
+      "command": {
+        "label": "Comando",
+        "required": "Il comando è obbligatorio"
+      },
+      "workingDir": {
+        "label": "Directory di lavoro",
+        "help": "Per impostazione predefinita, la directory definita dal container"
+      },
+      "httpMethod": {
+        "label": "Metodo",
+        "required": "Il metodo è obbligatorio"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "L'URL è obbligatorio"
+      },
+      "httpBody": {
+        "label": "Corpo della richiesta"
+      },
+      "httpTimeout": {
+        "label": "Timeout (secondi)"
+      },
+      "function": {
+        "label": "Funzione",
+        "required": "La funzione è obbligatoria",
+        "placeholder": "Seleziona una funzione",
+        "help": "La funzione viene invocata dal pannello, come dalla scheda Test della sua pagina. Al massimo 5 attività pianificate per funzione.",
+        "none": "Nessuna funzione"
+      },
+      "functionEvent": {
+        "label": "Evento (JSON)",
+        "help": "Un unico valore JSON passato all'handler come evento; vuoto equivale a {}. Al massimo 64 KB.",
+        "invalid": "L'evento deve essere un unico valore JSON valido",
+        "tooLarge": "L'evento supera i 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Esecuzione ricorrente: ogni {{interval}}",
+    "yearly": "Una volta all'anno, il 1° gennaio a mezzanotte",
+    "monthly": "Una volta al mese, il giorno 1 a mezzanotte",
+    "weekly": "Una volta alla settimana, la domenica a mezzanotte",
+    "daily": "Una volta al giorno, a mezzanotte",
+    "hourly": "Ogni ora"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Disattivata automaticamente: la funzione che invocava è stata eliminata."
+  }
+}

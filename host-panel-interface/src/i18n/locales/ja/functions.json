@@ -1,0 +1,498 @@
+{
+  "title": "関数",
+  "intro": "サーバーレス関数：AWS Lambda™ 向けに書かれたハンドラー（Node.js、Python）を、必要に応じて起動される分離されたコンテナーでこのサーバー上で実行します。同じコードは変更なしで AWS Lambda でも実行できます。",
+  "trademarkNotice": "AWS Lambda は Amazon.com, Inc. またはその関連会社の商標です。Loch.sh は Amazon と提携しておらず、Amazon による承認も受けていません。",
+  "forbidden": "関数は管理者専用です。",
+  "disabled": "このサーバーでは関数モジュールが無効です（FUNCTIONS_ENABLED）。",
+  "configError": "関数モジュールは有効ですが、起動できませんでした。API のログを確認してください。",
+  "runtimeNotReady": "信頼できる関数ランタイムがまだサーバーにインストールされていないため、関数を作成・実行できません。",
+  "newFunction": "新しい関数",
+  "createFirst": "関数を作成",
+  "limitReached": "関数の上限 {{max}} 個に達しています。先に関数を削除してください。",
+  "noCode": "コードなし",
+  "presentation": {
+    "title": "関数はまだありません",
+    "text": "関数とは、依存関係とともに zip でアップロードされたハンドラー（index.handler、lambda_function.lambda_handler）です。パネルは、選択したメモリ、CPU、タイムアウトで、AWS が公開している AWS Lambda ベースイメージ上でこれを実行します。同じネットワーク上のサイト、サービス、他の関数は、AWS SDK または通常の HTTP リクエストで呼び出せます。",
+    "security": "各関数には専用のプライベートネットワークが割り当てられ、公開ポートはなく、許可しない限りインターネットにもアクセスできません。呼び出し認証情報は一度だけ表示されます。"
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} 個の関数",
+    "memory": "メモリ {{used}} / {{max}}",
+    "memoryUnbounded": "メモリ {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "名前",
+    "runtime": "ランタイム",
+    "state": "状態",
+    "memory": "メモリ",
+    "timeout": "タイムアウト",
+    "networks": "ネットワーク",
+    "internet": "インターネット",
+    "deployment": "有効なデプロイ",
+    "deployedAt": "デプロイ日時",
+    "actions": "操作"
+  },
+  "tags": {
+    "purgeOnly": "強制削除のみ"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go、Rust…（カスタムランタイム）"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript、または JavaScript にコンパイルした TypeScript。",
+    "python": "Python モジュールとその依存関係。",
+    "provided": "任意のコンパイル言語：Linux 向けにビルドした実行ファイル bootstrap。"
+  },
+  "states": {
+    "not_deployed": "コードなし",
+    "running": "実行中",
+    "stopped": "停止",
+    "missing": "見つかりません",
+    "modified": "パネル外で編集済み",
+    "unverified": "未検証",
+    "invalid": "読み取り不可"
+  },
+  "stateHints": {
+    "not_deployed": "作成済みですが、まだコードがアップロードされていないため、何も実行されません。",
+    "running": "関数のコンテナーが実行中で、呼び出しに応答します。",
+    "stopped": "関数は停止しています。呼び出すには起動してください。",
+    "missing": "コードはデプロイされ、関数は停止していませんが、コンテナーが存在しません。もう一度起動してください。",
+    "modified": "Compose プロジェクトがパネル外で編集されているため、パネルはこれを実行しません。強制削除してください。",
+    "unverified": "コンテナーは実行中ですが、パネルが作成したものではないため使用されません。",
+    "invalid": "参照ファイルを読み取れないため、強制削除のみ可能です。"
+  },
+  "health": {
+    "unhealthy": "異常",
+    "starting": "起動中"
+  },
+  "egress": {
+    "label": "インターネットアクセス",
+    "on": "許可",
+    "off": "なし",
+    "onHint": "関数はインターネットにアクセスできます（ファイアウォールルールで制限しない限り、ホスト、LAN、メタデータエンドポイントにも到達できます）。",
+    "offHint": "関数は自身のネットワークのメンバーにのみ到達できます。",
+    "help": "既定ではオフです。関数は自身のネットワークのメンバーにのみ到達できます。",
+    "warning": "インターネットアクセスを許可すると、関数のコードはデータやシークレットを任意の宛先に送信でき、DOCKER-USER のファイアウォールルールでブロックしない限り、ホストのゲートウェイ、LAN、クラウドのメタデータエンドポイントにも到達できます。",
+    "enableTitle": "{{name}} のインターネットアクセスを許可しますか？",
+    "disableTitle": "{{name}} のインターネットアクセスを削除しますか？",
+    "recreate": "関数のコンテナーが再作成されます。実行中の呼び出しは中断されます。",
+    "enable": "許可",
+    "disable": "削除",
+    "enabledToast": "{{name}} はインターネットにアクセスできます。",
+    "disabledToast": "{{name}} はインターネットにアクセスできなくなりました。"
+  },
+  "sigv4": {
+    "label": "SigV4 呼び出し元（AWS SDK）",
+    "bearer": "呼び出し元は常にベアラートークン（Authorization: Bearer …）で認証します。トークンは一度だけ表示されます。",
+    "help": "既定ではオフです。オンにすると、AWS SDK クライアントがアクセスキーペアでも関数を呼び出せます（endpoint-url http://fn-<name>:8080、リージョン us-east-1）。",
+    "warning": "ランタイムは SigV4 シークレットそのものを必要とします。コンテナー内にあるため、関数のコードから読み取れます。このシークレットで可能なのは関数の呼び出しだけです。",
+    "enabled": "受け付ける",
+    "disabled": "受け付けない"
+  },
+  "actions": {
+    "test": "テスト",
+    "testOf": "{{name}} をテスト",
+    "start": "起動",
+    "startOf": "{{name}} を起動",
+    "stop": "停止",
+    "stopOf": "{{name}} を停止",
+    "restart": "再起動",
+    "restartOf": "{{name}} を再起動",
+    "delete": "削除",
+    "deleteOf": "{{name}} を削除",
+    "purge": "強制削除",
+    "purgeOf": "{{name}} を強制削除"
+  },
+  "confirm": {
+    "stop": {
+      "title": "{{name}} を停止しますか？",
+      "content": "再度起動するまで、関数は呼び出しに応答しなくなります（その間、スケジュールタスクは失敗します）。"
+    },
+    "restart": {
+      "title": "{{name}} を再起動しますか？",
+      "content": "コンテナーが再起動されます。実行中の呼び出しは中断されます。"
+    }
+  },
+  "delete": {
+    "title": "関数 {{name}} を削除しますか？",
+    "content": "コンテナー、コード、すべてのデプロイ、シークレット、呼び出し認証情報、専用ネットワークが削除されます。元に戻すことはできません。",
+    "submit": "削除",
+    "confirmLabel": "確認のため名前を入力してください："
+  },
+  "purge": {
+    "title": "関数 {{name}} を強制削除しますか？",
+    "content": "この関数はパネル外で編集されています。ファイルを一切実行せずに削除されます（コンテナー、コード、デプロイ、シークレット、認証情報）。元に戻すことはできません。",
+    "submit": "強制削除"
+  },
+  "toasts": {
+    "created": "関数 {{name}} を作成しました。",
+    "updated": "{{name}} の設定を保存しました。",
+    "deleted": "関数 {{name}} を削除しました。",
+    "purged": "関数 {{name}} を強制削除しました。",
+    "networkKept": "ネットワーク {{network}} は保持されました。他のメンバーがまだ接続しています。",
+    "start": "{{name}} を起動しました。",
+    "stop": "{{name}} を停止しました。",
+    "restart": "{{name}} を再起動しました。",
+    "rotated": "{{name}} の新しい認証情報を発行しました。"
+  },
+  "units": {
+    "mb": "MB",
+    "s": "秒",
+    "seconds_other": "{{count}} 秒"
+  },
+  "create": {
+    "title": "新しい関数",
+    "intro": "関数は AWS Lambda™ 向けに書かれたハンドラーを実行します。コードがデプロイされるまでは何も実行されません。zip は今すぐ、または後で関数のページからアップロードできます。",
+    "back": "関数一覧に戻る",
+    "submit": "関数を作成",
+    "latest": "最新",
+    "runtimeLabel": "ランタイム",
+    "versionLabel": "バージョン",
+    "imageNote": "AWS が公開している {{arch}} 用の AWS Lambda ベースイメージ。mirror.gcr.io から取得し、ダイジェストで固定します。",
+    "handlerLabel": "ハンドラー",
+    "handlerInvalid": "<file>.<function>：英字、数字、_、-、フォルダーは / で区切ります（例：index.handler、src/app.handler）。",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>。例：index.js（または index.mjs）がエクスポートするハンドラーなら index.handler。",
+      "python": "<module>.<function>。例：lambda_function.lambda_handler、app.main.handler。",
+      "provided": "_HANDLER として bootstrap に渡され、bootstrap が読み取れます。空の場合：bootstrap。"
+    },
+    "zipLabel": "コード (zip)",
+    "zipOptional": "任意：ハンドラーとその依存関係（サーバー上でビルドされることはありません）。作成直後にアップロードされます。",
+    "zipRemove": "削除",
+    "sections": {
+      "runtime": {
+        "title": "ランタイム",
+        "subtitle": "言語とそのバージョン。"
+      },
+      "code": {
+        "title": "コード",
+        "subtitle": "ランタイムが呼び出すハンドラーと、任意でデプロイする zip。"
+      },
+      "resources": {
+        "title": "リソース",
+        "subtitle": "関数のコンテナーの上限。"
+      },
+      "env": {
+        "title": "変数とシークレット",
+        "subtitle": "関数の環境。シークレットは別に保管され、読み戻すことはできません。"
+      },
+      "networks": {
+        "title": "ネットワークアクセス",
+        "subtitle": "関数を呼び出せる相手と、関数が到達できる範囲。"
+      },
+      "invoke": {
+        "title": "呼び出し",
+        "subtitle": "ネットワーク上の呼び出し元の認証方法。"
+      },
+      "name": {
+        "title": "名前",
+        "subtitle": "英小文字・数字・ハイフンで 1〜{{max}} 文字、先頭は英字。ホスト名にもなります：fn-<name>。"
+      }
+    },
+    "nameLabel": "名前",
+    "nameRequired": "名前を入力してください。",
+    "nameInvalid": "英小文字・数字・ハイフンで 1〜21 文字、先頭は英字、末尾はハイフン以外。",
+    "nameReserved": "この名前は予約されています。",
+    "nameTaken": "この名前の関数はすでに存在します。",
+    "summary": {
+      "title": "概要",
+      "runtime": "ランタイム",
+      "handler": "ハンドラー",
+      "code": "コード",
+      "codeLater": "後でアップロード",
+      "resources": "リソース",
+      "resourcesValue": "{{memory}}、{{cpus}} CPU、{{timeout}} 秒",
+      "env": "環境",
+      "envValue": "変数 {{variables}} 個、シークレット {{secrets}} 個",
+      "networks": "ネットワーク",
+      "internet": "インターネットアクセス",
+      "auth": "認証",
+      "authBearer": "ベアラートークン",
+      "authSigv4": "ベアラートークンと SigV4",
+      "name": "名前",
+      "endpoint": "内部 URL",
+      "credentialsNote": "呼び出し認証情報は作成直後に一度だけ表示されます。"
+    },
+    "setup": {
+      "title": "セットアップ中",
+      "secrets": "シークレット",
+      "code": "コードのアップロード",
+      "failed": "失敗しました：{{error}} 関数のページからやり直してください。"
+    },
+    "handlerOptionalLabel": "ハンドラー（任意）",
+    "handlerInvalidCustom": "英字、数字、_、-、.。フォルダーは / で区切り、. または - で始まる部分は使えません。最大 128 文字。",
+    "bootstrap": {
+      "title": "zip のルートに実行ファイル bootstrap を置きます",
+      "help": "Linux {{arch}} 向けにビルドして zip にします。たとえば Go で aws-lambda-go を使う場合："
+    }
+  },
+  "resources": {
+    "memory": "メモリ",
+    "memoryHelp": "{{min}}〜{{max}}。",
+    "cpus": "CPU",
+    "cpusHelp": "{{min}}〜{{max}}、0.01 刻み。",
+    "timeout": "タイムアウト",
+    "timeoutHelp": "呼び出しごとに 1〜{{max}} 秒。",
+    "tmp": "/tmp のサイズ",
+    "tmpHelp": "{{min}}〜{{max}}。",
+    "tmpNote": "/tmp 内のファイルはメモリ上限に含まれます。/tmp をいっぱいにした関数はメモリ不足で停止されます。",
+    "budget": "関数に割り当て可能な残り：メモリ {{memory}}、CPU {{cpus}}。",
+    "overBudget": "これらのリソースは関数の割り当ての残りを超えているため、作成は拒否されます。"
+  },
+  "env": {
+    "nameRequired": "名前を入力してください。",
+    "nameInvalid": "英字、数字、アンダースコアのみ。先頭に数字は使えません。",
+    "nameReserved": "この名前はランタイムで予約されています（AWS_LAMBDA_*、AWS_REGION、PATH…）。",
+    "nameDuplicate": "この名前はすでに変数またはシークレットで使われています。",
+    "value": {
+      "lines": "1 行のみ。",
+      "size": "最大 4096 バイト。"
+    },
+    "variable": {
+      "title": "変数",
+      "help": "関数の Compose ファイルに書き込まれます。ここにシークレットを入れないでください。",
+      "empty": "変数はありません。",
+      "add": "変数を追加",
+      "remove": "変数 {{index}} を削除",
+      "nameLabel": "変数 {{index}} の名前",
+      "valueLabel": "変数 {{index}} の値",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "値"
+    },
+    "secret": {
+      "title": "シークレット",
+      "warning": "シークレットの値は一度だけ書き込まれます。置き換えや削除はできますが、パネルを含め誰も再表示できません。",
+      "empty": "シークレットはありません。",
+      "add": "シークレットを追加",
+      "remove": "シークレット {{index}} を削除",
+      "nameLabel": "シークレット {{index}} の名前",
+      "valueLabel": "シークレット {{index}} の値",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "シークレットの値"
+    }
+  },
+  "networks": {
+    "title": "ネットワーク",
+    "intro": "これらのネットワークのメンバー（サイト、サービスインスタンス、他の関数）は、内部 URL で関数を呼び出せます。関数がサービスネットワークに参加することはありません。",
+    "dedicated": "専用ネットワーク",
+    "dedicatedHint": "関数と同時に作成される、この関数専用のネットワークです。関数を呼び出すサイトやサービスを接続してください。",
+    "dedicatedTag": "専用",
+    "extra": "その他のプライベートネットワーク",
+    "extraHelp": "任意：関数が追加で参加するネットワーク。",
+    "servicesRefused": "関数はサービスネットワークに参加できません。プライベートネットワークに接続してください。",
+    "connect": "ネットワークに接続",
+    "connectTitle": "{{name}} をネットワークに接続",
+    "connectIntro": "関数のコンテナーはこのネットワーク付きで再作成されます。実行中の呼び出しは中断されます。",
+    "network": "ネットワーク",
+    "choose": "ネットワークを選択",
+    "noneAvailable": "関数はすでにすべてのプライベートネットワークに接続されています。",
+    "disconnect": "切断",
+    "disconnectOf": "{{network}} から切断",
+    "disconnectConfirm": {
+      "title": "{{name}} を {{network}} から切断しますか？",
+      "content": "まずネットワークが切断され、その後コンテナーが再作成されます。このネットワークのメンバーは関数を呼び出せなくなります。再作成に失敗した場合、関数は停止されます。"
+    },
+    "lastHint": "関数は少なくとも 1 つのネットワークに接続されている必要があります。先に別のネットワークに接続してください。",
+    "notConnectedHint": "関数のコンテナーはこのネットワークに接続されていません。停止しているか、再起動が必要です。",
+    "connected": "{{name}} を {{network}} に接続しました。",
+    "disconnected": "{{name}} を {{network}} から切断しました。"
+  },
+  "detail": {
+    "back": "関数一覧に戻る",
+    "notFound": "この関数は存在しません（または削除されました）。",
+    "tabs": {
+      "overview": "概要",
+      "code": "コード",
+      "test": "テスト",
+      "configuration": "設定",
+      "secrets": "シークレット",
+      "credentials": "認証情報",
+      "networks": "ネットワーク",
+      "triggers": "トリガー"
+    }
+  },
+  "overview": {
+    "invocation": "呼び出し",
+    "endpoint": "内部 URL",
+    "endpointHint": "関数のネットワークのメンバーだけが、認証情報を使って到達できます（POST、本文にイベント）。",
+    "auth": "認証",
+    "networks": "ネットワーク",
+    "internet": "インターネットアクセス",
+    "runtimeTitle": "ランタイム",
+    "state": "状態",
+    "runtime": "ランタイム",
+    "handler": "ハンドラー",
+    "deployment": "有効なデプロイ",
+    "image": "イメージ",
+    "digest": "ダイジェスト",
+    "created": "作成日時",
+    "limits": "上限",
+    "limitMemory": "メモリ：{{value}}",
+    "limitCpus": "CPU：{{value}}",
+    "limitTimeout": "タイムアウト：{{value}}",
+    "limitTmp": "/tmp：{{value}}",
+    "notDeployed": "まだコードがデプロイされていません。「コード」タブで zip をアップロードしてください。",
+    "modified": "Compose プロジェクトがパネル外で編集されたため、パネルは今後これを実行しません。パネルが生成したファイルを復元するか、関数を強制削除してください。",
+    "invalid": "参照ファイルを読み取れないため、パネルは使用できません。関数を強制削除してください。",
+    "unverified": "コンテナーは実行中ですが、関数の参照と一致しないため、パネルは使用しません。関数を再起動して再作成してください。"
+  },
+  "code": {
+    "uploadTitle": "新しいコードをデプロイ",
+    "uploadIntro": "ルートにハンドラー（{{handler}}）とその依存関係を含む zip です。新しいデプロイとして即座に有効化されます。起動しない場合は、以前のデプロイが再び起動されます。",
+    "drop": "ここに zip をドロップするか、クリックして選択",
+    "dropHint": "最大 {{max}}。無圧縮または deflate 圧縮のエントリのみ。暗号化されたエントリ、デバイス、アーカイブ外を指すリンクは不可。",
+    "notZip": ".zip ファイルを選択してください。",
+    "tooLarge": "zip が {{max}} を超えています。",
+    "uploading": "{{name}} をアップロード中…",
+    "deployed": "デプロイ {{id}} が有効です。",
+    "deploymentsTitle": "デプロイ",
+    "kept_other": "ロールバック用に、有効なものを含めて {{count}} 件のデプロイが保持されます。",
+    "empty": "デプロイはまだありません。",
+    "active": "有効",
+    "zipSize": "zip：{{size}}",
+    "columns": {
+      "id": "デプロイ",
+      "date": "日付",
+      "files": "ファイル",
+      "size": "サイズ",
+      "sha256": "zip の SHA-256",
+      "actions": "操作"
+    },
+    "activate": "有効化",
+    "rollback": "ロールバック",
+    "activated": "デプロイ {{id}} が有効です。",
+    "activateConfirm": {
+      "title": "デプロイ {{id}} を有効化しますか？",
+      "content": "ファイルが検証された後、それを使って関数が再作成されます。実行中の呼び出しは中断されます。"
+    },
+    "rollbackConfirm": {
+      "title": "デプロイ {{id}} にロールバックしますか？",
+      "content": "関数はこの以前のコードに戻ります（事前に検証されます）。実行中の呼び出しは中断されます。現在のデプロイは保持されます。"
+    },
+    "deploying": "{{name}} のアップロードが完了しました。デプロイ中…",
+    "interrupted": "アップロードが中断されました。サーバーがコードをデプロイした可能性があるため、デプロイ一覧を確認してください。",
+    "uploadIntroCustom": "ルートに実行ファイル bootstrap（Linux {{arch}} 向けにビルド）を含む zip。新しいデプロイとなり、すぐに有効化されます。起動しない場合は前のデプロイが再起動されます。",
+    "warning": "警告"
+  },
+  "test": {
+    "eventTitle": "テストイベント",
+    "eventLabel": "イベント (JSON)",
+    "eventHelp": "ハンドラーにイベントとして渡される 1 つの JSON 値（オブジェクト、配列、文字列、数値…）。",
+    "eventProblems": {
+      "empty": "イベントを入力してください（例：{}）。",
+      "invalid": "有効な JSON ではありません。",
+      "tooLarge": "イベントが {{max}} を超えています。"
+    },
+    "invoke": "呼び出す",
+    "format": "整形",
+    "notRunning": "関数が実行されていません。呼び出す前に起動してください。",
+    "result": "結果",
+    "statusCode": "ステータス",
+    "duration": "所要時間",
+    "durationValue": "{{value}} ms",
+    "requestId": "リクエスト ID",
+    "functionError": "関数が失敗しました：{{error}}",
+    "payload": "レスポンス",
+    "payloadEmpty": "レスポンスは空です。",
+    "payloadBinary": "バイナリレスポンス（{{size}}）、base64 で表示：",
+    "logs": "ログ（末尾）",
+    "logsEmpty": "ログはありません。"
+  },
+  "configuration": {
+    "resources": "リソース",
+    "code": "ハンドラーと変数",
+    "deployScope": "ハンドラーと変数によって、コードがシークレットをどう扱うかが決まります。API キーで変更するには、functions:write に加えて functions:deploy スコープが必要です。",
+    "noChange": "保存する変更はありません。",
+    "reset": "リセット",
+    "confirm": {
+      "title": "{{name}} の設定を保存しますか？",
+      "running": "この設定で関数が再作成されます。実行中の呼び出しは中断されます。",
+      "stopped": "関数は停止したままです。設定は次回の起動時に適用されます。"
+    },
+    "mcp": {
+      "title": "AI アシスタント (MCP)",
+      "label": "MCP クライアントからの呼び出しを許可",
+      "help": "loch CLI の MCP ツール（AI アシスタント）向けのガードレールです。オフの場合、ツールはこの関数の呼び出しを拒否します。アクセス制御ではありません。呼び出しを禁止するには、functions:invoke スコープを持たない API キーを MCP クライアントに渡してください。変更には functions:deploy スコープが必要です。"
+    }
+  },
+  "secrets": {
+    "title": "シークレット",
+    "intro": "シークレットは環境変数として関数に渡され、Compose ファイルの外に保管されます。値が表示、返却、ログ記録、監査記録されることはありません。変更するには値を置き換えてください。",
+    "add": "シークレットを追加",
+    "addTitle": "新しいシークレット",
+    "replace": "置き換え",
+    "replaceOf": "{{name}} を置き換え",
+    "replaceTitle": "{{name}} の値を置き換え",
+    "remove": "削除",
+    "removeOf": "{{name}} を削除",
+    "removeConfirm": {
+      "title": "シークレット {{name}} を削除しますか？",
+      "content": "関数はこのシークレットを受け取らなくなり、再作成されます。"
+    },
+    "empty": "シークレットはありません。",
+    "hidden": "非表示",
+    "nameLabel": "名前",
+    "valueLabel": "値",
+    "restart": "実行中の関数はこの値で再作成されます。",
+    "saved": "シークレット {{name}} を保存しました。",
+    "removed": "シークレット {{name}} を削除しました。",
+    "columns": {
+      "name": "名前",
+      "value": "値",
+      "actions": "操作"
+    }
+  },
+  "credentials": {
+    "title": "呼び出し認証情報",
+    "warning": "この認証情報は一度だけ表示されるので、今すぐコピーしてください。パネルは検証に必要な情報しか保持せず、再表示できません。紛失した場合はローテーションしてください。",
+    "close": "認証情報をコピーしました",
+    "show": "表示",
+    "hide": "非表示",
+    "curl": "テストコマンドをコピー（curl、関数のネットワークのメンバーから実行）",
+    "internalOnly": "内部 URL には関数のネットワークのメンバーからのみ到達できます。公開ポートはありません。",
+    "sigv4Note": "AWS SDK：endpoint-url http://fn-<name>:8080、リージョン us-east-1、このキーペアを使用。",
+    "fields": {
+      "endpoint": "内部 URL",
+      "region": "リージョン",
+      "token": "ベアラートークン",
+      "accessKeyId": "アクセスキー ID",
+      "secretAccessKey": "シークレットアクセスキー"
+    }
+  },
+  "credentialsTab": {
+    "title": "呼び出し認証情報",
+    "intro": "関数のネットワーク上の呼び出し元はこの認証情報で認証します。パネル自身の呼び出し（「テスト」タブ、スケジュールタスク）には不要です。再度読み取ることはできないため、新しいものが必要な場合はローテーションしてください。",
+    "bearerStored": "設定済み（ハッシュのみ保持）",
+    "rotate": {
+      "title": "{{name}} の認証情報をローテーションしますか？",
+      "content": "新しい認証情報が生成されて一度だけ表示され、現在の認証情報は直ちに無効になります。関数は再作成されます。",
+      "submit": "認証情報をローテーション"
+    },
+    "enableSigv4": {
+      "title": "{{name}} で SigV4 呼び出し元を受け付けますか？",
+      "content": "認証情報がローテーションされます。新しいベアラートークンと SigV4 キーペアが一度だけ表示され、現在の認証情報は無効になります。",
+      "submit": "有効化してローテーション"
+    },
+    "disableSigv4": {
+      "title": "{{name}} で SigV4 呼び出し元の受け付けを停止しますか？",
+      "content": "キーペアなしで認証情報がローテーションされます。新しいベアラートークンが一度だけ表示され、現在の認証情報は無効になります。",
+      "submit": "無効化してローテーション"
+    }
+  },
+  "triggers": {
+    "title": "スケジュールされた呼び出し",
+    "intro": "この関数を対象とする「関数の呼び出し」タイプのスケジュールタスク（最大 {{max}} 件）。",
+    "create": "呼び出しをスケジュール",
+    "manage": "スケジュールタスクを管理",
+    "empty": "この関数を呼び出すスケジュールタスクはありません。",
+    "event": "イベント"
+  },
+  "runtimeCustomVersion": "Go、Rust…（カスタムランタイム、provided.{{version}}）",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "bootstrap は glibc に動的リンクされています。Amazon Linux 2023 より新しくない glibc でビルドされた場合にのみ動作します。これを避けるには静的にビルドしてください（CGO_ENABLED=0）。"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "title": "Benvenuto nella console di amministrazione",
+  "cards": {
+    "resourceOverview": {
+      "title": "Panoramica delle risorse",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "caricamento",
+      "unavailable": "non disponibile",
+      "resources": {
+        "containers": "Container",
+        "stacks": "Stack",
+        "hosting": "Siti ospitati",
+        "database": "Database",
+        "cache": "Cache",
+        "messaging": "Messaggistica",
+        "queue": "Code",
+        "storage": "Archiviazione",
+        "functions": "Funzioni",
+        "cron": "Attività pianificate",
+        "networks": "Reti private",
+        "sftp": "Utenti SFTP",
+        "domains": "Domini",
+        "apiKeys": "Chiavi API"
+      }
+    },
+    "containerCount": {
+      "title": "Numero di container"
+    },
+    "profile": {
+      "adminTitle": "Profilo amministratore",
+      "userTitle": "Profilo utente",
+      "adminAccess": "Hai accesso a tutti i container (tranne quelli di sistema).",
+      "noAccess": "Il tuo amministratore non ha ancora definito alcun accesso.",
+      "restrictedAccess": "Hai accesso ai seguenti container: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Ultimi stack distribuiti",
+      "empty": "Nessuno stack",
+      "abnormalExit": "Arresto anomalo"
+    },
+    "latestDomains": {
+      "title": "Ultimi domini",
+      "empty": "Nessun dominio"
+    },
+    "errorContainers": {
+      "title": "Container arrestati in modo anomalo",
+      "empty": "Nessun container in errore"
+    },
+    "support": {
+      "title": "Supporto tecnico",
+      "emergency": "📲 Emergenza: {{phone}}",
+      "openTicket": "📕 Apri un ticket di incidente"
+    },
+    "serviceStatus": {
+      "title": "Stato dei servizi"
+    }
+  }
+}

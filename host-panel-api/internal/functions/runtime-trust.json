@@ -1,0 +1,20 @@
+{
+  "signing": {
+    "identity": "https://github.com/loch-sh/lambda-runtime/.github/workflows/ci.yml",
+    "issuer": "https://token.actions.githubusercontent.com"
+  },
+  "releases": [
+    {
+      "version": "v1.0.1",
+      "arch": "amd64",
+      "sha256": "829a2e4fc449234acff0332a9f702f928d65c35a99a315309669f011fd40f01d",
+      "size": 8036476
+    },
+    {
+      "version": "v1.0.1",
+      "arch": "arm64",
+      "sha256": "35146a3fd6685dc75ccfee8128b998d12732ed3b0e77922e76b2fd61658cd8d2",
+      "size": 7471228
+    }
+  ]
+}

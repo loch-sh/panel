@@ -1,0 +1,467 @@
+{
+  "title": "Hosting",
+  "newStack": "Nieuwe hosting",
+  "backToList": "Terug naar hosting",
+  "empty": "Nog geen hosting",
+  "disabled": "Webhosting is niet ingeschakeld op deze server.",
+  "configError": "Kan de hostingconfiguratie niet laden.",
+  "retry": "Opnieuw proberen",
+  "templates": {
+    "php-nginx": {
+      "label": "PHP + Nginx",
+      "description": "PHP-FPM achter Nginx: snel, geschikt voor de meeste PHP-applicaties (WordPress, Laravel, Symfony)."
+    },
+    "php-apache": {
+      "label": "PHP + Apache",
+      "description": "PHP met Apache: ondersteunt .htaccess-bestanden, voor applicaties die daarvan afhankelijk zijn."
+    },
+    "nginx": {
+      "label": "Statisch (Nginx)",
+      "description": "Nginx die statische bestanden serveert: HTML-sites, single-page-applicaties, gegenereerde sites."
+    },
+    "apache": {
+      "label": "Statisch (Apache)",
+      "description": "Apache die statische bestanden serveert, met ondersteuning voor .htaccess."
+    },
+    "badges": {
+      "static": "Statisch"
+    }
+  },
+  "status": {
+    "running": "Actief",
+    "partial": "Gedeeltelijk actief",
+    "stopped": "Gestopt",
+    "not_deployed": "Niet uitgerold",
+    "withCount": "{{label}} ({{running}}/{{total}})",
+    "modified": "Handmatig gewijzigd",
+    "modifiedTooltip": "Het compose-bestand is buiten het panel bewerkt.",
+    "lastOperationFailed": "Laatste bewerking mislukt",
+    "refreshing": "Status bijwerken…"
+  },
+  "columns": {
+    "name": "Naam",
+    "template": "Sjabloon",
+    "phpVersion": "PHP",
+    "domains": "Domeinen",
+    "status": "Status",
+    "actions": "Acties"
+  },
+  "php": {
+    "deprecated": "Verouderd",
+    "deprecatedTooltip": "Deze PHP-versie krijgt geen beveiligingsupdates meer.",
+    "support": {
+      "activeUntil": "Bugfixes tot {{date}}",
+      "activeEnded": "Bugfixes beëindigd op {{date}}",
+      "securityUntil": "Beveiliging tot {{date}}",
+      "securityEnded": "Beveiliging beëindigd op {{date}}",
+      "activeTooltip": "Actieve ondersteuning: bugs en beveiligingsproblemen worden opgelost.",
+      "securityTooltip": "Beveiligingsondersteuning: alleen beveiligingsproblemen worden opgelost. Na deze datum krijgt de versie geen updates meer."
+    }
+  },
+  "domains": {
+    "none": "Geen domein",
+    "httpsTooltip": "HTTPS ingeschakeld"
+  },
+  "actions": {
+    "start": "Starten",
+    "stop": "Stoppen",
+    "restart": "Herstarten",
+    "redeploy": "Opnieuw uitrollen",
+    "delete": "Verwijderen",
+    "details": "Details",
+    "busy": "Er loopt een bewerking op deze hosting"
+  },
+  "confirm": {
+    "stop": "De hosting \"{{name}}\" stoppen? De website is dan niet beschikbaar.",
+    "restart": "De hosting \"{{name}}\" herstarten? De website is kort niet beschikbaar."
+  },
+  "toasts": {
+    "started": "Hosting \"{{name}}\" gestart",
+    "stopped": "Hosting \"{{name}}\" gestopt",
+    "restarted": "Hosting \"{{name}}\" herstart",
+    "partialFailure": "Hosting \"{{name}}\": {{failed}} van {{total}} containers mislukt",
+    "createStarted": "Hosting \"{{name}}\" wordt aangemaakt…",
+    "updateStarted": "Nieuwe instellingen van \"{{name}}\" worden toegepast…",
+    "deployStarted": "\"{{name}}\" wordt opnieuw uitgerold…",
+    "deleteStarted": "\"{{name}}\" wordt verwijderd…",
+    "deleted": "Hosting \"{{name}}\" verwijderd",
+    "operationSucceeded": "Bewerking voltooid op \"{{name}}\"",
+    "operationFailed": "Bewerking mislukt op \"{{name}}\""
+  },
+  "redeploy": {
+    "title": "\"{{name}}\" opnieuw uitrollen",
+    "description": "Maakt de container opnieuw aan met de huidige instellingen.",
+    "pull": "Nieuwste image ophalen (patches voor PHP / webserver)",
+    "submit": "Opnieuw uitrollen",
+    "modifiedWarning": "Het compose-bestand van deze hosting is buiten het panel bewerkt. Het wordt ongewijzigd uitgerold, inclusief de handmatige wijzigingen.",
+    "modifiedConfirm": "Begrepen: het handmatig bewerkte compose-bestand uitrollen"
+  },
+  "delete": {
+    "title": "\"{{name}}\" verwijderen",
+    "description": "De container en de configuratie ervan worden verwijderd. De bestanden van de site blijven behouden, tenzij u anders kiest.",
+    "purge": "Ook de bestanden van de site verwijderen ({{path}})",
+    "purgeWarning": "Dit kan niet ongedaan worden gemaakt. SFTP-gebruikers van de site \"{{site}}\" verliezen al hun bestanden.",
+    "typeName": "Typ <code>{{name}}</code> om te bevestigen",
+    "typeNameMismatch": "De naam komt niet overeen",
+    "submit": "Verwijderen"
+  },
+  "create": {
+    "title": "Nieuwe hosting",
+    "submit": "Hosting aanmaken"
+  },
+  "detail": {
+    "tabs": {
+      "overview": "Overzicht",
+      "settings": "Instellingen",
+      "networks": "Netwerken",
+      "operation": "Laatste bewerking",
+      "compose": "Compose"
+    },
+    "notFound": "Deze hosting bestaat niet of is verwijderd.",
+    "deleting": "Deze hosting wordt verwijderd…",
+    "noSpec": "De instellingen van deze hosting kunnen niet worden gelezen.",
+    "overview": {
+      "template": "Sjabloon",
+      "image": "Image",
+      "phpVersion": "PHP-versie",
+      "sitePath": "Sitemap",
+      "documentRoot": "Document root",
+      "documentRootRoot": "Hoofdmap van de site",
+      "domains": "Domeinen",
+      "https": "HTTPS",
+      "redirectHttps": "Doorsturen HTTP → HTTPS",
+      "resources": "Resources",
+      "resourcesValue": "Geheugen: {{memory}} · CPU: {{cpus}}",
+      "containers": "Containers",
+      "noContainers": "Geen container: de hosting is niet uitgerold.",
+      "memoryValue": "{{value}} MB",
+      "cpusValue": "{{value}} CPU",
+      "unlimited": "Onbeperkt",
+      "disabledModules": "Uitgeschakelde PHP-modules",
+      "noDisabledModules": "Geen",
+      "routing": "Routering",
+      "routingDefault": "Standaard (image)",
+      "routingSymfony": "Symfony",
+      "routingLaravel": "Laravel",
+      "routingCustom": "Eigen regels",
+      "usage": "Resourcegebruik",
+      "usageNotRunning": "Geen draaiende container: start de hosting om het geheugen- en CPU-gebruik te zien.",
+      "usageLoading": "Wachten op de eerste metingen…",
+      "phpMemory": "PHP-geheugen",
+      "phpMemoryWeb": "Web:",
+      "phpMemoryCli": "CLI:",
+      "sameAsCli": "zoals CLI ({{value}})",
+      "networks": "Netwerken",
+      "noNetwork": "Geen"
+    },
+    "secretsMasked": "Geheime waarden (omgevingsvariabelen, configuratiefragmenten) zijn verborgen voor deze API-sleutel: de instellingen zijn alleen-lezen.",
+    "compose": {
+      "help": "De compose.yaml waarmee deze hosting draait. Het is een standaard Docker Compose-bestand: `docker compose up -d` in de hostingmap start het zonder het panel.",
+      "modified": "Dit bestand is buiten het panel bewerkt en komt niet meer overeen met de instellingen. Bij het opslaan van de instellingen wordt het overschreven.",
+      "masked": "Het compose-bestand wordt niet getoond: deze API-sleutel kan geen geheimen lezen.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "routingFile": "Routeringsregels",
+      "routingFileHelp": "Routeringsbestand dat de webserver momenteel gebruikt."
+    }
+  },
+  "settings": {
+    "modifiedAlert": {
+      "title": "Deze hosting is buiten het panel gewijzigd",
+      "description": "Bij opslaan wordt het compose-bestand opnieuw gegenereerd en worden de handmatige wijzigingen overschreven."
+    },
+    "forceConfirm": {
+      "title": "Handmatige wijzigingen overschrijven?",
+      "content": "Het compose-bestand van \"{{name}}\" is buiten het panel bewerkt. Bij opslaan wordt het vervangen door de instellingen van dit formulier: de handmatige wijzigingen gaan verloren.",
+      "ok": "Handmatige wijzigingen overschrijven"
+    },
+    "submit": "Opslaan en opnieuw uitrollen",
+    "reset": "Wijzigingen negeren"
+  },
+  "operation": {
+    "none": "Sinds de start van de API is er geen bewerking uitgevoerd.",
+    "kind": {
+      "create": "Aanmaak",
+      "update": "Bijwerking",
+      "deploy": "Uitrol",
+      "delete": "Verwijdering"
+    },
+    "state": {
+      "running": "Bezig",
+      "succeeded": "Geslaagd",
+      "failed": "Mislukt"
+    },
+    "fields": {
+      "kind": "Bewerking",
+      "state": "Status",
+      "startedAt": "Gestart",
+      "finishedAt": "Beëindigd",
+      "duration": "Duur"
+    },
+    "durationSeconds": "{{seconds}} s",
+    "rolledBack": "De vorige configuratie is hersteld.",
+    "failedAlert": "De bewerking is mislukt",
+    "output": "Uitvoer van Docker Compose",
+    "noOutput": "Geen uitvoer"
+  },
+  "form": {
+    "required": "Verplicht",
+    "sections": {
+      "routing": "Routering"
+    },
+    "fields": {
+      "template": {
+        "required": "Kies een sjabloon",
+        "editHelp": "Voor een bestaande hosting kunnen alleen sjablonen van hetzelfde type worden gekozen."
+      },
+      "name": {
+        "label": "Naam",
+        "placeholder": "mijn-site",
+        "help": "Kleine letters, cijfers en streepjes (max. {{max}} tekens). Kan later niet worden gewijzigd.",
+        "required": "Naam is verplicht",
+        "tooLong": "Maximaal {{max}} tekens",
+        "invalid": "Alleen kleine letters, cijfers en streepjes, zonder streepje aan het begin of einde",
+        "checkFailed": "Kan de beschikbaarheid van de naam niet controleren",
+        "taken": {
+          "reserved": "Deze naam is gereserveerd",
+          "stack": "Een hosting gebruikt deze naam al",
+          "directory": "Er bestaat al een map met deze naam",
+          "compose_project": "Een Docker Compose-stack gebruikt deze naam al",
+          "container": "Een container gebruikt deze naam al",
+          "traefik_router": "Een Traefik-router gebruikt deze naam al",
+          "unknown": "Deze naam is niet beschikbaar"
+        }
+      },
+      "site": {
+        "label": "Sitemap",
+        "tooltip": "Map onder {{dir}} met de bestanden van de website. Kan worden gedeeld met SFTP-gebruikers en kan later niet worden gewijzigd.",
+        "new": "Nieuwe map",
+        "newHelp": "Er wordt een map met de naam van de hosting aangemaakt: {{path}}",
+        "existing": "Bestaande map",
+        "select": "Selecteer een map",
+        "noneAvailable": "Geen vrije map: elke bestaande site wordt al door een hosting gebruikt.",
+        "required": "Selecteer een map",
+        "readOnly": "De sitemap van een hosting kan niet worden gewijzigd."
+      },
+      "documentRoot": {
+        "label": "Document root",
+        "tooltip": "Map die door de webserver wordt geserveerd, relatief ten opzichte van de sitemap. Laat leeg om de hoofdmap van de site te serveren.",
+        "placeholder": "web",
+        "invalid": "Relatief pad: letters, cijfers en . _ @ + ~ - in segmenten gescheiden door /, zonder segmenten \".\" of \"..\"",
+        "webTooltip": "Klassieke indeling: de bestanden van de site staan in web/.",
+        "publicTooltip": "Symfony-/Laravel-indeling: de bestanden van de site staan in public/. Bij PHP-sjablonen wordt ook Symfony-routering ingeschakeld.",
+        "symfonyEnabled": "{{framework}}-routering ingeschakeld (zie Geavanceerd)."
+      },
+      "domains": {
+        "label": "Domeinen",
+        "placeholder": "voorbeeld.nl, www.voorbeeld.nl",
+        "help": "Typ een domein en druk op Enter. Maximaal {{max}} domeinen.",
+        "invalid": "Ongeldig domein: {{domain}}",
+        "duplicate": "Dubbel domein: {{domain}}",
+        "tooMany": "Maximaal {{max}} domeinen"
+      },
+      "https": {
+        "label": "HTTPS",
+        "help": "Schakel HTTPS in zodra de DNS van elk domein naar deze server wijst, anders kan het certificaat niet worden uitgegeven."
+      },
+      "redirectHttps": {
+        "label": "HTTP doorsturen naar HTTPS",
+        "help": "Vereist HTTPS."
+      },
+      "phpVersion": {
+        "label": "PHP-versie",
+        "required": "Selecteer een PHP-versie",
+        "supported": "Ondersteund",
+        "deprecated": "Verouderd",
+        "deprecatedWarning": "Deze PHP-versie wordt niet meer onderhouden: plan een upgrade."
+      },
+      "memory": {
+        "label": "Geheugenlimiet",
+        "unit": "MB",
+        "toggle": "Geheugen beperken",
+        "help": "Optioneel. Wanneer de container zijn geheugenlimiet bereikt, beëindigt Docker hem: laat dit uit tenzij u het verbruik moet begrenzen."
+      },
+      "cpus": {
+        "label": "CPU-limiet",
+        "unit": "CPU",
+        "toggle": "CPU beperken",
+        "help": "Optioneel. Zonder limiet kan de container alle CPU-kernen van de server gebruiken."
+      },
+      "memoryLimit": {
+        "label": "memory_limit",
+        "tooltip": "Maximaal geheugen per PHP-script, bijv. 256M, of -1 voor onbeperkt.",
+        "invalid": "Verwacht een grootte zoals 256M, of -1",
+        "help": "Ook de standaard voor webverzoeken wanneer de weblimiet leeg is."
+      },
+      "uploadMaxFilesize": {
+        "label": "upload_max_filesize",
+        "tooltip": "Maximale grootte van een geüpload bestand, bijv. 64M.",
+        "invalid": "Verwacht een grootte zoals 64M"
+      },
+      "postMaxSize": {
+        "label": "post_max_size",
+        "tooltip": "Maximale grootte van de body van een verzoek; moet minstens upload_max_filesize zijn.",
+        "invalid": "Verwacht een grootte zoals 64M",
+        "tooSmall": "Moet groter dan of gelijk aan upload_max_filesize zijn"
+      },
+      "maxExecutionTime": {
+        "label": "max_execution_time",
+        "tooltip": "Maximale uitvoeringstijd van een script, in seconden (0 = onbeperkt).",
+        "unit": "s",
+        "invalid": "Tussen 0 en {{max}} seconden",
+        "help": "Alleen web: PHP op de opdrachtregel (crons) heeft nooit een tijdslimiet; beperk een cron met php -d max_execution_time=N."
+      },
+      "displayErrors": {
+        "label": "display_errors",
+        "tooltip": "Toont PHP-fouten in de pagina's. Laat uitgeschakeld in productie."
+      },
+      "timezone": {
+        "label": "Tijdzone",
+        "required": "Selecteer een tijdzone"
+      },
+      "env": {
+        "label": "Omgevingsvariabelen",
+        "add": "Variabele toevoegen",
+        "remove": "Verwijderen",
+        "namePlaceholder": "NAAM",
+        "valuePlaceholder": "waarde",
+        "nameRequired": "Naam is verplicht",
+        "nameInvalid": "Letters, cijfers en underscores, niet beginnend met een cijfer",
+        "nameReserved": "Deze variabele wordt door het panel beheerd",
+        "nameDuplicate": "Dubbele variabele",
+        "valueInvalid": "De waarde moet op één regel passen",
+        "tooMany": "Maximaal {{max}} variabelen",
+        "help": "Variabelen die door het panel worden beheerd (PHP_*, WEB_DOCUMENT_ROOT, APPLICATION_*, CONTAINER_*, LD_*) kunnen hier niet worden ingesteld."
+      },
+      "phpIni": {
+        "label": "Extra php.ini",
+        "tooltip": "Wordt geladen na alle andere PHP-configuratiebestanden.",
+        "placeholder": "opcache.enable = 1"
+      },
+      "vhost": {
+        "label": "Extra virtualhost-directives",
+        "tooltipNginx": "Nginx-directives die in het server-blok worden opgenomen.",
+        "tooltipApache": "Apache-directives die in het VirtualHost-blok worden opgenomen.",
+        "placeholderNginx": "location /api { … }",
+        "placeholderApache": "Header set X-Frame-Options \"DENY\"",
+        "helpNginx": "Wordt in het server-blok van de image ingevoegd: plak geen volledig server { }-blok. De image definieert al location / en location ~ \\.php$ (fastcgi_pass php); wijzig ze in de sectie Routering. Voorbeeld:",
+        "helpApache": "Wordt in het VirtualHost-blok van de image ingevoegd: plak geen volledig VirtualHost-blok. Wijzig de routering in de sectie Routering. Voorbeeld:"
+      },
+      "bytes": "{{used}} / {{max}} bytes",
+      "snippetTooLarge": "Maximaal {{max}} bytes",
+      "phpModules": {
+        "label": "PHP-modules",
+        "help": "Schakel de modules uit die deze site niet nodig heeft.",
+        "loading": "De modules van deze PHP-image worden geladen…",
+        "loadingHint": "De eerste keer wordt de image gedownload: dit kan een à twee minuten duren.",
+        "error": "Kan de modules van deze PHP-image niet laden.",
+        "retry": "Opnieuw proberen",
+        "search": "Modules filteren",
+        "empty": "Geen module",
+        "selectVersion": "Selecteer een PHP-versie om de modules ervan te tonen.",
+        "ioncubeTag": "Let op",
+        "ioncubeWarning": "ionCube voert gecodeerde PHP uit; het is standaard uitgeschakeld omdat het vaak door malware (bijv. ransomware) wordt gebruikt.",
+        "alsoDisabled": "Ook uitgeschakeld: {{modules}}",
+        "disabledWith": "Samen met {{module}} uitgeschakeld"
+      },
+      "routing": {
+        "framework": {
+          "label": "Framework",
+          "none": "Geen",
+          "noneHelp": "Routering van de image: bestanden worden ongewijzigd geserveerd en PHP-bestanden direct uitgevoerd.",
+          "phpOnly": "Vereist een PHP-sjabloon.",
+          "overriddenByCustom": "Inactief zolang eigen regels worden gebruikt: die vervangen de frameworkregels.",
+          "siteRootWarning": "De document root is geen \"public\"-map: projectbestanden zoals .env, composer.json, vendor/, var/ of storage/ zouden worden geserveerd. {{framework}} verwacht zijn map \"public\" als document root (bijv. \"public\" of \"web/public\")."
+        },
+        "symfony": {
+          "helpNginx": "Alle verzoeken vallen terug op index.php (try_files $uri /index.php$is_args$args). Alleen de frontcontroller wordt uitgevoerd: rechtstreeks aangeroepen /index.php en andere .php-bestanden geven 404.",
+          "helpApache": "FallbackResource /index.php op de document root: elk verzoek naar een ontbrekend bestand bereikt de frontcontroller."
+        },
+        "laravel": {
+          "helpNginx": "Verzoeken vallen terug op index.php (try_files $uri $uri/ /index.php?$query_string); alleen index.php wordt uitgevoerd, andere .php-bestanden geven 404, verborgen bestanden worden geweigerd behalve .well-known en 404-pagina's worden door Laravel afgehandeld.",
+          "helpApache": "FallbackResource /index.php met AllowOverride All (de public/.htaccess van Laravel geldt), geen mapweergave, verborgen bestanden geweigerd."
+        },
+        "assetDirs": {
+          "label": "Assetmappen",
+          "help": "Mappen in de document root die alleen als statische bestanden worden geserveerd: een ontbrekend bestand geeft 404 in plaats van de frontcontroller te bereiken.",
+          "placeholder": "bundles",
+          "invalid": "Ongeldige map: {{dir}} (letters, cijfers en . _ @ + ~ - in segmenten gescheiden door /, zonder \".\" of \"..\")",
+          "duplicate": "Dubbele map: {{dir}}",
+          "tooMany": "Maximaal {{max}} mappen"
+        },
+        "custom": {
+          "label": "Regels aanpassen",
+          "helpNginx": "Uw regels vervangen de routering van de image (het location /-bestand), opgenomen vóór de PHP-location: u kunt location / opnieuw definiëren en regex-locations toevoegen. PHP-FPM is de upstream php (fastcgi_pass php;).",
+          "helpApache": "Uw regels vervangen de routering van de image en worden als eerste in de VirtualHost opgenomen.",
+          "noPrefill": "Geen gegenereerde regels voor statische sjablonen: begin met een leeg bestand."
+        },
+        "rules": {
+          "label": "Routeringsregels",
+          "reset": "Terugzetten naar gegenereerde regels",
+          "required": "Voer de routeringsregels in",
+          "resetConfirm": "De huidige regels vervangen door de gegenereerde regels?",
+          "prefillInvalid": "Corrigeer de gemarkeerde velden (document root, assetmappen) voordat u de regels genereert."
+        },
+        "familyWarning": "Deze regels zijn geschreven voor {{from}} en het sjabloon gebruikt nu {{to}}: de syntaxis verschilt, controleer ze voordat u opslaat.",
+        "rulesWrongFamily": "Deze regels zijn geschreven voor de vorige webserver: herschrijf ze voor {{family}}."
+      },
+      "phpGroups": {
+        "web": "Webverzoeken (Nginx / Apache)",
+        "cli": "Opdrachtregel (crons, console)"
+      },
+      "webMemoryLimit": {
+        "label": "Geheugenlimiet web",
+        "tooltip": "Geheugenlimiet van webverzoeken (PHP-FPM); de applicatie kan die niet verhogen met ini_set. Laat leeg om de limiet van de opdrachtregel te gebruiken.",
+        "placeholder": "Zoals CLI: {{value}}"
+      },
+      "networks": {
+        "label": "Netwerken",
+        "help": "Privénetwerken waaraan de site deelneemt: ze bereikt de services en sites op die netwerken via hun naam (bijv. svc-postgres-17). Het gedeelde netwerk \"services\" geeft toegang tot de service-instanties die erop zitten.",
+        "extra": "Het wijzigen van de netwerken rolt de site opnieuw uit (enkele seconden onderbreking)."
+      }
+    },
+    "layout": {
+      "type": {
+        "title": "Type",
+        "subtitle": "Webserver en PHP"
+      },
+      "site": {
+        "title": "Site",
+        "subtitle": "Naam, bestanden en domeinen"
+      },
+      "runtime": {
+        "title": "PHP en resources",
+        "subtitle": "PHP-versie, limieten, instellingen en modules"
+      },
+      "runtimeStatic": {
+        "title": "Resources",
+        "subtitle": "Geheugen- en CPU-limieten van de container"
+      },
+      "advanced": {
+        "title": "Geavanceerd",
+        "subtitle": "Routering, omgeving en configuratiefragmenten"
+      },
+      "review": {
+        "title": "Overzicht",
+        "subtitle": "Controleer de instellingen voordat u de hosting aanmaakt",
+        "seconds": "{{value}} s"
+      },
+      "advancedNotice": "Alles hier is optioneel: de standaardwaarden passen bij de meeste sites.",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "edit": "Bewerken",
+      "stepsLabel": "Stappen voor aanmaken",
+      "navigation": "Secties",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "summary": {
+        "configured": "Geconfigureerd",
+        "empty": "Leeg",
+        "variables_one": "{{count}} variabele",
+        "variables_other": "{{count}} variabelen",
+        "disabledModules_one": "{{count}} uitgeschakeld",
+        "disabledModules_other": "{{count}} uitgeschakeld",
+        "allEnabled": "Alle ingeschakeld"
+      }
+    }
+  }
+}

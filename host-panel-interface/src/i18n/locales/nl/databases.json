@@ -1,0 +1,507 @@
+{
+  "disabled": "Databases zijn uitgeschakeld op deze server.",
+  "configError": "De databasemodule is ingeschakeld maar kon niet starten: bekijk de API-logs.",
+  "engineDisabled": "Deze engine is niet ingeschakeld op deze server.",
+  "engines": {
+    "mysql": "MySQL®",
+    "mariadb": "MariaDB®",
+    "postgres": "PostgreSQL®",
+    "mongodb": "MongoDB®",
+    "redis": "Redis®",
+    "valkey": "Valkey™",
+    "rabbitmq": "RabbitMQ®",
+    "nats": "NATS®",
+    "s3": "Loch S3",
+    "elasticmq": "ElasticMQ",
+    "mosquitto": "Eclipse Mosquitto™"
+  },
+  "actions": {
+    "resetPassword": "Nieuw wachtwoord",
+    "retire": "Instantie verwijderen",
+    "edit": "Bewerken",
+    "purge": "Verwijderen"
+  },
+  "instances": {
+    "columns": {
+      "version": "Versie",
+      "state": "Status",
+      "host": "Intern adres",
+      "actions": "Acties",
+      "exposure": "Gepubliceerde poort"
+    },
+    "modified": "Handmatig gewijzigd",
+    "modifiedHint": "De bestanden zijn buiten het paneel gewijzigd: ze blijft behouden, ook zonder database.",
+    "state": {
+      "ready": "Actief",
+      "starting": "Wordt gestart",
+      "unhealthy": "Niet gezond",
+      "stopped": "Gestopt",
+      "missing": "Niet actief",
+      "conflict": "Conflict",
+      "other": "Onbekend",
+      "unverified": "Niet geverifieerd",
+      "restarting": "Herstarten",
+      "paused": "Gepauzeerd"
+    },
+    "notReadyHint": "De instantie draait niet of is niet gezond: haar databases kunnen niet worden weergegeven.",
+    "tls": "TLS",
+    "noTls": "niet versleuteld",
+    "notExposed": "Alleen intern",
+    "exposureHint": "Gepubliceerd op een adres van de server: clients buiten Docker kunnen verbinding maken.",
+    "exposureTlsHint": "TLS verplicht. SHA-256-vingerafdruk van het certificaat: {{fingerprint}}",
+    "exposureError": "Wijziging mislukt",
+    "exposureErrorHint": "De laatste wijziging van de gepubliceerde poort is mislukt: de vorige blijft actief. Bekijk de API-logs.",
+    "tlsOptional": "TLS optioneel",
+    "exposureTlsOptionalHint": "TLS aangeboden maar niet verplicht: clients zonder TLS sturen hun wachtwoord en gegevens onversleuteld. SHA-256-vingerafdruk van het certificaat: {{fingerprint}}"
+  },
+  "resources": {
+    "columns": {
+      "actions": "Acties"
+    },
+    "unmanaged": "Niet beheerd",
+    "unmanagedHint": "Buiten het paneel aangemaakt: ze kan hier niet worden verwijderd en houdt de instantie actief."
+  },
+  "create": {
+    "nameRequired": "Voer een naam in."
+  },
+  "credentials": {
+    "title": "Verbindingsgegevens",
+    "warning": "Kopieer het wachtwoord nu: het wordt niet opnieuw getoond. Bent u het kwijt, genereer dan een nieuw.",
+    "fields": {
+      "host": "Host",
+      "port": "Poort",
+      "database": "Database",
+      "user": "Gebruiker",
+      "password": "Wachtwoord",
+      "uri": "Verbindings-URI",
+      "external": "Extern adres",
+      "tlsFingerprint": "Vingerafdruk van het certificaat (SHA-256)",
+      "vhost": "Virtuele host",
+      "endpoint": "Endpoint",
+      "region": "Regio",
+      "bucket": "Bucket",
+      "accessKeyId": "Toegangssleutel-ID",
+      "secretAccessKey": "Geheime toegangssleutel",
+      "pathStyle": "URL's in padstijl",
+      "queueUrlPrefix": "Prefix van de wachtrij-URL's"
+    },
+    "internalOnly": "De host is alleen bereikbaar vanaf de sites die met het servicesnetwerk verbonden zijn.",
+    "close": "Ik heb het wachtwoord gekopieerd",
+    "show": "Tonen",
+    "hide": "Verbergen",
+    "laravelEnv": "De Laravel .env-regels kopiëren (bevat het geheim)",
+    "noAuth": "Geen authenticatie: elke site die met het servicenetwerk is verbonden, kan de wachtrijen van deze instantie gebruiken, legen of verwijderen. Alle inloggegevens worden geaccepteerd (SDK's vereisen er een, bijv. \"x\")."
+  },
+  "delete": {
+    "confirmLabel": "Typ {{name}} om te bevestigen:"
+  },
+  "rotate": {
+    "title": "Nieuw wachtwoord genereren voor {{name}}?",
+    "content": "Het huidige wachtwoord werkt niet meer en open verbindingen worden verbroken: werk de sites bij die het gebruiken.",
+    "submit": "Genereren"
+  },
+  "retire": {
+    "title": "Instantie {{engine}} {{version}} verwijderen?",
+    "content": "De instantie bevat geen database. Haar containers en gegevens worden verwijderd.",
+    "submit": "Verwijderen"
+  },
+  "toasts": {
+    "passwordReset": "Nieuw wachtwoord gegenereerd.",
+    "retired": "Instantie verwijderd.",
+    "updated": "Instantie bijgewerkt.",
+    "purged": "Instantie verwijderd."
+  },
+  "wording": {
+    "database": {
+      "title": "{{engine}}-databases",
+      "intro": "Elke versie draait in één instantie die alle sites delen. Ze start met haar eerste database en wordt, met haar gegevens, verwijderd wanneer de laatste wordt verwijderd.",
+      "newResource": "Nieuwe database",
+      "empty": "Nog geen {{engine}}-database.",
+      "resourceColumn": "Database en gebruiker",
+      "countColumn": "Databases",
+      "resourcesEmpty": "Geen database in deze instantie.",
+      "createTitle": "Nieuwe {{engine}}-database",
+      "nameHelp": "Voor de database en haar gebruiker: kleine letters, cijfers en _, beginnend met een letter (max. {{max}} tekens).",
+      "nameInvalid": "Gebruik alleen kleine letters, cijfers en _, beginnend met een letter (max. {{max}} tekens).",
+      "created": "Database aangemaakt.",
+      "deleted": "Database verwijderd.",
+      "instanceRetired": "Database verwijderd; de instantie is verwijderd.",
+      "retireBlocked": "Database verwijderd; de lege instantie is behouden (bestanden handmatig gewijzigd of verwijderen mislukt).",
+      "deleteTitle": "Database {{name}} verwijderen?",
+      "deleteContent": "De database en haar gebruiker worden definitief verwijderd. Open verbindingen worden gesloten.",
+      "deleteLast": "Het is de laatste database van {{engine}} {{version}}: de instantie wordt ook verwijderd, met haar gegevens.",
+      "createFirst": "Database aanmaken"
+    },
+    "vhost": {
+      "title": "Virtuele {{engine}}-hosts",
+      "intro": "Elke versie draait in één broker die alle sites delen. Een resource is een virtuele host met een gebruiker met dezelfde naam, geïsoleerd van de andere en begrensd (verbindingen, queues, queuegrootte).",
+      "newResource": "Nieuwe virtuele host",
+      "empty": "Nog geen virtuele {{engine}}-host.",
+      "resourceColumn": "Virtuele host en gebruiker",
+      "countColumn": "Virtuele hosts",
+      "resourcesEmpty": "Geen virtuele host in deze instantie.",
+      "createTitle": "Nieuwe virtuele {{engine}}-host",
+      "nameHelp": "Voor de virtuele host en zijn gebruiker: kleine letters, cijfers en _, beginnend met een letter (max. {{max}} tekens).",
+      "nameInvalid": "Gebruik alleen kleine letters, cijfers en _, beginnend met een letter (max. {{max}} tekens).",
+      "created": "Virtuele host aangemaakt.",
+      "deleted": "Virtuele host verwijderd.",
+      "instanceRetired": "Virtuele host verwijderd; de broker is verwijderd.",
+      "retireBlocked": "Virtuele host verwijderd; de lege broker is behouden (bestanden handmatig gewijzigd of verwijderen mislukt).",
+      "deleteTitle": "Virtuele host {{name}} verwijderen?",
+      "deleteContent": "De virtuele host, zijn queues en berichten, en zijn gebruiker worden definitief verwijderd. Open verbindingen worden gesloten.",
+      "deleteLast": "Het is de laatste virtuele host van {{engine}} {{version}}: de broker wordt ook verwijderd, met zijn gegevens.",
+      "createFirst": "Virtuele host aanmaken"
+    },
+    "dedicated": {
+      "title": "{{engine}}-instanties",
+      "intro": "Elke instantie draait in een eigen container, bij het aanmaken gedimensioneerd, met één gebruiker. Verwijderen verwijdert haar gegevens.",
+      "newResource": "Nieuwe instantie",
+      "empty": "Nog geen {{engine}}-instantie.",
+      "resourceColumn": "Instantie",
+      "countColumn": "Instanties",
+      "resourcesEmpty": "Geen instantie.",
+      "createTitle": "Nieuwe {{engine}}-instantie",
+      "nameHelp": "Wordt de hostnaam en de gebruiker: kleine letters en cijfers, beginnend met een letter (max. {{max}} tekens).",
+      "nameInvalid": "Gebruik alleen kleine letters en cijfers, beginnend met een letter (max. {{max}} tekens).",
+      "created": "Instantie aangemaakt.",
+      "deleted": "Instantie verwijderd, met haar gegevens.",
+      "instanceRetired": "Instantie verwijderd, met haar gegevens.",
+      "retireBlocked": "Instantie verwijderd.",
+      "deleteTitle": "Instantie {{name}} verwijderen?",
+      "deleteContent": "De container en al zijn gegevens worden definitief verwijderd. Open verbindingen worden gesloten.",
+      "deleteLast": "De container en zijn gegevens worden verwijderd.",
+      "createFirst": "Instantie aanmaken"
+    }
+  },
+  "createPage": {
+    "back": "Terug naar de lijst",
+    "recommended": "Aanbevolen",
+    "instanceRunning": "Instantie actief",
+    "default": "Standaard",
+    "nameLabel": "Naam",
+    "submit": "Aanmaken",
+    "sections": {
+      "version": {
+        "title": "Versie",
+        "subtitle": "De versie van de engine, eenmalig gekozen (later niet te wijzigen)."
+      },
+      "options": {
+        "title": "Grootte en instellingen",
+        "subtitle": "Voor de container gereserveerde resources en engine-instellingen."
+      },
+      "name": {
+        "title": "Naam"
+      }
+    },
+    "summary": {
+      "title": "Overzicht",
+      "engine": "Engine",
+      "type": "Type",
+      "shared": "Gedeelde instantie",
+      "dedicated": "Eigen container",
+      "name": "Naam",
+      "address": "Intern adres",
+      "startNote": "De instantie {{engine}} {{version}} draait nog niet: ze start met deze resource (tot twee minuten).",
+      "sharedNote": "Aangemaakt in de actieve instantie {{engine}} {{version}}.",
+      "dedicatedNote": "Voor deze resource wordt een eigen container gestart (tot een minuut).",
+      "passwordNote": "Het wachtwoord wordt na het aanmaken één keer getoond.",
+      "restartNote": "Opslaan herstart de instantie: haar clients worden enkele seconden losgekoppeld."
+    },
+    "nameTaken": "Er bestaat al een instantie met deze naam.",
+    "fixed": "Ingesteld bij aanmaken",
+    "noChange": "Niets te wijzigen.",
+    "editTitle": "{{name}} bewerken",
+    "editIntro": "Wijzig de grootte of instellingen van deze instantie. Ze wordt ermee opnieuw aangemaakt: enkele seconden onbeschikbaar, gegevens blijven behouden.",
+    "notFound": "Deze instantie bestaat niet (meer).",
+    "saveConfirm": {
+      "title": "Wijzigingen toepassen op {{name}}?",
+      "content": "De instantie herstart met de nieuwe instellingen (enkele seconden onbeschikbaar). Start ze niet, dan worden de vorige instellingen hersteld."
+    },
+    "legacyAuth": {
+      "label": "Legacy-authenticatie",
+      "help": {
+        "mysql": "Voor oudere clients (oude PHP of tools) die mislukken met „Authentication requires secure connection”: de gebruiker authenticeert met mysql_native_password in plaats van caching_sha2_password. Kan achteraf niet worden gewijzigd (behalve door de database opnieuw aan te maken).",
+        "postgres": "Voor oudere clients zonder SCRAM: het wachtwoord wordt als md5 opgeslagen in plaats van SCRAM-SHA-256 (verouderd sinds PostgreSQL 18). Kan achteraf niet worden gewijzigd (behalve door de database opnieuw aan te maken)."
+      },
+      "warning": "Zwakker mechanisme: wie het netwerk observeert, leert meer uit de uitwisseling. Het wachtwoord blijft willekeurig; schakel het alleen in voor clients die het nodig hebben.",
+      "summary": "Authenticatie",
+      "mechanism": {
+        "mysql": "mysql_native_password (legacy)",
+        "postgres": "md5 (legacy)"
+      }
+    },
+    "custom": {
+      "title": "Aangepast",
+      "description": "Elke grootte van {{min}} tot {{max}}",
+      "unit": "GB",
+      "inputLabel": "Aangepast: {{option}} in GB"
+    },
+    "unauthenticated": "ElasticMQ heeft geen authenticatie: elke site op hetzelfde netwerk kan de wachtrijen van de instantie gebruiken, legen of verwijderen. Sla er geen gevoelige gegevens in op."
+  },
+  "options": {
+    "memory": {
+      "label": "Geheugen",
+      "help": "Voor de container gereserveerd geheugen.",
+      "detail": {
+        "data": "{{size}} voor de gegevens",
+        "streams": "{{size}} voor streams in het geheugen"
+      }
+    },
+    "storage": {
+      "label": "Streamopslag",
+      "help": "Schijfruimte voor JetStream (persistente streams)."
+    },
+    "policy": {
+      "label": "Als het geheugen vol is",
+      "help": "Wat de server doet wanneer de gegevens zijn geheugen vullen.",
+      "values": {
+        "noeviction": {
+          "label": "Schrijfacties weigeren",
+          "description": "Er worden nooit gegevens verwijderd: schrijfacties mislukken tot er geheugen vrijkomt."
+        },
+        "allkeys-lru": {
+          "label": "Minst recent gebruikte verwijderen",
+          "description": "Elke sleutel kan worden verwijderd, de minst recent gebruikte eerst (cache)."
+        },
+        "allkeys-lfu": {
+          "label": "Minst gebruikte verwijderen",
+          "description": "Elke sleutel kan worden verwijderd, de minst gebruikte eerst."
+        },
+        "volatile-lru": {
+          "label": "Verlopende sleutels verwijderen (LRU)",
+          "description": "Alleen sleutels met een vervaltijd worden verwijderd, de minst recent gebruikte eerst."
+        },
+        "volatile-lfu": {
+          "label": "Verlopende sleutels verwijderen (LFU)",
+          "description": "Alleen sleutels met een vervaltijd worden verwijderd, de minst gebruikte eerst."
+        },
+        "volatile-ttl": {
+          "label": "Eerst verlopende verwijderen",
+          "description": "Alleen sleutels met een vervaltijd worden verwijderd, die het eerst verlopen eerst."
+        }
+      }
+    },
+    "persistence": {
+      "label": "Persistentie",
+      "help": "Hoe de gegevens een herstart overleven.",
+      "values": {
+        "aof": {
+          "label": "Logboek (AOF)",
+          "description": "Elke schrijfactie wordt gelogd en elke seconde weggeschreven: hooguit één seconde verlies."
+        },
+        "rdb": {
+          "label": "Snapshots",
+          "description": "Periodieke snapshots: schrijfacties sinds de laatste kunnen verloren gaan."
+        },
+        "none": {
+          "label": "Geen",
+          "description": "Alleen geheugen: de gegevens gaan bij elke herstart verloren."
+        },
+        "on": {
+          "label": "Op schijf",
+          "description": "Bewaarde berichten en persistente sessies overleven een herstart."
+        },
+        "off": {
+          "label": "Alleen in geheugen",
+          "description": "Verloren bij herstart; minder schrijfacties."
+        }
+      }
+    },
+    "scripting": {
+      "label": "Lua-scripts",
+      "help": "EVAL en functies (sommige bibliotheken hebben ze nodig).",
+      "values": {
+        "on": {
+          "label": "Toegestaan",
+          "description": "Scripts en functies zijn bruikbaar."
+        },
+        "off": {
+          "label": "Uitgeschakeld",
+          "description": "Kleiner aanvalsoppervlak; scripts worden geweigerd."
+        }
+      }
+    },
+    "modules": {
+      "label": "Redis-modules",
+      "help": "JSON, zoeken, tijdreeksen en probabilistische structuren die bij Redis 8 horen.",
+      "values": {
+        "off": {
+          "label": "Uitgeschakeld",
+          "description": "Alleen basisopdrachten (kleiner aanvalsoppervlak)."
+        },
+        "on": {
+          "label": "Ingeschakeld",
+          "description": "JSON, zoeken, tijdreeksen, Bloom-filters…"
+        }
+      }
+    },
+    "quota": {
+      "label": "Opslagquotum",
+      "help": "Maximale ruimte voor de objecten, hun versies en lopende uploads. Verlagen onder de gebruikte ruimte weigert nieuwe schrijfacties; er wordt niets verwijderd."
+    },
+    "encryption": {
+      "label": "Versleuteling aan de serverkant",
+      "help": "Elk geschreven object wordt op schijf versleuteld (SSE-S3, AES-256-GCM) met een sleutel die voor deze instantie is gegenereerd. Gekozen bij het aanmaken.",
+      "values": {
+        "off": {
+          "label": "Uitgeschakeld",
+          "description": "Objecten worden opgeslagen zoals ze worden verzonden."
+        },
+        "on": {
+          "label": "Ingeschakeld",
+          "description": "Versleuteld in rust; de sleutel blijft op de server, apart van de gegevens. Iets meer CPU."
+        }
+      }
+    },
+    "message-size": {
+      "label": "Maximale berichtgrootte",
+      "help": "Grotere berichten worden geweigerd."
+    },
+    "payload": {
+      "label": "Maximale berichtgrootte",
+      "help": "NATS raadt kleine berichten aan: grote kosten geheugen voor elke client."
+    },
+    "queued": {
+      "label": "Wachtende berichten per client",
+      "help": "Berichten die worden bewaard voor een losgekoppelde of trage client (QoS 1 en 2) voordat nieuwe worden verworpen."
+    },
+    "limits": {
+      "label": "SQS-limieten",
+      "help": "Toegestane berichtgrootte, vertragingen en time-outs.",
+      "values": {
+        "strict": {
+          "label": "Strikt",
+          "description": "Dezelfde limieten als Amazon SQS: wat hier werkt, werkt op AWS."
+        },
+        "relaxed": {
+          "label": "Ruimer",
+          "description": "Grotere berichten en langere vertragingen dan Amazon SQS toestaat (ontwikkeling, migraties)."
+        }
+      }
+    }
+  },
+  "dedicated": {
+    "columns": {
+      "name": "Naam",
+      "version": "Versie",
+      "size": "Grootte"
+    }
+  },
+  "forbidden": "Services zijn voorbehouden aan beheerders.",
+  "purge": {
+    "title": "{{name}} verwijderen?",
+    "content": "De bestanden van deze instantie zijn buiten het panel bewerkt; het panel voert ze niet uit. Verwijderen haalt haar containers en AL haar gegevens weg, inclusief elke database die ze bevat: niets kan worden hersteld (tenzij archiveren op de server is ingeschakeld). De bewerkte bestanden worden nooit uitgevoerd.",
+    "confirmLabel": "Typ de naam van de instantie om te bevestigen:",
+    "submit": "Definitief verwijderen"
+  },
+  "networks": {
+    "column": "Netwerken",
+    "label": "Netwerken",
+    "edit": "Netwerken wijzigen",
+    "sectionTitle": "Netwerken",
+    "help": "Privénetwerken waaraan de instantie deelneemt: alleen de sites op een van die netwerken bereiken haar.",
+    "accessTitle": "Netwerktoegang",
+    "accessSubtitle": "Netwerken en gepubliceerde poort van de instantie. Elke wijziging wordt direct toegepast en herstart de instantie.",
+    "modalTitle": "Netwerken van {{name}}",
+    "required": "Kies minstens één netwerk.",
+    "privateRequired": "{{engine}} heeft geen authenticatie: het kan niet aan het gedeelde netwerk deelnemen. Kies een privénetwerk: alleen de sites daarop bereiken de instantie.",
+    "unauthenticatedShared": "Geen authenticatie: niet op het gedeelde netwerk",
+    "existingInstance": "De instantie {{engine}} {{version}} draait al: de database wordt op haar netwerken aangemaakt. Wijzig ze vanuit de lijst met instanties.",
+    "restart": "Opslaan maakt {{container}} opnieuw aan: de clients worden enkele seconden losgekoppeld. Sites die geen netwerk meer met de instantie delen, verliezen de toegang ertoe.",
+    "saved": "Netwerken van {{name}} bijgewerkt."
+  },
+  "exposure": {
+    "edit": "Gepubliceerde poort instellen",
+    "title": "Gepubliceerde poort van {{name}}",
+    "intro": "Publiceer de poort op een adres van de server zodat clients buiten Docker verbinding kunnen maken. Wordt direct toegepast: de instantie herstart (enkele seconden onbeschikbaar).",
+    "current": "Gepubliceerd op",
+    "tls": "Versleuteling",
+    "fingerprint": "SHA-256-vingerafdruk van het certificaat",
+    "notPublished": "Niet gepubliceerd: alleen de sites op haar netwerken bereiken de instantie.",
+    "address": "Adres",
+    "addressHelp": "Toegestaan door de server: {{cidrs}}",
+    "addressNone": "De serverconfiguratie staat geen enkel adres toe (SERVICES_EXPOSE_ALLOWED_CIDRS): de poort kan niet worden gepubliceerd.",
+    "addressRequired": "Voer een adres in.",
+    "addressInvalid": "Voer een IP-adres in, bijv. 127.0.0.1.",
+    "addressNotAllowed": "Dit adres is niet toegestaan door de serverconfiguratie.",
+    "port": "Poort",
+    "portHelp": "Van {{min}} tot {{max}}.",
+    "portRequired": "Voer een poort in.",
+    "portRange": "De poort moet tussen {{min}} en {{max}} liggen.",
+    "portReserved": "Deze poort is op deze server gereserveerd.",
+    "tlsOptional": "TLS optioneel",
+    "tlsOptionalHelp": "Biedt TLS aan zonder het te vereisen, voor clients die het niet kunnen gebruiken. Clients zonder TLS sturen hun wachtwoord en gegevens onversleuteld.",
+    "loopbackOnly": {
+      "deprecated": "Deze versie wordt niet meer ondersteund: ze kan alleen op een loopback-adres (127.0.0.1) worden gepubliceerd.",
+      "unauthenticated": "Deze engine heeft geen authenticatie: ze kan alleen op een loopback-adres (127.0.0.1) worden gepubliceerd.",
+      "noTls": "Deze engine kan TLS niet verplichten: ze kan alleen op een loopback-adres (127.0.0.1) worden gepubliceerd."
+    },
+    "loopbackNote": "Loopback-adres: alleen bereikbaar vanaf de server zelf (bijv. via een SSH-tunnel).",
+    "tlsRequired": "TLS wordt verplicht voor alle clients van deze instantie, ook voor de sites binnen Docker: controleer vóór het publiceren dat ze met TLS verbinden.",
+    "noEncryption": "TLS is uitgeschakeld op deze server: wachtwoorden en gegevens gaan onversleuteld over het netwerk.",
+    "submit": "Publiceren",
+    "close": "Poort sluiten",
+    "closeConfirm": {
+      "title": "De poort van {{name}} sluiten?",
+      "content": "De instantie herstart zonder gepubliceerde poort: clients buiten Docker kunnen geen verbinding meer maken.",
+      "submit": "Poort sluiten"
+    },
+    "toasts": {
+      "published": "Poort gepubliceerd op {{address}}.",
+      "closed": "Poort gesloten."
+    }
+  },
+  "support": {
+    "active": "Support: {{date}}",
+    "security": "Beveiliging: {{date}}",
+    "activeUntil": "Actieve ondersteuning tot {{date}}",
+    "activeEnded": "Actieve ondersteuning beëindigd op {{date}}",
+    "activeTooltip": "Bugfixes door de beheerders.",
+    "securityUntil": "Beveiligingsondersteuning tot {{date}}",
+    "securityEnded": "Beveiligingsondersteuning beëindigd op {{date}}",
+    "securityTooltip": "Beveiligingsupdates door de beheerders (end of life).",
+    "securityEndedTooltip": "Geen beveiligingsupdates meer: stap over op een nieuwere versie.",
+    "ended": "Beveiligingsondersteuning beëindigd",
+    "pinned": "Vastgezet",
+    "pinnedTooltip": "Aangeboden omdat de serverconfiguratie deze versie vastzet."
+  },
+  "update": {
+    "available": "Update beschikbaar",
+    "availableHint": "Er is een nieuwere image of versie beschikbaar voor deze instantie.",
+    "action": "Bijwerken",
+    "title": "{{name}} bijwerken",
+    "current": "Huidige versie",
+    "choose": "Bijwerken naar",
+    "none": "Deze instantie is up-to-date.",
+    "image": "Nieuwste image van {{engine}} {{version}}",
+    "imageHint": "Dezelfde versie, met de nieuwste fixes: het gegevensformaat verandert niet.",
+    "restartWarning": "De instantie wordt herstart: open verbindingen worden verbroken en clients moeten opnieuw verbinden. Het downloaden van de image en het herstarten kan enkele minuten duren.",
+    "rollbackNote": "Als de instantie niet start, wordt de vorige versie hersteld.",
+    "noDowngrade": "Er is geen weg terug: gegevens geschreven door {{engine}} {{version}} zijn mogelijk niet leesbaar voor een oudere versie. De gegevens worden vóór de wijziging niet geback-upt: maak eerst een back-up.",
+    "submit": "Bijwerken",
+    "updated": "{{name}} bijgewerkt ({{engine}} {{version}}).",
+    "upToDate": "{{name}} is al up-to-date.",
+    "startFailed": "De instantie is niet gestart met de update: de vorige versie is hersteld."
+  },
+  "catalog": {
+    "check": "Controleren op updates",
+    "checked": "Versies gecontroleerd {{when}}",
+    "never": "Versies nog niet gecontroleerd: ingebouwde lijst in gebruik.",
+    "failed": "Laatste controle onvolledig voor: {{engines}}. De getoonde versies en datums zijn mogelijk verouderd.",
+    "done": "Versies gecontroleerd.",
+    "throttled": "Er is net een controle uitgevoerd: probeer het over enkele seconden opnieuw."
+  },
+  "presentation": {
+    "mysql": "MySQL® is een relationele open-sourcedatabase die veel gebruikt wordt door webapplicaties en contentmanagementsystemen zoals WordPress. Maak een database aan om een gebruiker en de verbindingsgegevens voor uw site te krijgen.",
+    "mariadb": "MariaDB® is een relationele open-sourcedatabase die begon als fork van MySQL en er grotendeels compatibel mee is gebleven. Hij wordt veel gebruikt door PHP-applicaties en contentmanagementsystemen. Maak een database aan om een gebruiker en de verbindingsgegevens voor uw site te krijgen.",
+    "postgres": "PostgreSQL® is een relationele open-sourcedatabase, bekend om de naleving van standaarden, transacties en uitgebreide SQL-functies. Hij past bij de meeste webapplicaties, van contentbeheer tot bedrijfssoftware. Maak een database aan om een gebruiker en de verbindingsgegevens voor uw site te krijgen.",
+    "mongodb": "MongoDB® is een documentdatabase: hij slaat gegevens op als flexibele, JSON-achtige documenten in plaats van tabellen. Hij past bij applicaties waarvan de gegevens genest zijn of vaak van vorm veranderen. Maak een database aan om een gebruiker en de verbindingsgegevens voor uw site te krijgen.",
+    "redis": "Redis® is een key-value-opslag in het geheugen, veel gebruikt voor caching, sessies, wachtrijen en tellers. De gegevens staan in het geheugen en kunnen naar schijf worden geschreven. Maak een instantie aan: die draait in een eigen container met het geheugen dat u kiest.",
+    "valkey": "Valkey™ is een open-source key-value-opslag in het geheugen, een fork van Redis die onder de Linux Foundation wordt onderhouden. Hij werkt met Redis-clients en wordt veel gebruikt voor caching, sessies en wachtrijen. Maak een instantie aan: die draait in een eigen container met het geheugen dat u kiest.",
+    "rabbitmq": "RabbitMQ® is een open-source message broker gebouwd rond het AMQP-protocol. Applicaties gebruiken de wachtrijen om taken aan achtergrondworkers over te dragen en betrouwbaar berichten uit te wisselen. Maak een virtuele host aan om een geïsoleerde ruimte met een eigen gebruiker te krijgen.",
+    "nats": "NATS® is een open-source berichtensysteem en een CNCF-project, met publish-subscribe, request-reply en, met JetStream, persistente streams. Services gebruiken het om in realtime berichten uit te wisselen. Maak een instantie aan om berichten te publiceren en te ontvangen.",
+    "s3": "Loch S3 is objectopslag die compatibel is met de Amazon S3-API, ontwikkeld door Loch.sh. Applicaties slaan er bestanden zoals uploads, media en back-ups in op en leveren ze uit met elke S3-client of -SDK. Maak een instantie aan om een bucket en de bijbehorende toegangssleutels te krijgen.",
+    "elasticmq": "ElasticMQ is een open-source berichtenwachtrij die compatibel is met de Amazon SQS-API. Applicaties die voor SQS geschreven zijn, kunnen berichten verzenden en ontvangen zonder AWS-account, wat handig is voor ontwikkeling en tests. Maak een instantie aan om een eigen wachtrijserver te krijgen.",
+    "mosquitto": "Eclipse Mosquitto™ is een open-source MQTT-broker van de Eclipse Foundation. MQTT is een lichtgewicht publish-subscribe-protocol, veel gebruikt door verbonden apparaten, sensoren en dashboards. Maak een instantie aan om een broker met een eigen gebruiker te krijgen."
+  }
+}

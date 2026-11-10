@@ -1,0 +1,74 @@
+{
+  "title": "API keys",
+  "newKey": "New key",
+  "empty": "No API keys",
+  "table": {
+    "columns": {
+      "name": "Name",
+      "prefix": "Prefix",
+      "permissions": "Permissions",
+      "expiresAt": "Expires on",
+      "createdAt": "Created on",
+      "lastUsed": "Last used",
+      "actions": "Actions"
+    },
+    "allScopes": "All",
+    "expired": "(expired)"
+  },
+  "revoke": {
+    "title": "Revoke this key?",
+    "description": "This action cannot be undone.",
+    "action": "Revoke"
+  },
+  "create": {
+    "title": "Create an API key",
+    "failed": "Failed to create the key",
+    "form": {
+      "name": {
+        "label": "Name",
+        "required": "Name is required",
+        "help": "A descriptive name to identify this key (e.g. CLI MacBook Pro)",
+        "placeholder": "My CLI key"
+      },
+      "expiresInDays": {
+        "label": "Validity period (days)",
+        "required": "Duration is required",
+        "range": "Duration must be between {{min}} and {{max}} days",
+        "help": "Maximum duration: {{max}} days"
+      },
+      "scopes": {
+        "label": "Permissions",
+        "required": "At least one permission is required"
+      }
+    }
+  },
+  "created": {
+    "title": "API key created",
+    "ok": "I have copied my key",
+    "warning": "Copy this key now. It will not be shown again.",
+    "copied": "Key copied to clipboard",
+    "cliHelp": "Configure the CLI, then paste the key when prompted: <configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd> then <loginCmd>loch login</loginCmd>",
+    "serverName": "my-server"
+  },
+  "scopes": {
+    "all": "All permissions",
+    "containersRead": "Read (list, inspect)",
+    "containersLogs": "Logs (download, streaming)",
+    "containersActions": "Actions (start, stop, restart, kill, delete)",
+    "containersShell": "Shell (remote terminal)",
+    "containersStats": "Stats (real-time monitoring)",
+    "containersProxy": "Proxy (port tunnel)",
+    "containersCp": "File copy (cp)",
+    "cron": "Cron jobs",
+    "sftpRead": "SFTP (read)",
+    "sftpWrite": "SFTP (create, edit, delete)",
+    "hostingRead": "Hosting (read)",
+    "hostingWrite": "Hosting (create, edit, deploy, delete)",
+    "networksRead": "Private networks (read)",
+    "networksWrite": "Private networks (create, attach, detach, delete)",
+    "servicesRead": "Databases (read)",
+    "servicesWrite": "Databases (create, new password, delete)",
+    "servicesExpose": "Databases (publish a port)",
+    "auditRead": "Audit trail (read)"
+  }
+}

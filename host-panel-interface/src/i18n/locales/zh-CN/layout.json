@@ -1,0 +1,45 @@
+{
+  "menu": {
+    "home": "首页",
+    "containers": "容器",
+    "hostingSites": "站点",
+    "sftpShort": "SFTP",
+    "domains": "域名",
+    "networks": "私有网络",
+    "cron": "计划任务",
+    "users": "用户",
+    "apiKeys": "API 密钥",
+    "logout": "退出登录",
+    "groups": {
+      "compute": "计算",
+      "serverless": "无服务器",
+      "hosting": "托管",
+      "network": "网络",
+      "admin": "管理",
+      "security": "安全",
+      "database": "数据库",
+      "cache": "缓存",
+      "messaging": "消息",
+      "storage": "存储",
+      "queue": "队列"
+    },
+    "auditTrail": "审计日志",
+    "services": {
+      "mysql": "MySQL®",
+      "mariadb": "MariaDB®",
+      "postgres": "PostgreSQL®",
+      "mongodb": "MongoDB®",
+      "redis": "Redis®",
+      "valkey": "Valkey™",
+      "rabbitmq": "RabbitMQ®",
+      "nats": "NATS®",
+      "s3": "Loch S3",
+      "elasticmq": "ElasticMQ",
+      "mosquitto": "Eclipse Mosquitto™"
+    },
+    "functions": "函数"
+  },
+  "openMenu": "打开菜单",
+  "collapseMenu": "收起菜单",
+  "expandMenu": "展开菜单"
+}

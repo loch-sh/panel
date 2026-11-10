@@ -1,0 +1,163 @@
+{
+  "title": "スケジュールタスク",
+  "newJob": "新規タスク",
+  "jobTypes": {
+    "dockerAction": "Docker 操作",
+    "dockerExec": "Docker コマンド",
+    "http": "HTTP",
+    "httpRequest": "HTTP リクエスト",
+    "functionInvoke": "関数の呼び出し",
+    "function": "関数"
+  },
+  "statuses": {
+    "pending": "待機中",
+    "running": "実行中",
+    "success": "成功",
+    "error": "エラー",
+    "skipped": "実行をスキップ"
+  },
+  "modes": {
+    "disabled": "無効",
+    "once": "1 回のみ実行",
+    "recurring": "定期実行",
+    "disabledByPanel": "パネルにより無効化"
+  },
+  "dockerActions": {
+    "start": "起動",
+    "stop": "停止",
+    "restart": "再起動",
+    "kill": "強制終了 (kill)"
+  },
+  "table": {
+    "columns": {
+      "name": "名前",
+      "schedule": "スケジュール",
+      "type": "種類",
+      "target": "対象",
+      "mode": "モード",
+      "lastStatus": "最終ステータス",
+      "lastRun": "最終実行",
+      "actions": "操作"
+    },
+    "actions": {
+      "runNow": "今すぐ実行",
+      "suspend": "一時停止",
+      "enable": "有効化"
+    },
+    "details": {
+      "error": "エラー：",
+      "output": "出力：",
+      "lastSkipped": "{{date}} の前回の実行は、その前の実行がまだ続いていたためスキップされました。",
+      "functionRun": "{{duration}} ms、レスポンス {{bytes}} バイト",
+      "functionError": "関数のエラー：{{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "タスクの削除",
+      "content": "このスケジュールタスクを削除してもよろしいですか？"
+    },
+    "suspend": {
+      "title": "タスクの一時停止",
+      "content": "タスク「{{name}}」を一時停止してもよろしいですか？",
+      "ok": "一時停止"
+    },
+    "enable": {
+      "title": "タスクの有効化",
+      "content": "タスク「{{name}}」を有効にしてもよろしいですか？",
+      "ok": "有効化"
+    },
+    "run": {
+      "title": "今すぐ実行",
+      "content": "タスク「{{name}}」を今すぐ実行してもよろしいですか？",
+      "ok": "実行"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "新規スケジュールタスク",
+      "edit": "タスクの編集"
+    },
+    "submit": {
+      "update": "更新"
+    },
+    "fields": {
+      "name": {
+        "label": "名前",
+        "required": "名前は必須です",
+        "placeholder": "例：Symfony のキャッシュをクリア"
+      },
+      "schedule": {
+        "label": "cron 式",
+        "required": "cron 式は必須です",
+        "invalid": "無効な cron 式です",
+        "help": "形式：分 時 日 月 曜日（例：0 3 * * * または @every 5m）"
+      },
+      "type": {
+        "label": "種類"
+      },
+      "enabled": {
+        "label": "有効"
+      },
+      "once": {
+        "label": "1 回のみ実行",
+        "tooltip": "初回実行後に自動的に無効になります"
+      },
+      "container": {
+        "label": "コンテナ",
+        "required": "コンテナは必須です",
+        "placeholder": "コンテナを選択"
+      },
+      "action": {
+        "label": "操作",
+        "required": "操作は必須です"
+      },
+      "command": {
+        "label": "コマンド",
+        "required": "コマンドは必須です"
+      },
+      "workingDir": {
+        "label": "作業ディレクトリ",
+        "help": "既定ではコンテナで定義されたディレクトリが使用されます"
+      },
+      "httpMethod": {
+        "label": "メソッド",
+        "required": "メソッドは必須です"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "URL は必須です"
+      },
+      "httpBody": {
+        "label": "リクエストボディ"
+      },
+      "httpTimeout": {
+        "label": "タイムアウト（秒）"
+      },
+      "function": {
+        "label": "関数",
+        "required": "関数は必須です",
+        "placeholder": "関数を選択",
+        "help": "関数はパネルから呼び出されます（関数ページの「テスト」タブと同様）。1 つの関数につきスケジュールタスクは最大 5 件です。",
+        "none": "関数なし"
+      },
+      "functionEvent": {
+        "label": "イベント (JSON)",
+        "help": "ハンドラーにイベントとして渡される 1 つの JSON 値です。空の場合は {} になります。最大 64 KB。",
+        "invalid": "イベントは有効な JSON 値 1 つである必要があります",
+        "tooLarge": "イベントが 64 KB を超えています"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "定期実行：{{interval}} ごと",
+    "yearly": "年 1 回、1 月 1 日の午前 0 時",
+    "monthly": "月 1 回、1 日の午前 0 時",
+    "weekly": "週 1 回、日曜日の午前 0 時",
+    "daily": "1 日 1 回、午前 0 時",
+    "hourly": "1 時間ごと"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "呼び出し先の関数が削除されたため、自動的に無効化されました。"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Starten",
+    "restart": "Neu starten",
+    "stop": "Stoppen",
+    "kill": "Beenden (kill)",
+    "delete": "Löschen",
+    "detachedTerminal": "Separates Terminal",
+    "detailsAndTerminal": "Details und Terminal"
+  },
+  "stackActions": {
+    "start": "Stack starten",
+    "stop": "Stack stoppen",
+    "restart": "Stack neu starten",
+    "started": "Stack „{{name}}“ gestartet",
+    "stopped": "Stack „{{name}}“ gestoppt",
+    "restarted": "Stack „{{name}}“ neu gestartet",
+    "partialFailure": "Stack „{{name}}“: {{failed}} von {{total}} Containern konnten nicht verarbeitet werden"
+  },
+  "confirm": {
+    "delete": "Möchten Sie den Container „{{name}}“ wirklich löschen?",
+    "stop": "Möchten Sie den Container „{{name}}“ wirklich stoppen?",
+    "kill": "Möchten Sie den Container „{{name}}“ wirklich beenden (kill)? Diese Aktion erfolgt sofort und lässt dem Prozess keine Zeit, sauber herunterzufahren.",
+    "stackStop": "Möchten Sie wirklich alle Container des Stacks „{{name}}“ stoppen?",
+    "stackRestart": "Möchten Sie wirklich alle Container des Stacks „{{name}}“ neu starten? Seine Dienste sind kurzzeitig nicht verfügbar."
+  },
+  "list": {
+    "title": "Container-Liste",
+    "searchPlaceholder": "Container oder Stack suchen...",
+    "filterActive": "Aktiv",
+    "filterAll": "Alle",
+    "filterErrors": "Fehler",
+    "noStack": "Ohne Stack",
+    "errorExitsTooltip": "Mindestens ein Container wurde unerwartet beendet",
+    "hostingTag": "Hosting",
+    "serviceTag": "Dienst",
+    "type": {
+      "label": "Stack-Typ",
+      "all": "Alle",
+      "hosting": "Hosting",
+      "services": "Dienste",
+      "other": "Andere"
+    },
+    "stackFilter": "Stack: {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Container",
+    "id": "ID",
+    "name": "Name",
+    "state": "Status",
+    "webRouting": "Web-Routing",
+    "actions": "Aktionen"
+  },
+  "table": {
+    "copyIdTooltip": "Vollständige Container-ID kopieren",
+    "idCopied": "Die ID wurde kopiert!",
+    "abnormalExit": "Unerwartet beendet"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} aktiv"
+  },
+  "sidePanel": {
+    "title": "Container-Details",
+    "fullScreen": "Vollbild",
+    "consoleOnly": "Nur Konsole",
+    "noData": "Keine Daten für diesen Container",
+    "heading": "Container {{name}}",
+    "compose": {
+      "title": "Von Compose gestartet",
+      "project": "✅ Projekt {{project}}",
+      "no": "❌ Nein"
+    },
+    "identifier": "Kennung",
+    "image": "Image",
+    "currentState": "Aktueller Status",
+    "startedAt": {
+      "title": "Gestartet",
+      "value": "Am {{date}} um {{time}}"
+    },
+    "restartCount": "Anzahl der Neustarts",
+    "network": "Netzwerk",
+    "mounts": "Einhängepunkte",
+    "none": "Keine",
+    "hostPath": "Host-Pfad",
+    "logPath": "Log-Pfad",
+    "logs": {
+      "title": "Live-Logs",
+      "show": "Logs anzeigen",
+      "close": "Logs schließen"
+    },
+    "terminal": {
+      "title": "Interaktives Docker-Terminal",
+      "open": "Terminal öffnen",
+      "detach": "Abdocken",
+      "detachPopup": "In einem Pop-up abdocken",
+      "unavailable": "Das Terminal ist nicht verfügbar (vermutlich fehlt <code>tty:true</code> in der Compose-Datei, oder der Container wurde nicht mit dem Argument <code>-t</code> gestartet)."
+    }
+  },
+  "mountTable": {
+    "type": "Typ",
+    "source": "Quelle",
+    "destination": "Ziel"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protokoll",
+    "localPort": "Lokaler Port",
+    "hostPort": "Host-Port"
+  },
+  "stats": {
+    "open": "Monitoring",
+    "close": "Monitoring schließen",
+    "live": "Live",
+    "cpuTotal": "CPU gesamt:",
+    "ramLabel": "RAM:",
+    "netLabel": "Netz:",
+    "columns": {
+      "container": "Container",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Netzwerk",
+      "pids": "PIDs"
+    }
+  },
+  "logViewer": {
+    "error": "Fehler"
+  },
+  "popupTerminal": {
+    "missingId": "Container-ID fehlt",
+    "windowTitle": "{{appName}} - Terminal",
+    "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  }
+}

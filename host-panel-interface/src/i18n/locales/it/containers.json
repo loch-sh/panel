@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "start": "Avvia",
+    "restart": "Riavvia",
+    "stop": "Arresta",
+    "kill": "Termina (kill)",
+    "delete": "Elimina",
+    "detachedTerminal": "Terminale separato",
+    "detailsAndTerminal": "Dettagli e terminale"
+  },
+  "stackActions": {
+    "start": "Avvia lo stack",
+    "stop": "Arresta lo stack",
+    "restart": "Riavvia lo stack",
+    "started": "Stack «{{name}}» avviato",
+    "stopped": "Stack «{{name}}» arrestato",
+    "restarted": "Stack «{{name}}» riavviato",
+    "partialFailure": "Stack «{{name}}»: non è stato possibile elaborare {{failed}} container su {{total}}"
+  },
+  "confirm": {
+    "delete": "Sei sicuro di voler eliminare il container «{{name}}»?",
+    "stop": "Sei sicuro di voler arrestare il container «{{name}}»?",
+    "kill": "Sei sicuro di voler terminare (kill) il container «{{name}}»? L'azione è immediata e non lascia al processo il tempo di arrestarsi correttamente.",
+    "stackStop": "Sei sicuro di voler arrestare tutti i container dello stack «{{name}}»?",
+    "stackRestart": "Sei sicuro di voler riavviare tutti i container dello stack «{{name}}»? I suoi servizi saranno brevemente non disponibili."
+  },
+  "list": {
+    "title": "Elenco dei container",
+    "searchPlaceholder": "Cerca un container, uno stack...",
+    "filterActive": "Attivi",
+    "filterAll": "Tutti",
+    "filterErrors": "Errori",
+    "noStack": "Senza stack",
+    "errorExitsTooltip": "Uno o più container si sono arrestati in modo anomalo",
+    "hostingTag": "Hosting",
+    "serviceTag": "Servizio",
+    "type": {
+      "label": "Tipo di stack",
+      "all": "Tutti",
+      "hosting": "Hosting",
+      "services": "Servizi",
+      "other": "Altri"
+    },
+    "stackFilter": "Stack: {{name}}"
+  },
+  "columns": {
+    "stack": "Stack",
+    "containers": "Container",
+    "id": "ID",
+    "name": "Nome",
+    "state": "Stato",
+    "webRouting": "Routing web",
+    "actions": "Azioni"
+  },
+  "table": {
+    "copyIdTooltip": "Copia l'ID completo del container",
+    "idCopied": "L'ID è stato copiato!",
+    "abnormalExit": "Arresto anomalo"
+  },
+  "stackStatus": {
+    "active": "{{running}}/{{total}} attivi"
+  },
+  "sidePanel": {
+    "title": "Dettagli del container",
+    "fullScreen": "Schermo intero",
+    "consoleOnly": "Solo console",
+    "noData": "Nessun dato per questo container",
+    "heading": "Container {{name}}",
+    "compose": {
+      "title": "Avviato da compose",
+      "project": "✅ Progetto {{project}}",
+      "no": "❌ No"
+    },
+    "identifier": "Identificativo",
+    "image": "Immagine",
+    "currentState": "Stato attuale",
+    "startedAt": {
+      "title": "Avvio",
+      "value": "Il {{date}} alle {{time}}"
+    },
+    "restartCount": "Numero di riavvii",
+    "network": "Rete",
+    "mounts": "Punti di montaggio",
+    "none": "Nessuno",
+    "hostPath": "Percorso fisico",
+    "logPath": "Percorso dei log",
+    "logs": {
+      "title": "Log in tempo reale",
+      "show": "Mostra i log",
+      "close": "Chiudi i log"
+    },
+    "terminal": {
+      "title": "Terminale interattivo Docker",
+      "open": "Apri un terminale",
+      "detach": "Separa",
+      "detachPopup": "Separa in un popup",
+      "unavailable": "Il terminale non è disponibile (probabilmente manca <code>tty:true</code> nel compose oppure il container non è stato avviato con l'argomento <code>-t</code>)."
+    }
+  },
+  "mountTable": {
+    "type": "Tipo",
+    "source": "Origine",
+    "destination": "Destinazione"
+  },
+  "networkTable": {
+    "ip": "IP",
+    "protocol": "Protocollo",
+    "localPort": "Porta locale",
+    "hostPort": "Porta host"
+  },
+  "stats": {
+    "open": "Monitoraggio",
+    "close": "Chiudi monitoraggio",
+    "live": "Live",
+    "cpuTotal": "CPU totale:",
+    "ramLabel": "RAM:",
+    "netLabel": "Rete:",
+    "columns": {
+      "container": "Container",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "network": "Rete",
+      "pids": "PID"
+    }
+  },
+  "logViewer": {
+    "error": "Errore"
+  },
+  "popupTerminal": {
+    "missingId": "ID del container mancante",
+    "windowTitle": "{{appName}} - Terminale",
+    "windowTitleWithName": "{{appName}} - Terminale #{{name}}"
+  }
+}

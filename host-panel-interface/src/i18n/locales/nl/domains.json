@@ -1,0 +1,29 @@
+{
+  "title": "Domeinoverzicht",
+  "toolbar": {
+    "searchPlaceholder": "Zoek een domein, een container...",
+    "tldPlaceholder": "Filteren op TLD",
+    "activeOnly": "Actief",
+    "all": "Alle",
+    "views": {
+      "table": "Tabel",
+      "graph": "Grafiek"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "Domein",
+      "router": "Router",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "Service",
+      "container": "Container",
+      "state": "Status",
+      "image": "Image"
+    }
+  },
+  "graph": {
+    "empty": "Geen Traefik-domein gevonden"
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "title": "私有网络",
+  "intro": "为站点和服务提供的隔离网络：只有同一网络的成员才能互相访问。所有网络都是内部网络：不提供互联网访问。",
+  "forbidden": "私有网络仅限管理员使用。",
+  "newNetwork": "新建网络",
+  "empty": "暂无私有网络",
+  "columns": {
+    "name": "名称",
+    "subnet": "子网",
+    "gateway": "网关",
+    "members": "成员",
+    "properties": "属性",
+    "description": "描述",
+    "actions": "操作"
+  },
+  "tags": {
+    "shared": "共享",
+    "private": "私有",
+    "noInternet": "无互联网访问",
+    "reservedOverlap": "保留网段"
+  },
+  "tagHints": {
+    "shared": "服务模块的网络：其中的每个站点都可以访问其中的服务。无法删除。",
+    "private": "只有其成员可以互相访问。",
+    "noInternet": "内部网络：其成员无法通过它访问互联网。",
+    "reservedOverlap": "其子网与保留网段 {{range}}（Docker 之外使用的局域网或 VPN）重叠：其容器可能无法访问该网段的地址。"
+  },
+  "state": {
+    "ok": "正常",
+    "missing": "缺失",
+    "compromised": "已被篡改"
+  },
+  "stateHints": {
+    "ok": "该 Docker 网络是面板创建的网络。",
+    "missing": "服务器上不存在该 Docker 网络：其成员无法在其上启动。API 会在下次启动时重新创建它。",
+    "compromised": "该 Docker 网络不是面板创建的网络：在修复之前，其成员不受信任。"
+  },
+  "problems": {
+    "replaced": "网络已在面板外被替换（ID 不同）。",
+    "notBridge": "它不是本地 bridge 网络。",
+    "notInternal": "它不是内部网络：其成员可能访问互联网。",
+    "unexpectedOptions": "它有意外的选项（IPv6 或配置网络）。",
+    "missingLabel": "缺少面板标签。",
+    "unexpectedLabel": "其面板标签指向另一个网络。",
+    "composeProject": "它是由 Compose 项目创建的。",
+    "unexpectedSubnet": "其子网与记录的不一致。",
+    "inspectFailed": "无法查询 Docker。",
+    "other": "意外的 Docker 网络。"
+  },
+  "automatic": "自动",
+  "delete": {
+    "title": "删除网络 {{name}}？",
+    "content": "将移除该 Docker 网络。只有在网络没有任何成员后才能删除。",
+    "submit": "删除",
+    "systemHint": "服务模块的共享网络无法删除。",
+    "inUseHint": "请先移出其成员。"
+  },
+  "toasts": {
+    "created": "网络 {{name}} 已创建。",
+    "deleted": "网络 {{name}} 已删除。",
+    "descriptionSaved": "描述已保存。",
+    "attached": "{{name}} 已连接到网络。",
+    "detached": "{{name}} 已与网络断开。",
+    "siteRedeploying": "正在使用新网络重新部署 {{name}}…",
+    "siteRedeployed": "{{name}} 已使用新网络重新部署。",
+    "siteRedeployFailed": "{{name}} 重新部署失败：请查看其最近一次操作。",
+    "disconnected": "容器 {{name}} 已断开连接。"
+  },
+  "create": {
+    "title": "新建私有网络",
+    "intro": "创建一个隔离网络，然后将站点和服务实例加入其中：只有其成员可以互相访问。",
+    "back": "返回列表",
+    "submit": "创建网络",
+    "sections": {
+      "name": {
+        "title": "名称",
+        "subtitle": "1 到 24 个小写字母、数字或连字符，以字母开头。创建后无法更改。"
+      },
+      "description": {
+        "title": "描述",
+        "subtitle": "可选：网络的用途。"
+      },
+      "addressing": {
+        "title": "地址分配",
+        "subtitle": "网络的 IPv4 地址段，只能设置一次（Docker 之后无法更改）。"
+      },
+      "members": {
+        "title": "成员",
+        "subtitle": "可选：网络创建后要接入的站点和服务实例。"
+      }
+    },
+    "nameLabel": "名称",
+    "namePlaceholder": "backend",
+    "nameRequired": "请输入名称。",
+    "nameInvalid": "1 到 24 个小写字母、数字或连字符，以字母开头且不能以连字符结尾。",
+    "nameReserved": "此名称为保留名称。",
+    "nameTaken": "已存在同名网络。",
+    "dockerName": "Docker 名称：{{name}}",
+    "descriptionLabel": "描述",
+    "descriptionPlaceholder": "商店及其数据库",
+    "descriptionInvalid": "不能包含控制字符，最多 200 个字符。",
+    "addressing": {
+      "automatic": {
+        "title": "自动",
+        "description": "由 Docker 选择一个空闲的私有地址段。"
+      },
+      "manual": {
+        "title": "手动指定子网",
+        "description": "自行选择地址段，例如为避免与 VPN 冲突。"
+      }
+    },
+    "subnetLabel": "子网（CIDR）",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "私有 IPv4 地址段（10.0.0.0/8、172.16.0.0/12、192.168.0.0/16 或 100.64.0.0/10），范围 /16 到 /28，使用其网络地址书写。",
+    "subnetRequired": "请输入子网，或选择“自动”。",
+    "subnetProblems": {
+      "format": "请以 CIDR 表示法输入 IPv4 地址段，例如 10.20.0.0/24。",
+      "networkAddress": "请使用网络地址书写地址段：{{expected}}。",
+      "prefixLength": "前缀长度必须在 /16 到 /28 之间。",
+      "privateRange": "地址段必须是私有的：10.0.0.0/8、172.16.0.0/12、192.168.0.0/16 或 100.64.0.0/10。",
+      "reserved": "该网段与保留网段 {{range}}（Docker 之外使用的局域网或 VPN）重叠。"
+    },
+    "usableHosts_other": "{{count}} 个可用地址",
+    "summary": {
+      "title": "摘要",
+      "name": "名称",
+      "dockerName": "Docker 名称",
+      "subnet": "子网",
+      "internet": "互联网访问",
+      "internetNone": "无（内部网络）",
+      "note": "网络创建时为空：请在其页面中加入站点和服务实例。",
+      "limit": "私有网络",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "成员",
+      "membersNone": "无"
+    },
+    "limitReached": "已达到 {{max}} 个私有网络的上限：请先删除一个网络。",
+    "ranges": {
+      "private": "允许的网段",
+      "reserved": "保留网段",
+      "reservedNone": "无",
+      "reservedHintManual": "与保留网段（Docker 之外使用的局域网或 VPN）重叠的子网会被拒绝。",
+      "reservedHintAutomatic": "如果 Docker 选择的网段与保留网段重叠，创建会被拒绝：此时请手动指定子网。"
+    },
+    "members": {
+      "label": "站点和服务实例",
+      "placeholder": "选择站点或服务实例",
+      "restart": "每个选中的成员都会带着此网络重新创建：其容器会中断几秒钟（站点会重新部署）。",
+      "failedHint": "网络已创建：请通过“加入资源”重新接入它们。",
+      "failedTitle_other": "{{count}} 个成员无法接入",
+      "partial_other": "网络 {{name}} 已创建，但有 {{count}} 个成员无法接入。"
+    }
+  },
+  "detail": {
+    "back": "返回网络列表",
+    "notFound": "此网络不存在（或已被删除）。",
+    "info": "信息",
+    "dockerName": "Docker 名称",
+    "id": "Docker ID",
+    "subnet": "子网",
+    "gateway": "网关",
+    "internet": "互联网访问",
+    "internetNone": "无（内部网络）",
+    "internetWarning": "非内部网络：成员可以访问互联网",
+    "created": "创建时间",
+    "createdBy": "{{date}}，由 {{user}} 创建",
+    "description": "描述",
+    "descriptionEmpty": "无描述",
+    "editDescription": "编辑描述",
+    "members": "成员",
+    "membersEmpty": "暂无成员：请加入站点或服务实例。",
+    "attach": "加入资源",
+    "systemNote": "服务模块的共享网络：服务实例默认加入该网络，其中的每个站点都可以访问它们。"
+  },
+  "members": {
+    "columns": {
+      "kind": "类型",
+      "name": "名称",
+      "container": "容器",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "状态",
+      "actions": "操作"
+    },
+    "kinds": {
+      "site": "站点",
+      "instance": "服务实例",
+      "panel": "面板",
+      "unmanaged": "未托管",
+      "function": "函数"
+    },
+    "panelHint": "面板本身：当有端口隧道（loch proxy）连接到其某个成员时，面板会加入该网络。",
+    "notConnected": "已声明但未连接",
+    "notConnectedHint": "其 compose 文件声明了此网络，但其容器不在网络中：容器已停止，或需要重新部署。",
+    "notDeclared": "已连接但未声明",
+    "notDeclaredHint": "容器在此网络中，但其 compose 文件未声明该网络：它是被手动连接的。",
+    "noContainer": "无容器",
+    "detach": "移出",
+    "lastNetworkHint": "服务实例至少保留一个网络：请先将其加入另一个网络。",
+    "detachConfirm": {
+      "title": "将 {{name}} 移出 {{network}}？",
+      "site": "站点将在没有此网络的情况下重新部署：其容器会被重新创建（中断几秒钟），且不再能访问此网络的成员。",
+      "instance": "{{container}} 将在没有此网络的情况下重启：其客户端会断开几秒钟，此网络中的站点将无法再访问它。",
+      "submit": "移出",
+      "function": "函数 {{name}} 将在不含此网络的情况下重新创建：此网络的成员将无法再调用它。"
+    },
+    "lastNetworkHintFunction": "函数至少要保留一个网络：请先将其连接到另一个网络。"
+  },
+  "unmanaged": {
+    "title_other": "此网络中有 {{count}} 个未由面板托管的容器",
+    "description": "它们是在面板之外加入此网络的（例如 CI 栈），可以访问其成员。如果不应如此，请断开它们。",
+    "disconnect": "断开连接",
+    "confirm": {
+      "title": "断开 {{name}}？",
+      "content": "容器将立即与网络断开。如果其自身的 compose 文件声明了该网络，重新部署后会再次加入。",
+      "submit": "断开连接"
+    }
+  },
+  "attach": {
+    "title": "将资源加入 {{network}}",
+    "intro": "该成员的容器将带着此网络重新创建：仅该容器会中断几秒钟。",
+    "resource": "资源",
+    "placeholder": "选择站点或服务实例",
+    "sites": "站点",
+    "instances": "服务实例",
+    "noResource": "没有可加入的站点或服务实例。",
+    "submit": "加入",
+    "disabled": {
+      "unauthenticated": "无认证：无法加入共享网络",
+      "modified": "已手动修改",
+      "operation": "操作进行中"
+    },
+    "restart": {
+      "site": "站点 {{name}} 将重新部署：其容器会被重新创建（中断几秒钟）。",
+      "instance": "{{container}} 将重启：其站点会断开连接几秒钟。",
+      "function": "函数 {{name}} 将连同此网络重新创建：正在进行的调用会被中断。"
+    },
+    "functions": "函数"
+  },
+  "select": {
+    "placeholder": "选择网络",
+    "unavailable": "不可用",
+    "createLink": "创建私有网络",
+    "loadFailed": "无法列出网络。"
+  },
+  "tabs": {
+    "private": "私有网络",
+    "docker": "其他 Docker 网络"
+  },
+  "docker": {
+    "intro": "面板不管理的 Docker 网络：Docker 自身的网络（bridge、host、none）、Compose 栈的网络（例如由 CI/CD 部署的栈、反向代理）以及手动创建的网络。它们以只读方式显示。",
+    "empty": "没有其他 Docker 网络",
+    "columns": {
+      "origin": "来源",
+      "driver": "驱动",
+      "containers": "容器"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose：{{project}}",
+      "other": "其他"
+    },
+    "originHints": {
+      "docker": "由 Docker 自身创建。",
+      "compose": "由 Compose 项目创建（例如由 CI/CD 部署的栈）。",
+      "other": "手动或由其他工具创建。"
+    },
+    "internet": "互联网访问",
+    "internetHint": "非内部网络：其容器可以通过它访问互联网。",
+    "internetYes": "是（非内部）",
+    "back": "返回 Docker 网络",
+    "title": "Docker 网络",
+    "notFound": "此 Docker 网络不存在（或已不存在），或者它是面板的网络。",
+    "readOnly": "此网络不由面板管理：以只读方式显示。",
+    "containersEmpty": "此网络上没有容器。",
+    "containersTitle_other": "{{count}} 个容器"
+  },
+  "site": {
+    "title": "面板网络",
+    "intro": "站点可以访问这些网络的其他成员（服务实例、站点）。连接或断开网络会重新部署站点：站点会重启几秒钟。",
+    "connect": "连接网络",
+    "disconnect": "断开",
+    "empty": "站点不在任何面板网络上。",
+    "columns": {
+      "type": "类型",
+      "state": "状态",
+      "warnings": "警告"
+    },
+    "connected": "已连接",
+    "connectedHint": "站点的容器在此网络上。",
+    "unknown": "未知网络",
+    "unknownHint": "站点的设置指定了面板不认识（或已不存在）的网络。",
+    "modifiedHint": "compose 文件已被手动编辑：无法在面板中更改网络。",
+    "busyHint": "此站点上有操作正在进行。",
+    "connectModal": {
+      "title": "将 {{name}} 连接到网络",
+      "network": "网络",
+      "placeholder": "选择网络",
+      "none": "站点已在所有面板网络上。",
+      "submit": "连接"
+    },
+    "toasts": {
+      "connected": "{{name}} 已连接到 {{network}}。",
+      "disconnected": "{{name}} 已从 {{network}} 断开。"
+    },
+    "other": {
+      "title": "其他 Docker 网络",
+      "intro": "站点容器所在的、面板不管理的网络（例如反向代理的网络）。只读。",
+      "empty": "站点容器不在其他任何 Docker 网络上。",
+      "loadFailed": "无法列出其他 Docker 网络。"
+    }
+  }
+}

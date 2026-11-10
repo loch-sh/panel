@@ -1,0 +1,53 @@
+{
+  "title": "ユーザー",
+  "currentUser": "現在のユーザー",
+  "table": {
+    "columns": {
+      "email": "メールアドレス",
+      "name": "名前",
+      "type": "種類",
+      "permissions": "権限",
+      "actions": "操作"
+    },
+    "permissions": {
+      "allContainers": "すべてのコンテナ",
+      "none": "なし",
+      "more": "{{list}}（+{{extra}}）"
+    }
+  },
+  "profiles": {
+    "admin": "管理者",
+    "restricted": "制限付き"
+  },
+  "actions": {
+    "makeRestricted": "制限付きユーザーに変更",
+    "makeAdmin": "管理者に変更",
+    "restrictAll": "すべてのコンテナへのアクセスを拒否"
+  },
+  "modals": {
+    "demote": {
+      "title": "制限付きユーザーに降格",
+      "content": "「{{email}}」を制限付きユーザーに降格してもよろしいですか？すべてのコンテナへのアクセス権が失われます。",
+      "ok": "降格"
+    },
+    "promote": {
+      "title": "管理者に昇格",
+      "content": "「{{email}}」を管理者に昇格してもよろしいですか？すべてのコンテナにアクセスできるようになります。",
+      "ok": "昇格"
+    },
+    "restrict": {
+      "title": "すべてのコンテナへのアクセスを拒否",
+      "content": "「{{email}}」を制限してもよろしいですか？このユーザーはコンテナを一切表示できなくなります。",
+      "ok": "制限"
+    },
+    "delete": {
+      "title": "ユーザーの削除",
+      "content": "「{{email}}」を削除してもよろしいですか？この操作は取り消せません。このユーザーの API キーも削除されます。"
+    }
+  },
+  "sidePanel": {
+    "title": "ユーザー {{name}} の権限を編集",
+    "searchPlaceholder": "コンテナを検索",
+    "validate": "確定"
+  }
+}

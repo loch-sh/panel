@@ -1,0 +1,502 @@
+{
+  "title": "Funções",
+  "intro": "Funções serverless: handlers escritos para o AWS Lambda™ (Node.js, Python) executados neste servidor, em um contêiner isolado iniciado sob demanda. O mesmo código também roda sem alterações no AWS Lambda.",
+  "trademarkNotice": "AWS Lambda é uma marca comercial da Amazon.com, Inc. ou de suas afiliadas. A Loch.sh não é afiliada à Amazon nem endossada por ela.",
+  "forbidden": "As funções são reservadas aos administradores.",
+  "disabled": "O módulo de funções está desativado neste servidor (FUNCTIONS_ENABLED).",
+  "configError": "O módulo de funções está ativado, mas não pôde iniciar: veja os logs da API.",
+  "runtimeNotReady": "Nenhum runtime de função confiável está instalado no servidor ainda: não é possível criar nem executar funções.",
+  "newFunction": "Nova função",
+  "createFirst": "Criar uma função",
+  "limitReached": "O limite de {{max}} funções foi atingido: exclua uma função primeiro.",
+  "noCode": "Sem código",
+  "presentation": {
+    "title": "Nenhuma função ainda",
+    "text": "Uma função é um handler (index.handler, lambda_function.lambda_handler) enviado como zip, com suas dependências. O painel a executa na imagem base do AWS Lambda publicada pela AWS, com a memória, a CPU e o tempo limite que você escolher; sites, serviços e outras funções nas redes dela a invocam com o AWS SDK ou com uma simples requisição HTTP.",
+    "security": "Cada função tem sua própria rede privada, nenhuma porta publicada e nenhum acesso à Internet, a menos que você o permita; suas credenciais de invocação são exibidas uma única vez."
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} funções",
+    "memory": "memória {{used}} / {{max}}",
+    "memoryUnbounded": "memória {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "Nome",
+    "runtime": "Runtime",
+    "state": "Estado",
+    "memory": "Memória",
+    "timeout": "Tempo limite",
+    "networks": "Redes",
+    "internet": "Internet",
+    "deployment": "Implantação ativa",
+    "deployedAt": "Implantada",
+    "actions": "Ações"
+  },
+  "tags": {
+    "purgeOnly": "Somente expurgo"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go, Rust… (runtime personalizado)"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript, ou TypeScript compilado para JavaScript.",
+    "python": "Módulos Python e suas dependências.",
+    "provided": "Qualquer linguagem compilada: um executável bootstrap compilado para Linux."
+  },
+  "states": {
+    "not_deployed": "Sem código",
+    "running": "Em execução",
+    "stopped": "Parada",
+    "missing": "Ausente",
+    "modified": "Editada fora do painel",
+    "unverified": "Não verificada",
+    "invalid": "Ilegível"
+  },
+  "stateHints": {
+    "not_deployed": "Criada, mas nenhum código foi enviado ainda: nada é executado.",
+    "running": "O contêiner da função está em execução e responde às invocações.",
+    "stopped": "A função está parada: inicie-a para invocá-la.",
+    "missing": "Há código implantado e a função não está parada, mas o contêiner dela não existe: inicie-a novamente.",
+    "modified": "O projeto Compose dela foi editado fora do painel: o painel nunca o executa. Expurgue-a.",
+    "unverified": "Há um contêiner em execução, mas não é o que o painel criou: ele não é usado.",
+    "invalid": "O arquivo de referência dela está ilegível: ela só pode ser expurgada."
+  },
+  "health": {
+    "unhealthy": "Não saudável",
+    "starting": "Iniciando"
+  },
+  "egress": {
+    "label": "Acesso à Internet",
+    "on": "Permitido",
+    "off": "Nenhum",
+    "onHint": "A função pode acessar a Internet (e o host, a LAN e os endpoints de metadados, salvo regras de firewall em contrário).",
+    "offHint": "A função só acessa os membros das redes dela.",
+    "help": "Desativado por padrão: a função só acessa os membros das redes dela.",
+    "warning": "Com acesso à Internet, o código da função pode enviar seus dados e segredos para qualquer lugar, e acessar o gateway do host, a LAN e os endpoints de metadados da nuvem, a menos que regras de firewall DOCKER-USER os bloqueiem.",
+    "enableTitle": "Permitir acesso à Internet para {{name}}?",
+    "disableTitle": "Remover o acesso à Internet de {{name}}?",
+    "recreate": "O contêiner da função é recriado: uma invocação em andamento é interrompida.",
+    "enable": "Permitir",
+    "disable": "Remover",
+    "enabledToast": "{{name}} pode acessar a Internet.",
+    "disabledToast": "{{name}} não acessa mais a Internet."
+  },
+  "sigv4": {
+    "label": "Chamadores SigV4 (AWS SDK)",
+    "bearer": "Os chamadores sempre se autenticam com um token bearer (Authorization: Bearer …), exibido uma única vez.",
+    "help": "Desativado por padrão. Ativado: clientes do AWS SDK também podem invocar a função com um par de chaves de acesso (endpoint-url http://fn-<name>:8080, região us-east-1).",
+    "warning": "O runtime precisa do próprio segredo SigV4: ele fica no contêiner, então o código da função pode lê-lo. Ele só permite invocar a função.",
+    "enabled": "Aceitos",
+    "disabled": "Não aceitos"
+  },
+  "actions": {
+    "test": "Testar",
+    "testOf": "Testar {{name}}",
+    "start": "Iniciar",
+    "startOf": "Iniciar {{name}}",
+    "stop": "Parar",
+    "stopOf": "Parar {{name}}",
+    "restart": "Reiniciar",
+    "restartOf": "Reiniciar {{name}}",
+    "delete": "Excluir",
+    "deleteOf": "Excluir {{name}}",
+    "purge": "Expurgar",
+    "purgeOf": "Expurgar {{name}}"
+  },
+  "confirm": {
+    "stop": {
+      "title": "Parar {{name}}?",
+      "content": "A função deixa de responder às invocações até ser iniciada novamente (as tarefas agendadas falham enquanto isso)."
+    },
+    "restart": {
+      "title": "Reiniciar {{name}}?",
+      "content": "O contêiner dela é reiniciado: as invocações em andamento são interrompidas."
+    }
+  },
+  "delete": {
+    "title": "Excluir a função {{name}}?",
+    "content": "O contêiner, o código, todas as implantações, os segredos, as credenciais de invocação e a rede própria dela são excluídos. Nada pode ser recuperado.",
+    "submit": "Excluir",
+    "confirmLabel": "Digite o nome para confirmar:"
+  },
+  "purge": {
+    "title": "Expurgar a função {{name}}?",
+    "content": "A função foi editada fora do painel: ela é removida sem executar nenhum de seus arquivos (contêineres, código, implantações, segredos, credenciais). Nada pode ser recuperado.",
+    "submit": "Expurgar"
+  },
+  "toasts": {
+    "created": "Função {{name}} criada.",
+    "updated": "Configuração de {{name}} salva.",
+    "deleted": "Função {{name}} excluída.",
+    "purged": "Função {{name}} expurgada.",
+    "networkKept": "A rede {{network}} foi mantida: outros membros ainda estão conectados a ela.",
+    "start": "{{name}} iniciada.",
+    "stop": "{{name}} parada.",
+    "restart": "{{name}} reiniciada.",
+    "rotated": "Novas credenciais para {{name}}."
+  },
+  "units": {
+    "mb": "MB",
+    "s": "s",
+    "seconds_one": "{{count}} segundo",
+    "seconds_many": "{{count}} segundos",
+    "seconds_other": "{{count}} segundos"
+  },
+  "create": {
+    "title": "Nova função",
+    "intro": "Uma função executa um handler escrito para o AWS Lambda™. Nada é executado até que o código seja implantado: envie um zip agora ou depois, pela página dela.",
+    "back": "Voltar às funções",
+    "submit": "Criar a função",
+    "latest": "Mais recente",
+    "runtimeLabel": "Runtime",
+    "versionLabel": "Versão",
+    "imageNote": "Imagem base do AWS Lambda publicada pela AWS para {{arch}}, baixada via mirror.gcr.io e fixada por digest.",
+    "handlerLabel": "Handler",
+    "handlerInvalid": "<file>.<function>: letras, dígitos, _ e -, pastas separadas por /, por exemplo index.handler ou src/app.handler.",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>, por exemplo index.handler para o handler exportado por index.js (ou index.mjs).",
+      "python": "<module>.<function>, por exemplo lambda_function.lambda_handler, ou app.main.handler.",
+      "provided": "Passado ao seu bootstrap em _HANDLER, que ele pode ler. Vazio: bootstrap."
+    },
+    "zipLabel": "Código (zip)",
+    "zipOptional": "Opcional: o handler e suas dependências, nunca compilados no servidor. Ele é enviado logo após a criação.",
+    "zipRemove": "Remover",
+    "sections": {
+      "runtime": {
+        "title": "Runtime",
+        "subtitle": "A linguagem e a versão dela."
+      },
+      "code": {
+        "title": "Código",
+        "subtitle": "O handler que o runtime chama e, opcionalmente, o zip a implantar."
+      },
+      "resources": {
+        "title": "Recursos",
+        "subtitle": "Limites do contêiner da função."
+      },
+      "env": {
+        "title": "Variáveis e segredos",
+        "subtitle": "Ambiente da função. Os segredos são mantidos à parte e nunca podem ser lidos de volta."
+      },
+      "networks": {
+        "title": "Acesso de rede",
+        "subtitle": "Quem pode invocar a função e o que ela pode acessar."
+      },
+      "invoke": {
+        "title": "Invocação",
+        "subtitle": "Como os chamadores nas redes dela se autenticam."
+      },
+      "name": {
+        "title": "Nome",
+        "subtitle": "De 1 a {{max}} letras minúsculas, dígitos ou hifens, começando por uma letra. É também o nome de host dela: fn-<name>."
+      }
+    },
+    "nameLabel": "Nome",
+    "nameRequired": "Informe um nome.",
+    "nameInvalid": "De 1 a 21 letras minúsculas, dígitos ou hifens, começando por uma letra e sem terminar com hífen.",
+    "nameReserved": "Este nome é reservado.",
+    "nameTaken": "Já existe uma função com este nome.",
+    "summary": {
+      "title": "Resumo",
+      "runtime": "Runtime",
+      "handler": "Handler",
+      "code": "Código",
+      "codeLater": "Enviado depois",
+      "resources": "Recursos",
+      "resourcesValue": "{{memory}}, {{cpus}} CPU, {{timeout}} s",
+      "env": "Ambiente",
+      "envValue": "{{variables}} variáveis, {{secrets}} segredos",
+      "networks": "Redes",
+      "internet": "Acesso à Internet",
+      "auth": "Autenticação",
+      "authBearer": "Token bearer",
+      "authSigv4": "Token bearer e SigV4",
+      "name": "Nome",
+      "endpoint": "URL interna",
+      "credentialsNote": "As credenciais de invocação são exibidas uma única vez, logo após a criação."
+    },
+    "setup": {
+      "title": "Configurando",
+      "secrets": "Segredos",
+      "code": "Envio do código",
+      "failed": "Falhou: {{error}} Faça novamente pela página da função."
+    },
+    "handlerOptionalLabel": "Handler (opcional)",
+    "handlerInvalidCustom": "Letras, dígitos, _, - e ., pastas separadas por /, nenhuma parte começando com . ou -; no máximo 128 caracteres.",
+    "bootstrap": {
+      "title": "O zip contém um executável bootstrap na raiz",
+      "help": "Compile-o para Linux {{arch}} e coloque-o em um zip, por exemplo em Go com aws-lambda-go:"
+    }
+  },
+  "resources": {
+    "memory": "Memória",
+    "memoryHelp": "De {{min}} a {{max}}.",
+    "cpus": "CPU",
+    "cpusHelp": "De {{min}} a {{max}}, em passos de 0,01.",
+    "timeout": "Tempo limite",
+    "timeoutHelp": "De 1 a {{max}} segundos por invocação.",
+    "tmp": "Tamanho de /tmp",
+    "tmpHelp": "De {{min}} a {{max}}.",
+    "tmpNote": "Os arquivos em /tmp contam no limite de memória: uma função que enche /tmp é interrompida por falta de memória.",
+    "budget": "Ainda disponível para as funções: {{memory}} de memória e {{cpus}} CPU.",
+    "overBudget": "Estes recursos excedem o que resta do orçamento das funções: a criação será recusada."
+  },
+  "env": {
+    "nameRequired": "Informe um nome.",
+    "nameInvalid": "Letras, dígitos e sublinhados, sem começar por um dígito.",
+    "nameReserved": "Este nome é reservado pelo runtime (AWS_LAMBDA_*, AWS_REGION, PATH…).",
+    "nameDuplicate": "Este nome já é usado por uma variável ou um segredo.",
+    "value": {
+      "lines": "Somente uma linha.",
+      "size": "No máximo 4096 bytes."
+    },
+    "variable": {
+      "title": "Variáveis",
+      "help": "Gravadas no arquivo Compose da função: não coloque segredos aqui.",
+      "empty": "Nenhuma variável.",
+      "add": "Adicionar uma variável",
+      "remove": "Remover a variável {{index}}",
+      "nameLabel": "Nome da variável {{index}}",
+      "valueLabel": "Valor da variável {{index}}",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "Valor"
+    },
+    "secret": {
+      "title": "Segredos",
+      "warning": "O valor de um segredo é gravado uma única vez: ele pode ser substituído ou removido, nunca exibido de novo, nem pelo painel nem por ninguém.",
+      "empty": "Nenhum segredo.",
+      "add": "Adicionar um segredo",
+      "remove": "Remover o segredo {{index}}",
+      "nameLabel": "Nome do segredo {{index}}",
+      "valueLabel": "Valor do segredo {{index}}",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "Valor secreto"
+    }
+  },
+  "networks": {
+    "title": "Redes",
+    "intro": "Os membros destas redes (sites, instâncias de serviço, outras funções) podem invocar a função pela URL interna dela. Uma função nunca entra na rede de serviços.",
+    "dedicated": "Rede dedicada",
+    "dedicatedHint": "Criada com a função, só para ela: conecte os sites ou serviços que a invocam.",
+    "dedicatedTag": "Dedicada",
+    "extra": "Outras redes privadas",
+    "extraHelp": "Opcional: redes nas quais a função também entra.",
+    "servicesRefused": "Uma função nunca entra na rede de serviços: conecte-a a uma rede privada.",
+    "connect": "Conectar uma rede",
+    "connectTitle": "Conectar {{name}} a uma rede",
+    "connectIntro": "O contêiner da função é recriado com esta rede: uma invocação em andamento é interrompida.",
+    "network": "Rede",
+    "choose": "Escolha uma rede",
+    "noneAvailable": "A função já está em todas as redes privadas.",
+    "disconnect": "Desconectar",
+    "disconnectOf": "Desconectar de {{network}}",
+    "disconnectConfirm": {
+      "title": "Desconectar {{name}} de {{network}}?",
+      "content": "A rede é cortada primeiro, depois o contêiner é recriado: os membros desta rede não poderão mais invocar a função. Se a recriação falhar, a função é parada."
+    },
+    "lastHint": "Uma função mantém pelo menos uma rede: conecte outra primeiro.",
+    "notConnectedHint": "O contêiner da função não está nesta rede: ela está parada ou precisa ser reiniciada.",
+    "connected": "{{name}} está conectada a {{network}}.",
+    "disconnected": "{{name}} foi desconectada de {{network}}."
+  },
+  "detail": {
+    "back": "Voltar às funções",
+    "notFound": "Esta função não existe (mais).",
+    "tabs": {
+      "overview": "Visão geral",
+      "code": "Código",
+      "test": "Teste",
+      "configuration": "Configuração",
+      "secrets": "Segredos",
+      "credentials": "Credenciais",
+      "networks": "Redes",
+      "triggers": "Gatilhos"
+    }
+  },
+  "overview": {
+    "invocation": "Invocação",
+    "endpoint": "URL interna",
+    "endpointHint": "Acessível apenas pelos membros das redes da função, com as credenciais dela (POST, com o evento no corpo).",
+    "auth": "Autenticação",
+    "networks": "Redes",
+    "internet": "Acesso à Internet",
+    "runtimeTitle": "Runtime",
+    "state": "Estado",
+    "runtime": "Runtime",
+    "handler": "Handler",
+    "deployment": "Implantação ativa",
+    "image": "Imagem",
+    "digest": "Digest",
+    "created": "Criada",
+    "limits": "Limites",
+    "limitMemory": "Memória: {{value}}",
+    "limitCpus": "CPU: {{value}}",
+    "limitTimeout": "Tempo limite: {{value}}",
+    "limitTmp": "/tmp: {{value}}",
+    "notDeployed": "Nenhum código foi implantado ainda: envie um zip na aba Código.",
+    "modified": "O projeto Compose dela foi editado fora do painel, então o painel nunca mais o executa. Restaure o arquivo gerado pelo painel ou expurgue a função.",
+    "invalid": "O arquivo de referência dela está ilegível: o painel não pode usá-lo. Expurgue a função.",
+    "unverified": "Há um contêiner em execução, mas ele não corresponde à referência da função: o painel não o usa. Reinicie a função para recriá-lo."
+  },
+  "code": {
+    "uploadTitle": "Implantar novo código",
+    "uploadIntro": "Um zip com o handler ({{handler}}) e suas dependências na raiz. Ele se torna uma nova implantação, ativada imediatamente; se não iniciar, a anterior é iniciada novamente.",
+    "drop": "Solte um zip aqui ou clique para escolher um",
+    "dropHint": "No máximo {{max}}. Somente entradas armazenadas ou comprimidas com deflate; nenhuma entrada criptografada, dispositivo ou link que saia do arquivo.",
+    "notZip": "Escolha um arquivo .zip.",
+    "tooLarge": "O zip é maior que {{max}}.",
+    "uploading": "Enviando {{name}}…",
+    "deployed": "A implantação {{id}} está ativa.",
+    "deploymentsTitle": "Implantações",
+    "kept_one": "{{count}} implantação é mantida, incluindo a ativa.",
+    "kept_many": "{{count}} implantações são mantidas para uma reversão, incluindo a ativa.",
+    "kept_other": "{{count}} implantações são mantidas para uma reversão, incluindo a ativa.",
+    "empty": "Nenhuma implantação ainda.",
+    "active": "Ativa",
+    "zipSize": "Zip: {{size}}",
+    "columns": {
+      "id": "Implantação",
+      "date": "Data",
+      "files": "Arquivos",
+      "size": "Tamanho",
+      "sha256": "SHA-256 do zip",
+      "actions": "Ações"
+    },
+    "activate": "Ativar",
+    "rollback": "Reverter",
+    "activated": "A implantação {{id}} está ativa.",
+    "activateConfirm": {
+      "title": "Ativar a implantação {{id}}?",
+      "content": "Os arquivos dela são verificados e a função é recriada com eles: uma invocação em andamento é interrompida."
+    },
+    "rollbackConfirm": {
+      "title": "Reverter para a implantação {{id}}?",
+      "content": "A função volta a este código mais antigo (verificado antes): uma invocação em andamento é interrompida. A implantação atual é mantida."
+    },
+    "deploying": "Envio de {{name}} concluído, implantando…",
+    "interrupted": "Envio interrompido: o servidor pode ter implantado o código mesmo assim, verifique a lista de implantações.",
+    "uploadIntroCustom": "Um zip com o executável bootstrap na raiz, compilado para Linux {{arch}}. Ele vira uma nova implantação, ativada na hora; se não iniciar, a anterior é iniciada de novo.",
+    "warning": "Aviso"
+  },
+  "test": {
+    "eventTitle": "Evento de teste",
+    "eventLabel": "Evento (JSON)",
+    "eventHelp": "Um valor JSON (objeto, array, string, número…), passado ao handler como evento.",
+    "eventProblems": {
+      "empty": "Informe um evento, por exemplo {}.",
+      "invalid": "Isto não é um JSON válido.",
+      "tooLarge": "O evento é maior que {{max}}."
+    },
+    "invoke": "Invocar",
+    "format": "Formatar",
+    "notRunning": "A função não está em execução: inicie-a antes de invocá-la.",
+    "result": "Resultado",
+    "statusCode": "Status",
+    "duration": "Duração",
+    "durationValue": "{{value}} ms",
+    "requestId": "ID da requisição",
+    "functionError": "A função falhou: {{error}}",
+    "payload": "Resposta",
+    "payloadEmpty": "Resposta vazia.",
+    "payloadBinary": "Resposta binária ({{size}}), exibida em base64:",
+    "logs": "Logs (final)",
+    "logsEmpty": "Nenhum log."
+  },
+  "configuration": {
+    "resources": "Recursos",
+    "code": "Handler e variáveis",
+    "deployScope": "O handler e as variáveis determinam o que o código faz com os segredos: com uma chave de API, alterá-los exige o escopo functions:deploy, além de functions:write.",
+    "noChange": "Nada a salvar.",
+    "reset": "Redefinir",
+    "confirm": {
+      "title": "Salvar a configuração de {{name}}?",
+      "running": "A função é recriada com ela: uma invocação em andamento é interrompida.",
+      "stopped": "A função continua parada: a configuração será aplicada na próxima inicialização."
+    },
+    "mcp": {
+      "title": "Assistentes de IA (MCP)",
+      "label": "Invocável por clientes MCP",
+      "help": "Uma proteção para a ferramenta MCP da CLI loch (assistentes de IA): desativada, a ferramenta se recusa a invocar esta função. Não é um controle de acesso: para proibir invocações, dê ao cliente MCP uma chave de API sem o scope functions:invoke. Alterá-la exige o scope functions:deploy."
+    }
+  },
+  "secrets": {
+    "title": "Segredos",
+    "intro": "Os segredos são passados à função como variáveis de ambiente, mantidos fora do arquivo Compose dela. Os valores nunca são exibidos, retornados, registrados em log nem auditados: substitua um valor para alterá-lo.",
+    "add": "Adicionar um segredo",
+    "addTitle": "Novo segredo",
+    "replace": "Substituir",
+    "replaceOf": "Substituir {{name}}",
+    "replaceTitle": "Substituir o valor de {{name}}",
+    "remove": "Remover",
+    "removeOf": "Remover {{name}}",
+    "removeConfirm": {
+      "title": "Remover o segredo {{name}}?",
+      "content": "A função deixa de recebê-lo: ela é recriada."
+    },
+    "empty": "Nenhum segredo.",
+    "hidden": "Oculto",
+    "nameLabel": "Nome",
+    "valueLabel": "Valor",
+    "restart": "A função em execução é recriada com ele.",
+    "saved": "Segredo {{name}} salvo.",
+    "removed": "Segredo {{name}} removido.",
+    "columns": {
+      "name": "Nome",
+      "value": "Valor",
+      "actions": "Ações"
+    }
+  },
+  "credentials": {
+    "title": "Credenciais de invocação",
+    "warning": "Copie estas credenciais agora: elas são exibidas uma única vez. O painel guarda apenas o necessário para verificá-las e não pode exibi-las novamente; renove-as se forem perdidas.",
+    "close": "Copiei as credenciais",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "curl": "Copiar um comando de teste (curl, a partir de um membro das redes dela)",
+    "internalOnly": "A URL interna só é acessível pelos membros das redes da função: ela não tem porta publicada.",
+    "sigv4Note": "AWS SDK: endpoint-url http://fn-<name>:8080, região us-east-1, com este par de chaves.",
+    "fields": {
+      "endpoint": "URL interna",
+      "region": "Região",
+      "token": "Token bearer",
+      "accessKeyId": "ID da chave de acesso",
+      "secretAccessKey": "Chave de acesso secreta"
+    }
+  },
+  "credentialsTab": {
+    "title": "Credenciais de invocação",
+    "intro": "Os chamadores nas redes da função se autenticam com estas credenciais; as invocações do próprio painel (aba Teste, tarefas agendadas) não precisam delas. Elas não podem ser lidas novamente: renove-as para obter novas.",
+    "bearerStored": "Definido (apenas o hash é guardado)",
+    "rotate": {
+      "title": "Renovar as credenciais de {{name}}?",
+      "content": "Novas credenciais são geradas e exibidas uma única vez; as atuais param de funcionar imediatamente. A função é recriada.",
+      "submit": "Renovar as credenciais"
+    },
+    "enableSigv4": {
+      "title": "Aceitar chamadores SigV4 para {{name}}?",
+      "content": "As credenciais são renovadas: um novo token bearer e um par de chaves SigV4 são exibidos uma única vez, e as atuais param de funcionar.",
+      "submit": "Ativar e renovar"
+    },
+    "disableSigv4": {
+      "title": "Deixar de aceitar chamadores SigV4 para {{name}}?",
+      "content": "As credenciais são renovadas sem par de chaves: um novo token bearer é exibido uma única vez, e as credenciais atuais param de funcionar.",
+      "submit": "Desativar e renovar"
+    }
+  },
+  "triggers": {
+    "title": "Invocações agendadas",
+    "intro": "Tarefas agendadas do tipo “Invocação de função” direcionadas a esta função (no máximo {{max}}).",
+    "create": "Agendar uma invocação",
+    "manage": "Gerenciar as tarefas agendadas",
+    "empty": "Nenhuma tarefa agendada invoca esta função.",
+    "event": "Evento"
+  },
+  "runtimeCustomVersion": "Go, Rust… (runtime personalizado, provided.{{version}})",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "O bootstrap está vinculado dinamicamente à glibc: ele só funciona se foi compilado com uma glibc não mais recente que a do Amazon Linux 2023. Compile-o de forma estática (CGO_ENABLED=0) para evitar isso."
+  }
+}

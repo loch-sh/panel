@@ -1,0 +1,163 @@
+{
+  "title": "Scheduled tasks",
+  "newJob": "New task",
+  "jobTypes": {
+    "dockerAction": "Docker action",
+    "dockerExec": "Docker command",
+    "http": "HTTP",
+    "httpRequest": "HTTP request",
+    "functionInvoke": "Function invocation",
+    "function": "Function"
+  },
+  "statuses": {
+    "pending": "Pending",
+    "running": "Running",
+    "success": "Success",
+    "error": "Error",
+    "skipped": "Run skipped"
+  },
+  "modes": {
+    "disabled": "Disabled",
+    "once": "One-time run",
+    "recurring": "Recurring",
+    "disabledByPanel": "Disabled by the panel"
+  },
+  "dockerActions": {
+    "start": "Start",
+    "stop": "Stop",
+    "restart": "Restart",
+    "kill": "Kill"
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "schedule": "Schedule",
+      "type": "Type",
+      "target": "Target",
+      "mode": "Mode",
+      "lastStatus": "Last status",
+      "lastRun": "Last run",
+      "actions": "Actions"
+    },
+    "actions": {
+      "runNow": "Run now",
+      "suspend": "Suspend",
+      "enable": "Enable"
+    },
+    "details": {
+      "error": "Error:",
+      "output": "Output:",
+      "lastSkipped": "The last run, on {{date}}, was skipped: the previous one was still running.",
+      "functionRun": "{{duration}} ms, response of {{bytes}} bytes",
+      "functionError": "Function error: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Delete task",
+      "content": "Are you sure you want to delete this scheduled task?"
+    },
+    "suspend": {
+      "title": "Suspend task",
+      "content": "Are you sure you want to suspend the task “{{name}}”?",
+      "ok": "Suspend"
+    },
+    "enable": {
+      "title": "Enable task",
+      "content": "Are you sure you want to enable the task “{{name}}”?",
+      "ok": "Enable"
+    },
+    "run": {
+      "title": "Run now",
+      "content": "Are you sure you want to run the task “{{name}}” now?",
+      "ok": "Run"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "New scheduled task",
+      "edit": "Edit task"
+    },
+    "submit": {
+      "update": "Update"
+    },
+    "fields": {
+      "name": {
+        "label": "Name",
+        "required": "Name is required",
+        "placeholder": "e.g. Clear Symfony cache"
+      },
+      "schedule": {
+        "label": "Cron expression",
+        "required": "Cron expression is required",
+        "invalid": "Invalid cron expression",
+        "help": "Format: minute hour day month weekday (e.g. 0 3 * * * or @every 5m)"
+      },
+      "type": {
+        "label": "Type"
+      },
+      "enabled": {
+        "label": "Enabled"
+      },
+      "once": {
+        "label": "One-time run",
+        "tooltip": "Automatically disabled after the first run"
+      },
+      "container": {
+        "label": "Container",
+        "required": "Container is required",
+        "placeholder": "Select a container"
+      },
+      "action": {
+        "label": "Action",
+        "required": "Action is required"
+      },
+      "command": {
+        "label": "Command",
+        "required": "Command is required"
+      },
+      "workingDir": {
+        "label": "Working directory",
+        "help": "Defaults to the directory defined by the container"
+      },
+      "httpMethod": {
+        "label": "Method",
+        "required": "Method is required"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "URL is required"
+      },
+      "httpBody": {
+        "label": "Request body"
+      },
+      "httpTimeout": {
+        "label": "Timeout (seconds)"
+      },
+      "function": {
+        "label": "Function",
+        "required": "Function is required",
+        "placeholder": "Select a function",
+        "help": "The function is invoked by the panel, like the Test tab of its page. At most 5 scheduled tasks per function.",
+        "none": "No function"
+      },
+      "functionEvent": {
+        "label": "Event (JSON)",
+        "help": "One JSON value passed to the handler as its event; empty means {}. At most 64 KB.",
+        "invalid": "The event must be one valid JSON value",
+        "tooLarge": "The event is larger than 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Recurring run: every {{interval}}",
+    "yearly": "Once a year, on January 1st at midnight",
+    "monthly": "Once a month, on the 1st at midnight",
+    "weekly": "Once a week, on Sunday at midnight",
+    "daily": "Once a day, at midnight",
+    "hourly": "Every hour"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Disabled automatically: the function it invoked was deleted."
+  }
+}

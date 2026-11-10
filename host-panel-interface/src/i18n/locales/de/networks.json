@@ -1,0 +1,319 @@
+{
+  "title": "Private Netzwerke",
+  "intro": "Isolierte Netzwerke für Ihre Sites und Dienste: Nur die Mitglieder eines Netzwerks erreichen sich gegenseitig. Jedes Netzwerk ist intern: Es bietet keinen Internetzugang.",
+  "forbidden": "Private Netzwerke sind Administratoren vorbehalten.",
+  "newNetwork": "Neues Netzwerk",
+  "empty": "Noch kein privates Netzwerk",
+  "columns": {
+    "name": "Name",
+    "subnet": "Subnetz",
+    "gateway": "Gateway",
+    "members": "Mitglieder",
+    "properties": "Eigenschaften",
+    "description": "Beschreibung",
+    "actions": "Aktionen"
+  },
+  "tags": {
+    "shared": "Gemeinsam",
+    "private": "Privat",
+    "noInternet": "Kein Internetzugang",
+    "reservedOverlap": "Reservierter Bereich"
+  },
+  "tagHints": {
+    "shared": "Netzwerk des Dienstemoduls: Jede Site darin erreicht die Dienste darin. Es kann nicht gelöscht werden.",
+    "private": "Nur seine Mitglieder erreichen sich gegenseitig.",
+    "noInternet": "Internes Netzwerk: Seine Mitglieder können darüber nicht ins Internet.",
+    "reservedOverlap": "Sein Subnetz überschneidet sich mit dem reservierten Bereich {{range}} (ein außerhalb von Docker genutztes LAN oder VPN): Adressen dieses Bereichs sind von seinen Containern aus möglicherweise nicht erreichbar."
+  },
+  "state": {
+    "ok": "OK",
+    "missing": "Fehlt",
+    "compromised": "Kompromittiert"
+  },
+  "stateHints": {
+    "ok": "Das Docker-Netzwerk ist das vom Panel erstellte.",
+    "missing": "Das Docker-Netzwerk existiert nicht auf dem Server: Seine Mitglieder können darin nicht starten. Die API erstellt es beim nächsten Start neu.",
+    "compromised": "Das Docker-Netzwerk ist nicht das vom Panel erstellte: Seinen Mitgliedern wird nicht vertraut, bis es behoben ist."
+  },
+  "problems": {
+    "replaced": "Das Netzwerk wurde außerhalb des Panels ersetzt (andere ID).",
+    "notBridge": "Es ist kein lokales Bridge-Netzwerk.",
+    "notInternal": "Es ist nicht intern: Seine Mitglieder könnten das Internet erreichen.",
+    "unexpectedOptions": "Es hat unerwartete Optionen (IPv6 oder ein Konfigurationsnetzwerk).",
+    "missingLabel": "Das Panel-Label fehlt.",
+    "unexpectedLabel": "Sein Panel-Label verweist auf ein anderes Netzwerk.",
+    "composeProject": "Es wurde von einem Compose-Projekt erstellt.",
+    "unexpectedSubnet": "Sein Subnetz ist nicht das gespeicherte.",
+    "inspectFailed": "Docker konnte nicht abgefragt werden.",
+    "other": "Unerwartetes Docker-Netzwerk."
+  },
+  "automatic": "Automatisch",
+  "delete": {
+    "title": "Netzwerk {{name}} löschen?",
+    "content": "Das Docker-Netzwerk wird entfernt. Ein Netzwerk kann erst gelöscht werden, wenn es kein Mitglied mehr hat.",
+    "submit": "Löschen",
+    "systemHint": "Das gemeinsame Netzwerk des Dienstemoduls kann nicht gelöscht werden.",
+    "inUseHint": "Trennen Sie zuerst seine Mitglieder."
+  },
+  "toasts": {
+    "created": "Netzwerk {{name}} erstellt.",
+    "deleted": "Netzwerk {{name}} gelöscht.",
+    "descriptionSaved": "Beschreibung gespeichert.",
+    "attached": "{{name}} ist mit dem Netzwerk verbunden.",
+    "detached": "{{name}} ist vom Netzwerk getrennt.",
+    "siteRedeploying": "{{name}} wird mit seinen neuen Netzwerken neu bereitgestellt …",
+    "siteRedeployed": "{{name}} wurde mit seinen neuen Netzwerken neu bereitgestellt.",
+    "siteRedeployFailed": "Die Neubereitstellung von {{name}} ist fehlgeschlagen: Prüfen Sie ihren letzten Vorgang.",
+    "disconnected": "Container {{name}} getrennt."
+  },
+  "create": {
+    "title": "Neues privates Netzwerk",
+    "intro": "Erstellen Sie ein isoliertes Netzwerk und binden Sie dann Sites und Dienstinstanzen daran an: Nur seine Mitglieder erreichen sich gegenseitig.",
+    "back": "Zurück zur Liste",
+    "submit": "Netzwerk erstellen",
+    "sections": {
+      "name": {
+        "title": "Name",
+        "subtitle": "1 bis 24 Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben. Er kann später nicht geändert werden."
+      },
+      "description": {
+        "title": "Beschreibung",
+        "subtitle": "Optional: wofür das Netzwerk dient."
+      },
+      "addressing": {
+        "title": "Adressierung",
+        "subtitle": "Der IPv4-Bereich des Netzwerks, einmalig festgelegt (Docker kann ihn später nicht ändern)."
+      },
+      "members": {
+        "title": "Mitglieder",
+        "subtitle": "Optional: Websites und Service-Instanzen, die nach dem Erstellen des Netzwerks angebunden werden."
+      }
+    },
+    "nameLabel": "Name",
+    "namePlaceholder": "backend",
+    "nameRequired": "Geben Sie einen Namen ein.",
+    "nameInvalid": "1 bis 24 Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben und nicht mit einem Bindestrich endend.",
+    "nameReserved": "Dieser Name ist reserviert.",
+    "nameTaken": "Ein Netzwerk mit diesem Namen existiert bereits.",
+    "dockerName": "Docker-Name: {{name}}",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Shop und seine Datenbank",
+    "descriptionInvalid": "Keine Steuerzeichen, höchstens 200 Zeichen.",
+    "addressing": {
+      "automatic": {
+        "title": "Automatisch",
+        "description": "Docker wählt einen freien privaten Bereich."
+      },
+      "manual": {
+        "title": "Manuelles Subnetz",
+        "description": "Wählen Sie den Bereich, z. B. um einen Konflikt mit einem VPN zu vermeiden."
+      }
+    },
+    "subnetLabel": "Subnetz (CIDR)",
+    "subnetPlaceholder": "10.20.0.0/24",
+    "subnetHelp": "Ein privater IPv4-Bereich (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 oder 100.64.0.0/10) von /16 bis /28, mit seiner Netzwerkadresse angegeben.",
+    "subnetRequired": "Geben Sie ein Subnetz ein oder wählen Sie Automatisch.",
+    "subnetProblems": {
+      "format": "Geben Sie einen IPv4-Bereich in CIDR-Notation an, z. B. 10.20.0.0/24.",
+      "networkAddress": "Geben Sie den Bereich mit seiner Netzwerkadresse an: {{expected}}.",
+      "prefixLength": "Die Präfixlänge muss zwischen /16 und /28 liegen.",
+      "privateRange": "Der Bereich muss privat sein: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 oder 100.64.0.0/10.",
+      "reserved": "Der Bereich überschneidet sich mit dem reservierten Bereich {{range}} (ein außerhalb von Docker genutztes LAN oder VPN)."
+    },
+    "usableHosts_one": "{{count}} nutzbare Adresse",
+    "usableHosts_other": "{{count}} nutzbare Adressen",
+    "summary": {
+      "title": "Zusammenfassung",
+      "name": "Name",
+      "dockerName": "Docker-Name",
+      "subnet": "Subnetz",
+      "internet": "Internetzugang",
+      "internetNone": "Keiner (internes Netzwerk)",
+      "note": "Das Netzwerk ist zunächst leer: Binden Sie Sites und Dienstinstanzen über seine Seite an.",
+      "limit": "Private Netzwerke",
+      "limitValue": "{{used}} / {{max}}",
+      "members": "Mitglieder",
+      "membersNone": "Keine"
+    },
+    "limitReached": "Das Limit von {{max}} privaten Netzwerken ist erreicht: Löschen Sie zuerst ein Netzwerk.",
+    "ranges": {
+      "private": "Erlaubte Bereiche",
+      "reserved": "Reservierte Bereiche",
+      "reservedNone": "Keine",
+      "reservedHintManual": "Ein Subnetz, das sich mit einem reservierten Bereich (einem außerhalb von Docker genutzten LAN oder VPN) überschneidet, wird abgelehnt.",
+      "reservedHintAutomatic": "Wählt Docker einen Bereich, der sich mit einem reservierten Bereich überschneidet, wird die Erstellung abgelehnt: Wählen Sie dann ein manuelles Subnetz."
+    },
+    "members": {
+      "label": "Websites und Service-Instanzen",
+      "placeholder": "Websites oder Service-Instanzen wählen",
+      "restart": "Jedes gewählte Mitglied wird mit diesem Netzwerk neu erstellt: einige Sekunden Ausfall für seinen Container (eine Website wird neu bereitgestellt).",
+      "failedHint": "Das Netzwerk wurde erstellt: Binden Sie sie mit „Ressource anbinden“ erneut an.",
+      "failedTitle_one": "{{count}} Mitglied konnte nicht angebunden werden",
+      "failedTitle_other": "{{count}} Mitglieder konnten nicht angebunden werden",
+      "partial_one": "Netzwerk {{name}} erstellt, aber {{count}} Mitglied konnte nicht angebunden werden.",
+      "partial_other": "Netzwerk {{name}} erstellt, aber {{count}} Mitglieder konnten nicht angebunden werden."
+    }
+  },
+  "detail": {
+    "back": "Zurück zu den Netzwerken",
+    "notFound": "Dieses Netzwerk existiert nicht (mehr).",
+    "info": "Informationen",
+    "dockerName": "Docker-Name",
+    "id": "Docker-ID",
+    "subnet": "Subnetz",
+    "gateway": "Gateway",
+    "internet": "Internetzugang",
+    "internetNone": "Keiner (internes Netzwerk)",
+    "internetWarning": "Nicht intern: Die Mitglieder können das Internet erreichen",
+    "created": "Erstellt",
+    "createdBy": "{{date}} von {{user}}",
+    "description": "Beschreibung",
+    "descriptionEmpty": "Keine Beschreibung",
+    "editDescription": "Beschreibung bearbeiten",
+    "members": "Mitglieder",
+    "membersEmpty": "Noch kein Mitglied: Binden Sie eine Site oder eine Dienstinstanz an.",
+    "attach": "Ressource anbinden",
+    "systemNote": "Gemeinsames Netzwerk des Dienstemoduls: Dienstinstanzen treten ihm standardmäßig bei, und jede Site darin erreicht sie."
+  },
+  "members": {
+    "columns": {
+      "kind": "Typ",
+      "name": "Name",
+      "container": "Container",
+      "ipv4": "IPv4",
+      "mac": "MAC",
+      "state": "Status",
+      "actions": "Aktionen"
+    },
+    "kinds": {
+      "site": "Site",
+      "instance": "Dienstinstanz",
+      "panel": "Panel",
+      "unmanaged": "Nicht verwaltet",
+      "function": "Funktion"
+    },
+    "panelHint": "Das Panel selbst: Es tritt dem Netzwerk bei, solange ein Port-Tunnel (loch proxy) zu einem seiner Mitglieder offen ist.",
+    "notConnected": "Deklariert, aber nicht verbunden",
+    "notConnectedHint": "Seine Compose-Datei deklariert dieses Netzwerk, aber sein Container ist nicht darin: Er ist gestoppt oder muss neu bereitgestellt werden.",
+    "notDeclared": "Verbunden, aber nicht deklariert",
+    "notDeclaredHint": "Der Container ist im Netzwerk, aber seine Compose-Datei deklariert es nicht: Er wurde von Hand verbunden.",
+    "noContainer": "Kein Container",
+    "detach": "Trennen",
+    "lastNetworkHint": "Eine Dienstinstanz behält mindestens ein Netzwerk: Binden Sie sie zuerst an ein anderes Netzwerk an.",
+    "detachConfirm": {
+      "title": "{{name}} von {{network}} trennen?",
+      "site": "Die Site wird ohne dieses Netzwerk neu bereitgestellt: Ihre Container werden neu erstellt (einige Sekunden Ausfallzeit) und sie erreicht die Mitglieder dieses Netzwerks nicht mehr.",
+      "instance": "{{container}} startet ohne dieses Netzwerk neu: Seine Clients werden für einige Sekunden getrennt, und die Sites dieses Netzwerks verlieren den Zugriff darauf.",
+      "submit": "Trennen",
+      "function": "Die Funktion {{name}} wird ohne dieses Netzwerk neu erstellt: Die Mitglieder dieses Netzwerks können sie nicht mehr aufrufen."
+    },
+    "lastNetworkHintFunction": "Eine Funktion behält mindestens ein Netzwerk: Binden Sie sie zuerst an ein anderes Netzwerk an."
+  },
+  "unmanaged": {
+    "title_one": "{{count}} nicht vom Panel verwalteter Container ist in diesem Netzwerk",
+    "title_other": "{{count}} nicht vom Panel verwaltete Container sind in diesem Netzwerk",
+    "description": "Sie sind ihm außerhalb des Panels beigetreten (z. B. ein CI-Stack) und erreichen seine Mitglieder. Trennen Sie sie, falls sie das nicht sollen.",
+    "disconnect": "Trennen",
+    "confirm": {
+      "title": "{{name}} trennen?",
+      "content": "Der Container wird sofort vom Netzwerk getrennt. Er tritt ihm wieder bei, wenn seine eigene Compose-Datei es deklariert und er neu bereitgestellt wird.",
+      "submit": "Trennen"
+    }
+  },
+  "attach": {
+    "title": "Ressource an {{network}} anbinden",
+    "intro": "Der Container des Mitglieds wird mit diesem Netzwerk neu erstellt: einige Sekunden Ausfallzeit nur für diesen Container.",
+    "resource": "Ressource",
+    "placeholder": "Wählen Sie eine Site oder eine Dienstinstanz",
+    "sites": "Sites",
+    "instances": "Dienstinstanzen",
+    "noResource": "Keine Site oder Dienstinstanz zum Anbinden.",
+    "submit": "Anbinden",
+    "disabled": {
+      "unauthenticated": "Keine Authentifizierung: kann dem gemeinsamen Netzwerk nicht beitreten",
+      "modified": "Von Hand bearbeitet",
+      "operation": "Vorgang läuft"
+    },
+    "restart": {
+      "site": "Die Site {{name}} wird neu bereitgestellt: Ihre Container werden neu erstellt (einige Sekunden Ausfallzeit).",
+      "instance": "{{container}} startet neu: Seine Sites verlieren für einige Sekunden die Verbindung.",
+      "function": "Die Funktion {{name}} wird mit diesem Netzwerk neu erstellt: Ein laufender Aufruf wird abgebrochen."
+    },
+    "functions": "Funktionen"
+  },
+  "select": {
+    "placeholder": "Netzwerke wählen",
+    "unavailable": "Nicht verfügbar",
+    "createLink": "Privates Netzwerk erstellen",
+    "loadFailed": "Die Netzwerke können nicht aufgelistet werden."
+  },
+  "tabs": {
+    "private": "Private Netzwerke",
+    "docker": "Andere Docker-Netzwerke"
+  },
+  "docker": {
+    "intro": "Docker-Netzwerke, die das Panel nicht verwaltet: die von Docker selbst (bridge, host, none), die von Compose-Stacks (z. B. per CI/CD bereitgestellt, der Reverse Proxy) und von Hand erstellte. Sie werden schreibgeschützt angezeigt.",
+    "empty": "Kein anderes Docker-Netzwerk",
+    "columns": {
+      "origin": "Herkunft",
+      "driver": "Treiber",
+      "containers": "Container"
+    },
+    "origins": {
+      "docker": "Docker",
+      "compose": "Compose",
+      "composeProject": "Compose: {{project}}",
+      "other": "Andere"
+    },
+    "originHints": {
+      "docker": "Von Docker selbst erstellt.",
+      "compose": "Von einem Compose-Projekt erstellt (z. B. einem per CI/CD bereitgestellten Stack).",
+      "other": "Von Hand oder mit einem anderen Werkzeug erstellt."
+    },
+    "internet": "Internetzugang",
+    "internetHint": "Nicht intern: Seine Container können darüber das Internet erreichen.",
+    "internetYes": "Ja (nicht intern)",
+    "back": "Zurück zu den Docker-Netzwerken",
+    "title": "Docker-Netzwerk",
+    "notFound": "Dieses Docker-Netzwerk existiert nicht (mehr), oder es ist ein Netzwerk des Panels.",
+    "readOnly": "Dieses Netzwerk wird nicht vom Panel verwaltet: Es wird schreibgeschützt angezeigt.",
+    "containersEmpty": "Kein Container in diesem Netzwerk.",
+    "containersTitle_one": "{{count}} Container",
+    "containersTitle_other": "{{count}} Container"
+  },
+  "site": {
+    "title": "Netzwerke des Panels",
+    "intro": "Die Website erreicht die anderen Mitglieder dieser Netzwerke (Service-Instanzen, Websites). Das Verbinden oder Trennen eines Netzwerks stellt die Website neu bereit: Sie startet für einige Sekunden neu.",
+    "connect": "Netzwerk verbinden",
+    "disconnect": "Trennen",
+    "empty": "Die Website ist in keinem Netzwerk des Panels.",
+    "columns": {
+      "type": "Typ",
+      "state": "Status",
+      "warnings": "Warnungen"
+    },
+    "connected": "Verbunden",
+    "connectedHint": "Der Container der Website ist in diesem Netzwerk.",
+    "unknown": "Unbekanntes Netzwerk",
+    "unknownHint": "Die Einstellungen der Website nennen ein Netzwerk, das das Panel nicht (mehr) kennt.",
+    "modifiedHint": "Die Compose-Datei wurde von Hand bearbeitet: Die Netzwerke können nicht im Panel geändert werden.",
+    "busyHint": "Auf dieser Website läuft ein Vorgang.",
+    "connectModal": {
+      "title": "{{name}} mit einem Netzwerk verbinden",
+      "network": "Netzwerk",
+      "placeholder": "Netzwerk wählen",
+      "none": "Die Website ist bereits in jedem Netzwerk des Panels.",
+      "submit": "Verbinden"
+    },
+    "toasts": {
+      "connected": "{{name}} ist mit {{network}} verbunden.",
+      "disconnected": "{{name}} ist von {{network}} getrennt."
+    },
+    "other": {
+      "title": "Andere Docker-Netzwerke",
+      "intro": "Nicht vom Panel verwaltete Netzwerke, in denen sich der Container der Website befindet (z. B. das Netzwerk des Reverse Proxys). Schreibgeschützt.",
+      "empty": "Der Container der Website ist in keinem anderen Docker-Netzwerk.",
+      "loadFailed": "Die anderen Docker-Netzwerke können nicht aufgelistet werden."
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "title": "Geplande taken",
+  "newJob": "Nieuwe taak",
+  "jobTypes": {
+    "dockerAction": "Docker-actie",
+    "dockerExec": "Docker-opdracht",
+    "http": "HTTP",
+    "httpRequest": "HTTP-verzoek",
+    "functionInvoke": "Functie-aanroep",
+    "function": "Functie"
+  },
+  "statuses": {
+    "pending": "In afwachting",
+    "running": "Bezig",
+    "success": "Geslaagd",
+    "error": "Fout",
+    "skipped": "Uitvoering overgeslagen"
+  },
+  "modes": {
+    "disabled": "Uitgeschakeld",
+    "once": "Eenmalige uitvoering",
+    "recurring": "Terugkerend",
+    "disabledByPanel": "Uitgeschakeld door het paneel"
+  },
+  "dockerActions": {
+    "start": "Starten",
+    "stop": "Stoppen",
+    "restart": "Herstarten",
+    "kill": "Kill"
+  },
+  "table": {
+    "columns": {
+      "name": "Naam",
+      "schedule": "Planning",
+      "type": "Type",
+      "target": "Doel",
+      "mode": "Modus",
+      "lastStatus": "Laatste status",
+      "lastRun": "Laatste uitvoering",
+      "actions": "Acties"
+    },
+    "actions": {
+      "runNow": "Nu uitvoeren",
+      "suspend": "Pauzeren",
+      "enable": "Inschakelen"
+    },
+    "details": {
+      "error": "Fout:",
+      "output": "Uitvoer:",
+      "lastSkipped": "De laatste uitvoering, op {{date}}, is overgeslagen: de vorige was nog bezig.",
+      "functionRun": "{{duration}} ms, antwoord van {{bytes}} bytes",
+      "functionError": "Functiefout: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Taak verwijderen",
+      "content": "Weet je zeker dat je deze geplande taak wilt verwijderen?"
+    },
+    "suspend": {
+      "title": "Taak pauzeren",
+      "content": "Weet je zeker dat je de taak “{{name}}” wilt pauzeren?",
+      "ok": "Pauzeren"
+    },
+    "enable": {
+      "title": "Taak inschakelen",
+      "content": "Weet je zeker dat je de taak “{{name}}” wilt inschakelen?",
+      "ok": "Inschakelen"
+    },
+    "run": {
+      "title": "Nu uitvoeren",
+      "content": "Weet je zeker dat je de taak “{{name}}” nu wilt uitvoeren?",
+      "ok": "Uitvoeren"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Nieuwe geplande taak",
+      "edit": "Taak bewerken"
+    },
+    "submit": {
+      "update": "Bijwerken"
+    },
+    "fields": {
+      "name": {
+        "label": "Naam",
+        "required": "Naam is verplicht",
+        "placeholder": "bijv. Symfony-cache legen"
+      },
+      "schedule": {
+        "label": "Cron-expressie",
+        "required": "Cron-expressie is verplicht",
+        "invalid": "Ongeldige cron-expressie",
+        "help": "Formaat: minuut uur dag maand weekdag (bijv. 0 3 * * * of @every 5m)"
+      },
+      "type": {
+        "label": "Type"
+      },
+      "enabled": {
+        "label": "Ingeschakeld"
+      },
+      "once": {
+        "label": "Eenmalige uitvoering",
+        "tooltip": "Wordt na de eerste uitvoering automatisch uitgeschakeld"
+      },
+      "container": {
+        "label": "Container",
+        "required": "Container is verplicht",
+        "placeholder": "Selecteer een container"
+      },
+      "action": {
+        "label": "Actie",
+        "required": "Actie is verplicht"
+      },
+      "command": {
+        "label": "Opdracht",
+        "required": "Opdracht is verplicht"
+      },
+      "workingDir": {
+        "label": "Werkmap",
+        "help": "Standaard de map die door de container is ingesteld"
+      },
+      "httpMethod": {
+        "label": "Methode",
+        "required": "Methode is verplicht"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "URL is verplicht"
+      },
+      "httpBody": {
+        "label": "Body van het verzoek"
+      },
+      "httpTimeout": {
+        "label": "Time-out (seconden)"
+      },
+      "function": {
+        "label": "Functie",
+        "required": "Functie is verplicht",
+        "placeholder": "Selecteer een functie",
+        "help": "De functie wordt door het paneel aangeroepen, zoals via het tabblad Test op de pagina ervan. Maximaal 5 geplande taken per functie.",
+        "none": "Geen functie"
+      },
+      "functionEvent": {
+        "label": "Event (JSON)",
+        "help": "Eén JSON-waarde die als event aan de handler wordt doorgegeven; leeg betekent {}. Maximaal 64 KB.",
+        "invalid": "Het event moet één geldige JSON-waarde zijn",
+        "tooLarge": "Het event is groter dan 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Terugkerende uitvoering: elke {{interval}}",
+    "yearly": "Eén keer per jaar, op 1 januari om middernacht",
+    "monthly": "Eén keer per maand, op de 1e om middernacht",
+    "weekly": "Eén keer per week, op zondag om middernacht",
+    "daily": "Eén keer per dag, om middernacht",
+    "hourly": "Elk uur"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Automatisch uitgeschakeld: de functie die werd aangeroepen, is verwijderd."
+  }
+}

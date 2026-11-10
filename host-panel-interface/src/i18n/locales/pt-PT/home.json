@@ -1,0 +1,58 @@
+{
+  "title": "Bem-vindo à consola de administração",
+  "cards": {
+    "resourceOverview": {
+      "title": "Visão geral dos recursos",
+      "tileLabel": "{{label}}: {{value}}",
+      "loading": "a carregar",
+      "unavailable": "indisponível",
+      "resources": {
+        "containers": "Contentores",
+        "stacks": "Stacks",
+        "hosting": "Sites alojados",
+        "database": "Bases de dados",
+        "cache": "Cache",
+        "messaging": "Mensagens",
+        "queue": "Filas",
+        "storage": "Armazenamento",
+        "functions": "Funções",
+        "cron": "Tarefas agendadas",
+        "networks": "Redes privadas",
+        "sftp": "Utilizadores SFTP",
+        "domains": "Domínios",
+        "apiKeys": "Chaves de API"
+      }
+    },
+    "containerCount": {
+      "title": "Número de contentores"
+    },
+    "profile": {
+      "adminTitle": "Perfil de administrador",
+      "userTitle": "Perfil de utilizador",
+      "adminAccess": "Tem acesso a todos os contentores (exceto os de sistema).",
+      "noAccess": "O seu administrador ainda não configurou nenhum acesso.",
+      "restrictedAccess": "Tem acesso aos seguintes contentores: {{containers}}"
+    },
+    "latestStacks": {
+      "title": "Últimas stacks implementadas",
+      "empty": "Nenhuma stack",
+      "abnormalExit": "Saída anómala"
+    },
+    "latestDomains": {
+      "title": "Últimos domínios",
+      "empty": "Nenhum domínio"
+    },
+    "errorContainers": {
+      "title": "Contentores terminados com erro",
+      "empty": "Nenhum contentor com erro"
+    },
+    "support": {
+      "title": "Suporte técnico",
+      "emergency": "📲 Emergência: {{phone}}",
+      "openTicket": "📕 Abrir um pedido de incidente"
+    },
+    "serviceStatus": {
+      "title": "Estado dos serviços"
+    }
+  }
+}

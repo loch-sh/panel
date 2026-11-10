@@ -1,0 +1,53 @@
+{
+  "title": "Benutzer",
+  "currentUser": "Aktueller Benutzer",
+  "table": {
+    "columns": {
+      "email": "E-Mail",
+      "name": "Name",
+      "type": "Typ",
+      "permissions": "Berechtigungen",
+      "actions": "Aktionen"
+    },
+    "permissions": {
+      "allContainers": "Alle Container",
+      "none": "Keine",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Admin",
+    "restricted": "Eingeschränkt"
+  },
+  "actions": {
+    "makeRestricted": "In eingeschränkten Benutzer umwandeln",
+    "makeAdmin": "In Admin umwandeln",
+    "restrictAll": "Alle Container sperren"
+  },
+  "modals": {
+    "demote": {
+      "title": "Zu eingeschränktem Benutzer herabstufen",
+      "content": "Möchten Sie „{{email}}“ wirklich zu einem eingeschränkten Benutzer herabstufen? Der Zugriff auf alle Container geht verloren.",
+      "ok": "Herabstufen"
+    },
+    "promote": {
+      "title": "Zum Administrator befördern",
+      "content": "Möchten Sie „{{email}}“ wirklich zum Administrator befördern? Der Benutzer erhält Zugriff auf alle Container.",
+      "ok": "Befördern"
+    },
+    "restrict": {
+      "title": "Alle Container sperren",
+      "content": "Möchten Sie „{{email}}“ wirklich einschränken? Der Benutzer sieht dann keinen Container mehr.",
+      "ok": "Einschränken"
+    },
+    "delete": {
+      "title": "Benutzer löschen",
+      "content": "Möchten Sie „{{email}}“ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden und löscht auch die API-Schlüssel des Benutzers."
+    }
+  },
+  "sidePanel": {
+    "title": "Benutzerrechte bearbeiten: {{name}}",
+    "searchPlaceholder": "Container suchen",
+    "validate": "Bestätigen"
+  }
+}

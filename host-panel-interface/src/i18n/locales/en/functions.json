@@ -1,0 +1,500 @@
+{
+  "title": "Functions",
+  "intro": "Serverless functions: handlers written for AWS Lambda™ (Node.js, Python) run on this server, in an isolated container started on demand. The same code also runs on AWS Lambda without changes.",
+  "trademarkNotice": "AWS Lambda is a trademark of Amazon.com, Inc. or its affiliates. Loch.sh is not affiliated with or endorsed by Amazon.",
+  "forbidden": "Functions are reserved for administrators.",
+  "disabled": "The functions module is disabled on this server (FUNCTIONS_ENABLED).",
+  "configError": "The functions module is enabled but could not start: see the API logs.",
+  "runtimeNotReady": "No trusted function runtime is installed on the server yet: functions cannot be created or run.",
+  "newFunction": "New function",
+  "createFirst": "Create a function",
+  "limitReached": "The limit of {{max}} functions is reached: delete a function first.",
+  "noCode": "No code",
+  "presentation": {
+    "title": "No function yet",
+    "text": "A function is a handler (index.handler, lambda_function.lambda_handler) uploaded as a zip, with its dependencies. The panel runs it in the AWS Lambda base image published by AWS, with the memory, CPU and timeout you choose; sites, services and other functions on its networks invoke it with the AWS SDK or a plain HTTP request.",
+    "security": "Each function gets its own private network, no published port and no Internet access unless you allow it; its invoke credentials are shown once."
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} functions",
+    "memory": "memory {{used}} / {{max}}",
+    "memoryUnbounded": "memory {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "Name",
+    "runtime": "Runtime",
+    "state": "State",
+    "memory": "Memory",
+    "timeout": "Timeout",
+    "networks": "Networks",
+    "internet": "Internet",
+    "deployment": "Active deployment",
+    "deployedAt": "Deployed",
+    "actions": "Actions"
+  },
+  "tags": {
+    "purgeOnly": "Purge only"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go, Rust… (custom runtime)"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript or TypeScript compiled to JavaScript.",
+    "python": "Python modules and their dependencies.",
+    "provided": "Any compiled language: a bootstrap executable built for Linux."
+  },
+  "states": {
+    "not_deployed": "No code",
+    "running": "Running",
+    "stopped": "Stopped",
+    "missing": "Missing",
+    "modified": "Edited outside the panel",
+    "unverified": "Not verified",
+    "invalid": "Unreadable"
+  },
+  "stateHints": {
+    "not_deployed": "Created, but no code was uploaded yet: nothing runs.",
+    "running": "The function's container runs and answers invocations.",
+    "stopped": "The function is stopped: start it to invoke it.",
+    "missing": "Code is deployed and the function is not stopped, but its container does not exist: start it again.",
+    "modified": "Its compose project was edited outside the panel: the panel never runs it. Purge it.",
+    "unverified": "A container runs, but it is not the one the panel created: it is not used.",
+    "invalid": "Its reference file is unreadable: it can only be purged."
+  },
+  "health": {
+    "unhealthy": "Unhealthy",
+    "starting": "Starting"
+  },
+  "egress": {
+    "label": "Internet access",
+    "on": "Allowed",
+    "off": "None",
+    "onHint": "The function can reach the Internet (and the host, the LAN and metadata endpoints unless firewall rules say otherwise).",
+    "offHint": "The function only reaches the members of its networks.",
+    "help": "Off by default: the function only reaches the members of its networks.",
+    "warning": "With Internet access, the function's code can send its data and secrets anywhere, and reach the host gateway, the LAN and cloud metadata endpoints unless DOCKER-USER firewall rules block them.",
+    "enableTitle": "Allow Internet access for {{name}}?",
+    "disableTitle": "Remove Internet access from {{name}}?",
+    "recreate": "The function's container is recreated: an invocation in progress is cut.",
+    "enable": "Allow",
+    "disable": "Remove",
+    "enabledToast": "{{name}} can reach the Internet.",
+    "disabledToast": "{{name}} no longer reaches the Internet."
+  },
+  "sigv4": {
+    "label": "SigV4 callers (AWS SDK)",
+    "bearer": "Callers always authenticate with a bearer token (Authorization: Bearer …), shown once.",
+    "help": "Off by default. On: AWS SDK clients can also invoke the function with an access key pair (endpoint-url http://fn-<name>:8080, region us-east-1).",
+    "warning": "The runtime needs the SigV4 secret itself: it is in the container, so the function's code can read it. It only lets the function be invoked.",
+    "enabled": "Accepted",
+    "disabled": "Not accepted"
+  },
+  "actions": {
+    "test": "Test",
+    "testOf": "Test {{name}}",
+    "start": "Start",
+    "startOf": "Start {{name}}",
+    "stop": "Stop",
+    "stopOf": "Stop {{name}}",
+    "restart": "Restart",
+    "restartOf": "Restart {{name}}",
+    "delete": "Delete",
+    "deleteOf": "Delete {{name}}",
+    "purge": "Purge",
+    "purgeOf": "Purge {{name}}"
+  },
+  "confirm": {
+    "stop": {
+      "title": "Stop {{name}}?",
+      "content": "The function no longer answers invocations until it is started again (scheduled tasks fail meanwhile)."
+    },
+    "restart": {
+      "title": "Restart {{name}}?",
+      "content": "Its container is restarted: invocations in progress are cut."
+    }
+  },
+  "delete": {
+    "title": "Delete the function {{name}}?",
+    "content": "Its container, code, every deployment, secrets, invoke credentials and its own network are deleted. Nothing can be recovered.",
+    "submit": "Delete",
+    "confirmLabel": "Type the name to confirm:"
+  },
+  "purge": {
+    "title": "Purge the function {{name}}?",
+    "content": "The function was edited outside the panel: it is removed without running any of its files (containers, code, deployments, secrets, credentials). Nothing can be recovered.",
+    "submit": "Purge"
+  },
+  "toasts": {
+    "created": "Function {{name}} created.",
+    "updated": "Configuration of {{name}} saved.",
+    "deleted": "Function {{name}} deleted.",
+    "purged": "Function {{name}} purged.",
+    "networkKept": "The network {{network}} was kept: other members are still attached to it.",
+    "start": "{{name}} started.",
+    "stop": "{{name}} stopped.",
+    "restart": "{{name}} restarted.",
+    "rotated": "New credentials for {{name}}."
+  },
+  "units": {
+    "mb": "MB",
+    "s": "s",
+    "seconds_one": "{{count}} second",
+    "seconds_other": "{{count}} seconds"
+  },
+  "create": {
+    "title": "New function",
+    "intro": "A function runs a handler written for AWS Lambda™. Nothing runs until its code is deployed: upload a zip now or later from its page.",
+    "back": "Back to the functions",
+    "submit": "Create the function",
+    "latest": "Latest",
+    "runtimeLabel": "Runtime",
+    "versionLabel": "Version",
+    "imageNote": "AWS Lambda base image published by AWS for {{arch}}, pulled through mirror.gcr.io and pinned by digest.",
+    "handlerLabel": "Handler",
+    "handlerInvalid": "<file>.<function>: letters, digits, _ and -, folders separated by /, e.g. index.handler or src/app.handler.",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>, e.g. index.handler for the handler exported by index.js (or index.mjs).",
+      "python": "<module>.<function>, e.g. lambda_function.lambda_handler, or app.main.handler.",
+      "provided": "Passed to your bootstrap as _HANDLER, which it may read. Empty: bootstrap."
+    },
+    "zipLabel": "Code (zip)",
+    "zipOptional": "Optional: the handler and its dependencies, never built on the server. It is uploaded right after the creation.",
+    "zipRemove": "Remove",
+    "sections": {
+      "runtime": {
+        "title": "Runtime",
+        "subtitle": "The language and its version."
+      },
+      "code": {
+        "title": "Code",
+        "subtitle": "The handler the runtime calls, and optionally the zip to deploy."
+      },
+      "resources": {
+        "title": "Resources",
+        "subtitle": "Limits of the function's container."
+      },
+      "env": {
+        "title": "Variables and secrets",
+        "subtitle": "Environment of the function. Secrets are kept apart and can never be read back."
+      },
+      "networks": {
+        "title": "Network access",
+        "subtitle": "Who can invoke the function, and what it can reach."
+      },
+      "invoke": {
+        "title": "Invocation",
+        "subtitle": "How callers on its networks authenticate."
+      },
+      "name": {
+        "title": "Name",
+        "subtitle": "1 to {{max}} lowercase letters, digits or dashes, starting with a letter. It is also its hostname: fn-<name>."
+      }
+    },
+    "nameLabel": "Name",
+    "nameRequired": "Enter a name.",
+    "nameInvalid": "1 to 21 lowercase letters, digits or dashes, starting with a letter and not ending with a dash.",
+    "nameReserved": "This name is reserved.",
+    "nameTaken": "A function with this name already exists.",
+    "summary": {
+      "title": "Summary",
+      "runtime": "Runtime",
+      "handler": "Handler",
+      "code": "Code",
+      "codeLater": "Uploaded later",
+      "resources": "Resources",
+      "resourcesValue": "{{memory}}, {{cpus}} CPU, {{timeout}} s",
+      "env": "Environment",
+      "envValue": "{{variables}} variables, {{secrets}} secrets",
+      "networks": "Networks",
+      "internet": "Internet access",
+      "auth": "Authentication",
+      "authBearer": "Bearer token",
+      "authSigv4": "Bearer token and SigV4",
+      "name": "Name",
+      "endpoint": "Internal URL",
+      "credentialsNote": "The invoke credentials are shown once, right after the creation."
+    },
+    "setup": {
+      "title": "Setting up",
+      "secrets": "Secrets",
+      "code": "Code upload",
+      "failed": "Failed: {{error}} Do it again from the function's page."
+    },
+    "handlerOptionalLabel": "Handler (optional)",
+    "handlerInvalidCustom": "Letters, digits, _, - and ., folders separated by /, no part starting with . or -; at most 128 characters.",
+    "bootstrap": {
+      "title": "The zip holds a bootstrap executable at its root",
+      "help": "Build it for Linux {{arch}} and zip it, for example in Go with aws-lambda-go:"
+    }
+  },
+  "resources": {
+    "memory": "Memory",
+    "memoryHelp": "From {{min}} to {{max}}.",
+    "cpus": "CPU",
+    "cpusHelp": "From {{min}} to {{max}}, in steps of 0.01.",
+    "timeout": "Timeout",
+    "timeoutHelp": "From 1 to {{max}} seconds per invocation.",
+    "tmp": "/tmp size",
+    "tmpHelp": "From {{min}} to {{max}}.",
+    "tmpNote": "Files in /tmp count against the memory limit: a function filling /tmp is stopped for lack of memory.",
+    "budget": "Still available for the functions: {{memory}} of memory and {{cpus}} CPU.",
+    "overBudget": "These resources exceed what is left of the functions' budget: the creation will be refused."
+  },
+  "env": {
+    "nameRequired": "Enter a name.",
+    "nameInvalid": "Letters, digits and underscores, not starting with a digit.",
+    "nameReserved": "This name is reserved by the runtime (AWS_LAMBDA_*, AWS_REGION, PATH…).",
+    "nameDuplicate": "This name is already used by a variable or a secret.",
+    "value": {
+      "lines": "One line only.",
+      "size": "At most 4096 bytes."
+    },
+    "variable": {
+      "title": "Variables",
+      "help": "Written in the function's compose file: do not put secrets here.",
+      "empty": "No variable.",
+      "add": "Add a variable",
+      "remove": "Remove variable {{index}}",
+      "nameLabel": "Name of variable {{index}}",
+      "valueLabel": "Value of variable {{index}}",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "Value"
+    },
+    "secret": {
+      "title": "Secrets",
+      "warning": "A secret value is written once: it can be replaced or removed, never shown again, by the panel or anyone.",
+      "empty": "No secret.",
+      "add": "Add a secret",
+      "remove": "Remove secret {{index}}",
+      "nameLabel": "Name of secret {{index}}",
+      "valueLabel": "Value of secret {{index}}",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "Secret value"
+    }
+  },
+  "networks": {
+    "title": "Networks",
+    "intro": "Members of these networks (sites, service instances, other functions) can invoke the function at its internal URL. A function never joins the services network.",
+    "dedicated": "Dedicated network",
+    "dedicatedHint": "Created with the function, only for it: attach the sites or services that invoke it.",
+    "dedicatedTag": "Dedicated",
+    "extra": "Other private networks",
+    "extraHelp": "Optional: networks the function also joins.",
+    "servicesRefused": "A function never joins the services network: attach it to a private network.",
+    "connect": "Connect a network",
+    "connectTitle": "Connect {{name}} to a network",
+    "connectIntro": "The function's container is recreated with this network: an invocation in progress is cut.",
+    "network": "Network",
+    "choose": "Choose a network",
+    "noneAvailable": "The function is already on every private network.",
+    "disconnect": "Disconnect",
+    "disconnectOf": "Disconnect from {{network}}",
+    "disconnectConfirm": {
+      "title": "Disconnect {{name}} from {{network}}?",
+      "content": "The network is cut first, then the container is recreated: the members of this network can no longer invoke the function. If the recreation fails, the function is stopped."
+    },
+    "lastHint": "A function keeps at least one network: connect another one first.",
+    "notConnectedHint": "The function's container is not on this network: it is stopped, or must be restarted.",
+    "connected": "{{name}} is connected to {{network}}.",
+    "disconnected": "{{name}} is disconnected from {{network}}."
+  },
+  "detail": {
+    "back": "Back to the functions",
+    "notFound": "This function does not exist (any more).",
+    "tabs": {
+      "overview": "Overview",
+      "code": "Code",
+      "test": "Test",
+      "configuration": "Configuration",
+      "secrets": "Secrets",
+      "credentials": "Credentials",
+      "networks": "Networks",
+      "triggers": "Triggers"
+    }
+  },
+  "overview": {
+    "invocation": "Invocation",
+    "endpoint": "Internal URL",
+    "endpointHint": "Reachable only by the members of the function's networks, with its credentials (POST, the event as body).",
+    "auth": "Authentication",
+    "networks": "Networks",
+    "internet": "Internet access",
+    "runtimeTitle": "Runtime",
+    "state": "State",
+    "runtime": "Runtime",
+    "handler": "Handler",
+    "deployment": "Active deployment",
+    "image": "Image",
+    "digest": "Digest",
+    "created": "Created",
+    "limits": "Limits",
+    "limitMemory": "Memory: {{value}}",
+    "limitCpus": "CPU: {{value}}",
+    "limitTimeout": "Timeout: {{value}}",
+    "limitTmp": "/tmp: {{value}}",
+    "notDeployed": "No code is deployed yet: upload a zip in the Code tab.",
+    "modified": "Its compose project was edited outside the panel, so the panel never runs it again. Restore the file the panel rendered, or purge the function.",
+    "invalid": "Its reference file is unreadable: the panel cannot use it. Purge the function.",
+    "unverified": "A container runs, but it does not match the function's reference: the panel does not use it. Restart the function to recreate it."
+  },
+  "code": {
+    "uploadTitle": "Deploy new code",
+    "uploadIntro": "A zip with the handler ({{handler}}) and its dependencies at its root. It becomes a new deployment, activated at once; if it does not start, the previous one is started again.",
+    "drop": "Drop a zip here, or click to choose one",
+    "dropHint": "At most {{max}}. Only stored and deflated entries; no encrypted entry, device or link leaving the archive.",
+    "notZip": "Choose a .zip file.",
+    "tooLarge": "The zip is larger than {{max}}.",
+    "uploading": "Uploading {{name}}…",
+    "deployed": "Deployment {{id}} is active.",
+    "deploymentsTitle": "Deployments",
+    "kept_one": "{{count}} deployment is kept, the active one included.",
+    "kept_other": "{{count}} deployments are kept for a rollback, the active one included.",
+    "empty": "No deployment yet.",
+    "active": "Active",
+    "zipSize": "Zip: {{size}}",
+    "columns": {
+      "id": "Deployment",
+      "date": "Date",
+      "files": "Files",
+      "size": "Size",
+      "sha256": "Zip SHA-256",
+      "actions": "Actions"
+    },
+    "activate": "Activate",
+    "rollback": "Roll back",
+    "activated": "Deployment {{id}} is active.",
+    "activateConfirm": {
+      "title": "Activate deployment {{id}}?",
+      "content": "Its files are verified, then the function is recreated with them: an invocation in progress is cut."
+    },
+    "rollbackConfirm": {
+      "title": "Roll back to deployment {{id}}?",
+      "content": "The function goes back to this older code (verified first): an invocation in progress is cut. The current deployment is kept."
+    },
+    "deploying": "Upload of {{name}} finished, deploying…",
+    "interrupted": "Upload interrupted: the server may still have deployed the code, check the deployments list.",
+    "uploadIntroCustom": "A zip with the bootstrap executable at its root, built for Linux {{arch}}. It becomes a new deployment, activated at once; if it does not start, the previous one is started again.",
+    "warning": "Warning"
+  },
+  "test": {
+    "eventTitle": "Test event",
+    "eventLabel": "Event (JSON)",
+    "eventHelp": "One JSON value (object, array, string, number…), passed to the handler as its event.",
+    "eventProblems": {
+      "empty": "Enter an event, e.g. {}.",
+      "invalid": "This is not valid JSON.",
+      "tooLarge": "The event is larger than {{max}}."
+    },
+    "invoke": "Invoke",
+    "format": "Format",
+    "notRunning": "The function is not running: start it before invoking it.",
+    "result": "Result",
+    "statusCode": "Status",
+    "duration": "Duration",
+    "durationValue": "{{value}} ms",
+    "requestId": "Request ID",
+    "functionError": "The function failed: {{error}}",
+    "payload": "Response",
+    "payloadEmpty": "Empty response.",
+    "payloadBinary": "Binary response ({{size}}), shown in base64:",
+    "logs": "Logs (end)",
+    "logsEmpty": "No log."
+  },
+  "configuration": {
+    "resources": "Resources",
+    "code": "Handler and variables",
+    "deployScope": "The handler and the variables decide what the code does with its secrets: with an API key, changing them needs the functions:deploy scope as well as functions:write.",
+    "noChange": "Nothing to save.",
+    "reset": "Reset",
+    "confirm": {
+      "title": "Save the configuration of {{name}}?",
+      "running": "The function is recreated with it: an invocation in progress is cut.",
+      "stopped": "The function stays stopped: the configuration applies at its next start."
+    },
+    "mcp": {
+      "title": "AI assistants (MCP)",
+      "label": "Invocable by MCP clients",
+      "help": "A guard-rail for the MCP tool of the loch CLI (AI assistants): when off, the tool refuses to invoke this function. It is not an access control: to forbid invocations, give the MCP client an API key without the functions:invoke scope. Changing it needs the functions:deploy scope."
+    }
+  },
+  "secrets": {
+    "title": "Secrets",
+    "intro": "Secrets are passed to the function as environment variables, kept outside its compose file. Their values are never shown, returned, logged nor audited: replace a value to change it.",
+    "add": "Add a secret",
+    "addTitle": "New secret",
+    "replace": "Replace",
+    "replaceOf": "Replace {{name}}",
+    "replaceTitle": "Replace the value of {{name}}",
+    "remove": "Remove",
+    "removeOf": "Remove {{name}}",
+    "removeConfirm": {
+      "title": "Remove the secret {{name}}?",
+      "content": "The function no longer receives it: it is recreated."
+    },
+    "empty": "No secret.",
+    "hidden": "Hidden",
+    "nameLabel": "Name",
+    "valueLabel": "Value",
+    "restart": "The running function is recreated with it.",
+    "saved": "Secret {{name}} saved.",
+    "removed": "Secret {{name}} removed.",
+    "columns": {
+      "name": "Name",
+      "value": "Value",
+      "actions": "Actions"
+    }
+  },
+  "credentials": {
+    "title": "Invoke credentials",
+    "warning": "Copy these credentials now: they are shown only once. The panel keeps only what checks them and cannot show them again; rotate them if they are lost.",
+    "close": "I have copied the credentials",
+    "show": "Show",
+    "hide": "Hide",
+    "curl": "Copy a test command (curl, from a member of its networks)",
+    "internalOnly": "The internal URL is reachable only from the members of the function's networks: it has no published port.",
+    "sigv4Note": "AWS SDK: endpoint-url http://fn-<name>:8080, region us-east-1, with this key pair.",
+    "fields": {
+      "endpoint": "Internal URL",
+      "region": "Region",
+      "token": "Bearer token",
+      "accessKeyId": "Access key ID",
+      "secretAccessKey": "Secret access key"
+    }
+  },
+  "credentialsTab": {
+    "title": "Invoke credentials",
+    "intro": "Callers on the function's networks authenticate with these credentials; the panel's own invocations (Test tab, scheduled tasks) need none. They cannot be read again: rotate them to get new ones.",
+    "bearerStored": "Set (only its hash is kept)",
+    "rotate": {
+      "title": "Rotate the credentials of {{name}}?",
+      "content": "New credentials are generated and shown once; the current ones stop working at once. The function is recreated.",
+      "submit": "Rotate the credentials"
+    },
+    "enableSigv4": {
+      "title": "Accept SigV4 callers for {{name}}?",
+      "content": "The credentials are rotated: a new bearer token and a SigV4 key pair are shown once, the current ones stop working.",
+      "submit": "Enable and rotate"
+    },
+    "disableSigv4": {
+      "title": "Stop accepting SigV4 callers for {{name}}?",
+      "content": "The credentials are rotated without a key pair: a new bearer token is shown once, the current credentials stop working.",
+      "submit": "Disable and rotate"
+    }
+  },
+  "triggers": {
+    "title": "Scheduled invocations",
+    "intro": "Scheduled tasks of type “Function invocation” targeting this function (at most {{max}}).",
+    "create": "Schedule an invocation",
+    "manage": "Manage the scheduled tasks",
+    "empty": "No scheduled task invokes this function.",
+    "event": "Event"
+  },
+  "runtimeCustomVersion": "Go, Rust… (custom runtime, provided.{{version}})",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "The bootstrap is dynamically linked against glibc: it runs only if it was built against a glibc no newer than Amazon Linux 2023's. Build it statically (CGO_ENABLED=0) to avoid this."
+  }
+}

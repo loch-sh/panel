@@ -1,0 +1,74 @@
+{
+  "title": "API キー",
+  "newKey": "新規キー",
+  "empty": "API キーはありません",
+  "table": {
+    "columns": {
+      "name": "名前",
+      "prefix": "プレフィックス",
+      "permissions": "権限",
+      "expiresAt": "有効期限",
+      "createdAt": "作成日",
+      "lastUsed": "最終使用",
+      "actions": "操作"
+    },
+    "allScopes": "すべて",
+    "expired": "（期限切れ）"
+  },
+  "revoke": {
+    "title": "このキーを失効させますか？",
+    "description": "この操作は取り消せません。",
+    "action": "失効"
+  },
+  "create": {
+    "title": "API キーの作成",
+    "failed": "キーの作成に失敗しました",
+    "form": {
+      "name": {
+        "label": "名前",
+        "required": "名前は必須です",
+        "help": "このキーを識別するためのわかりやすい名前（例：CLI MacBook Pro）",
+        "placeholder": "マイ CLI キー"
+      },
+      "expiresInDays": {
+        "label": "有効期間（日）",
+        "required": "期間は必須です",
+        "range": "期間は {{min}}〜{{max}} 日の範囲で指定してください",
+        "help": "最大期間：{{max}} 日"
+      },
+      "scopes": {
+        "label": "権限",
+        "required": "少なくとも 1 つの権限が必要です"
+      }
+    }
+  },
+  "created": {
+    "title": "API キーを作成しました",
+    "ok": "キーをコピーしました",
+    "warning": "今すぐこのキーをコピーしてください。再表示されることはありません。",
+    "copied": "キーをクリップボードにコピーしました",
+    "cliHelp": "CLI を設定し、求められたらキーを貼り付けてください：<configCmd>loch config {{serverName}} --url {{apiUrl}}</configCmd> の後に <loginCmd>loch login</loginCmd>",
+    "serverName": "my-server"
+  },
+  "scopes": {
+    "all": "すべての権限",
+    "containersRead": "読み取り（一覧、詳細）",
+    "containersLogs": "ログ（ダウンロード、ストリーミング）",
+    "containersActions": "操作（起動、停止、再起動、強制終了、削除）",
+    "containersShell": "シェル（リモートターミナル）",
+    "containersStats": "統計（リアルタイムモニタリング）",
+    "containersProxy": "プロキシ（ポートトンネル）",
+    "containersCp": "ファイルコピー（cp）",
+    "cron": "スケジュールタスク",
+    "sftpRead": "SFTP（読み取り）",
+    "sftpWrite": "SFTP（作成・編集・削除）",
+    "hostingRead": "ホスティング（読み取り）",
+    "hostingWrite": "ホスティング（作成、編集、デプロイ、削除）",
+    "networksRead": "プライベートネットワーク（読み取り）",
+    "networksWrite": "プライベートネットワーク（作成・アタッチ・デタッチ・削除）",
+    "servicesRead": "データベース（読み取り）",
+    "servicesWrite": "データベース（作成・新しいパスワード・削除）",
+    "servicesExpose": "データベース（ポートの公開）",
+    "auditRead": "監査証跡（読み取り）"
+  }
+}

@@ -1,0 +1,41 @@
+# Compose de développement : SFTPGo uniquement.
+# Les autres services (API, interface) sont lancés directement (voir le Makefile).
+#
+# Après le premier démarrage :
+#   1. Ouvrir l'admin SFTPGo : http://localhost:8080/web/admin
+#      (identifiants par défaut ci-dessous : admin / sftpgo-admin)
+#   2. Créer une clé API admin (Admin > API keys) et la copier
+#   3. Renseigner les variables SFTP_* dans host-panel-api/.env :
+#        SFTP_ENABLED=true
+#        SFTP_DIRECTORY=/data/websites/hosted
+#        SFTP_API_URL=http://localhost:8080
+#        SFTP_API_KEY=<la clé API copiée>
+#        SFTP_DOMAIN=localhost
+#        SFTP_PORT=2222
+#        SFTP_WEB_USER_INTERFACE=http://localhost:8080/web/client
+
+name: loch-panel-dev
+
+services:
+  sftpgo:
+    image: mirror.gcr.io/drakkan/sftpgo:latest
+    container_name: sftpgo
+    restart: unless-stopped
+    ports:
+      - "2222:2022" # SFTP (SSH) — correspond à SFTP_PORT
+      - "8080:8080" # Web admin + API REST — correspond à SFTP_API_URL
+    environment:
+      # Crée l'administrateur par défaut au premier démarrage.
+      # ⚠️ Identifiants de DÉVELOPPEMENT uniquement. À CHANGER impérativement
+      #    avant tout déploiement non local : le port 8080 (admin + API REST)
+      #    est exposé sans protection réseau supplémentaire.
+      SFTPGO_DEFAULT_ADMIN_USERNAME: admin
+      SFTPGO_DEFAULT_ADMIN_PASSWORD: sftpgo-admin
+      # Évite l'écran de configuration initial.
+      SFTPGO_HTTPD__BINDINGS__0__ENABLE_WEB_ADMIN: "true"
+      SFTPGO_HTTPD__BINDINGS__0__ENABLE_WEB_CLIENT: "true"
+    volumes:
+      # Base de données, clés d'hôte et état de SFTPGo
+      - ./data/sftpgo/var:/var/lib/sftpgo
+      # Répertoire de base des sites hébergés (= SFTP_DIRECTORY)
+      - ./data/sftpgo/websites:/data/websites/hosted

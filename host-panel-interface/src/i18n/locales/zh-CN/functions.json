@@ -1,0 +1,498 @@
+{
+  "title": "函数",
+  "intro": "无服务器函数：为 AWS Lambda™ 编写的处理程序（Node.js、Python）在本服务器上运行，位于按需启动的隔离容器中。相同的代码也无需修改即可在 AWS Lambda 上运行。",
+  "trademarkNotice": "AWS Lambda 是 Amazon.com, Inc. 或其关联公司的商标。Loch.sh 与 Amazon 无关联，也未获得 Amazon 的认可。",
+  "forbidden": "函数仅限管理员使用。",
+  "disabled": "本服务器已禁用函数模块（FUNCTIONS_ENABLED）。",
+  "configError": "函数模块已启用但无法启动：请查看 API 日志。",
+  "runtimeNotReady": "服务器上尚未安装受信任的函数运行时：无法创建或运行函数。",
+  "newFunction": "新建函数",
+  "createFirst": "创建函数",
+  "limitReached": "已达到 {{max}} 个函数的上限：请先删除一个函数。",
+  "noCode": "无代码",
+  "presentation": {
+    "title": "暂无函数",
+    "text": "函数是以 zip 形式连同依赖一起上传的处理程序（index.handler、lambda_function.lambda_handler）。面板在 AWS 发布的 AWS Lambda 基础镜像中运行它，使用你选择的内存、CPU 和超时；其网络上的站点、服务和其他函数可通过 AWS SDK 或普通 HTTP 请求调用它。",
+    "security": "每个函数都有自己的私有网络，没有发布的端口，除非你允许，否则无法访问互联网；其调用凭据只显示一次。"
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} 个函数",
+    "memory": "内存 {{used}} / {{max}}",
+    "memoryUnbounded": "内存 {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "名称",
+    "runtime": "运行时",
+    "state": "状态",
+    "memory": "内存",
+    "timeout": "超时",
+    "networks": "网络",
+    "internet": "互联网",
+    "deployment": "当前部署",
+    "deployedAt": "部署时间",
+    "actions": "操作"
+  },
+  "tags": {
+    "purgeOnly": "仅可强制清除"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go、Rust…（自定义运行时）"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript，或编译为 JavaScript 的 TypeScript。",
+    "python": "Python 模块及其依赖。",
+    "provided": "任何编译型语言：为 Linux 构建的可执行文件 bootstrap。"
+  },
+  "states": {
+    "not_deployed": "无代码",
+    "running": "运行中",
+    "stopped": "已停止",
+    "missing": "缺失",
+    "modified": "已在面板外修改",
+    "unverified": "未验证",
+    "invalid": "无法读取"
+  },
+  "stateHints": {
+    "not_deployed": "已创建，但尚未上传代码：不会运行任何内容。",
+    "running": "函数的容器正在运行并响应调用。",
+    "stopped": "函数已停止：启动后才能调用。",
+    "missing": "代码已部署且函数未停止，但其容器不存在：请重新启动。",
+    "modified": "其 Compose 项目已在面板外被修改：面板绝不会运行它。请强制清除。",
+    "unverified": "有容器在运行，但不是面板创建的那个：不会使用它。",
+    "invalid": "其参考文件无法读取：只能强制清除。"
+  },
+  "health": {
+    "unhealthy": "不健康",
+    "starting": "启动中"
+  },
+  "egress": {
+    "label": "互联网访问",
+    "on": "允许",
+    "off": "无",
+    "onHint": "函数可以访问互联网（除非防火墙规则另有限制，也可访问主机、局域网和元数据端点）。",
+    "offHint": "函数只能访问其网络中的成员。",
+    "help": "默认关闭：函数只能访问其网络中的成员。",
+    "warning": "允许互联网访问后，函数代码可以将其数据和密钥发送到任何地方，并能访问主机网关、局域网和云元数据端点，除非 DOCKER-USER 防火墙规则阻止。",
+    "enableTitle": "允许 {{name}} 访问互联网？",
+    "disableTitle": "移除 {{name}} 的互联网访问？",
+    "recreate": "函数的容器将被重新创建：正在进行的调用会被中断。",
+    "enable": "允许",
+    "disable": "移除",
+    "enabledToast": "{{name}} 可以访问互联网。",
+    "disabledToast": "{{name}} 已无法访问互联网。"
+  },
+  "sigv4": {
+    "label": "SigV4 调用方（AWS SDK）",
+    "bearer": "调用方始终使用 Bearer 令牌（Authorization: Bearer …）进行身份验证，令牌只显示一次。",
+    "help": "默认关闭。开启后：AWS SDK 客户端也可以使用访问密钥对调用该函数（endpoint-url http://fn-<name>:8080，区域 us-east-1）。",
+    "warning": "运行时需要 SigV4 密钥本身：它位于容器中，因此函数代码可以读取它。它只能用于调用该函数。",
+    "enabled": "接受",
+    "disabled": "不接受"
+  },
+  "actions": {
+    "test": "测试",
+    "testOf": "测试 {{name}}",
+    "start": "启动",
+    "startOf": "启动 {{name}}",
+    "stop": "停止",
+    "stopOf": "停止 {{name}}",
+    "restart": "重启",
+    "restartOf": "重启 {{name}}",
+    "delete": "删除",
+    "deleteOf": "删除 {{name}}",
+    "purge": "强制清除",
+    "purgeOf": "强制清除 {{name}}"
+  },
+  "confirm": {
+    "stop": {
+      "title": "停止 {{name}}？",
+      "content": "在再次启动之前，函数不再响应调用（期间计划任务会失败）。"
+    },
+    "restart": {
+      "title": "重启 {{name}}？",
+      "content": "其容器将被重启：正在进行的调用会被中断。"
+    }
+  },
+  "delete": {
+    "title": "删除函数 {{name}}？",
+    "content": "其容器、代码、所有部署、密钥、调用凭据及其专用网络都将被删除。无法恢复。",
+    "submit": "删除",
+    "confirmLabel": "输入名称以确认："
+  },
+  "purge": {
+    "title": "强制清除函数 {{name}}？",
+    "content": "该函数已在面板外被修改：将在不执行其任何文件的情况下将其移除（容器、代码、部署、密钥、凭据）。无法恢复。",
+    "submit": "强制清除"
+  },
+  "toasts": {
+    "created": "函数 {{name}} 已创建。",
+    "updated": "{{name}} 的配置已保存。",
+    "deleted": "函数 {{name}} 已删除。",
+    "purged": "函数 {{name}} 已强制清除。",
+    "networkKept": "网络 {{network}} 已保留：仍有其他成员连接到它。",
+    "start": "{{name}} 已启动。",
+    "stop": "{{name}} 已停止。",
+    "restart": "{{name}} 已重启。",
+    "rotated": "已为 {{name}} 生成新凭据。"
+  },
+  "units": {
+    "mb": "MB",
+    "s": "秒",
+    "seconds_other": "{{count}} 秒"
+  },
+  "create": {
+    "title": "新建函数",
+    "intro": "函数运行为 AWS Lambda™ 编写的处理程序。在部署代码之前不会运行任何内容：可以现在上传 zip，也可以稍后在其页面上传。",
+    "back": "返回函数列表",
+    "submit": "创建函数",
+    "latest": "最新",
+    "runtimeLabel": "运行时",
+    "versionLabel": "版本",
+    "imageNote": "AWS 为 {{arch}} 发布的 AWS Lambda 基础镜像，通过 mirror.gcr.io 拉取并按摘要固定。",
+    "handlerLabel": "处理程序",
+    "handlerInvalid": "<file>.<function>：字母、数字、_ 和 -，文件夹以 / 分隔，例如 index.handler 或 src/app.handler。",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>，例如 index.handler 表示 index.js（或 index.mjs）导出的处理程序。",
+      "python": "<module>.<function>，例如 lambda_function.lambda_handler 或 app.main.handler。",
+      "provided": "以 _HANDLER 传给您的 bootstrap，它可以读取。留空：bootstrap。"
+    },
+    "zipLabel": "代码 (zip)",
+    "zipOptional": "可选：处理程序及其依赖，绝不会在服务器上构建。将在创建后立即上传。",
+    "zipRemove": "移除",
+    "sections": {
+      "runtime": {
+        "title": "运行时",
+        "subtitle": "语言及其版本。"
+      },
+      "code": {
+        "title": "代码",
+        "subtitle": "运行时调用的处理程序，以及可选的待部署 zip。"
+      },
+      "resources": {
+        "title": "资源",
+        "subtitle": "函数容器的限制。"
+      },
+      "env": {
+        "title": "变量和密钥",
+        "subtitle": "函数的环境。密钥单独保存，永远无法读回。"
+      },
+      "networks": {
+        "title": "网络访问",
+        "subtitle": "谁可以调用该函数，以及它可以访问什么。"
+      },
+      "invoke": {
+        "title": "调用",
+        "subtitle": "其网络上的调用方如何进行身份验证。"
+      },
+      "name": {
+        "title": "名称",
+        "subtitle": "1 到 {{max}} 个小写字母、数字或连字符，以字母开头。它也是其主机名：fn-<name>。"
+      }
+    },
+    "nameLabel": "名称",
+    "nameRequired": "请输入名称。",
+    "nameInvalid": "1 到 21 个小写字母、数字或连字符，以字母开头，且不能以连字符结尾。",
+    "nameReserved": "此名称已被保留。",
+    "nameTaken": "已存在同名函数。",
+    "summary": {
+      "title": "摘要",
+      "runtime": "运行时",
+      "handler": "处理程序",
+      "code": "代码",
+      "codeLater": "稍后上传",
+      "resources": "资源",
+      "resourcesValue": "{{memory}}，{{cpus}} CPU，{{timeout}} 秒",
+      "env": "环境",
+      "envValue": "{{variables}} 个变量，{{secrets}} 个密钥",
+      "networks": "网络",
+      "internet": "互联网访问",
+      "auth": "身份验证",
+      "authBearer": "Bearer 令牌",
+      "authSigv4": "Bearer 令牌和 SigV4",
+      "name": "名称",
+      "endpoint": "内部 URL",
+      "credentialsNote": "调用凭据将在创建后立即显示，且仅显示一次。"
+    },
+    "setup": {
+      "title": "正在设置",
+      "secrets": "密钥",
+      "code": "代码上传",
+      "failed": "失败：{{error}} 请在函数页面上重新操作。"
+    },
+    "handlerOptionalLabel": "处理程序（可选）",
+    "handlerInvalidCustom": "字母、数字、_、- 和 .，文件夹以 / 分隔，任何部分不能以 . 或 - 开头；最多 128 个字符。",
+    "bootstrap": {
+      "title": "zip 根目录包含可执行文件 bootstrap",
+      "help": "为 Linux {{arch}} 构建并打包为 zip，例如在 Go 中使用 aws-lambda-go："
+    }
+  },
+  "resources": {
+    "memory": "内存",
+    "memoryHelp": "从 {{min}} 到 {{max}}。",
+    "cpus": "CPU",
+    "cpusHelp": "从 {{min}} 到 {{max}}，步长 0.01。",
+    "timeout": "超时",
+    "timeoutHelp": "每次调用 1 到 {{max}} 秒。",
+    "tmp": "/tmp 大小",
+    "tmpHelp": "从 {{min}} 到 {{max}}。",
+    "tmpNote": "/tmp 中的文件计入内存限制：写满 /tmp 的函数会因内存不足而被终止。",
+    "budget": "函数仍可使用：{{memory}} 内存和 {{cpus}} CPU。",
+    "overBudget": "这些资源超出了函数配额的剩余量：创建将被拒绝。"
+  },
+  "env": {
+    "nameRequired": "请输入名称。",
+    "nameInvalid": "字母、数字和下划线，不能以数字开头。",
+    "nameReserved": "此名称已被运行时保留（AWS_LAMBDA_*、AWS_REGION、PATH…）。",
+    "nameDuplicate": "此名称已被某个变量或密钥使用。",
+    "value": {
+      "lines": "只能有一行。",
+      "size": "最多 4096 字节。"
+    },
+    "variable": {
+      "title": "变量",
+      "help": "写入函数的 Compose 文件：不要在此放置密钥。",
+      "empty": "无变量。",
+      "add": "添加变量",
+      "remove": "移除变量 {{index}}",
+      "nameLabel": "变量 {{index}} 的名称",
+      "valueLabel": "变量 {{index}} 的值",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "值"
+    },
+    "secret": {
+      "title": "密钥",
+      "warning": "密钥值只写入一次：可以替换或移除，但无论面板还是任何人都无法再次查看。",
+      "empty": "无密钥。",
+      "add": "添加密钥",
+      "remove": "移除密钥 {{index}}",
+      "nameLabel": "密钥 {{index}} 的名称",
+      "valueLabel": "密钥 {{index}} 的值",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "密钥值"
+    }
+  },
+  "networks": {
+    "title": "网络",
+    "intro": "这些网络的成员（站点、服务实例、其他函数）可以通过内部 URL 调用该函数。函数永远不会加入服务网络。",
+    "dedicated": "专用网络",
+    "dedicatedHint": "随函数一起创建，仅供其使用：请连接调用它的站点或服务。",
+    "dedicatedTag": "专用",
+    "extra": "其他私有网络",
+    "extraHelp": "可选：函数还要加入的网络。",
+    "servicesRefused": "函数永远不会加入服务网络：请将其连接到私有网络。",
+    "connect": "连接网络",
+    "connectTitle": "将 {{name}} 连接到网络",
+    "connectIntro": "函数的容器将连同此网络重新创建：正在进行的调用会被中断。",
+    "network": "网络",
+    "choose": "选择网络",
+    "noneAvailable": "该函数已在所有私有网络上。",
+    "disconnect": "断开",
+    "disconnectOf": "从 {{network}} 断开",
+    "disconnectConfirm": {
+      "title": "将 {{name}} 从 {{network}} 断开？",
+      "content": "先切断网络，然后重新创建容器：此网络的成员将无法再调用该函数。如果重新创建失败，函数将被停止。"
+    },
+    "lastHint": "函数至少要保留一个网络：请先连接另一个网络。",
+    "notConnectedHint": "函数的容器不在此网络上：它已停止，或需要重启。",
+    "connected": "{{name}} 已连接到 {{network}}。",
+    "disconnected": "{{name}} 已从 {{network}} 断开。"
+  },
+  "detail": {
+    "back": "返回函数列表",
+    "notFound": "该函数不存在（或已不存在）。",
+    "tabs": {
+      "overview": "概览",
+      "code": "代码",
+      "test": "测试",
+      "configuration": "配置",
+      "secrets": "密钥",
+      "credentials": "凭据",
+      "networks": "网络",
+      "triggers": "触发器"
+    }
+  },
+  "overview": {
+    "invocation": "调用",
+    "endpoint": "内部 URL",
+    "endpointHint": "仅函数网络中的成员可凭其凭据访问（POST，以事件作为请求体）。",
+    "auth": "身份验证",
+    "networks": "网络",
+    "internet": "互联网访问",
+    "runtimeTitle": "运行时",
+    "state": "状态",
+    "runtime": "运行时",
+    "handler": "处理程序",
+    "deployment": "当前部署",
+    "image": "镜像",
+    "digest": "摘要",
+    "created": "创建时间",
+    "limits": "限制",
+    "limitMemory": "内存：{{value}}",
+    "limitCpus": "CPU：{{value}}",
+    "limitTimeout": "超时：{{value}}",
+    "limitTmp": "/tmp：{{value}}",
+    "notDeployed": "尚未部署代码：请在“代码”标签页上传 zip。",
+    "modified": "其 Compose 项目已在面板外被修改，因此面板不会再运行它。请恢复面板生成的文件，或强制清除该函数。",
+    "invalid": "其参考文件无法读取：面板无法使用它。请强制清除该函数。",
+    "unverified": "有容器在运行，但与函数的参考不符：面板不会使用它。请重启函数以重新创建容器。"
+  },
+  "code": {
+    "uploadTitle": "部署新代码",
+    "uploadIntro": "根目录包含处理程序（{{handler}}）及其依赖的 zip。它会成为新的部署并立即激活；如果无法启动，将重新启动之前的部署。",
+    "drop": "将 zip 拖放到此处，或点击选择",
+    "dropHint": "最大 {{max}}。仅支持存储或 deflate 压缩的条目；不允许加密条目、设备文件或指向归档外部的链接。",
+    "notZip": "请选择 .zip 文件。",
+    "tooLarge": "zip 超过 {{max}}。",
+    "uploading": "正在上传 {{name}}…",
+    "deployed": "部署 {{id}} 已激活。",
+    "deploymentsTitle": "部署",
+    "kept_other": "保留 {{count}} 个部署（含当前部署）以便回滚。",
+    "empty": "暂无部署。",
+    "active": "当前",
+    "zipSize": "zip：{{size}}",
+    "columns": {
+      "id": "部署",
+      "date": "日期",
+      "files": "文件",
+      "size": "大小",
+      "sha256": "zip SHA-256",
+      "actions": "操作"
+    },
+    "activate": "激活",
+    "rollback": "回滚",
+    "activated": "部署 {{id}} 已激活。",
+    "activateConfirm": {
+      "title": "激活部署 {{id}}？",
+      "content": "先验证其文件，然后用它们重新创建函数：正在进行的调用会被中断。"
+    },
+    "rollbackConfirm": {
+      "title": "回滚到部署 {{id}}？",
+      "content": "函数将恢复到这份较早的代码（先进行验证）：正在进行的调用会被中断。当前部署会被保留。"
+    },
+    "deploying": "{{name}} 上传完成，正在部署…",
+    "interrupted": "上传已中断：服务器可能仍已部署了代码，请检查部署列表。",
+    "uploadIntroCustom": "根目录包含可执行文件 bootstrap（为 Linux {{arch}} 构建）的 zip。它会成为新的部署并立即激活；如果无法启动，将重新启动上一个部署。",
+    "warning": "警告"
+  },
+  "test": {
+    "eventTitle": "测试事件",
+    "eventLabel": "事件 (JSON)",
+    "eventHelp": "一个 JSON 值（对象、数组、字符串、数字…），作为事件传给处理程序。",
+    "eventProblems": {
+      "empty": "请输入事件，例如 {}。",
+      "invalid": "这不是有效的 JSON。",
+      "tooLarge": "事件超过 {{max}}。"
+    },
+    "invoke": "调用",
+    "format": "格式化",
+    "notRunning": "函数未运行：请先启动再调用。",
+    "result": "结果",
+    "statusCode": "状态",
+    "duration": "耗时",
+    "durationValue": "{{value}} ms",
+    "requestId": "请求 ID",
+    "functionError": "函数执行失败：{{error}}",
+    "payload": "响应",
+    "payloadEmpty": "响应为空。",
+    "payloadBinary": "二进制响应（{{size}}），以 base64 显示：",
+    "logs": "日志（末尾）",
+    "logsEmpty": "无日志。"
+  },
+  "configuration": {
+    "resources": "资源",
+    "code": "处理程序和变量",
+    "deployScope": "处理程序和变量决定了代码如何使用其密钥：使用 API 密钥修改它们时，除 functions:write 外还需要 functions:deploy 范围。",
+    "noChange": "没有需要保存的内容。",
+    "reset": "重置",
+    "confirm": {
+      "title": "保存 {{name}} 的配置？",
+      "running": "函数将使用该配置重新创建：正在进行的调用会被中断。",
+      "stopped": "函数保持停止状态：配置将在下次启动时生效。"
+    },
+    "mcp": {
+      "title": "AI 助手 (MCP)",
+      "label": "允许 MCP 客户端调用",
+      "help": "这是 loch CLI 的 MCP 工具（AI 助手）的防护措施：关闭时，该工具拒绝调用此函数。它不是访问控制：要禁止调用，请为 MCP 客户端提供不含 functions:invoke 范围的 API 密钥。修改此项需要 functions:deploy 范围。"
+    }
+  },
+  "secrets": {
+    "title": "密钥",
+    "intro": "密钥以环境变量的形式传给函数，并保存在其 Compose 文件之外。其值永远不会被显示、返回、写入日志或审计：如需更改，请替换该值。",
+    "add": "添加密钥",
+    "addTitle": "新建密钥",
+    "replace": "替换",
+    "replaceOf": "替换 {{name}}",
+    "replaceTitle": "替换 {{name}} 的值",
+    "remove": "移除",
+    "removeOf": "移除 {{name}}",
+    "removeConfirm": {
+      "title": "移除密钥 {{name}}？",
+      "content": "函数将不再接收它：函数会被重新创建。"
+    },
+    "empty": "无密钥。",
+    "hidden": "已隐藏",
+    "nameLabel": "名称",
+    "valueLabel": "值",
+    "restart": "正在运行的函数将使用它重新创建。",
+    "saved": "密钥 {{name}} 已保存。",
+    "removed": "密钥 {{name}} 已移除。",
+    "columns": {
+      "name": "名称",
+      "value": "值",
+      "actions": "操作"
+    }
+  },
+  "credentials": {
+    "title": "调用凭据",
+    "warning": "请立即复制这些凭据：它们只显示一次。面板只保留用于校验的信息，无法再次显示；如果丢失，请轮换凭据。",
+    "close": "我已复制凭据",
+    "show": "显示",
+    "hide": "隐藏",
+    "curl": "复制测试命令（curl，需从其网络中的成员执行）",
+    "internalOnly": "内部 URL 只能从函数网络中的成员访问：它没有发布的端口。",
+    "sigv4Note": "AWS SDK：endpoint-url http://fn-<name>:8080，区域 us-east-1，使用此密钥对。",
+    "fields": {
+      "endpoint": "内部 URL",
+      "region": "区域",
+      "token": "Bearer 令牌",
+      "accessKeyId": "访问密钥 ID",
+      "secretAccessKey": "秘密访问密钥"
+    }
+  },
+  "credentialsTab": {
+    "title": "调用凭据",
+    "intro": "函数网络上的调用方使用这些凭据进行身份验证；面板自身的调用（“测试”标签页、计划任务）不需要凭据。凭据无法再次读取：如需新凭据，请进行轮换。",
+    "bearerStored": "已设置（仅保留其哈希）",
+    "rotate": {
+      "title": "轮换 {{name}} 的凭据？",
+      "content": "将生成新凭据并只显示一次；当前凭据立即失效。函数会被重新创建。",
+      "submit": "轮换凭据"
+    },
+    "enableSigv4": {
+      "title": "为 {{name}} 接受 SigV4 调用方？",
+      "content": "凭据将被轮换：新的 Bearer 令牌和 SigV4 密钥对只显示一次，当前凭据失效。",
+      "submit": "启用并轮换"
+    },
+    "disableSigv4": {
+      "title": "停止为 {{name}} 接受 SigV4 调用方？",
+      "content": "凭据将在不含密钥对的情况下轮换：新的 Bearer 令牌只显示一次，当前凭据失效。",
+      "submit": "禁用并轮换"
+    }
+  },
+  "triggers": {
+    "title": "计划调用",
+    "intro": "以此函数为目标、类型为“函数调用”的计划任务（最多 {{max}} 个）。",
+    "create": "计划一次调用",
+    "manage": "管理计划任务",
+    "empty": "没有调用此函数的计划任务。",
+    "event": "事件"
+  },
+  "runtimeCustomVersion": "Go、Rust…（自定义运行时，provided.{{version}}）",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "bootstrap 动态链接到 glibc：只有在使用不比 Amazon Linux 2023 更新的 glibc 构建时才能运行。请静态构建（CGO_ENABLED=0）以避免此问题。"
+  }
+}

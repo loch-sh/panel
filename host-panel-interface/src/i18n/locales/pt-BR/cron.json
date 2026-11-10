@@ -1,0 +1,163 @@
+{
+  "title": "Tarefas agendadas",
+  "newJob": "Nova tarefa",
+  "jobTypes": {
+    "dockerAction": "Ação Docker",
+    "dockerExec": "Comando Docker",
+    "http": "HTTP",
+    "httpRequest": "Requisição HTTP",
+    "functionInvoke": "Invocação de função",
+    "function": "Função"
+  },
+  "statuses": {
+    "pending": "Pendente",
+    "running": "Em execução",
+    "success": "Sucesso",
+    "error": "Erro",
+    "skipped": "Execução ignorada"
+  },
+  "modes": {
+    "disabled": "Desativada",
+    "once": "Execução única",
+    "recurring": "Recorrente",
+    "disabledByPanel": "Desativada pelo painel"
+  },
+  "dockerActions": {
+    "start": "Iniciar",
+    "stop": "Parar",
+    "restart": "Reiniciar",
+    "kill": "Kill"
+  },
+  "table": {
+    "columns": {
+      "name": "Nome",
+      "schedule": "Agendamento",
+      "type": "Tipo",
+      "target": "Alvo",
+      "mode": "Modo",
+      "lastStatus": "Último status",
+      "lastRun": "Última execução",
+      "actions": "Ações"
+    },
+    "actions": {
+      "runNow": "Executar agora",
+      "suspend": "Suspender",
+      "enable": "Ativar"
+    },
+    "details": {
+      "error": "Erro:",
+      "output": "Saída:",
+      "lastSkipped": "A última execução, em {{date}}, foi ignorada: a anterior ainda estava em andamento.",
+      "functionRun": "{{duration}} ms, resposta de {{bytes}} bytes",
+      "functionError": "Erro da função: {{error}}"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "title": "Excluir tarefa",
+      "content": "Tem certeza de que deseja excluir esta tarefa agendada?"
+    },
+    "suspend": {
+      "title": "Suspender tarefa",
+      "content": "Tem certeza de que deseja suspender a tarefa “{{name}}”?",
+      "ok": "Suspender"
+    },
+    "enable": {
+      "title": "Ativar tarefa",
+      "content": "Tem certeza de que deseja ativar a tarefa “{{name}}”?",
+      "ok": "Ativar"
+    },
+    "run": {
+      "title": "Executar agora",
+      "content": "Tem certeza de que deseja executar a tarefa “{{name}}” agora?",
+      "ok": "Executar"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "Nova tarefa agendada",
+      "edit": "Editar tarefa"
+    },
+    "submit": {
+      "update": "Atualizar"
+    },
+    "fields": {
+      "name": {
+        "label": "Nome",
+        "required": "O nome é obrigatório",
+        "placeholder": "ex.: Limpar o cache do Symfony"
+      },
+      "schedule": {
+        "label": "Expressão cron",
+        "required": "A expressão cron é obrigatória",
+        "invalid": "Expressão cron inválida",
+        "help": "Formato: minuto hora dia mês dia-da-semana (ex.: 0 3 * * * ou @every 5m)"
+      },
+      "type": {
+        "label": "Tipo"
+      },
+      "enabled": {
+        "label": "Ativada"
+      },
+      "once": {
+        "label": "Execução única",
+        "tooltip": "Desativada automaticamente após a primeira execução"
+      },
+      "container": {
+        "label": "Contêiner",
+        "required": "O contêiner é obrigatório",
+        "placeholder": "Selecione um contêiner"
+      },
+      "action": {
+        "label": "Ação",
+        "required": "A ação é obrigatória"
+      },
+      "command": {
+        "label": "Comando",
+        "required": "O comando é obrigatório"
+      },
+      "workingDir": {
+        "label": "Diretório de trabalho",
+        "help": "Por padrão, o diretório definido pelo contêiner"
+      },
+      "httpMethod": {
+        "label": "Método",
+        "required": "O método é obrigatório"
+      },
+      "httpUrl": {
+        "label": "URL",
+        "required": "A URL é obrigatória"
+      },
+      "httpBody": {
+        "label": "Corpo da requisição"
+      },
+      "httpTimeout": {
+        "label": "Tempo limite (segundos)"
+      },
+      "function": {
+        "label": "Função",
+        "required": "A função é obrigatória",
+        "placeholder": "Selecione uma função",
+        "help": "A função é invocada pelo painel, como na aba Teste da página dela. No máximo 5 tarefas agendadas por função.",
+        "none": "Nenhuma função"
+      },
+      "functionEvent": {
+        "label": "Evento (JSON)",
+        "help": "Um valor JSON passado ao handler como evento; vazio equivale a {}. No máximo 64 KB.",
+        "invalid": "O evento deve ser um único valor JSON válido",
+        "tooLarge": "O evento é maior que 64 KB"
+      }
+    }
+  },
+  "scheduleDescriptions": {
+    "every": "Execução recorrente: a cada {{interval}}",
+    "yearly": "Uma vez por ano, em 1º de janeiro à meia-noite",
+    "monthly": "Uma vez por mês, no dia 1º à meia-noite",
+    "weekly": "Uma vez por semana, no domingo à meia-noite",
+    "daily": "Uma vez por dia, à meia-noite",
+    "hourly": "A cada hora"
+  },
+  "disabledReasons": {
+    "FUNCTION_DELETED": "Desativada automaticamente: a função que ela invocava foi excluída."
+  }
+}

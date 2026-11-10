@@ -1,0 +1,500 @@
+{
+  "title": "Funktionen",
+  "intro": "Serverless-Funktionen: für AWS Lambda™ geschriebene Handler (Node.js, Python), ausgeführt auf diesem Server in einem isolierten Container, der bei Bedarf gestartet wird. Derselbe Code läuft auch unverändert auf AWS Lambda.",
+  "trademarkNotice": "AWS Lambda ist eine Marke von Amazon.com, Inc. oder seinen verbundenen Unternehmen. Loch.sh ist weder mit Amazon verbunden noch von Amazon unterstützt.",
+  "forbidden": "Funktionen sind Administratoren vorbehalten.",
+  "disabled": "Das Funktionsmodul ist auf diesem Server deaktiviert (FUNCTIONS_ENABLED).",
+  "configError": "Das Funktionsmodul ist aktiviert, konnte aber nicht starten: Siehe API-Logs.",
+  "runtimeNotReady": "Auf dem Server ist noch keine vertrauenswürdige Funktionslaufzeit installiert: Funktionen können weder erstellt noch ausgeführt werden.",
+  "newFunction": "Neue Funktion",
+  "createFirst": "Funktion erstellen",
+  "limitReached": "Das Limit von {{max}} Funktionen ist erreicht: Löschen Sie zuerst eine Funktion.",
+  "noCode": "Kein Code",
+  "presentation": {
+    "title": "Noch keine Funktion",
+    "text": "Eine Funktion ist ein Handler (index.handler, lambda_function.lambda_handler), der als Zip mit seinen Abhängigkeiten hochgeladen wird. Das Panel führt ihn im von AWS veröffentlichten AWS-Lambda-Basis-Image aus, mit dem Speicher, der CPU und dem Timeout Ihrer Wahl; Sites, Dienste und andere Funktionen in seinen Netzwerken rufen ihn mit dem AWS SDK oder einer einfachen HTTP-Anfrage auf.",
+    "security": "Jede Funktion erhält ihr eigenes privates Netzwerk, keinen veröffentlichten Port und keinen Internetzugang, sofern Sie ihn nicht erlauben; ihre Aufruf-Zugangsdaten werden nur einmal angezeigt."
+  },
+  "usage": {
+    "count": "{{count}} / {{max}} Funktionen",
+    "memory": "Speicher {{used}} / {{max}}",
+    "memoryUnbounded": "Speicher {{used}}",
+    "cpus": "CPU {{used}} / {{max}}",
+    "cpusUnbounded": "CPU {{used}}"
+  },
+  "columns": {
+    "name": "Name",
+    "runtime": "Laufzeit",
+    "state": "Zustand",
+    "memory": "Speicher",
+    "timeout": "Timeout",
+    "networks": "Netzwerke",
+    "internet": "Internet",
+    "deployment": "Aktive Bereitstellung",
+    "deployedAt": "Bereitgestellt",
+    "actions": "Aktionen"
+  },
+  "tags": {
+    "purgeOnly": "Nur bereinigen"
+  },
+  "runtimes": {
+    "nodejs": "Node.js",
+    "python": "Python",
+    "provided": "Go, Rust… (benutzerdefinierte Runtime)"
+  },
+  "runtimeDescriptions": {
+    "nodejs": "JavaScript oder zu JavaScript kompiliertes TypeScript.",
+    "python": "Python-Module und ihre Abhängigkeiten.",
+    "provided": "Jede kompilierte Sprache: eine für Linux gebaute ausführbare Datei bootstrap."
+  },
+  "states": {
+    "not_deployed": "Kein Code",
+    "running": "Läuft",
+    "stopped": "Gestoppt",
+    "missing": "Fehlt",
+    "modified": "Außerhalb des Panels geändert",
+    "unverified": "Nicht überprüft",
+    "invalid": "Nicht lesbar"
+  },
+  "stateHints": {
+    "not_deployed": "Erstellt, aber es wurde noch kein Code hochgeladen: Nichts läuft.",
+    "running": "Der Container der Funktion läuft und beantwortet Aufrufe.",
+    "stopped": "Die Funktion ist gestoppt: Starten Sie sie, um sie aufzurufen.",
+    "missing": "Code ist bereitgestellt und die Funktion ist nicht gestoppt, aber ihr Container existiert nicht: Starten Sie sie erneut.",
+    "modified": "Ihr Compose-Projekt wurde außerhalb des Panels geändert: Das Panel führt es nie aus. Bereinigen Sie sie.",
+    "unverified": "Ein Container läuft, aber es ist nicht der vom Panel erstellte: Er wird nicht verwendet.",
+    "invalid": "Ihre Referenzdatei ist nicht lesbar: Sie kann nur bereinigt werden."
+  },
+  "health": {
+    "unhealthy": "Fehlerhaft",
+    "starting": "Startet"
+  },
+  "egress": {
+    "label": "Internetzugang",
+    "on": "Erlaubt",
+    "off": "Keiner",
+    "onHint": "Die Funktion kann das Internet erreichen (sowie den Host, das LAN und Metadaten-Endpunkte, sofern Firewall-Regeln dies nicht verhindern).",
+    "offHint": "Die Funktion erreicht nur die Mitglieder ihrer Netzwerke.",
+    "help": "Standardmäßig aus: Die Funktion erreicht nur die Mitglieder ihrer Netzwerke.",
+    "warning": "Mit Internetzugang kann der Code der Funktion ihre Daten und Geheimnisse überallhin senden und das Host-Gateway, das LAN sowie Cloud-Metadaten-Endpunkte erreichen, sofern DOCKER-USER-Firewall-Regeln sie nicht blockieren.",
+    "enableTitle": "Internetzugang für {{name}} erlauben?",
+    "disableTitle": "Internetzugang von {{name}} entfernen?",
+    "recreate": "Der Container der Funktion wird neu erstellt: Ein laufender Aufruf wird abgebrochen.",
+    "enable": "Erlauben",
+    "disable": "Entfernen",
+    "enabledToast": "{{name}} kann das Internet erreichen.",
+    "disabledToast": "{{name}} erreicht das Internet nicht mehr."
+  },
+  "sigv4": {
+    "label": "SigV4-Aufrufer (AWS SDK)",
+    "bearer": "Aufrufer authentifizieren sich immer mit einem Bearer-Token (Authorization: Bearer …), das nur einmal angezeigt wird.",
+    "help": "Standardmäßig aus. Ein: AWS-SDK-Clients können die Funktion zusätzlich mit einem Zugriffsschlüsselpaar aufrufen (endpoint-url http://fn-<name>:8080, Region us-east-1).",
+    "warning": "Die Laufzeit benötigt das SigV4-Geheimnis selbst: Es liegt im Container, daher kann der Code der Funktion es lesen. Es erlaubt nur, die Funktion aufzurufen.",
+    "enabled": "Akzeptiert",
+    "disabled": "Nicht akzeptiert"
+  },
+  "actions": {
+    "test": "Testen",
+    "testOf": "{{name}} testen",
+    "start": "Starten",
+    "startOf": "{{name}} starten",
+    "stop": "Stoppen",
+    "stopOf": "{{name}} stoppen",
+    "restart": "Neu starten",
+    "restartOf": "{{name}} neu starten",
+    "delete": "Löschen",
+    "deleteOf": "{{name}} löschen",
+    "purge": "Bereinigen",
+    "purgeOf": "{{name}} bereinigen"
+  },
+  "confirm": {
+    "stop": {
+      "title": "{{name}} stoppen?",
+      "content": "Die Funktion beantwortet keine Aufrufe mehr, bis sie wieder gestartet wird (geplante Aufgaben schlagen in der Zwischenzeit fehl)."
+    },
+    "restart": {
+      "title": "{{name}} neu starten?",
+      "content": "Ihr Container wird neu gestartet: Laufende Aufrufe werden abgebrochen."
+    }
+  },
+  "delete": {
+    "title": "Funktion {{name}} löschen?",
+    "content": "Ihr Container, ihr Code, alle Bereitstellungen, Geheimnisse, Aufruf-Zugangsdaten und ihr eigenes Netzwerk werden gelöscht. Nichts kann wiederhergestellt werden.",
+    "submit": "Löschen",
+    "confirmLabel": "Geben Sie zur Bestätigung den Namen ein:"
+  },
+  "purge": {
+    "title": "Funktion {{name}} bereinigen?",
+    "content": "Die Funktion wurde außerhalb des Panels geändert: Sie wird entfernt, ohne eine ihrer Dateien auszuführen (Container, Code, Bereitstellungen, Geheimnisse, Zugangsdaten). Nichts kann wiederhergestellt werden.",
+    "submit": "Bereinigen"
+  },
+  "toasts": {
+    "created": "Funktion {{name}} erstellt.",
+    "updated": "Konfiguration von {{name}} gespeichert.",
+    "deleted": "Funktion {{name}} gelöscht.",
+    "purged": "Funktion {{name}} bereinigt.",
+    "networkKept": "Das Netzwerk {{network}} wurde beibehalten: Andere Mitglieder sind noch daran angebunden.",
+    "start": "{{name}} gestartet.",
+    "stop": "{{name}} gestoppt.",
+    "restart": "{{name}} neu gestartet.",
+    "rotated": "Neue Zugangsdaten für {{name}}."
+  },
+  "units": {
+    "mb": "MB",
+    "s": "s",
+    "seconds_one": "{{count}} Sekunde",
+    "seconds_other": "{{count}} Sekunden"
+  },
+  "create": {
+    "title": "Neue Funktion",
+    "intro": "Eine Funktion führt einen für AWS Lambda™ geschriebenen Handler aus. Nichts läuft, bevor ihr Code bereitgestellt ist: Laden Sie jetzt ein Zip hoch oder später über ihre Seite.",
+    "back": "Zurück zu den Funktionen",
+    "submit": "Funktion erstellen",
+    "latest": "Neueste",
+    "runtimeLabel": "Laufzeit",
+    "versionLabel": "Version",
+    "imageNote": "Von AWS veröffentlichtes AWS-Lambda-Basis-Image für {{arch}}, über mirror.gcr.io bezogen und per Digest fixiert.",
+    "handlerLabel": "Handler",
+    "handlerInvalid": "<file>.<function>: Buchstaben, Ziffern, _ und -, Ordner durch / getrennt, z. B. index.handler oder src/app.handler.",
+    "handlerHelp": {
+      "nodejs": "<file>.<export>, z. B. index.handler für den von index.js (oder index.mjs) exportierten Handler.",
+      "python": "<module>.<function>, z. B. lambda_function.lambda_handler oder app.main.handler.",
+      "provided": "Wird Ihrem bootstrap als _HANDLER übergeben, den er lesen kann. Leer: bootstrap."
+    },
+    "zipLabel": "Code (Zip)",
+    "zipOptional": "Optional: der Handler und seine Abhängigkeiten, nie auf dem Server gebaut. Es wird direkt nach der Erstellung hochgeladen.",
+    "zipRemove": "Entfernen",
+    "sections": {
+      "runtime": {
+        "title": "Laufzeit",
+        "subtitle": "Die Sprache und ihre Version."
+      },
+      "code": {
+        "title": "Code",
+        "subtitle": "Der Handler, den die Laufzeit aufruft, und optional das bereitzustellende Zip."
+      },
+      "resources": {
+        "title": "Ressourcen",
+        "subtitle": "Limits des Funktionscontainers."
+      },
+      "env": {
+        "title": "Variablen und Geheimnisse",
+        "subtitle": "Umgebung der Funktion. Geheimnisse werden getrennt aufbewahrt und können nie wieder ausgelesen werden."
+      },
+      "networks": {
+        "title": "Netzwerkzugang",
+        "subtitle": "Wer die Funktion aufrufen kann und was sie erreichen kann."
+      },
+      "invoke": {
+        "title": "Aufruf",
+        "subtitle": "Wie sich Aufrufer in ihren Netzwerken authentifizieren."
+      },
+      "name": {
+        "title": "Name",
+        "subtitle": "1 bis {{max}} Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben. Er ist auch ihr Hostname: fn-<name>."
+      }
+    },
+    "nameLabel": "Name",
+    "nameRequired": "Geben Sie einen Namen ein.",
+    "nameInvalid": "1 bis 21 Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben und nicht mit einem Bindestrich endend.",
+    "nameReserved": "Dieser Name ist reserviert.",
+    "nameTaken": "Eine Funktion mit diesem Namen existiert bereits.",
+    "summary": {
+      "title": "Zusammenfassung",
+      "runtime": "Laufzeit",
+      "handler": "Handler",
+      "code": "Code",
+      "codeLater": "Wird später hochgeladen",
+      "resources": "Ressourcen",
+      "resourcesValue": "{{memory}}, {{cpus}} CPU, {{timeout}} s",
+      "env": "Umgebung",
+      "envValue": "{{variables}} Variablen, {{secrets}} Geheimnisse",
+      "networks": "Netzwerke",
+      "internet": "Internetzugang",
+      "auth": "Authentifizierung",
+      "authBearer": "Bearer-Token",
+      "authSigv4": "Bearer-Token und SigV4",
+      "name": "Name",
+      "endpoint": "Interne URL",
+      "credentialsNote": "Die Aufruf-Zugangsdaten werden einmal angezeigt, direkt nach der Erstellung."
+    },
+    "setup": {
+      "title": "Einrichtung",
+      "secrets": "Geheimnisse",
+      "code": "Code-Upload",
+      "failed": "Fehlgeschlagen: {{error}} Wiederholen Sie es auf der Seite der Funktion."
+    },
+    "handlerOptionalLabel": "Handler (optional)",
+    "handlerInvalidCustom": "Buchstaben, Ziffern, _, - und ., Ordner durch / getrennt, kein Teil beginnt mit . oder -; höchstens 128 Zeichen.",
+    "bootstrap": {
+      "title": "Das Zip enthält im Stammverzeichnis eine ausführbare Datei bootstrap",
+      "help": "Bauen Sie sie für Linux {{arch}} und packen Sie sie ins Zip, z. B. in Go mit aws-lambda-go:"
+    }
+  },
+  "resources": {
+    "memory": "Speicher",
+    "memoryHelp": "Von {{min}} bis {{max}}.",
+    "cpus": "CPU",
+    "cpusHelp": "Von {{min}} bis {{max}}, in Schritten von 0,01.",
+    "timeout": "Timeout",
+    "timeoutHelp": "Von 1 bis {{max}} Sekunden pro Aufruf.",
+    "tmp": "Größe von /tmp",
+    "tmpHelp": "Von {{min}} bis {{max}}.",
+    "tmpNote": "Dateien in /tmp zählen zum Speicherlimit: Eine Funktion, die /tmp füllt, wird wegen Speichermangels gestoppt.",
+    "budget": "Noch verfügbar für die Funktionen: {{memory}} Speicher und {{cpus}} CPU.",
+    "overBudget": "Diese Ressourcen übersteigen das verbleibende Budget der Funktionen: Die Erstellung wird abgelehnt."
+  },
+  "env": {
+    "nameRequired": "Geben Sie einen Namen ein.",
+    "nameInvalid": "Buchstaben, Ziffern und Unterstriche, nicht mit einer Ziffer beginnend.",
+    "nameReserved": "Dieser Name ist von der Laufzeit reserviert (AWS_LAMBDA_*, AWS_REGION, PATH…).",
+    "nameDuplicate": "Dieser Name wird bereits von einer Variable oder einem Geheimnis verwendet.",
+    "value": {
+      "lines": "Nur eine Zeile.",
+      "size": "Höchstens 4096 Bytes."
+    },
+    "variable": {
+      "title": "Variablen",
+      "help": "Werden in die Compose-Datei der Funktion geschrieben: Legen Sie hier keine Geheimnisse ab.",
+      "empty": "Keine Variable.",
+      "add": "Variable hinzufügen",
+      "remove": "Variable {{index}} entfernen",
+      "nameLabel": "Name der Variable {{index}}",
+      "valueLabel": "Wert der Variable {{index}}",
+      "namePlaceholder": "TABLE_NAME",
+      "valuePlaceholder": "Wert"
+    },
+    "secret": {
+      "title": "Geheimnisse",
+      "warning": "Ein geheimer Wert wird einmal geschrieben: Er kann ersetzt oder entfernt, aber nie wieder angezeigt werden, weder vom Panel noch von sonst jemandem.",
+      "empty": "Kein Geheimnis.",
+      "add": "Geheimnis hinzufügen",
+      "remove": "Geheimnis {{index}} entfernen",
+      "nameLabel": "Name des Geheimnisses {{index}}",
+      "valueLabel": "Wert des Geheimnisses {{index}}",
+      "namePlaceholder": "API_KEY",
+      "valuePlaceholder": "Geheimer Wert"
+    }
+  },
+  "networks": {
+    "title": "Netzwerke",
+    "intro": "Mitglieder dieser Netzwerke (Sites, Dienstinstanzen, andere Funktionen) können die Funktion über ihre interne URL aufrufen. Eine Funktion tritt nie dem Dienstenetzwerk bei.",
+    "dedicated": "Dediziertes Netzwerk",
+    "dedicatedHint": "Mit der Funktion erstellt, nur für sie: Binden Sie die Sites oder Dienste an, die sie aufrufen.",
+    "dedicatedTag": "Dediziert",
+    "extra": "Weitere private Netzwerke",
+    "extraHelp": "Optional: Netzwerke, denen die Funktion zusätzlich beitritt.",
+    "servicesRefused": "Eine Funktion tritt nie dem Dienstenetzwerk bei: Binden Sie sie an ein privates Netzwerk an.",
+    "connect": "Netzwerk verbinden",
+    "connectTitle": "{{name}} mit einem Netzwerk verbinden",
+    "connectIntro": "Der Container der Funktion wird mit diesem Netzwerk neu erstellt: Ein laufender Aufruf wird abgebrochen.",
+    "network": "Netzwerk",
+    "choose": "Wählen Sie ein Netzwerk",
+    "noneAvailable": "Die Funktion ist bereits in allen privaten Netzwerken.",
+    "disconnect": "Trennen",
+    "disconnectOf": "Von {{network}} trennen",
+    "disconnectConfirm": {
+      "title": "{{name}} von {{network}} trennen?",
+      "content": "Zuerst wird das Netzwerk getrennt, dann wird der Container neu erstellt: Die Mitglieder dieses Netzwerks können die Funktion nicht mehr aufrufen. Schlägt die Neuerstellung fehl, wird die Funktion gestoppt."
+    },
+    "lastHint": "Eine Funktion behält mindestens ein Netzwerk: Verbinden Sie zuerst ein anderes.",
+    "notConnectedHint": "Der Container der Funktion ist nicht in diesem Netzwerk: Er ist gestoppt oder muss neu gestartet werden.",
+    "connected": "{{name}} ist mit {{network}} verbunden.",
+    "disconnected": "{{name}} ist von {{network}} getrennt."
+  },
+  "detail": {
+    "back": "Zurück zu den Funktionen",
+    "notFound": "Diese Funktion existiert nicht (mehr).",
+    "tabs": {
+      "overview": "Übersicht",
+      "code": "Code",
+      "test": "Test",
+      "configuration": "Konfiguration",
+      "secrets": "Geheimnisse",
+      "credentials": "Zugangsdaten",
+      "networks": "Netzwerke",
+      "triggers": "Auslöser"
+    }
+  },
+  "overview": {
+    "invocation": "Aufruf",
+    "endpoint": "Interne URL",
+    "endpointHint": "Nur für die Mitglieder der Netzwerke der Funktion erreichbar, mit ihren Zugangsdaten (POST, das Ereignis als Body).",
+    "auth": "Authentifizierung",
+    "networks": "Netzwerke",
+    "internet": "Internetzugang",
+    "runtimeTitle": "Laufzeit",
+    "state": "Zustand",
+    "runtime": "Laufzeit",
+    "handler": "Handler",
+    "deployment": "Aktive Bereitstellung",
+    "image": "Image",
+    "digest": "Digest",
+    "created": "Erstellt",
+    "limits": "Limits",
+    "limitMemory": "Speicher: {{value}}",
+    "limitCpus": "CPU: {{value}}",
+    "limitTimeout": "Timeout: {{value}}",
+    "limitTmp": "/tmp: {{value}}",
+    "notDeployed": "Es ist noch kein Code bereitgestellt: Laden Sie im Tab „Code“ ein Zip hoch.",
+    "modified": "Ihr Compose-Projekt wurde außerhalb des Panels geändert, daher führt das Panel es nie wieder aus. Stellen Sie die vom Panel erzeugte Datei wieder her oder bereinigen Sie die Funktion.",
+    "invalid": "Ihre Referenzdatei ist nicht lesbar: Das Panel kann sie nicht verwenden. Bereinigen Sie die Funktion.",
+    "unverified": "Ein Container läuft, entspricht aber nicht der Referenz der Funktion: Das Panel verwendet ihn nicht. Starten Sie die Funktion neu, um ihn neu zu erstellen."
+  },
+  "code": {
+    "uploadTitle": "Neuen Code bereitstellen",
+    "uploadIntro": "Ein Zip mit dem Handler ({{handler}}) und seinen Abhängigkeiten im Stammverzeichnis. Es wird zu einer neuen Bereitstellung, die sofort aktiviert wird; startet sie nicht, wird die vorherige wieder gestartet.",
+    "drop": "Zip hier ablegen oder klicken, um eines auszuwählen",
+    "dropHint": "Höchstens {{max}}. Nur gespeicherte und mit Deflate komprimierte Einträge; keine verschlüsselten Einträge, keine Geräte und keine Links, die aus dem Archiv herausführen.",
+    "notZip": "Wählen Sie eine .zip-Datei.",
+    "tooLarge": "Das Zip ist größer als {{max}}.",
+    "uploading": "{{name}} wird hochgeladen…",
+    "deployed": "Bereitstellung {{id}} ist aktiv.",
+    "deploymentsTitle": "Bereitstellungen",
+    "kept_one": "{{count}} Bereitstellung wird aufbewahrt, die aktive eingeschlossen.",
+    "kept_other": "{{count}} Bereitstellungen werden für ein Zurücksetzen aufbewahrt, die aktive eingeschlossen.",
+    "empty": "Noch keine Bereitstellung.",
+    "active": "Aktiv",
+    "zipSize": "Zip: {{size}}",
+    "columns": {
+      "id": "Bereitstellung",
+      "date": "Datum",
+      "files": "Dateien",
+      "size": "Größe",
+      "sha256": "SHA-256 des Zips",
+      "actions": "Aktionen"
+    },
+    "activate": "Aktivieren",
+    "rollback": "Zurücksetzen",
+    "activated": "Bereitstellung {{id}} ist aktiv.",
+    "activateConfirm": {
+      "title": "Bereitstellung {{id}} aktivieren?",
+      "content": "Ihre Dateien werden überprüft, dann wird die Funktion damit neu erstellt: Ein laufender Aufruf wird abgebrochen."
+    },
+    "rollbackConfirm": {
+      "title": "Auf Bereitstellung {{id}} zurücksetzen?",
+      "content": "Die Funktion kehrt zu diesem älteren Code zurück (zuvor überprüft): Ein laufender Aufruf wird abgebrochen. Die aktuelle Bereitstellung bleibt erhalten."
+    },
+    "deploying": "Upload von {{name}} abgeschlossen, wird bereitgestellt…",
+    "interrupted": "Upload unterbrochen: Der Server hat den Code möglicherweise trotzdem bereitgestellt, prüfen Sie die Liste der Deployments.",
+    "uploadIntroCustom": "Ein Zip mit der ausführbaren Datei bootstrap im Stammverzeichnis, gebaut für Linux {{arch}}. Es wird ein neues Deployment und sofort aktiviert; startet es nicht, wird das vorherige wieder gestartet.",
+    "warning": "Warnung"
+  },
+  "test": {
+    "eventTitle": "Testereignis",
+    "eventLabel": "Ereignis (JSON)",
+    "eventHelp": "Ein JSON-Wert (Objekt, Array, String, Zahl…), der dem Handler als Ereignis übergeben wird.",
+    "eventProblems": {
+      "empty": "Geben Sie ein Ereignis ein, z. B. {}.",
+      "invalid": "Das ist kein gültiges JSON.",
+      "tooLarge": "Das Ereignis ist größer als {{max}}."
+    },
+    "invoke": "Aufrufen",
+    "format": "Formatieren",
+    "notRunning": "Die Funktion läuft nicht: Starten Sie sie, bevor Sie sie aufrufen.",
+    "result": "Ergebnis",
+    "statusCode": "Status",
+    "duration": "Dauer",
+    "durationValue": "{{value}} ms",
+    "requestId": "Anfrage-ID",
+    "functionError": "Die Funktion ist fehlgeschlagen: {{error}}",
+    "payload": "Antwort",
+    "payloadEmpty": "Leere Antwort.",
+    "payloadBinary": "Binäre Antwort ({{size}}), in Base64 angezeigt:",
+    "logs": "Logs (Ende)",
+    "logsEmpty": "Kein Log."
+  },
+  "configuration": {
+    "resources": "Ressourcen",
+    "code": "Handler und Variablen",
+    "deployScope": "Handler und Variablen bestimmen, was der Code mit seinen Geheimnissen macht: Mit einem API-Schlüssel erfordert ihre Änderung den Scope functions:deploy zusätzlich zu functions:write.",
+    "noChange": "Nichts zu speichern.",
+    "reset": "Zurücksetzen",
+    "confirm": {
+      "title": "Konfiguration von {{name}} speichern?",
+      "running": "Die Funktion wird damit neu erstellt: Ein laufender Aufruf wird abgebrochen.",
+      "stopped": "Die Funktion bleibt gestoppt: Die Konfiguration gilt ab ihrem nächsten Start."
+    },
+    "mcp": {
+      "title": "KI-Assistenten (MCP)",
+      "label": "Von MCP-Clients aufrufbar",
+      "help": "Eine Schutzvorrichtung für das MCP-Tool der loch-CLI (KI-Assistenten): Ist sie deaktiviert, verweigert das Tool den Aufruf dieser Funktion. Sie ist keine Zugriffskontrolle: Um Aufrufe zu verbieten, geben Sie dem MCP-Client einen API-Schlüssel ohne den Scope functions:invoke. Zum Ändern ist der Scope functions:deploy erforderlich."
+    }
+  },
+  "secrets": {
+    "title": "Geheimnisse",
+    "intro": "Geheimnisse werden der Funktion als Umgebungsvariablen übergeben und außerhalb ihrer Compose-Datei aufbewahrt. Ihre Werte werden nie angezeigt, zurückgegeben, protokolliert oder auditiert: Ersetzen Sie einen Wert, um ihn zu ändern.",
+    "add": "Geheimnis hinzufügen",
+    "addTitle": "Neues Geheimnis",
+    "replace": "Ersetzen",
+    "replaceOf": "{{name}} ersetzen",
+    "replaceTitle": "Wert von {{name}} ersetzen",
+    "remove": "Entfernen",
+    "removeOf": "{{name}} entfernen",
+    "removeConfirm": {
+      "title": "Geheimnis {{name}} entfernen?",
+      "content": "Die Funktion erhält es nicht mehr: Sie wird neu erstellt."
+    },
+    "empty": "Kein Geheimnis.",
+    "hidden": "Verborgen",
+    "nameLabel": "Name",
+    "valueLabel": "Wert",
+    "restart": "Die laufende Funktion wird damit neu erstellt.",
+    "saved": "Geheimnis {{name}} gespeichert.",
+    "removed": "Geheimnis {{name}} entfernt.",
+    "columns": {
+      "name": "Name",
+      "value": "Wert",
+      "actions": "Aktionen"
+    }
+  },
+  "credentials": {
+    "title": "Aufruf-Zugangsdaten",
+    "warning": "Kopieren Sie diese Zugangsdaten jetzt: Sie werden nur einmal angezeigt. Das Panel speichert nur, was zu ihrer Prüfung nötig ist, und kann sie nicht erneut anzeigen; erneuern Sie sie, wenn sie verloren gehen.",
+    "close": "Ich habe die Zugangsdaten kopiert",
+    "show": "Anzeigen",
+    "hide": "Verbergen",
+    "curl": "Testbefehl kopieren (curl, von einem Mitglied ihrer Netzwerke)",
+    "internalOnly": "Die interne URL ist nur von den Mitgliedern der Netzwerke der Funktion aus erreichbar: Sie hat keinen veröffentlichten Port.",
+    "sigv4Note": "AWS SDK: endpoint-url http://fn-<name>:8080, Region us-east-1, mit diesem Schlüsselpaar.",
+    "fields": {
+      "endpoint": "Interne URL",
+      "region": "Region",
+      "token": "Bearer-Token",
+      "accessKeyId": "Zugriffsschlüssel-ID",
+      "secretAccessKey": "Geheimer Zugriffsschlüssel"
+    }
+  },
+  "credentialsTab": {
+    "title": "Aufruf-Zugangsdaten",
+    "intro": "Aufrufer in den Netzwerken der Funktion authentifizieren sich mit diesen Zugangsdaten; die eigenen Aufrufe des Panels (Tab „Test“, geplante Aufgaben) benötigen keine. Sie können nicht erneut gelesen werden: Erneuern Sie sie, um neue zu erhalten.",
+    "bearerStored": "Gesetzt (nur sein Hash wird gespeichert)",
+    "rotate": {
+      "title": "Zugangsdaten von {{name}} erneuern?",
+      "content": "Neue Zugangsdaten werden erzeugt und einmal angezeigt; die aktuellen funktionieren sofort nicht mehr. Die Funktion wird neu erstellt.",
+      "submit": "Zugangsdaten erneuern"
+    },
+    "enableSigv4": {
+      "title": "SigV4-Aufrufer für {{name}} akzeptieren?",
+      "content": "Die Zugangsdaten werden erneuert: Ein neues Bearer-Token und ein SigV4-Schlüsselpaar werden einmal angezeigt, die aktuellen funktionieren nicht mehr.",
+      "submit": "Aktivieren und erneuern"
+    },
+    "disableSigv4": {
+      "title": "SigV4-Aufrufer für {{name}} nicht mehr akzeptieren?",
+      "content": "Die Zugangsdaten werden ohne Schlüsselpaar erneuert: Ein neues Bearer-Token wird einmal angezeigt, die aktuellen Zugangsdaten funktionieren nicht mehr.",
+      "submit": "Deaktivieren und erneuern"
+    }
+  },
+  "triggers": {
+    "title": "Geplante Aufrufe",
+    "intro": "Geplante Aufgaben vom Typ „Funktionsaufruf“, die diese Funktion aufrufen (höchstens {{max}}).",
+    "create": "Aufruf planen",
+    "manage": "Geplante Aufgaben verwalten",
+    "empty": "Keine geplante Aufgabe ruft diese Funktion auf.",
+    "event": "Ereignis"
+  },
+  "runtimeCustomVersion": "Go, Rust… (benutzerdefinierte Runtime, provided.{{version}})",
+  "deploymentWarnings": {
+    "FUNCTION_BOOTSTRAP_DYNAMIC": "Der bootstrap ist dynamisch gegen glibc gelinkt: Er läuft nur, wenn er gegen eine glibc gebaut wurde, die nicht neuer als die von Amazon Linux 2023 ist. Bauen Sie ihn statisch (CGO_ENABLED=0), um das zu vermeiden."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Gebruikers",
+  "currentUser": "Huidige gebruiker",
+  "table": {
+    "columns": {
+      "email": "E-mail",
+      "name": "Naam",
+      "type": "Type",
+      "permissions": "Rechten",
+      "actions": "Acties"
+    },
+    "permissions": {
+      "allContainers": "Alle containers",
+      "none": "Geen",
+      "more": "{{list}} (+{{extra}})"
+    }
+  },
+  "profiles": {
+    "admin": "Beheerder",
+    "restricted": "Beperkt"
+  },
+  "actions": {
+    "makeRestricted": "Omzetten naar beperkte gebruiker",
+    "makeAdmin": "Omzetten naar beheerder",
+    "restrictAll": "Alle containers weigeren"
+  },
+  "modals": {
+    "demote": {
+      "title": "Degraderen tot beperkte gebruiker",
+      "content": "Weet je zeker dat je “{{email}}” wilt degraderen tot beperkte gebruiker? Deze gebruiker verliest de toegang tot alle containers.",
+      "ok": "Degraderen"
+    },
+    "promote": {
+      "title": "Promoveren tot beheerder",
+      "content": "Weet je zeker dat je “{{email}}” wilt promoveren tot beheerder? Deze gebruiker krijgt toegang tot alle containers.",
+      "ok": "Promoveren"
+    },
+    "restrict": {
+      "title": "Alle containers weigeren",
+      "content": "Weet je zeker dat je “{{email}}” wilt beperken? De gebruiker ziet dan geen enkele container meer.",
+      "ok": "Beperken"
+    },
+    "delete": {
+      "title": "Gebruiker verwijderen",
+      "content": "Weet je zeker dat je “{{email}}” wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt en verwijdert ook de API-sleutels van deze gebruiker."
+    }
+  },
+  "sidePanel": {
+    "title": "Rechten van gebruiker {{name}} bewerken",
+    "searchPlaceholder": "Zoek een container",
+    "validate": "Bevestigen"
+  }
+}

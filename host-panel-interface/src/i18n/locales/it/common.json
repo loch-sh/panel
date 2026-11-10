@@ -1,0 +1,69 @@
+{
+  "actions": {
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "confirm": "Conferma",
+    "create": "Crea",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "save": "Salva",
+    "seeMore": "Mostra altro",
+    "copy": "Copia",
+    "copied": "Copiato",
+    "refresh": "Aggiorna",
+    "search": "Cerca",
+    "download": "Scarica",
+    "yes": "Sì",
+    "no": "No"
+  },
+  "status": {
+    "loading": "Caricamento…",
+    "enabled": "Attivato",
+    "disabled": "Disattivato",
+    "never": "Mai",
+    "unknown": "Sconosciuto"
+  },
+  "language": {
+    "label": "Lingua",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "es": "Español",
+    "it": "Italiano",
+    "nl": "Nederlands",
+    "pt-PT": "Português (Portugal)",
+    "pt-BR": "Português (Brasil)",
+    "ja": "日本語",
+    "zh-CN": "简体中文"
+  },
+  "container": {
+    "state": {
+      "running": "In esecuzione",
+      "exited": "Arrestato",
+      "created": "Creato",
+      "paused": "In pausa",
+      "restarting": "Riavvio",
+      "removing": "Rimozione",
+      "dead": "Morto"
+    },
+    "status": {
+      "up": "Avviato {{ago}}",
+      "paused": "In pausa, avviato {{ago}}",
+      "exited": "Arrestato ({{code}}) {{ago}}",
+      "restarting": "Riavvio ({{code}}) {{ago}}",
+      "withHealth": "{{status}} ({{health}})"
+    },
+    "health": {
+      "healthy": "integro",
+      "unhealthy": "non integro",
+      "starting": "verifica in corso"
+    }
+  },
+  "errorBoundary": {
+    "title": "Impossibile visualizzare questa pagina",
+    "description": "Si è verificato un errore imprevisto. Ricarica la pagina; se succede di nuovo, contatta l'amministratore.",
+    "chunkTitle": "È disponibile una nuova versione",
+    "chunkDescription": "Il pannello è stato aggiornato mentre questa pagina era aperta. Ricarica per continuare.",
+    "reload": "Ricarica"
+  }
+}

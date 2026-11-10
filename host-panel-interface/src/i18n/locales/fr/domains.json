@@ -1,0 +1,29 @@
+{
+  "title": "Cartographie des domaines",
+  "toolbar": {
+    "searchPlaceholder": "Rechercher un domaine, un conteneur...",
+    "tldPlaceholder": "Filtrer par TLD",
+    "activeOnly": "Actifs",
+    "all": "Tous",
+    "views": {
+      "table": "Tableau",
+      "graph": "Graphe"
+    }
+  },
+  "table": {
+    "columns": {
+      "domain": "Domaine",
+      "router": "Routeur",
+      "entrypoints": "Entrypoints",
+      "tls": "TLS",
+      "middlewares": "Middlewares",
+      "service": "Service",
+      "container": "Conteneur",
+      "state": "État",
+      "image": "Image"
+    }
+  },
+  "graph": {
+    "empty": "Aucun domaine Traefik trouvé"
+  }
+}
