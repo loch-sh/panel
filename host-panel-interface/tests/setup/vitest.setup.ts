@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, configure } from "@testing-library/react";
-import { Modal } from "antd";
+import { ConfigProvider, Modal } from "antd";
+import { createElement } from "react";
 import { afterAll, afterEach, beforeAll, beforeEach, expect } from "vitest";
 import i18n from "../../src/i18n";
 import { resetMockApi, server, mockApi } from "./msw";
@@ -29,6 +30,20 @@ globalThis.ResizeObserver ??= class {
   unobserve() {}
   disconnect() {}
 };
+
+// Static dialogs (Modal.confirm) render in their own React root, outside the
+// tested tree. jsdom never ends a CSS transition, so a closing dialog would
+// wait for rc-motion's fallback deadline before unmounting: that late React
+// work can land after the environment is torn down ("window is not
+// defined"). Without motion they close and unmount at once.
+ConfigProvider.config({
+  holderRender: (children) =>
+    createElement(
+      ConfigProvider,
+      { theme: { token: { motion: false } } },
+      children,
+    ),
+});
 
 beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 beforeEach(async () => {
