@@ -62,7 +62,9 @@ func TestPoolFileWrittenAndRegenerated(t *testing.T) {
 	ctx := context.Background()
 	spec := validSpec("site")
 	spec.PHP.WebMemoryLimit = "128M"
-	m.Create(ctx, spec, Snippets{}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	pool := filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, FPMPoolFile)
 	if data, _ := os.ReadFile(pool); !strings.Contains(string(data), "128M") {
@@ -85,24 +87,24 @@ func TestPoolFileInRealContainer(t *testing.T) {
 		t.Skip("set HOSTING_E2E=1 to run")
 	}
 	site := t.TempDir()
-	os.WriteFile(filepath.Join(site, "index.php"), []byte(`<?php echo ini_get("memory_limit");`), 0o644)
+	writeTestFile(t, filepath.Join(site, "index.php"), []byte(`<?php echo ini_get("memory_limit");`), 0o644)
 	spec := validSpec("site")
 	spec.PHP.WebMemoryLimit = "96M"
 	pool := filepath.Join(t.TempDir(), FPMPoolFile)
-	os.WriteFile(pool, []byte(FPMPoolContent(spec)), 0o644)
+	writeTestFile(t, pool, []byte(FPMPoolContent(spec)), 0o644)
 
 	for i, image := range []string{"webdevops/php-nginx:8.4", "webdevops/php-apache:8.4"} {
 		t.Run(image, func(t *testing.T) {
 			name := fmt.Sprintf("loch-fpm-e2e-%d", i)
 			port := 18100 + i
-			exec.Command("docker", "rm", "-f", name).Run()
+			_ = exec.Command("docker", "rm", "-f", name).Run() // the container may not exist yet
 			out, err := exec.Command("docker", "run", "-d", "--name", name, "--init", "-t",
 				"-e", "PHP_MEMORY_LIMIT=1G", "-p", fmt.Sprintf("127.0.0.1:%d:80", port),
 				"-v", site+":/app", "-v", pool+":"+fpmPoolTarget+":ro", image).CombinedOutput()
 			if err != nil {
 				t.Fatalf("docker run: %v\n%s", err, out)
 			}
-			defer exec.Command("docker", "rm", "-f", name).Run()
+			defer func() { _ = exec.Command("docker", "rm", "-f", name).Run() }() // best-effort cleanup
 
 			var web string
 			for deadline := time.Now().Add(30 * time.Second); time.Now().Before(deadline); time.Sleep(500 * time.Millisecond) {
@@ -128,9 +130,11 @@ func TestPoolFileEditIsDetected(t *testing.T) {
 	ctx := context.Background()
 	spec := validSpec("site")
 	spec.PHP.WebMemoryLimit = "128M"
-	m.Create(ctx, spec, Snippets{}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
-	os.WriteFile(filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, FPMPoolFile), []byte("[www]\npm.max_children = 500\n"), 0o640)
+	writeTestFile(t, filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, FPMPoolFile), []byte("[www]\npm.max_children = 500\n"), 0o640)
 	if d, _ := m.Get(ctx, "site"); !d.Modified {
 		t.Fatal("a hand-edited pool file must be reported as modified")
 	}
@@ -144,11 +148,13 @@ func TestForcedDeployKeepsEditedRouting(t *testing.T) {
 	spec := validSpec("site")
 	spec.Routing = RoutingSymfony
 	spec.PHP.WebMemoryLimit = "128M"
-	m.Create(ctx, spec, Snippets{}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	cfgDir := filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir)
 	edited := "location / { return 418; }\n"
-	os.WriteFile(filepath.Join(cfgDir, RoutingFile), []byte(edited), 0o640)
+	writeTestFile(t, filepath.Join(cfgDir, RoutingFile), []byte(edited), 0o640)
 	os.Remove(filepath.Join(cfgDir, FPMPoolFile))
 
 	if _, err := m.Deploy(ctx, "site", false, true, "admin"); err != nil {

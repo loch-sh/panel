@@ -39,18 +39,22 @@ func TestNamePrefixOfAnotherStackIsFree(t *testing.T) {
 func writeForeignStack(t *testing.T, cfg Config, name, xloch string, marker bool) {
 	t.Helper()
 	dir := filepath.Join(cfg.StacksDir, "hosted-"+name)
-	os.Mkdir(dir, 0o755)
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
 	compose := "name: hosted-" + name + "\nx-loch:\n  version: 1\n  name: " + name + "\n  template: nginx\n" + xloch
-	os.WriteFile(filepath.Join(dir, ComposeFile), []byte(compose), 0o644)
+	writeTestFile(t, filepath.Join(dir, ComposeFile), []byte(compose), 0o644)
 	if marker {
-		os.WriteFile(filepath.Join(dir, ManagedMarker), []byte("x"), 0o644)
+		writeTestFile(t, filepath.Join(dir, ManagedMarker), []byte("x"), 0o644)
 	}
 }
 
 func TestStoredSpecIsRevalidated(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	victim := filepath.Join(cfg.StacksDir, "ci-app")
-	os.Mkdir(victim, 0o755)
+	if err := os.Mkdir(victim, 0o755); err != nil {
+		t.Fatal(err)
+	}
 
 	// A planted spec whose site escapes the sites directory is not managed.
 	writeForeignStack(t, cfg, "evil", "  site: ../../ci-app\n  documentRoot: web\n", true)
@@ -75,7 +79,9 @@ func TestCheckDeletableRefusesEscapingSite(t *testing.T) {
 			t.Errorf("site %q must be refused", site)
 		}
 	}
-	os.Mkdir(filepath.Join(cfg.Render.SitesDir, "ok"), 0o755)
+	if err := os.Mkdir(filepath.Join(cfg.Render.SitesDir, "ok"), 0o755); err != nil {
+		t.Fatal(err)
+	}
 	if got, err := m.checkDeletable(dir, "ok", true); err != nil || got != filepath.Join(cfg.Render.SitesDir, "ok") {
 		t.Fatalf("valid site: %q %v", got, err)
 	}
@@ -84,11 +90,13 @@ func TestCheckDeletableRefusesEscapingSite(t *testing.T) {
 func TestDeployModifiedRequiresForce(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	path := filepath.Join(cfg.StacksDir, "hosted-site", ComposeFile)
 	data, _ := os.ReadFile(path)
-	os.WriteFile(path, append(data, []byte("# privileged: true\n")...), 0o640)
+	writeTestFile(t, path, append(data, []byte("# privileged: true\n")...), 0o640)
 
 	if _, err := m.Deploy(ctx, "site", false, false, "admin"); codeOf(err) != CodeManuallyModified {
 		t.Fatalf("deploy of a modified stack without force: %v", err)
@@ -102,7 +110,9 @@ func TestDeployModifiedRequiresForce(t *testing.T) {
 func TestOperationErrorCodePerKind(t *testing.T) {
 	runner := &fakeRunner{fail: func(string, []string) error { return errors.New("boom") }}
 	m, _ := newTestManager(t, runner, &fakeDocker{})
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	if op := waitOp(t, m, "site"); op.Error != "HOSTING_CREATE_FAILED" {
 		t.Fatalf("error = %q", op.Error)
 	}
@@ -111,7 +121,9 @@ func TestOperationErrorCodePerKind(t *testing.T) {
 func TestPanicInOperationIsRecovered(t *testing.T) {
 	runner := &fakeRunner{fail: func(string, []string) error { panic("unexpected") }}
 	m, _ := newTestManager(t, runner, &fakeDocker{})
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	if op := waitOp(t, m, "site"); op.State != OpFailed {
 		t.Fatalf("op = %+v", op)
 	}
@@ -119,7 +131,9 @@ func TestPanicInOperationIsRecovered(t *testing.T) {
 
 func TestInterruptedOperationIsReported(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	dir := filepath.Join(cfg.StacksDir, "hosted-site")
 	if _, err := os.Stat(filepath.Join(dir, operationMarker)); !os.IsNotExist(err) {
@@ -127,7 +141,9 @@ func TestInterruptedOperationIsReported(t *testing.T) {
 	}
 
 	// Simulate an API stopped during an update.
-	writeOperationMarker(dir, &Operation{ID: "x", Kind: OpUpdate, StartedAt: time.Now()})
+	if err := writeOperationMarker(dir, &Operation{ID: "x", Kind: OpUpdate, StartedAt: time.Now()}); err != nil {
+		t.Fatal(err)
+	}
 	discard := slog.New(slog.NewTextHandler(io.Discard, nil))
 	restarted := NewManager(cfg, &fakeRunner{}, &fakeDocker{}, fakeModules{}, discard, discard, nil)
 	op := restarted.Operation("site")
@@ -138,7 +154,9 @@ func TestInterruptedOperationIsReported(t *testing.T) {
 
 func TestListOmitsOperationOutput(t *testing.T) {
 	m, _ := newTestManager(t, &fakeRunner{}, &fakeDocker{})
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	list, _ := m.List(context.Background())
 	if len(list) != 1 || list[0].Operation == nil || list[0].Operation.Output != "" {
@@ -170,9 +188,13 @@ func TestExecRunnerIgnoresDotEnv(t *testing.T) {
 	}
 	out, _ := Render(validSpec("site"), testRender)
 	dir := filepath.Join(t.TempDir(), "hosted-site")
-	os.Mkdir(dir, 0o755)
-	writeStackFiles(dir, out, Snippets{}, generatedFiles{})
-	os.WriteFile(filepath.Join(dir, ".env"), []byte("COMPOSE_PROJECT_NAME=ci-app\n"), 0o644)
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeStackFiles(dir, out, Snippets{}, generatedFiles{}); err != nil {
+		t.Fatal(err)
+	}
+	writeTestFile(t, filepath.Join(dir, ".env"), []byte("COMPOSE_PROJECT_NAME=ci-app\n"), 0o644)
 
 	res, err := ExecRunner{}.Run(context.Background(), dir, "config", "--format", "json")
 	if err != nil {
@@ -186,7 +208,9 @@ func TestExecRunnerIgnoresDotEnv(t *testing.T) {
 func TestOlderSpecVersionIsNotModifiedAndRefreshedOnDeploy(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 
 	// Simulate a file written by version 1 of the panel (no init/tty).
@@ -195,7 +219,7 @@ func TestOlderSpecVersionIsNotModifiedAndRefreshedOnDeploy(t *testing.T) {
 	current := fmt.Sprintf("version: %d", SpecVersion)
 	old := strings.Replace(string(data), current, "version: 1", 1)
 	old = strings.Replace(old, "        init: true\n", "", 1)
-	os.WriteFile(path, []byte(old), 0o640)
+	writeTestFile(t, path, []byte(old), 0o640)
 
 	if s, _ := m.Get(ctx, "site"); s.Modified {
 		t.Fatal("a file from an older panel version must not be reported as modified")

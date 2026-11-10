@@ -199,7 +199,7 @@ func TestUpdateRefusals(t *testing.T) {
 	// Edited by hand: never run.
 	compose := filepath.Join(env.cfg.StacksDir, kvRef.Project(), ComposeFile)
 	data, _ := os.ReadFile(compose)
-	os.WriteFile(compose, append(data, []byte("# edited\n")...), 0o640)
+	must(t, os.WriteFile(compose, append(data, []byte("# edited\n")...), 0o640))
 	_, err = env.m.Update(ctx, "kv-cache", "", "admin")
 	wantCode(t, err, CodeInstanceModified)
 	if s := env.summaryOf(t, "kv-cache"); s.Update != nil {
@@ -214,7 +214,7 @@ func TestRecordImagesOfOlderInstances(t *testing.T) {
 	env.unpin(t, kvRef, false)
 	r, _ := env.m.readReference(kvRef)
 	r.Image = ""
-	env.m.writeReference(kvRef, r)
+	must(t, env.m.writeReference(kvRef, r))
 	// The catalog moves on: the instance is still the panel's (built-in
 	// image), not modified.
 	env.discover(t, newFakeSource())
@@ -227,7 +227,7 @@ func TestRecordImagesOfOlderInstances(t *testing.T) {
 	}
 	// A recorded image that is not one of the version is tampering.
 	r.Image = "evil:8.0.1"
-	env.m.writeReference(kvRef, r)
+	must(t, env.m.writeReference(kvRef, r))
 	if inst, _ := env.m.load("kv-cache"); !inst.modified {
 		t.Fatal("an image outside the engine catalog is never run")
 	}
@@ -581,7 +581,7 @@ func TestPinImagesNeverTrustsAMismatchingDigest(t *testing.T) {
 		inst, _ := env.m.load("kv-cache")
 		r, _ := env.m.readReference(kvRef)
 		r.Digest = digestOf('f')
-		env.m.writeReference(kvRef, r)
+		must(t, env.m.writeReference(kvRef, r))
 		env.writeComposeOf(t, inst, digestOf('f'))
 		inst, _ = env.m.load("kv-cache")
 		_, rerr := env.m.ready(ctx, inst)
@@ -592,7 +592,7 @@ func TestPinImagesNeverTrustsAMismatchingDigest(t *testing.T) {
 		createKV(t, env, "cache", nil)
 		r, _ := env.m.readReference(kvRef)
 		r.Digest = "sha256:short"
-		env.m.writeReference(kvRef, r)
+		must(t, env.m.writeReference(kvRef, r))
 		if inst, _ := env.m.load("kv-cache"); !inst.modified {
 			t.Fatal("an invalid digest is tampering")
 		}
@@ -644,7 +644,7 @@ func TestPinnedToAnotherDigestOfTheSameImage(t *testing.T) {
 	inst, _ := env.m.load("kv-cache")
 	r, _ := env.m.readReference(kvRef)
 	r.Digest = digestOf('d')
-	env.m.writeReference(kvRef, r)
+	must(t, env.m.writeReference(kvRef, r))
 	env.writeComposeOf(t, inst, digestOf('d'))
 	env.docker.mu.Lock()
 	running := env.docker.byProjectLocked(kvRef.Project()).inspect.Image
@@ -667,7 +667,7 @@ func TestPinnedToAnotherDigestOfTheSameImage(t *testing.T) {
 	// Pinned to 'b', the container still created from 'd': trusted (the
 	// image carries both).
 	r.Digest = digestOf('b')
-	env.m.writeReference(kvRef, r)
+	must(t, env.m.writeReference(kvRef, r))
 	env.writeComposeOf(t, inst, digestOf('b'))
 	inst, _ = env.m.load("kv-cache")
 	if _, rerr := env.m.ready(ctx, inst); inst.modified || rerr != nil {
@@ -729,7 +729,7 @@ func TestPinImagesAfterAnInterruptedUpdate(t *testing.T) {
 	env.unpin(t, kvRef, true)
 	r, _ := env.m.readReference(kvRef)
 	r.Digest = digestOf('b') // the update's, never pulled nor run
-	env.m.writeReference(kvRef, r)
+	must(t, env.m.writeReference(kvRef, r))
 	if inst, _ := env.m.load("kv-cache"); !inst.modified || !inst.unpinnedCompose {
 		t.Fatal("interrupted update: modified, compose without its digest")
 	}

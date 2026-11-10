@@ -52,7 +52,7 @@ func serveBinary(bin []byte) http.HandlerFunc {
 			http.NotFound(w, r)
 			return
 		}
-		w.Write(bin)
+		_, _ = w.Write(bin)
 	}
 }
 
@@ -122,7 +122,7 @@ func TestRuntimeDownloadRefusesTooLarge(t *testing.T) {
 		"announced": serveBinary(big),
 		"chunked": func(w http.ResponseWriter, r *http.Request) {
 			w.(http.Flusher).Flush() // no Content-Length
-			w.Write(big)
+			_, _ = w.Write(big)
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
@@ -175,7 +175,7 @@ func TestRuntimeDownloadRedirects(t *testing.T) {
 		mux.HandleFunc("/releases/download/v1.0.1/loch-lambda-runtime-linux-arm64", func(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/asset", http.StatusFound)
 		})
-		mux.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) { w.Write(bin) })
+		mux.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) { _, _ = w.Write(bin) })
 		dl, _ := tlsDownloader(t, mux, 5*time.Second)
 		return dl
 	})
@@ -198,7 +198,7 @@ func TestRuntimeDownloadTimeout(t *testing.T) {
 	e := newFetchEnv(t, bin, func(TrustedRelease) RuntimeSource {
 		dl, _ := tlsDownloader(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Length", strconv.Itoa(len(bin)))
-			w.Write(bin[:10])
+			_, _ = w.Write(bin[:10])
 			w.(http.Flusher).Flush()
 			select { // stalls mid-body
 			case <-release:
@@ -380,7 +380,8 @@ func TestRuntimeSourceDirFIFO(t *testing.T) {
 		done2 <- err
 	}()
 	select {
-	case <-done2:
+	case err := <-done2:
+		_ = err // only the absence of blocking is checked: the open may fail
 	case <-time.After(time.Second):
 		t.Fatal("O_NONBLOCK open blocks")
 	}
@@ -401,16 +402,16 @@ func TestRuntimeSourceDirPermissions(t *testing.T) {
 	if err := CheckRuntimeSourceDir(filepath.Join(dir, "missing")); err == nil {
 		t.Error("a missing directory accepted")
 	}
-	os.Chmod(file, 0o666)
+	mustChmod(t, file, 0o666)
 	if err := CheckRuntimeSourceDir(dir); err == nil {
 		t.Error("a world-writable file accepted")
 	}
-	os.Chmod(file, 0o644)
-	os.Chmod(dir, 0o770)
+	mustChmod(t, file, 0o644)
+	mustChmod(t, dir, 0o770)
 	if err := CheckRuntimeSourceDir(dir); err == nil {
 		t.Error("a group-writable directory accepted")
 	}
-	os.Chmod(dir, 0o700)
+	mustChmod(t, dir, 0o700)
 	os.Remove(file)
 	if err := os.Symlink("/etc/hosts", file); err != nil {
 		t.Fatal(err)
@@ -442,7 +443,7 @@ func TestRuntimeProviderStates(t *testing.T) {
 	e := newFetchEnv(t, bin, func(TrustedRelease) RuntimeSource {
 		dl, _ := tlsDownloader(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			<-release
-			w.Write(bin)
+			_, _ = w.Write(bin)
 		}), 5*time.Second)
 		return dl
 	})
@@ -482,7 +483,7 @@ func TestRuntimeProviderBurstAndRefusalBackoff(t *testing.T) {
 	e := newFetchEnv(t, good, func(TrustedRelease) RuntimeSource {
 		dl, _ := tlsDownloader(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			<-release
-			w.Write(evil)
+			_, _ = w.Write(evil)
 		}), 5*time.Second)
 		src = &countingSource{RuntimeSource: dl}
 		return src
@@ -494,7 +495,10 @@ func TestRuntimeProviderBurstAndRefusalBackoff(t *testing.T) {
 	var wg sync.WaitGroup
 	for range 50 {
 		wg.Add(1)
-		go func() { defer wg.Done(); e.p.Latest("arm64") }()
+		go func() {
+			defer wg.Done()
+			_, _ = e.p.Latest("arm64") // the source is refused: the error is expected, its effect asserted below
+		}()
 	}
 	wg.Wait()
 	close(release)
@@ -506,7 +510,7 @@ func TestRuntimeProviderBurstAndRefusalBackoff(t *testing.T) {
 		t.Fatal(e.p.Status())
 	}
 	// Refused: no on-demand retry for 30 minutes.
-	e.p.Latest("arm64")
+	_, _ = e.p.Latest("arm64") // the error is irrelevant: only the source opening is counted
 	waitIdle(t, e.p)
 	if n := src.count(); n != 1 {
 		t.Fatalf("retried %d times within the refusal backoff", n)
@@ -514,7 +518,7 @@ func TestRuntimeProviderBurstAndRefusalBackoff(t *testing.T) {
 	clockMu.Lock()
 	clock = clock.Add(31 * time.Minute)
 	clockMu.Unlock()
-	e.p.Latest("arm64")
+	_, _ = e.p.Latest("arm64") // triggers the retry counted below
 	for deadline := time.Now().Add(5 * time.Second); src.count() != 2; time.Sleep(5 * time.Millisecond) {
 		if time.Now().After(deadline) {
 			t.Fatal("no retry after the refusal backoff")
@@ -611,7 +615,9 @@ func TestRuntimeStoreLatestCache(t *testing.T) {
 	}
 	// After the TTL: re-hashed.
 	clock = clock.Add(11 * time.Second)
-	store.Latest("arm64")
+	if _, err := store.Latest("arm64"); err != nil {
+		t.Fatal(err)
+	}
 	if store.hashes != h+2 {
 		t.Fatalf("hashes after TTL = %d", store.hashes-h)
 	}
@@ -621,13 +627,15 @@ func TestRuntimeStoreLatestCache(t *testing.T) {
 	path := store.Path("v1.0.0", "arm64")
 	fi, _ := os.Stat(path)
 	time.Sleep(50 * time.Millisecond)
-	os.Chmod(path, 0o755)
+	mustChmod(t, path, 0o755)
 	evil := fakeELF(elf.EM_AARCH64, "evi")
 	if err := os.WriteFile(path, evil, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	os.Chmod(path, 0o555)
-	os.Chtimes(path, fi.ModTime(), fi.ModTime())
+	mustChmod(t, path, 0o555)
+	if err := os.Chtimes(path, fi.ModTime(), fi.ModTime()); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := store.Latest("arm64"); err == nil {
 		t.Fatal("a modified binary served from the cache")
 	}
@@ -649,12 +657,14 @@ func TestRuntimeStoreLatestCacheRacyStamp(t *testing.T) {
 	}
 	path := store.Path("v1.0.0", "arm64")
 	fi, _ := os.Stat(path)
-	os.Chmod(path, 0o755)
+	mustChmod(t, path, 0o755)
 	if err := os.WriteFile(path, fakeELF(elf.EM_AARCH64, "evi"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	os.Chmod(path, 0o555)
-	os.Chtimes(path, fi.ModTime(), fi.ModTime())
+	mustChmod(t, path, 0o555)
+	if err := os.Chtimes(path, fi.ModTime(), fi.ModTime()); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := store.Latest("arm64"); err == nil {
 		t.Fatal("a binary changed right after its verification served from the cache")
 	}

@@ -122,7 +122,7 @@ func TestCreateRefusals(t *testing.T) {
 			e.nets.refs["fn-resize"] = e.nets.refs["images"]
 		}, CodeNameConflict},
 		"stacks directory taken": {func(_ *CreateRequest, e *testEnv) {
-			os.Mkdir(filepath.Join(e.m.cfg.StacksDir, "fn-resize"), 0o755)
+			mustMkdir(t, filepath.Join(e.m.cfg.StacksDir, "fn-resize"), 0o755)
 		}, CodeNameConflict},
 		"pull fails": {func(_ *CreateRequest, e *testEnv) { e.docker.pullFailures = imageAttempts }, CodeImagePullFailed},
 	}
@@ -225,9 +225,9 @@ func TestDeployActivateRollbackAndPrune(t *testing.T) {
 	}
 	// A kept deployment modified on disk is never activated.
 	dir := e.m.paths.Deployment(n, d3.ID)
-	os.Chmod(dir, 0o755)
-	os.WriteFile(filepath.Join(dir, "evil.js"), []byte("x"), 0o444)
-	os.Chmod(dir, 0o555)
+	mustChmod(t, dir, 0o755)
+	mustWriteFile(t, filepath.Join(dir, "evil.js"), []byte("x"), 0o444)
+	mustChmod(t, dir, 0o555)
 	wantCode(t, e.m.Activate(bg, "resize", d3.ID, actor), CodeArtifactModified)
 	if !strings.Contains(e.audit.String(), "function verification refused") {
 		t.Fatal("refusal not audited")
@@ -240,7 +240,7 @@ func TestComposeModifiedIsNeverRun(t *testing.T) {
 	e.deploy(t, "resize", "exports.handler = async () => 1")
 	n := nm("resize")
 	compose := filepath.Join(e.m.paths.ProjectDir(n), ComposeFile)
-	os.WriteFile(compose, []byte("services: {evil: {image: alpine, privileged: true}}\n"), 0o640)
+	mustWriteFile(t, compose, []byte("services: {evil: {image: alpine, privileged: true}}\n"), 0o640)
 	ups := e.runner.ups()
 
 	mem := 1024
@@ -323,7 +323,7 @@ func TestArtifactsAreReverifiedBeforeEveryUp(t *testing.T) {
 	// The active deployment modified on disk: refused too.
 	e.runtimes.verifyErr = nil
 	dir := e.m.paths.Deployment(nm("resize"), ref.Deployment.ID)
-	os.Chmod(filepath.Join(dir, "index.js"), 0o644)
+	mustChmod(t, filepath.Join(dir, "index.js"), 0o644)
 	wantCode(t, e.m.Action(bg, "resize", ActionStart, actor), CodeArtifactModified)
 }
 
@@ -507,7 +507,9 @@ func TestInvoke(t *testing.T) {
 	wantCode(t, err, CodeEventTooLarge)
 	// Aggregated audit: one entry for the minute, never the content.
 	e.invoker.res = InvokeResult{StatusCode: 200, FunctionError: "Unhandled", Payload: []byte(`{"errorType":"Boom"}`)}
-	e.m.Invoke(bg, "resize", bytes.NewReader([]byte(`{"secret-event":1}`)), actor)
+	if _, err := e.m.Invoke(bg, "resize", bytes.NewReader([]byte(`{"secret-event":1}`)), actor); err != nil {
+		t.Fatal(err)
+	}
 	e.invoker.err = ErrInvokeTimeout
 	_, err = e.m.Invoke(bg, "resize", bytes.NewReader([]byte(`{}`)), actor)
 	wantCode(t, err, CodeInvokeTimeout)
@@ -657,8 +659,8 @@ func TestStartupSweepsAndReportsModified(t *testing.T) {
 	e.create(t, "resize")
 	e.deploy(t, "resize", "exports.handler = async () => 1")
 	leftover := filepath.Join(e.m.paths.Uploads(nm("resize")), "upload-123.zip")
-	os.WriteFile(leftover, []byte("x"), 0o600)
-	os.WriteFile(filepath.Join(e.m.paths.ProjectDir(nm("resize")), ComposeFile), []byte("x"), 0o640)
+	mustWriteFile(t, leftover, []byte("x"), 0o600)
+	mustWriteFile(t, filepath.Join(e.m.paths.ProjectDir(nm("resize")), ComposeFile), []byte("x"), 0o640)
 	e.m.Startup(bg)
 	if _, err := os.Lstat(leftover); !errors.Is(err, os.ErrNotExist) {
 		t.Fatal("leftover kept")
@@ -683,7 +685,7 @@ func TestListAndInfo(t *testing.T) {
 		t.Fatalf("info: %+v", info)
 	}
 	// A broken reference is listed (purge only).
-	os.WriteFile(filepath.Join(e.m.paths.Private(nm("report")), ReferenceFile), []byte("{"), 0o600)
+	mustWriteFile(t, filepath.Join(e.m.paths.Private(nm("report")), ReferenceFile), []byte("{"), 0o600)
 	list, _ = e.m.List(bg)
 	if list[0].State != StateInvalid {
 		t.Fatalf("%+v", list[0])
@@ -774,7 +776,7 @@ func TestInvokeChecksBeforeReadingAndKeepsSlots(t *testing.T) {
 	e.m.forgetSlots(nm("resize"))
 	e.m.invokeWait = 10 * time.Millisecond
 	e.invoker.err = ErrInvokeTransport
-	e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor)
+	_, _ = e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor) // fails by design: the cut exec keeps its slot
 	e.invoker.err = nil
 	_, err = e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor)
 	wantCode(t, err, CodeInvokeBusy)
@@ -812,9 +814,13 @@ func TestInvocationsAfterTheFinalFlushAreAudited(t *testing.T) {
 	e := newTestEnv(t)
 	e.create(t, "resize")
 	e.deploy(t, "resize", "exports.handler = async () => 1")
-	e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor)
+	if _, err := e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor); err != nil {
+		t.Fatal(err)
+	}
 	e.m.CloseAudit()
-	e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor)
+	if _, err := e.m.Invoke(bg, "resize", strings.NewReader(`{}`), actor); err != nil {
+		t.Fatal(err)
+	}
 	if n := strings.Count(e.audit.String(), "function invoked"); n != 2 {
 		t.Fatalf("%d entries: %s", n, e.audit.String())
 	}
@@ -898,7 +904,7 @@ func TestMCPInvocableFlag(t *testing.T) {
 		t.Fatalf("update both: %+v %v", d, err)
 	}
 	// Refused on a function modified outside the panel.
-	os.WriteFile(filepath.Join(e.m.paths.ProjectDir(nm("resize")), ComposeFile), []byte("services: {}\n"), 0o640)
+	mustWriteFile(t, filepath.Join(e.m.paths.ProjectDir(nm("resize")), ComposeFile), []byte("services: {}\n"), 0o640)
 	_, err = e.m.Update(bg, "resize", UpdateRequest{MCPInvocable: &off}, actor)
 	wantCode(t, err, CodeModified)
 }

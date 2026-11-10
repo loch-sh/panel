@@ -224,19 +224,19 @@ func TestReferenceRoundTrip(t *testing.T) {
 	// A tampered file is refused (unknown field, another name).
 	file := filepath.Join(p.Private(nm("resize")), ReferenceFile)
 	data, _ := os.ReadFile(file)
-	os.WriteFile(file, []byte(strings.Replace(string(data), `"version": 1,`, `"version": 1, "privileged": true,`, 1)), 0o600)
+	mustWriteFile(t, file, []byte(strings.Replace(string(data), `"version": 1,`, `"version": 1, "privileged": true,`, 1)), 0o600)
 	if _, err := p.ReadReference(nm("resize"), testConfig); CodeOf(err) != CodeInvalidReference {
 		t.Fatalf("unknown field: %v", err)
 	}
-	os.WriteFile(file, []byte(strings.Replace(string(data), `"name": "resize"`, `"name": "other"`, 1)), 0o600)
+	mustWriteFile(t, file, []byte(strings.Replace(string(data), `"name": "resize"`, `"name": "other"`, 1)), 0o600)
 	if _, err := p.ReadReference(nm("resize"), testConfig); CodeOf(err) != CodeInvalidReference {
 		t.Fatalf("other name: %v", err)
 	}
 	// Never through a symlinked private directory.
 	os.RemoveAll(p.Private(nm("resize")))
 	elsewhere := t.TempDir()
-	os.WriteFile(filepath.Join(elsewhere, ReferenceFile), data, 0o600)
-	os.Symlink(elsewhere, p.Private(nm("resize")))
+	mustWriteFile(t, filepath.Join(elsewhere, ReferenceFile), data, 0o600)
+	mustSymlink(t, elsewhere, p.Private(nm("resize")))
 	if _, err := p.ReadReference(nm("resize"), testConfig); err == nil {
 		t.Fatal("read through a symlink")
 	}
@@ -267,7 +267,9 @@ func TestSecretsEnv(t *testing.T) {
 	}
 
 	p := Paths{DataDir: t.TempDir()}
-	p.EnsureFunctionDirs(nm("resize"))
+	if err := p.EnsureFunctionDirs(nm("resize")); err != nil {
+		t.Fatal(err)
+	}
 	if err := p.WriteSecretsEnv(nm("resize"), names, map[string]string{"A_KEY": "1", "B_KEY": "2"}); err != nil {
 		t.Fatal(err)
 	}

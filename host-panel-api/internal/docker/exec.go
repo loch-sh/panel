@@ -221,7 +221,7 @@ func pumpExecLimits(ctx context.Context, limits outputLimits, stdin []byte, w io
 		}
 	case <-ctx.Done():
 		closeConn()
-		<-readErr
+		<-readErr //nolint:errcheck // superseded by the timeout
 		err = wrapTimeout(ctx, ctx.Err())
 	}
 	// The output ended (the process exited or closed its outputs) or failed:
@@ -229,7 +229,7 @@ func pumpExecLimits(ctx context.Context, limits outputLimits, stdin []byte, w io
 	// A write error here only means the process stopped reading early, which
 	// its exit code reports better.
 	closeConn()
-	<-writeErr
+	<-writeErr //nolint:errcheck // see above: the exit code reports it better
 	return ExecResult{
 		Stdout:    stdout.Bytes(),
 		Stderr:    stderr.Bytes(),

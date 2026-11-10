@@ -104,7 +104,7 @@ func TestInvokeOutputLimit(t *testing.T) {
 	}
 	// Over the envelope limit: an error, nothing buffered beyond it.
 	flood := func(stdin io.Reader, stdout, _ io.Writer) {
-		io.Copy(io.Discard, stdin)
+		_, _ = io.Copy(io.Discard, stdin) // fake process drains its stdin pipe
 		for range 64 {
 			if _, err := stdout.Write(bytes.Repeat([]byte("x"), 1<<10)); err != nil {
 				return

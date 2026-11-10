@@ -98,7 +98,7 @@ The checks:
 | Job | What | Report |
 |---|---|---|
 | `api:test` | `go vet`, `go test` with coverage (`gotestsum`, `gocover-cobertura`) | JUnit, Cobertura, coverage % |
-| `api:lint` | `golangci-lint` (default linters), not blocking | Code quality |
+| `api:lint` | `golangci-lint` (`.golangci.yml`: standard linters, errors conventionally ignored such as `Close` excluded), blocking | Code quality |
 | `interface:lint` | ESLint, zero warnings, blocking | Code quality |
 | `interface:test` | `yarn typecheck`, `yarn i18n:check`, `yarn coverage` (Vitest, v8) | JUnit, Cobertura, coverage % |
 | `interface:e2e` | Playwright on the mocked API | JUnit |

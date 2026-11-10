@@ -449,7 +449,7 @@ func portsMatch(bindings network.PortMap, exp *Exposure, port int) bool {
 			if b.HostPort != strconv.Itoa(exp.Port) {
 				return false
 			}
-			if b.HostIP != exp.Address && !(exp.Address.IsUnspecified() && b.HostIP.IsUnspecified()) {
+			if b.HostIP != exp.Address && (!exp.Address.IsUnspecified() || !b.HostIP.IsUnspecified()) {
 				return false
 			}
 			count++

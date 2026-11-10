@@ -29,8 +29,8 @@ func preflightConfig(t *testing.T) Config {
 	// Resolved: on macOS the temporary directory is behind a symlink.
 	root, _ := filepath.EvalSymlinks(t.TempDir())
 	cfg := Config{StacksDir: filepath.Join(root, "compose"), Render: RenderConfig{DataDir: filepath.Join(root, "services")}}
-	os.Mkdir(cfg.StacksDir, 0o755)
-	os.Mkdir(cfg.Render.DataDir, 0o755)
+	must(t, os.Mkdir(cfg.StacksDir, 0o755))
+	must(t, os.Mkdir(cfg.Render.DataDir, 0o755))
 	return cfg
 }
 
@@ -42,19 +42,19 @@ func TestPreflight(t *testing.T) {
 		t.Fatalf("res=%+v err=%v", res, err)
 	}
 
-	bad := map[string]func(c *Config){
-		"nested data dir": func(c *Config) {
+	bad := map[string]func(t *testing.T, c *Config){
+		"nested data dir": func(t *testing.T, c *Config) {
 			c.Render.DataDir = filepath.Join(c.StacksDir, "data")
-			os.Mkdir(c.Render.DataDir, 0o755)
+			must(t, os.Mkdir(c.Render.DataDir, 0o755))
 		},
-		"same dirs":    func(c *Config) { c.Render.DataDir = c.StacksDir },
-		"missing dir":  func(c *Config) { c.Render.DataDir = filepath.Join(c.Render.DataDir, "nope") },
-		"relative dir": func(c *Config) { c.StacksDir = "compose" },
+		"same dirs":    func(_ *testing.T, c *Config) { c.Render.DataDir = c.StacksDir },
+		"missing dir":  func(_ *testing.T, c *Config) { c.Render.DataDir = filepath.Join(c.Render.DataDir, "nope") },
+		"relative dir": func(_ *testing.T, c *Config) { c.StacksDir = "compose" },
 	}
 	for name, spoil := range bad {
 		t.Run(name, func(t *testing.T) {
 			c := preflightConfig(t)
-			spoil(&c)
+			spoil(t, &c)
 			if _, err := Preflight(ctx, c, fakeVersioner{}, fakeSelf{}); err == nil {
 				t.Fatal("must fail")
 			}

@@ -25,7 +25,9 @@ func engineIDs(t *testing.T, cfg *config.Config) ([]string, []string, map[string
 
 func TestSelectServiceEngines(t *testing.T) {
 	stacks := t.TempDir()
-	os.Mkdir(filepath.Join(stacks, "svc-s3-media"), 0o755)
+	if err := os.Mkdir(filepath.Join(stacks, "svc-s3-media"), 0o755); err != nil {
+		t.Fatal(err)
+	}
 
 	// No key: standalone mode, everything as configured.
 	cfg := &config.Config{ServicesEngines: []string{"s3", "redis"}, ServicesPinnedVersions: map[string][]string{"s3": {"1.4"}}, HostingStacksDir: stacks}

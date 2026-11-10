@@ -562,7 +562,9 @@ func (r *fakeRunner) Run(_ context.Context, dir string, args ...string) (string,
 		// no resources; existing data keeps them.
 		marker := filepath.Join(r.cfg.DataPath(ref), "ENGINE_DATA")
 		if _, err := os.Lstat(marker); err != nil {
-			os.WriteFile(marker, []byte("data\n"), 0o600)
+			if err := os.WriteFile(marker, []byte("data\n"), 0o600); err != nil {
+				return "", err
+			}
 			r.prov.forget(id)
 		}
 		// Like compose, merge the override: published port, TLS command and mounts.
@@ -689,8 +691,8 @@ func newEnv(t *testing.T) *testEnv {
 			netip.MustParsePrefix("127.0.0.0/8"), netip.MustParsePrefix("203.0.113.0/24"),
 		}, ReservedPorts: []int{2222}},
 	}
-	os.Mkdir(cfg.StacksDir, 0o755)
-	os.Mkdir(cfg.Render.DataDir, 0o755)
+	must(t, os.Mkdir(cfg.StacksDir, 0o755))
+	must(t, os.Mkdir(cfg.Render.DataDir, 0o755))
 	e := newFakeEngine()
 	reg, err := NewRegistry([]Engine{e, fakeDedicatedEngine{}}, nil, nil, func() time.Time { return testNow })
 	if err != nil {
@@ -747,6 +749,14 @@ func wantCode(t *testing.T, err error, code string) {
 	t.Helper()
 	if err == nil || CodeOf(err) != code {
 		t.Fatalf("err = %v (%s), want %s", err, CodeOf(err), code)
+	}
+}
+
+// must fails the test on a setup error.
+func must(tb testing.TB, err error) {
+	tb.Helper()
+	if err != nil {
+		tb.Fatal(err)
 	}
 }
 

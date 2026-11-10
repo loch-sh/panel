@@ -81,9 +81,9 @@ func HandleFileLogsStart(
 		stderrPR, stderrPW := io.Pipe()
 
 		go func() {
-			stdcopy.StdCopy(stdoutPW, stderrPW, hijacked.Reader)
-			stdoutPW.Close()
-			stderrPW.Close()
+			_, err := stdcopy.StdCopy(stdoutPW, stderrPW, hijacked.Reader)
+			stdoutPW.CloseWithError(err)
+			stderrPW.CloseWithError(err)
 		}()
 
 		// Read stderr in background to detect errors (file not found, etc.)

@@ -9,7 +9,8 @@ import (
 func writeJSON(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(v)
+	// The status is sent: an encoding or write error only means the client is gone.
+	_ = json.NewEncoder(w).Encode(v)
 }
 
 // writeError returns a standardized JSON error with a machine-readable code.

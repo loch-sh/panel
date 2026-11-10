@@ -56,13 +56,15 @@ func TestLaravelRulesInRealContainer(t *testing.T) {
 		t.Skip("set HOSTING_E2E=1 to run")
 	}
 	site := t.TempDir()
-	os.MkdirAll(filepath.Join(site, "public", "css"), 0o755)
-	os.WriteFile(filepath.Join(site, "public", "index.php"), []byte(`<?php echo "FRONT ".$_SERVER['REQUEST_URI'];`), 0o644)
-	os.WriteFile(filepath.Join(site, "public", "other.php"), []byte(`<?php echo "OTHER";`), 0o644)
-	os.WriteFile(filepath.Join(site, "public", ".env"), []byte("APP_KEY=secret"), 0o644)
-	os.WriteFile(filepath.Join(site, "public", ".well-known.env"), []byte("x"), 0o644)
-	os.WriteFile(filepath.Join(site, "public", "auth.php"), []byte(`<?php echo $_SERVER["HTTP_AUTHORIZATION"] ?? "noauth";`), 0o644)
-	os.WriteFile(filepath.Join(site, "public", "css", "app.css"), []byte("asset"), 0o644)
+	if err := os.MkdirAll(filepath.Join(site, "public", "css"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writeTestFile(t, filepath.Join(site, "public", "index.php"), []byte(`<?php echo "FRONT ".$_SERVER['REQUEST_URI'];`), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", "other.php"), []byte(`<?php echo "OTHER";`), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", ".env"), []byte("APP_KEY=secret"), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", ".well-known.env"), []byte("x"), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", "auth.php"), []byte(`<?php echo $_SERVER["HTTP_AUTHORIZATION"] ?? "noauth";`), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", "css", "app.css"), []byte("asset"), 0o644)
 
 	for i, tt := range []struct {
 		template Template
@@ -80,17 +82,17 @@ func TestLaravelRulesInRealContainer(t *testing.T) {
 	} {
 		t.Run(string(tt.template), func(t *testing.T) {
 			rules := filepath.Join(t.TempDir(), RoutingFile)
-			os.WriteFile(rules, []byte(LaravelRules(tt.template, "public", 90)), 0o644)
+			writeTestFile(t, rules, []byte(LaravelRules(tt.template, "public", 90)), 0o644)
 			name := fmt.Sprintf("loch-laravel-e2e-%d", i)
 			port := 18110 + i
-			exec.Command("docker", "rm", "-f", name).Run()
+			_ = exec.Command("docker", "rm", "-f", name).Run() // the container may not exist yet
 			out, err := exec.Command("docker", "run", "-d", "--name", name, "--init", "-t",
 				"-e", "WEB_DOCUMENT_ROOT=/app/public", "-p", fmt.Sprintf("127.0.0.1:%d:80", port),
 				"-v", site+":/app", "-v", rules+":"+routingTarget(tt.template)+":ro", tt.image).CombinedOutput()
 			if err != nil {
 				t.Fatalf("docker run: %v\n%s", err, out)
 			}
-			defer exec.Command("docker", "rm", "-f", name).Run()
+			defer func() { _ = exec.Command("docker", "rm", "-f", name).Run() }() // best-effort cleanup
 
 			client := &http.Client{Timeout: 3 * time.Second}
 			base := fmt.Sprintf("http://127.0.0.1:%d", port)

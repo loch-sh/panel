@@ -232,7 +232,9 @@ func TestCreateListDelete(t *testing.T) {
 	wantCode(t, err, CodeInvalidName)
 
 	// A Docker network created outside the panel is never adopted.
-	d.CreateInternalNetwork(ctx, "loch-net-squat", netip.Prefix{}, nil)
+	if _, err := d.CreateInternalNetwork(ctx, "loch-net-squat", netip.Prefix{}, nil); err != nil {
+		t.Fatal(err)
+	}
 	_, err = m.Create(ctx, CreateRequest{Name: "squat"}, "admin")
 	wantCode(t, err, CodeNameTaken)
 
@@ -275,7 +277,9 @@ func TestCreateListDelete(t *testing.T) {
 func TestDeleteRefusedWithMembers(t *testing.T) {
 	m, d, _ := newTestManager(t)
 	ctx := context.Background()
-	m.Create(ctx, CreateRequest{Name: "jobs"}, "admin")
+	if _, err := m.Create(ctx, CreateRequest{Name: "jobs"}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	src := &fakeSource{members: []DeclaredMember{{Name: "site", Project: "hosted-site", Networks: []string{"jobs"}}}}
 	m.AddSource(KindSite, src)
 	wantCode(t, m.Delete(ctx, "jobs", "admin"), CodeInUse)
@@ -298,7 +302,9 @@ func TestSharedNetwork(t *testing.T) {
 	// An existing network without the panel label is refused.
 	m2, _, _ := newTestManager(t)
 	m2.docker = d
-	d.CreateInternalNetwork(ctx, "other-services", netip.Prefix{}, nil)
+	if _, err := d.CreateInternalNetwork(ctx, "other-services", netip.Prefix{}, nil); err != nil {
+		t.Fatal(err)
+	}
 	if err := m2.EnsureShared(ctx, "other-services"); err == nil {
 		t.Fatal("a network the panel did not create must not be adopted")
 	}
@@ -324,7 +330,9 @@ func TestStatesAndReconcile(t *testing.T) {
 	}
 	// Replaced by a network of the same name: compromised, never trusted.
 	delete(d.nets, "loch-net-jobs")
-	d.CreateInternalNetwork(ctx, "loch-net-jobs", netip.MustParsePrefix("10.20.0.0/24"), map[string]string{LabelManaged: "true", LabelNetwork: "jobs"})
+	if _, err := d.CreateInternalNetwork(ctx, "loch-net-jobs", netip.MustParsePrefix("10.20.0.0/24"), map[string]string{LabelManaged: "true", LabelNetwork: "jobs"}); err != nil {
+		t.Fatal(err)
+	}
 	if _, ok := m.Verify(ctx, "jobs"); ok {
 		t.Fatal("a replaced network must not be trusted")
 	}
@@ -442,13 +450,17 @@ func TestMembersAttachDetachDisconnect(t *testing.T) {
 
 func TestRegistryFileIsPrivateAndValidated(t *testing.T) {
 	m, _, _ := newTestManager(t)
-	m.Create(context.Background(), CreateRequest{Name: "jobs"}, "admin")
+	if _, err := m.Create(context.Background(), CreateRequest{Name: "jobs"}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	info, err := os.Stat(m.cfg.File)
 	if err != nil || info.Mode().Perm() != 0o600 {
 		t.Fatalf("mode = %v %v", info.Mode(), err)
 	}
 	bad := filepath.Join(t.TempDir(), "networks.json")
-	os.WriteFile(bad, []byte(`[{"name":"x","dockerName":"elsewhere"}]`), 0o600)
+	if err := os.WriteFile(bad, []byte(`[{"name":"x","dockerName":"elsewhere"}]`), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := NewManager(Config{File: bad, Max: 3}, newFakeDocker(), m.logger, m.audit); err == nil {
 		t.Fatal("a registry entry with another Docker name must be refused")
 	}
@@ -492,9 +504,15 @@ func TestExternalNetworks(t *testing.T) {
 	ctx := context.Background()
 	m.cfg.Reserved = []netip.Prefix{netip.MustParsePrefix("172.30.0.0/16")}
 	mine, _ := m.Create(ctx, CreateRequest{Name: "jobs", Subnet: "10.20.0.0/24"}, "admin")
-	d.CreateInternalNetwork(ctx, "bridge", netip.MustParsePrefix("172.17.0.0/16"), nil)
-	d.CreateInternalNetwork(ctx, "ci_default", netip.MustParsePrefix("172.30.5.0/24"), map[string]string{"com.docker.compose.project": "ci"})
-	d.CreateInternalNetwork(ctx, "manual", netip.MustParsePrefix("192.168.50.0/24"), nil)
+	if _, err := d.CreateInternalNetwork(ctx, "bridge", netip.MustParsePrefix("172.17.0.0/16"), nil); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := d.CreateInternalNetwork(ctx, "ci_default", netip.MustParsePrefix("172.30.5.0/24"), map[string]string{"com.docker.compose.project": "ci"}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := d.CreateInternalNetwork(ctx, "manual", netip.MustParsePrefix("192.168.50.0/24"), nil); err != nil {
+		t.Fatal(err)
+	}
 	d.connect("ci_default", strings.Repeat("a", 64), "ci-app-1", "ci", "172.30.5.2")
 	sites := &fakeSource{members: []DeclaredMember{{Name: "shop", Project: "hosted-shop", Container: "hosted-shop-web-1"}}}
 	m.AddSource(KindSite, sites)

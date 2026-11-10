@@ -266,7 +266,7 @@ func (h *HostingHandler) Create(w http.ResponseWriter, r *http.Request) {
 		h.writeHostingError(w, err)
 		return
 	}
-	writeJSON(w, http.StatusAccepted, hostingOperationResponse{Name: req.Spec.Name, Operation: op})
+	writeJSON(w, http.StatusAccepted, hostingOperationResponse{Name: req.Name, Operation: op})
 }
 
 // Update replaces the settings of a stack and redeploys it (202).

@@ -24,19 +24,24 @@ func fakeELF(machine elf.Machine, marker string) []byte {
 	b.Write([]byte{0x7f, 'E', 'L', 'F', byte(elf.ELFCLASS64), byte(elf.ELFDATA2LSB), byte(elf.EV_CURRENT), 0})
 	b.Write(make([]byte, 8)) // padding of e_ident
 	le := binary.LittleEndian
-	binary.Write(&b, le, uint16(elf.ET_EXEC))
-	binary.Write(&b, le, uint16(machine))
-	binary.Write(&b, le, uint32(elf.EV_CURRENT))
-	binary.Write(&b, le, uint64(0x401000)) // entry
-	binary.Write(&b, le, uint64(0))        // phoff
-	binary.Write(&b, le, uint64(0))        // shoff
-	binary.Write(&b, le, uint32(0))        // flags
-	binary.Write(&b, le, uint16(64))       // ehsize
-	binary.Write(&b, le, uint16(56))       // phentsize
-	binary.Write(&b, le, uint16(0))        // phnum
-	binary.Write(&b, le, uint16(64))       // shentsize
-	binary.Write(&b, le, uint16(0))        // shnum
-	binary.Write(&b, le, uint16(0))        // shstrndx
+	put := func(v any) {
+		if err := binary.Write(&b, le, v); err != nil {
+			panic(err) // writes to a bytes.Buffer never fail
+		}
+	}
+	put(uint16(elf.ET_EXEC))
+	put(uint16(machine))
+	put(uint32(elf.EV_CURRENT))
+	put(uint64(0x401000)) // entry
+	put(uint64(0))        // phoff
+	put(uint64(0))        // shoff
+	put(uint32(0))        // flags
+	put(uint16(64))       // ehsize
+	put(uint16(56))       // phentsize
+	put(uint16(0))        // phnum
+	put(uint16(64))       // shentsize
+	put(uint16(0))        // shnum
+	put(uint16(0))        // shstrndx
 	b.WriteString(marker)
 	return b.Bytes()
 }
@@ -155,27 +160,31 @@ func TestRuntimeStoreDetectsTampering(t *testing.T) {
 	b := RuntimeBinary{Version: rel.Version, Arch: rel.Arch, SHA256: rel.SHA256}
 	cases := map[string]func(t *testing.T, path string){
 		"content": func(t *testing.T, path string) {
-			os.Chmod(path, 0o755)
-			os.WriteFile(path, fakeELF(elf.EM_AARCH64, "evil"), 0o755)
-			os.Chmod(path, 0o555)
+			mustChmod(t, path, 0o755)
+			mustWriteFile(t, path, fakeELF(elf.EM_AARCH64, "evil"), 0o755)
+			mustChmod(t, path, 0o555)
 		},
-		"mode":     func(t *testing.T, path string) { os.Chmod(path, 0o755) },
-		"setuid":   func(t *testing.T, path string) { os.Chmod(path, os.ModeSetuid|0o555) },
-		"dir mode": func(t *testing.T, path string) { os.Chmod(filepath.Dir(path), 0o777) },
+		"mode":     func(t *testing.T, path string) { mustChmod(t, path, 0o755) },
+		"setuid":   func(t *testing.T, path string) { mustChmod(t, path, os.ModeSetuid|0o555) },
+		"dir mode": func(t *testing.T, path string) { mustChmod(t, filepath.Dir(path), 0o777) },
 		"symlink": func(t *testing.T, path string) {
 			other := filepath.Join(t.TempDir(), "bin")
-			os.WriteFile(other, arm, 0o555)
+			mustWriteFile(t, other, arm, 0o555)
 			os.Remove(path)
-			os.Symlink(other, path)
+			mustSymlink(t, other, path)
 		},
 		"symlinked dir": func(t *testing.T, path string) {
 			dir := filepath.Dir(path)
 			moved := filepath.Join(t.TempDir(), "arm64")
-			os.Rename(dir, moved)
-			os.Symlink(moved, dir)
+			if err := os.Rename(dir, moved); err != nil {
+				t.Fatal(err)
+			}
+			mustSymlink(t, moved, dir)
 		},
 		"hard link": func(t *testing.T, path string) {
-			os.Link(path, filepath.Join(t.TempDir(), "extra"))
+			if err := os.Link(path, filepath.Join(t.TempDir(), "extra")); err != nil {
+				t.Fatal(err)
+			}
 		},
 		"removed": func(t *testing.T, path string) { os.Remove(path) },
 	}

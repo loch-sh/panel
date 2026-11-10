@@ -37,6 +37,14 @@ func validSpec(name string) *Spec {
 	}
 }
 
+// writeTestFile writes a test fixture and fails the test on error.
+func writeTestFile(t testing.TB, path string, data []byte, perm os.FileMode) {
+	t.Helper()
+	if err := os.WriteFile(path, data, perm); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func codeOf(err error) string {
 	var herr *Error
 	if errors.As(err, &herr) {
@@ -327,8 +335,10 @@ func TestEnsureSiteDirsRefusesSymlink(t *testing.T) {
 func TestReadRefusesSymlinkFile(t *testing.T) {
 	dir := t.TempDir()
 	target := filepath.Join(t.TempDir(), "secret")
-	os.WriteFile(target, []byte("secret"), 0o600)
-	os.Symlink(target, filepath.Join(dir, ComposeFile))
+	writeTestFile(t, target, []byte("secret"), 0o600)
+	if err := os.Symlink(target, filepath.Join(dir, ComposeFile)); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := readFileNoFollow(filepath.Join(dir, ComposeFile)); err == nil {
 		t.Fatal("reading through a symlink must fail")
 	}
@@ -342,7 +352,9 @@ func TestBackupRestore(t *testing.T) {
 	if err := backupStack(dir); err != nil {
 		t.Fatal(err)
 	}
-	writeStackFiles(dir, []byte("v2"), Snippets{Vhost: "b"}, generatedFiles{})
+	if err := writeStackFiles(dir, []byte("v2"), Snippets{Vhost: "b"}, generatedFiles{}); err != nil {
+		t.Fatal(err)
+	}
 	if err := restoreStack(dir); err != nil {
 		t.Fatal(err)
 	}
@@ -541,7 +553,9 @@ func TestCreateCollisions(t *testing.T) {
 		{Names: []string{"/other"}, Labels: map[string]string{"traefik.http.routers.hosted-router-https.rule": "Host(`r.example.com`)"}},
 	}}
 	m, cfg := newTestManager(t, &fakeRunner{}, docker)
-	os.Mkdir(filepath.Join(cfg.StacksDir, "hosted-dir"), 0o755)
+	if err := os.Mkdir(filepath.Join(cfg.StacksDir, "hosted-dir"), 0o755); err != nil {
+		t.Fatal(err)
+	}
 
 	tests := []struct {
 		name   string
@@ -624,7 +638,9 @@ func TestUpdateRollsBackOnFailure(t *testing.T) {
 	runner := &fakeRunner{}
 	m, cfg := newTestManager(t, runner, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{Vhost: "v1"}, "admin")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{Vhost: "v1"}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	dir := filepath.Join(cfg.StacksDir, "hosted-site")
 	before, _ := os.ReadFile(filepath.Join(dir, ComposeFile))
@@ -657,12 +673,14 @@ func TestUpdateRollsBackOnFailure(t *testing.T) {
 func TestUpdateRefusesManualEditsUnlessForced(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 
 	path := filepath.Join(cfg.StacksDir, "hosted-site", ComposeFile)
 	data, _ := os.ReadFile(path)
-	os.WriteFile(path, append(data, []byte("# manual edit\n")...), 0o640)
+	writeTestFile(t, path, append(data, []byte("# manual edit\n")...), 0o640)
 
 	if s, _ := m.Get(ctx, "site"); !s.Modified {
 		t.Fatal("manual edit not detected")
@@ -682,7 +700,9 @@ func TestUpdateRefusesManualEditsUnlessForced(t *testing.T) {
 func TestUpdateSiteIsImmutable(t *testing.T) {
 	m, _ := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	spec := validSpec("site")
 	spec.Site = "elsewhere"
@@ -709,7 +729,9 @@ func TestDeleteKeepsOrPurgesData(t *testing.T) {
 	for _, purge := range []bool{false, true} {
 		m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 		ctx := context.Background()
-		m.Create(ctx, validSpec("site"), Snippets{}, "admin")
+		if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "admin"); err != nil {
+			t.Fatal(err)
+		}
 		waitOp(t, m, "site")
 		if _, err := m.Delete(ctx, "site", purge, "admin"); err != nil {
 			t.Fatal(err)
@@ -730,8 +752,10 @@ func TestDeleteKeepsOrPurgesData(t *testing.T) {
 func TestDeleteIgnoresForeignStacks(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	dir := filepath.Join(cfg.StacksDir, "hosted-ci")
-	os.Mkdir(dir, 0o755)
-	os.WriteFile(filepath.Join(dir, ComposeFile), []byte("services:\n  app:\n    image: nginx\n"), 0o644)
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writeTestFile(t, filepath.Join(dir, ComposeFile), []byte("services:\n  app:\n    image: nginx\n"), 0o644)
 
 	if _, err := m.Delete(context.Background(), "ci", true, "admin"); codeOf(err) != CodeStackNotFound {
 		t.Fatalf("deleting a foreign compose project: %v", err)
@@ -747,9 +771,15 @@ func TestDeleteIgnoresForeignStacks(t *testing.T) {
 
 func TestSites(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
-	os.Mkdir(filepath.Join(cfg.Render.SitesDir, "legacy"), 0o755)
-	os.Symlink(t.TempDir(), filepath.Join(cfg.Render.SitesDir, "link"))
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if err := os.Mkdir(filepath.Join(cfg.Render.SitesDir, "legacy"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(t.TempDir(), filepath.Join(cfg.Render.SitesDir, "link")); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 
 	sites, err := m.Sites()

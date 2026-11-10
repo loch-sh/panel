@@ -35,7 +35,7 @@ func TestAPIKeyHandler_Create_Success(t *testing.T) {
 	}
 
 	var resp createAPIKeyResponse
-	json.NewDecoder(w.Result().Body).Decode(&resp)
+	decodeJSON(t, w.Result().Body, &resp)
 
 	if resp.Name != "my-key" {
 		t.Errorf("Name = %q, want %q", resp.Name, "my-key")
@@ -69,7 +69,7 @@ func TestAPIKeyHandler_Create_DefaultScopesWildcard(t *testing.T) {
 	}
 
 	var resp createAPIKeyResponse
-	json.NewDecoder(w.Result().Body).Decode(&resp)
+	decodeJSON(t, w.Result().Body, &resp)
 
 	if len(resp.Scopes) != 1 || resp.Scopes[0] != "*" {
 		t.Errorf("Scopes = %v, want [*] (default wildcard)", resp.Scopes)
@@ -233,7 +233,7 @@ func TestAPIKeyHandler_List_Success(t *testing.T) {
 	}
 
 	var resp []listAPIKeyResponse
-	json.NewDecoder(w.Result().Body).Decode(&resp)
+	decodeJSON(t, w.Result().Body, &resp)
 
 	if len(resp) != 1 {
 		t.Fatalf("len = %d, want 1", len(resp))

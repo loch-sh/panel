@@ -68,7 +68,9 @@ func FuzzQuoteIdent(f *testing.F) {
 		f.Add(n)
 	}
 	f.Fuzz(func(t *testing.T, s string) {
-		defer func() { recover() }()
+		// quoteIdent panics by design on names outside the alphabet: only the
+		// non-panicking results are checked.
+		defer func() { _ = recover() }()
 		q := quoteIdent(s)
 		inner := q[1 : len(q)-1]
 		if strings.ContainsAny(inner, "\"\\'`\x00\n; ") {
@@ -353,8 +355,12 @@ func TestRenderGolden(t *testing.T) {
 			}
 			golden := filepath.Join("testdata", "compose-postgres-"+v+".golden.yaml")
 			if *update {
-				os.MkdirAll("testdata", 0o755)
-				os.WriteFile(golden, out, 0o644)
+				if err := os.MkdirAll("testdata", 0o755); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(golden, out, 0o644); err != nil {
+					t.Fatal(err)
+				}
 			}
 			want, err := os.ReadFile(golden)
 			if err != nil {
@@ -380,7 +386,7 @@ func TestTimeoutsAreNested(t *testing.T) {
 		t.Fatal(err)
 	}
 	statement := 20 * time.Second
-	if !strings.Contains(preamble, "statement_timeout = '20s'") || !(statement < kill && kill < execTimeout) {
+	if !strings.Contains(preamble, "statement_timeout = '20s'") || statement >= kill || kill >= execTimeout {
 		t.Fatalf("statement %s < kill %s < exec %s must hold", statement, kill, execTimeout)
 	}
 }

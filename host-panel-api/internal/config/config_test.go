@@ -490,8 +490,12 @@ func TestConfig_Load_Functions(t *testing.T) {
 	t.Run("overlap through a symlink", func(t *testing.T) {
 		root := t.TempDir()
 		real := filepath.Join(root, "compose")
-		os.MkdirAll(filepath.Join(real, "functions"), 0o755)
-		os.Symlink(filepath.Join(real, "functions"), filepath.Join(root, "fn"))
+		if err := os.MkdirAll(filepath.Join(real, "functions"), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Symlink(filepath.Join(real, "functions"), filepath.Join(root, "fn")); err != nil {
+			t.Fatal(err)
+		}
 		t.Setenv("HOSTING_STACKS_DIRECTORY", real)
 		t.Setenv("FUNCTIONS_DATA_DIRECTORY", filepath.Join(root, "fn"))
 		if _, err := Load(); err == nil || !strings.Contains(err.Error(), "must not be inside HOSTING_STACKS_DIRECTORY") {
@@ -501,8 +505,12 @@ func TestConfig_Load_Functions(t *testing.T) {
 	t.Run("not yet created directory under a symlink", func(t *testing.T) {
 		root := t.TempDir()
 		stacks := filepath.Join(root, "compose")
-		os.MkdirAll(stacks, 0o755)
-		os.Symlink(stacks, filepath.Join(root, "link"))
+		if err := os.MkdirAll(stacks, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Symlink(stacks, filepath.Join(root, "link")); err != nil {
+			t.Fatal(err)
+		}
 		t.Setenv("HOSTING_STACKS_DIRECTORY", stacks)
 		t.Setenv("FUNCTIONS_DATA_DIRECTORY", filepath.Join(root, "link", "not", "yet"))
 		if _, err := Load(); err == nil || !strings.Contains(err.Error(), "must not be inside HOSTING_STACKS_DIRECTORY") {

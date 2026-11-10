@@ -38,7 +38,7 @@ func IsGeneratedPassword(p string) bool {
 	}
 	for i := 0; i < len(p); i++ {
 		c := p[i]
-		if !(c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9') {
+		if (c < 'A' || c > 'Z') && (c < 'a' || c > 'z') && (c < '0' || c > '9') {
 			return false
 		}
 	}

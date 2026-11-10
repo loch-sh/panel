@@ -133,7 +133,9 @@ func TestAuthHandler_Redirect_Success(t *testing.T) {
 		t.Fatalf("GetSigned: %v", err)
 	}
 	var flow authFlowData
-	json.Unmarshal([]byte(flowJSON), &flow)
+	if err := json.Unmarshal([]byte(flowJSON), &flow); err != nil {
+		t.Fatal(err)
+	}
 
 	// Now call redirect with the state and code
 	redirectURL := fmt.Sprintf("/auth/redirect?state=%s&code=test-code", flow.State)
@@ -215,7 +217,9 @@ func TestAuthHandler_Redirect_MissingCode(t *testing.T) {
 		"authFlow",
 	)
 	var flow authFlowData
-	json.Unmarshal([]byte(flowJSON), &flow)
+	if err := json.Unmarshal([]byte(flowJSON), &flow); err != nil {
+		t.Fatal(err)
+	}
 
 	r := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/auth/redirect?state=%s", flow.State), nil)
 	r.AddCookie(authFlowCookie)
@@ -252,7 +256,9 @@ func TestAuthHandler_Redirect_ProviderError(t *testing.T) {
 		"authFlow",
 	)
 	var flow authFlowData
-	json.Unmarshal([]byte(flowJSON), &flow)
+	if err := json.Unmarshal([]byte(flowJSON), &flow); err != nil {
+		t.Fatal(err)
+	}
 
 	r := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/auth/redirect?state=%s&error=access_denied&error_description=user+denied", flow.State), nil)
 	r.AddCookie(authFlowCookie)
@@ -312,7 +318,7 @@ func TestAuthHandler_Logout_WithoutLogoutURL(t *testing.T) {
 	}
 
 	var body map[string]string
-	json.NewDecoder(w.Result().Body).Decode(&body)
+	decodeJSON(t, w.Result().Body, &body)
 	if body["message"] != "logged out" {
 		t.Errorf("message = %q, want %q", body["message"], "logged out")
 	}

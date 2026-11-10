@@ -387,7 +387,11 @@ func newTestEnv(t *testing.T, tweak ...func(*ManagerConfig)) *testEnv {
 			t.Fatal(err)
 		}
 	}
-	t.Cleanup(func() { removeTree(data) })
+	t.Cleanup(func() {
+		if err := removeTree(data); err != nil {
+			t.Error(err)
+		}
+	})
 	cfg := ManagerConfig{
 		Config: Config{Enabled: true, DataDir: data, StacksDir: stacks, Max: 10, MaxMemoryMB: 3008,
 			MaxCodeBytes: 1 << 20, DeploymentsKept: 3, TmpSizeMB: 512},

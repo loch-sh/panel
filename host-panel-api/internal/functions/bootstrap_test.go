@@ -234,7 +234,7 @@ func TestDeploymentWarningsRoundTrip(t *testing.T) {
 	}
 	// Only unknown codes: the field is emptied.
 	only := bytes.Replace(data, []byte(`"`+WarnBootstrapDynamic+`"`), []byte(`"FUNCTION_FUTURE_WARNING"`), 1)
-	os.WriteFile(file, only, 0o600)
+	mustWriteFile(t, file, only, 0o600)
 	if ref, err = e.m.load(nm("gofn")); err != nil || ref.Deployment.Warnings != nil {
 		t.Fatalf("only unknown warnings: %+v %v", ref, err)
 	}

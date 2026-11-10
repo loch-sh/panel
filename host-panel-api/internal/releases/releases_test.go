@@ -22,7 +22,7 @@ func fakeRegistry(t *testing.T) (*Client, string) {
 			http.Error(w, "bad scope", http.StatusBadRequest)
 			return
 		}
-		w.Write([]byte(`{"token":"tok"}`))
+		_, _ = w.Write([]byte(`{"token":"tok"}`))
 	})
 	auth := func(w http.ResponseWriter, r *http.Request) bool {
 		if r.Header.Get("Authorization") != "Bearer tok" {
@@ -38,10 +38,10 @@ func fakeRegistry(t *testing.T) (*Client, string) {
 		}
 		if r.URL.Query().Get("last") == "" {
 			w.Header().Set("Link", `</v2/library/redis/tags/list?last=8.4-alpine&n=2>; rel="next"`)
-			w.Write([]byte(`{"name":"library/redis","tags":["8.2-alpine","8.4-alpine"]}`))
+			_, _ = w.Write([]byte(`{"name":"library/redis","tags":["8.2-alpine","8.4-alpine"]}`))
 			return
 		}
-		w.Write([]byte(`{"name":"library/redis","tags":["8.10-alpine","latest"]}`))
+		_, _ = w.Write([]byte(`{"name":"library/redis","tags":["8.10-alpine","latest"]}`))
 	})
 	mux.HandleFunc("/v2/library/redis/manifests/", func(w http.ResponseWriter, r *http.Request) {
 		if !auth(w, r) {
@@ -58,7 +58,7 @@ func fakeRegistry(t *testing.T) (*Client, string) {
 		w.WriteHeader(http.StatusNotFound)
 	})
 	mux.HandleFunc("/api/v1/products/redis", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`{"result":{"releases":[
+		_, _ = w.Write([]byte(`{"result":{"releases":[
 			{"name":"8.10","eoasFrom":null,"eolFrom":null},
 			{"name":"8.2","eoasFrom":"2025-11-18","eolFrom":"2030-09-01"},
 			{"name":"7.4","eoasFrom":"not a date","eolFrom":"2026-01-01"}]}}`))
@@ -165,7 +165,7 @@ func TestTagsRefusesATruncatedList(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Every page announces another one.
 		w.Header().Set("Link", `</v2/library/redis/tags/list?last=x&n=1>; rel="next"`)
-		w.Write([]byte(`{"tags":["8.2-alpine"]}`))
+		_, _ = w.Write([]byte(`{"tags":["8.2-alpine"]}`))
 	}))
 	t.Cleanup(srv.Close)
 	c := &Client{HTTP: srv.Client(), Scheme: "http"}

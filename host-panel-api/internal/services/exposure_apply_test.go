@@ -122,7 +122,7 @@ func TestApplyExposuresAtStartup(t *testing.T) {
 	// compose.yaml edited by hand (e.g. by CI): the panel never runs it. A
 	// port to close is closed by stopping the instance (never fail-open).
 	p := filepath.Join(env.instanceDir(), ComposeFile)
-	os.WriteFile(p, append([]byte(readFile(t, p)), "# privileged: true\n"...), 0o640)
+	must(t, os.WriteFile(p, append([]byte(readFile(t, p)), "# privileged: true\n"...), 0o640))
 	ups = env.runner.count("svc-fake-2 up")
 	env.setDesired(t, "fake-2", ptrExposure(publicExposure(5417))) // the 5416 port closes
 	env.m.applyAll(context.Background())
@@ -240,7 +240,7 @@ func TestNoExposureChangeOnAModifiedInstance(t *testing.T) {
 	env := newEnv(t)
 	mustCreate(t, env, "shop")
 	p := filepath.Join(env.instanceDir(), ComposeFile)
-	os.WriteFile(p, append([]byte(readFile(t, p)), "# privileged: true\n"...), 0o640)
+	must(t, os.WriteFile(p, append([]byte(readFile(t, p)), "# privileged: true\n"...), 0o640))
 	ups := env.runner.count("svc-fake-2 up")
 	exp := loopbackExposure(5416)
 	_, err := env.m.SetExposure(context.Background(), "fake-2", &exp, "admin")
@@ -266,7 +266,7 @@ func TestSelfConsistentOverrideIsNotTrusted(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	os.WriteFile(filepath.Join(env.instanceDir(), OverrideFile), forged, 0o640)
+	must(t, os.WriteFile(filepath.Join(env.instanceDir(), OverrideFile), forged, 0o640))
 	_, rerr := env.m.Resources(context.Background(), "fake-2")
 	wantCode(t, rerr, CodeNotReady)
 	env.m.applyAll(context.Background())

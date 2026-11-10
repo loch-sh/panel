@@ -305,7 +305,9 @@ func TestFunctionsInvokeEnvelope(t *testing.T) {
 		t.Fatal("the payload must be JSON-escaped")
 	}
 	var out map[string]any
-	json.Unmarshal(rec.Body.Bytes(), &out)
+	if err := json.Unmarshal(rec.Body.Bytes(), &out); err != nil {
+		t.Fatal(err)
+	}
 	if out["payload"] != `<script>alert(1)</script>` || out["functionError"] != "Unhandled" || out["logTail"] != "log � line" {
 		t.Fatalf("envelope: %v", out)
 	}
@@ -331,9 +333,13 @@ func TestFunctionsUpload(t *testing.T) {
 	// Multipart: the "code" part is streamed.
 	var buf bytes.Buffer
 	mw := multipart.NewWriter(&buf)
-	mw.WriteField("comment", "ignored")
+	if err := mw.WriteField("comment", "ignored"); err != nil {
+		t.Fatal(err)
+	}
 	fw, _ := mw.CreateFormFile("code", "code.zip")
-	fw.Write([]byte("PK-multipart"))
+	if _, err := fw.Write([]byte("PK-multipart")); err != nil {
+		t.Fatal(err)
+	}
 	mw.Close()
 	req := hostingRequest("POST", "/functions/resize/code", buf.String())
 	req.Header.Set("Content-Type", mw.FormDataContentType())
@@ -537,7 +543,8 @@ func TestFunctionsUnreadBodies(t *testing.T) {
 	post := func(path, contentType string) (*http.Response, time.Duration) {
 		pr, pw := io.Pipe()
 		t.Cleanup(func() { pw.Close() })
-		go pw.Write([]byte("{")) // a start, then nothing
+		// a start, then nothing; the write fails once the pipe is closed at cleanup, which is expected
+		go func() { _, _ = pw.Write([]byte("{")) }()
 		req, _ := http.NewRequest("POST", srv.URL+path, pr)
 		req.Header.Set("Content-Type", contentType)
 		start := time.Now()

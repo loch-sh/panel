@@ -1,0 +1,11 @@
+# golangci-lint v2 configuration (CI job api:lint, code quality report).
+version: "2"
+
+linters:
+  # errcheck, govet, ineffassign, staticcheck, unused
+  default: standard
+  exclusions:
+    presets:
+      # Errors ignored by convention: Close, Flush, os.Remove(All),
+      # fmt.Fprint*, os.Setenv/Unsetenv, writes to stdout/stderr.
+      - std-error-handling

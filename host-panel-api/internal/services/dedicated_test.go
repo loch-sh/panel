@@ -189,7 +189,7 @@ func TestDedicatedTampering(t *testing.T) {
 	orig, _ := os.ReadFile(compose)
 
 	// A larger memory limit written by hand: modified, rotation refused.
-	os.WriteFile(compose, []byte(strings.Replace(string(orig), "mem_limit: 67108864", "mem_limit: 99999999999", 1)), 0o640)
+	must(t, os.WriteFile(compose, []byte(strings.Replace(string(orig), "mem_limit: 67108864", "mem_limit: 99999999999", 1)), 0o640))
 	_, err := env.m.RotatePassword(context.Background(), "kv-cache", "cache", "admin")
 	wantCode(t, err, CodeInstanceModified)
 	_, err = env.m.Delete(context.Background(), "kv-cache", "cache", "admin")
@@ -197,17 +197,17 @@ func TestDedicatedTampering(t *testing.T) {
 
 	// Valid options that differ from the panel's record (e.g. a larger
 	// memory size rewritten consistently): modified, never run.
-	os.WriteFile(compose, []byte(strings.NewReplacer(`memory: "64"`, `memory: "128"`, "67108864", "134217728").Replace(string(orig))), 0o640)
+	must(t, os.WriteFile(compose, []byte(strings.NewReplacer(`memory: "64"`, `memory: "128"`, "67108864", "134217728").Replace(string(orig))), 0o640))
 	if inst, lerr := env.m.load("kv-cache"); lerr != nil || !inst.modified {
 		t.Fatalf("a manifest differing from the record must be reported as modified: %v", lerr)
 	}
 
 	// Options outside the catalog: the instance is not managed at all.
-	os.WriteFile(compose, []byte(strings.Replace(string(orig), `memory: "64"`, `memory: "999999"`, 1)), 0o640)
+	must(t, os.WriteFile(compose, []byte(strings.Replace(string(orig), `memory: "64"`, `memory: "999999"`, 1)), 0o640))
 	if _, lerr := env.m.load("kv-cache"); lerr == nil {
 		t.Fatal("invalid options in the manifest must not be trusted")
 	}
-	os.WriteFile(compose, orig, 0o640)
+	must(t, os.WriteFile(compose, orig, 0o640))
 
 	// A container whose limits differ is not trusted.
 	c := env.docker.byProject(kvRef.Project())
@@ -295,7 +295,7 @@ func TestDedicatedReference(t *testing.T) {
 	if inst, lerr := env.m.load("kv-cache"); lerr != nil || !inst.modified {
 		t.Fatal("an instance without its private reference is reported as modified")
 	}
-	os.Symlink("/etc/passwd", ref)
+	must(t, os.Symlink("/etc/passwd", ref))
 	if inst, lerr := env.m.load("kv-cache"); lerr != nil || !inst.modified {
 		t.Fatal("a symlinked reference is not trusted")
 	}
@@ -305,8 +305,8 @@ func TestDedicatedCountIgnoresForeignDirectories(t *testing.T) {
 	env := newEnv(t)
 	env.m.cfg.MaxDedicatedInstances = 1
 	// Directories planted in the stacks directory (CI), even with the marker.
-	os.Mkdir(filepath.Join(env.cfg.StacksDir, "svc-kv-planted"), 0o755)
-	os.WriteFile(filepath.Join(env.cfg.StacksDir, "svc-kv-planted", ".loch-managed"), nil, 0o644)
+	must(t, os.Mkdir(filepath.Join(env.cfg.StacksDir, "svc-kv-planted"), 0o755))
+	must(t, os.WriteFile(filepath.Join(env.cfg.StacksDir, "svc-kv-planted", ".loch-managed"), nil, 0o644))
 	createKV(t, env, "cache", nil)
 }
 
@@ -396,9 +396,9 @@ func TestSecretStateFile(t *testing.T) {
 	root := t.TempDir()
 	private := filepath.Join(root, ".loch", "svc-x")
 	state := filepath.Join(private, "state")
-	os.MkdirAll(state, 0o755)
-	os.Chmod(filepath.Join(root, ".loch"), 0o700)
-	os.Chmod(private, 0o700)
+	must(t, os.MkdirAll(state, 0o755))
+	must(t, os.Chmod(filepath.Join(root, ".loch"), 0o700))
+	must(t, os.Chmod(private, 0o700))
 	var chowned []string
 	env.m.chown = func(p string, uid, gid int) error {
 		chowned = append(chowned, fmt.Sprintf("%s %d:%d", filepath.Base(p), uid, gid))
@@ -427,7 +427,7 @@ func TestSecretStateFile(t *testing.T) {
 	if st, _ := os.Stat(filepath.Join(state, "users.json")); st.Mode().Perm() != 0o444 {
 		t.Fatalf("fallback: %v", st.Mode())
 	}
-	os.Chmod(private, 0o755)
+	must(t, os.Chmod(private, 0o755))
 	if err := env.m.writeStateFile(e, true, state, "users.json", []byte("secret")); err == nil {
 		t.Fatal("a readable secret behind a loose parent must be refused")
 	}
@@ -447,7 +447,7 @@ func TestPurgeModifiedInstance(t *testing.T) {
 	dir := filepath.Join(env.cfg.StacksDir, kvRef.Project())
 	compose := filepath.Join(dir, ComposeFile)
 	orig, _ := os.ReadFile(compose)
-	os.WriteFile(compose, []byte(strings.Replace(string(orig), "mem_limit: 67108864", "mem_limit: 99999999999", 1)), 0o640)
+	must(t, os.WriteFile(compose, []byte(strings.Replace(string(orig), "mem_limit: 67108864", "mem_limit: 99999999999", 1)), 0o640))
 	// A container started by hand from the instance directory under another
 	// project name, and an unrelated one.
 	env.docker.mu.Lock()

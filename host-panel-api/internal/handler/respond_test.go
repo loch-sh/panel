@@ -46,7 +46,7 @@ func TestWriteError(t *testing.T) {
 	}
 
 	var body map[string]string
-	json.NewDecoder(resp.Body).Decode(&body)
+	decodeJSON(t, resp.Body, &body)
 
 	if body["code"] != "INVALID_REQUEST_BODY" {
 		t.Errorf("code = %q, want %q", body["code"], "INVALID_REQUEST_BODY")
@@ -61,7 +61,7 @@ func TestWriteJSON_EmptySlice(t *testing.T) {
 	writeJSON(w, 200, []string{})
 
 	var body []string
-	json.NewDecoder(w.Result().Body).Decode(&body)
+	decodeJSON(t, w.Result().Body, &body)
 	if body == nil {
 		t.Error("empty slice should serialize as [] not null")
 	}

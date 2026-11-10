@@ -31,7 +31,7 @@ func TestRenderGolden(t *testing.T) {
 			}
 			golden := filepath.Join("testdata", "compose-"+name+".golden.yaml")
 			if *update {
-				os.WriteFile(golden, out, 0o644)
+				mustWriteFile(t, golden, out, 0o644)
 			}
 			want, err := os.ReadFile(golden)
 			if err != nil {
@@ -101,18 +101,18 @@ func TestComposeIntact(t *testing.T) {
 	cfg := testRenderConfig(ref)
 	cfg.Paths.StacksDir = t.TempDir()
 	dir := cfg.Paths.ProjectDir(nm(ref.Name))
-	os.Mkdir(dir, 0o750)
+	mustMkdir(t, dir, 0o750)
 	out, _ := Render(ref, cfg)
-	os.WriteFile(filepath.Join(dir, ComposeFile), out, 0o640)
+	mustWriteFile(t, filepath.Join(dir, ComposeFile), out, 0o640)
 	if ComposeIntact(ref, cfg) {
 		t.Fatal("intact without the managed marker")
 	}
-	os.WriteFile(filepath.Join(dir, composekit.ManagedMarker), []byte("x"), 0o640)
+	mustWriteFile(t, filepath.Join(dir, composekit.ManagedMarker), []byte("x"), 0o640)
 	if !ComposeIntact(ref, cfg) {
 		t.Fatal("rendered file not intact")
 	}
 	edited := strings.Replace(string(out), "read_only: true", "read_only: false", 1)
-	os.WriteFile(filepath.Join(dir, ComposeFile), []byte(edited), 0o640)
+	mustWriteFile(t, filepath.Join(dir, ComposeFile), []byte(edited), 0o640)
 	if ComposeIntact(ref, cfg) {
 		t.Fatal("edited file reported intact")
 	}

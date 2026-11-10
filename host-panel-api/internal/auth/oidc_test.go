@@ -66,7 +66,7 @@ func TestGenerateState(t *testing.T) {
 
 	// Must be valid hex (only 0-9, a-f)
 	for _, c := range state {
-		if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
+		if (c < '0' || c > '9') && (c < 'a' || c > 'f') {
 			t.Errorf("state contains invalid hex character: %c", c)
 			break
 		}

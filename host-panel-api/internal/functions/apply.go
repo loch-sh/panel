@@ -196,7 +196,7 @@ func (m *Manager) apply(ctx context.Context, prev, next *Reference, ch change, o
 	}
 	if !run {
 		if prev.Deployment != nil && !prev.Stopped && next.Stopped {
-			m.stopContainers(ctx, n)
+			_ = m.stopContainers(ctx, n) // failures are logged by stopContainers
 		}
 		m.onChange()
 		return nil
@@ -213,8 +213,7 @@ func (m *Manager) apply(ctx context.Context, prev, next *Reference, ch change, o
 	err := m.up(ctx, n, compose, ch.recreate)
 	if err == nil {
 		if _, problem := m.verifyRunning(ctx, next, rc); problem != "" {
-			m.refused(n, actor, op, problem, CodeVerificationFailed, "")
-			err = newError(CodeVerificationFailed, "", "the container does not match the function reference")
+			err = m.refused(n, actor, op, problem, CodeVerificationFailed, "the container does not match the function reference")
 		}
 	}
 	if err == nil {
@@ -236,7 +235,7 @@ func (m *Manager) rollback(ctx context.Context, prev *Reference, n Name, ch chan
 	defer cancel()
 	m.logger.Error("functions: the function did not start with its new configuration", "function", n.String(), "error", cause)
 	if !restoreFiles() {
-		m.stopContainers(rctx, n)
+		_ = m.stopContainers(rctx, n) // failures are logged by stopContainers
 		return newError(CodeOutcomeUnknown, "", "the previous files could not be restored: the function was stopped, check it")
 	}
 	reason := newError(CodeStartFailed, "", "the function did not start with its new configuration; the previous one is kept")
@@ -246,13 +245,15 @@ func (m *Manager) rollback(ctx context.Context, prev *Reference, n Name, ch chan
 	switch {
 	case prev.Deployment == nil:
 		// Never ran: nothing to start again.
-		m.removeContainers(rctx, n)
+		if _, err := m.removeContainers(rctx, n); err != nil {
+			m.logger.Error("functions: removing the containers after a failed first start", "function", n.String(), "error", err)
+		}
 		return reason
 	case len(ch.cut) > 0:
-		m.stopContainers(rctx, n)
+		_ = m.stopContainers(rctx, n) // failures are logged by stopContainers
 		return newError(CodeStartFailed, "", "the function did not restart without the removed networks: it was stopped")
 	case prev.Stopped:
-		m.stopContainers(rctx, n)
+		_ = m.stopContainers(rctx, n) // failures are logged by stopContainers
 		return reason
 	}
 	prc := m.renderConfig(prev)
@@ -262,7 +263,7 @@ func (m *Manager) rollback(ctx context.Context, prev *Reference, n Name, ch chan
 	}
 	prevCompose, rerr := Render(prev, prc)
 	if aerr != nil || rerr != nil || !ComposeIntact(prev, prc) {
-		m.stopContainers(rctx, n)
+		_ = m.stopContainers(rctx, n) // failures are logged by stopContainers
 		return newError(CodeOutcomeUnknown, "", "the previous configuration could not be verified: the function was stopped")
 	}
 	if err := m.up(rctx, n, prevCompose, true); err != nil {

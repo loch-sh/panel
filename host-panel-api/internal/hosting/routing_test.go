@@ -127,10 +127,12 @@ func TestSymfonyRulesInRealContainer(t *testing.T) {
 		t.Skip("set HOSTING_E2E=1 to run")
 	}
 	site := t.TempDir()
-	os.MkdirAll(filepath.Join(site, "public", "bundles"), 0o755)
-	os.WriteFile(filepath.Join(site, "public", "index.php"), []byte(`<?php echo "FRONT ".$_SERVER['REQUEST_URI'];`), 0o644)
-	os.WriteFile(filepath.Join(site, "public", "other.php"), []byte(`<?php echo "OTHER";`), 0o644)
-	os.WriteFile(filepath.Join(site, "public", "bundles", "app.css"), []byte("asset"), 0o644)
+	if err := os.MkdirAll(filepath.Join(site, "public", "bundles"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writeTestFile(t, filepath.Join(site, "public", "index.php"), []byte(`<?php echo "FRONT ".$_SERVER['REQUEST_URI'];`), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", "other.php"), []byte(`<?php echo "OTHER";`), 0o644)
+	writeTestFile(t, filepath.Join(site, "public", "bundles", "app.css"), []byte("asset"), 0o644)
 
 	for i, tt := range []struct {
 		template Template
@@ -148,17 +150,17 @@ func TestSymfonyRulesInRealContainer(t *testing.T) {
 	} {
 		t.Run(string(tt.template), func(t *testing.T) {
 			rules := filepath.Join(t.TempDir(), RoutingFile)
-			os.WriteFile(rules, []byte(SymfonyRules(tt.template, "public", []string{"bundles"}, 90)), 0o644)
+			writeTestFile(t, rules, []byte(SymfonyRules(tt.template, "public", []string{"bundles"}, 90)), 0o644)
 			name := fmt.Sprintf("loch-routing-e2e-%d", i)
 			port := 18090 + i
-			exec.Command("docker", "rm", "-f", name).Run()
+			_ = exec.Command("docker", "rm", "-f", name).Run() // the container may not exist yet
 			out, err := exec.Command("docker", "run", "-d", "--name", name, "--init", "-t",
 				"-e", "WEB_DOCUMENT_ROOT=/app/public", "-p", fmt.Sprintf("127.0.0.1:%d:80", port),
 				"-v", site+":/app", "-v", rules+":"+routingTarget(tt.template)+":ro", tt.image).CombinedOutput()
 			if err != nil {
 				t.Fatalf("docker run: %v\n%s", err, out)
 			}
-			defer exec.Command("docker", "rm", "-f", name).Run()
+			defer func() { _ = exec.Command("docker", "rm", "-f", name).Run() }() // best-effort cleanup
 
 			client := &http.Client{Timeout: 3 * time.Second}
 			base := fmt.Sprintf("http://127.0.0.1:%d", port)
@@ -209,7 +211,9 @@ func TestCreateDefaultsAssetDirs(t *testing.T) {
 	m, _ := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	spec := validSpec("site")
 	spec.Routing = RoutingSymfony
-	m.Create(context.Background(), spec, Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	d, _ := m.Get(context.Background(), "site")
 	if len(d.Spec.AssetDirs) != 1 || d.Spec.AssetDirs[0] != "bundles" {
@@ -222,11 +226,13 @@ func TestSymfonyRoutingDriftAndRegeneration(t *testing.T) {
 	ctx := context.Background()
 	spec := validSpec("site")
 	spec.Routing = RoutingSymfony
-	m.Create(ctx, spec, Snippets{}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	routing := filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, RoutingFile)
 
-	os.WriteFile(routing, []byte("location / { return 200; }\n"), 0o640)
+	writeTestFile(t, routing, []byte("location / { return 200; }\n"), 0o640)
 	if d, _ := m.Get(ctx, "site"); !d.Modified {
 		t.Fatal("a hand-edited Symfony routing file must be reported as modified")
 	}
@@ -246,9 +252,11 @@ func TestSymfonyRoutingDriftAndRegeneration(t *testing.T) {
 
 func TestDefaultRoutingHidesLeftoverFile(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
-	m.Create(context.Background(), validSpec("site"), Snippets{}, "admin")
+	if _, err := m.Create(context.Background(), validSpec("site"), Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
-	os.WriteFile(filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, RoutingFile), []byte("leftover"), 0o640)
+	writeTestFile(t, filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, RoutingFile), []byte("leftover"), 0o640)
 	if d, _ := m.Get(context.Background(), "site"); d.RoutingFile != "" {
 		t.Fatalf("routingFile = %q for the default routing", d.RoutingFile)
 	}
@@ -260,7 +268,9 @@ func TestCustomRulesMustFollowWebServer(t *testing.T) {
 	rules := "location / {\n    try_files $uri /index.php$is_args$args;\n}\n"
 	spec := validSpec("site")
 	spec.Routing = RoutingCustom
-	m.Create(ctx, spec, Snippets{RoutingRules: rules}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{RoutingRules: rules}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 
 	apache := validSpec("site")
@@ -287,7 +297,9 @@ func TestSymfonyToCustomAcrossServersNeedsNewRules(t *testing.T) {
 	ctx := context.Background()
 	spec := validSpec("site")
 	spec.Routing = RoutingSymfony
-	m.Create(ctx, spec, Snippets{}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	generated, _ := os.ReadFile(filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, RoutingFile))
 
@@ -305,7 +317,9 @@ func TestDeployMissingCustomRoutingFile(t *testing.T) {
 	ctx := context.Background()
 	spec := validSpec("site")
 	spec.Routing = RoutingCustom
-	m.Create(ctx, spec, Snippets{RoutingRules: "location / {}\n"}, "admin")
+	if _, err := m.Create(ctx, spec, Snippets{RoutingRules: "location / {}\n"}, "admin"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	os.Remove(filepath.Join(cfg.StacksDir, "hosted-site", ConfigDir, RoutingFile))
 	if _, err := m.Deploy(ctx, "site", false, false, "admin"); codeOf(err) != CodeInvalidRouting {

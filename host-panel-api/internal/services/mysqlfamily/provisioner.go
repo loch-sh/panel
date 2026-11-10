@@ -127,7 +127,9 @@ func (p provisioner) Deprovision(ctx context.Context, t services.Target, name st
 			return err
 		}
 	}
-	d.killSessions(ctx, t, name)
+	// Best effort: DROP DATABASE does not need the sessions closed, and the
+	// user is already dropped (its sessions cannot reconnect).
+	_ = d.killSessions(ctx, t, name)
 	_, err := d.run(ctx, t, "drop database", dropDatabaseSQL(name))
 	return err
 }
@@ -153,7 +155,7 @@ func (p provisioner) SetPassword(ctx context.Context, t services.Target, name, p
 	}
 	// Best effort: the new password is set, losing it over a failed KILL
 	// would be worse than an old session staying open.
-	d.killSessions(ctx, t, name)
+	_ = d.killSessions(ctx, t, name)
 	return nil
 }
 

@@ -60,7 +60,7 @@ func startJWKSServer(t *testing.T) *httptest.Server {
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(jwks)
+		_ = json.NewEncoder(w).Encode(jwks) // test HTTP response write
 	}))
 	t.Cleanup(srv.Close)
 	return srv

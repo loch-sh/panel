@@ -29,7 +29,9 @@ func TestStampCompose(t *testing.T) {
 func TestStackIsStampedOnEachDeployment(t *testing.T) {
 	m, cfg := newTestManager(t, &fakeRunner{}, &fakeDocker{})
 	ctx := context.Background()
-	m.Create(ctx, validSpec("site"), Snippets{}, "alice@example.com")
+	if _, err := m.Create(ctx, validSpec("site"), Snippets{}, "alice@example.com"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	path := filepath.Join(cfg.StacksDir, "hosted-site", ComposeFile)
 	if data, _ := os.ReadFile(path); !strings.Contains(string(data), "# Last deployed by alice@example.com at ") || !strings.Contains(string(data), "(create)") {
@@ -39,7 +41,9 @@ func TestStackIsStampedOnEachDeployment(t *testing.T) {
 		t.Fatal("the stamp must not count as a manual edit")
 	}
 
-	m.Deploy(ctx, "site", false, false, "bob@example.com")
+	if _, err := m.Deploy(ctx, "site", false, false, "bob@example.com"); err != nil {
+		t.Fatal(err)
+	}
 	waitOp(t, m, "site")
 	data, _ := os.ReadFile(path)
 	if !strings.Contains(string(data), "by bob@example.com") || strings.Contains(string(data), "alice") {
@@ -50,15 +54,15 @@ func TestStackIsStampedOnEachDeployment(t *testing.T) {
 	}
 
 	// A real manual edit is still detected.
-	os.WriteFile(path, append(data, []byte("# edited\n")...), 0o640)
+	writeTestFile(t, path, append(data, []byte("# edited\n")...), 0o640)
 	if d, _ := m.Get(ctx, "site"); !d.Modified {
 		t.Fatal("manual edit not detected")
 	}
 }
 
 func TestSanitizeActorUnicodeBreaks(t *testing.T) {
-	got := sanitizeActor("x x-evil: 1 ‮" + strings.Repeat("a", 300))
-	if strings.ContainsAny(got, "  ‮\n") || len([]rune(got)) > maxActorRunes {
+	got := sanitizeActor("x x-evil: 1 \u202e" + strings.Repeat("a", 300))
+	if strings.ContainsAny(got, "  \u202e\n") || len([]rune(got)) > maxActorRunes {
 		t.Fatalf("actor = %q", got)
 	}
 }

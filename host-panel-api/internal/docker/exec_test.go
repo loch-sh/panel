@@ -83,8 +83,8 @@ func (m *muxWriter) Write(p []byte) (int, error) {
 func TestPumpExecSeparatesStreams(t *testing.T) {
 	res, err := pipeExec(t, context.Background(), []byte("hello"), func(in io.Reader, out, errw io.Writer) {
 		data, _ := io.ReadAll(in)
-		out.Write(bytes.ToUpper(data))
-		errw.Write([]byte("warn"))
+		_, _ = out.Write(bytes.ToUpper(data)) // fake process output pipe
+		_, _ = errw.Write([]byte("warn"))
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -101,7 +101,7 @@ func TestPumpExecNoDeadlockWithLargeEcho(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	res, err := pipeExec(t, ctx, stdin, func(in io.Reader, out, _ io.Writer) {
-		io.Copy(out, in)
+		_, _ = io.Copy(out, in) // fake process pipe: the result is checked on the client side
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -114,8 +114,8 @@ func TestPumpExecNoDeadlockWithLargeEcho(t *testing.T) {
 func TestPumpExecBoundsOutputAndDrains(t *testing.T) {
 	big := strings.Repeat("y", maxExecStdout+10)
 	res, err := pipeExec(t, context.Background(), nil, func(_ io.Reader, out, errw io.Writer) {
-		out.Write([]byte(big)) // returns only once fully drained by the client
-		errw.Write([]byte(strings.Repeat("e", maxExecStderr+1)))
+		_, _ = out.Write([]byte(big)) // returns only once fully drained by the client
+		_, _ = errw.Write([]byte(strings.Repeat("e", maxExecStderr+1)))
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -130,7 +130,7 @@ func TestPumpExecProcessIgnoresStdin(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	res, err := pipeExec(t, ctx, bytes.Repeat([]byte("z"), MaxExecStdin), func(_ io.Reader, out, _ io.Writer) {
-		out.Write([]byte("bye"))
+		_, _ = out.Write([]byte("bye")) // fake process output pipe
 	})
 	if err != nil || string(res.Stdout) != "bye" {
 		t.Fatalf("res=%+v err=%v", res, err)
@@ -184,7 +184,7 @@ func TestPumpExecTimeoutInertProcessWithStdin(t *testing.T) {
 	defer cancel()
 	_, err := pipeExec(t, ctx, bytes.Repeat([]byte("s"), MaxExecStdin), func(_ io.Reader, out, _ io.Writer) {
 		<-ctx.Done()
-		out.Write([]byte("late")) // fails: the connection was closed
+		_, _ = out.Write([]byte("late")) // fails: the connection was closed
 	})
 	if !errors.Is(err, ErrExecTimeout) {
 		t.Fatalf("err = %v", err)
@@ -197,11 +197,12 @@ func TestPumpExecCorruptStream(t *testing.T) {
 	outR, outW := io.Pipe()
 	go func() {
 		hdr := []byte{9, 0, 0, 0, 0, 0, 0, 3} // unknown stream type
-		outW.Write(append(hdr, "abc"...))
+		// Fake process output pipe: errors surface on the reading side.
+		_, _ = outW.Write(append(hdr, "abc"...))
 		outW.Close()
 	}()
 	stdinR, stdinW := io.Pipe()
-	go io.Copy(io.Discard, stdinR)
+	go func() { _, _ = io.Copy(io.Discard, stdinR) }() // drains the fake stdin
 	_, err := pumpExec(context.Background(), []byte("x"), stdinW, stdinW.Close, outR, func() {
 		stdinW.CloseWithError(net.ErrClosed)
 		outR.CloseWithError(net.ErrClosed)
@@ -224,7 +225,8 @@ func TestPumpExecWriteErrorDropsConnection(t *testing.T) {
 	go func() { <-dropped; outW.Close() }()
 	var closedWrite atomic.Bool
 	failing := writerFunc(func([]byte) (int, error) { return 0, errors.New("broken pipe") })
-	pumpExec(context.Background(), []byte("SECRET"), failing,
+	// The write error is expected; only the connection handling is checked.
+	_, _ = pumpExec(context.Background(), []byte("SECRET"), failing,
 		func() error { closedWrite.Store(true); return nil }, outR, closeConn)
 	if closedWrite.Load() {
 		t.Fatal("CloseWrite must not be called after a failed write")

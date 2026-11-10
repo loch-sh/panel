@@ -2,7 +2,9 @@ package functions
 
 import (
 	"context"
+	"os"
 	"strings"
+	"testing"
 	"time"
 
 	dockerspec "github.com/moby/docker-image-spec/specs-go/v1"
@@ -200,4 +202,41 @@ func goodEgress(ref *Reference, info container.InspectResponse) *network.Inspect
 	n.Options = map[string]string{"com.docker.network.enable_ipv4": "true", "com.docker.network.enable_ipv6": "false"}
 	n.IPAM.Driver = "default"
 	return n
+}
+
+// mustWriteFile, mustChmod, mustSymlink, mustMkdir and mustMkdirAll fail the
+// test when a file system setup step fails (test helpers).
+func mustWriteFile(t testing.TB, path string, data []byte, perm os.FileMode) {
+	t.Helper()
+	if err := os.WriteFile(path, data, perm); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func mustChmod(t testing.TB, path string, mode os.FileMode) {
+	t.Helper()
+	if err := os.Chmod(path, mode); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func mustSymlink(t testing.TB, target, link string) {
+	t.Helper()
+	if err := os.Symlink(target, link); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func mustMkdir(t testing.TB, path string, perm os.FileMode) {
+	t.Helper()
+	if err := os.Mkdir(path, perm); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func mustMkdirAll(t testing.TB, path string, perm os.FileMode) {
+	t.Helper()
+	if err := os.MkdirAll(path, perm); err != nil {
+		t.Fatal(err)
+	}
 }

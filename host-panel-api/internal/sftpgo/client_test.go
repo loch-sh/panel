@@ -19,7 +19,7 @@ func TestClient_ListUsers_SendsAPIKeyHeader(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotKey = r.Header.Get(apiKeyHeader)
 		gotPath = r.URL.Path
-		json.NewEncoder(w).Encode([]User{{Username: "a"}, {Username: "b"}})
+		_ = json.NewEncoder(w).Encode([]User{{Username: "a"}, {Username: "b"}})
 	}))
 	defer srv.Close()
 
@@ -45,12 +45,14 @@ func TestClient_CreateUser_SendsBody(t *testing.T) {
 			t.Errorf("method = %s, want POST", r.Method)
 		}
 		var u User
-		json.NewDecoder(r.Body).Decode(&u)
+		if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
+			t.Errorf("decode body: %v", err)
+		}
 		if u.Username != "client1" {
 			t.Errorf("username = %q, want client1", u.Username)
 		}
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(u)
+		_ = json.NewEncoder(w).Encode(u)
 	}))
 	defer srv.Close()
 
@@ -67,7 +69,7 @@ func TestClient_CreateUser_SendsBody(t *testing.T) {
 func TestClient_GetUser_NotFound(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(`{"error":"not found"}`))
+		_, _ = w.Write([]byte(`{"error":"not found"}`))
 	}))
 	defer srv.Close()
 

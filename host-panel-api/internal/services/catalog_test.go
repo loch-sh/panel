@@ -253,13 +253,13 @@ func TestCatalogPersistence(t *testing.T) {
 	data, _ := os.ReadFile(filepath.Join(dir, catalogFile))
 	tampered := strings.Replace(string(data), `"tag":"3.2"`, `"tag":"9.9"`, 1)
 	tampered = strings.Replace(tampered, digestOf('3'), "sha256:bad", 1)
-	os.WriteFile(filepath.Join(dir, catalogFile), []byte(tampered), 0o640)
+	must(t, os.WriteFile(filepath.Join(dir, catalogFile), []byte(tampered), 0o640))
 	third := newCatalogRegistry(t, nil)
-	third.SetStore(dir)
+	must(t, third.SetStore(dir))
 	if got := versionsOf(third.Versions("fake")); got != "3.1" { // 2 was never checked on the mirror
 		t.Fatalf("sanitized catalog = %s", got)
 	}
-	os.WriteFile(filepath.Join(dir, catalogFile), []byte("{"), 0o640)
+	must(t, os.WriteFile(filepath.Join(dir, catalogFile), []byte("{"), 0o640))
 	if err := newCatalogRegistry(t, nil).SetStore(dir); err == nil {
 		t.Fatal("an invalid file is reported")
 	}

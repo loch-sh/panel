@@ -2,7 +2,6 @@ package handler
 
 import (
 	"bytes"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -34,7 +33,7 @@ func TestUsersHandler_Me_Success(t *testing.T) {
 	}
 
 	var resp userResponse
-	json.NewDecoder(w.Result().Body).Decode(&resp)
+	decodeJSON(t, w.Result().Body, &resp)
 
 	if resp.Email != "admin@test.com" {
 		t.Errorf("Email = %q, want %q", resp.Email, "admin@test.com")
@@ -74,7 +73,7 @@ func TestUsersHandler_List_Success(t *testing.T) {
 	}
 
 	var resp []userResponse
-	json.NewDecoder(w.Result().Body).Decode(&resp)
+	decodeJSON(t, w.Result().Body, &resp)
 
 	if len(resp) != 2 {
 		t.Errorf("len = %d, want 2", len(resp))

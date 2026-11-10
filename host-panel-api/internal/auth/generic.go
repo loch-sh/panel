@@ -92,7 +92,8 @@ func (p *GenericProvider) ExchangeCode(ctx context.Context, code, codeVerifier, 
 			Error       string `json:"error"`
 			Description string `json:"error_description"`
 		}
-		json.NewDecoder(resp.Body).Decode(&errResp)
+		// Best effort: the status code is reported even without a readable body.
+		_ = json.NewDecoder(resp.Body).Decode(&errResp)
 		return nil, fmt.Errorf("token exchange failed (status %d): %s — %s",
 			resp.StatusCode, errResp.Error, errResp.Description)
 	}

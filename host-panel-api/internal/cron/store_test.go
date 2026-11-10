@@ -54,7 +54,9 @@ func TestNewStore_ExistingFile(t *testing.T) {
 		"job1": makeJob("job1", "Test", true, time.Now()),
 	}
 	data, _ := json.MarshalIndent(jobs, "", "  ")
-	os.WriteFile(path, data, 0644)
+	if err := os.WriteFile(path, data, 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	s, err := NewStore(path, testLogger())
 	if err != nil {
@@ -68,7 +70,9 @@ func TestNewStore_ExistingFile(t *testing.T) {
 func TestNewStore_CorruptedFile(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "cron.json")
-	os.WriteFile(path, []byte("{invalid json"), 0644)
+	if err := os.WriteFile(path, []byte("{invalid json"), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	_, err := NewStore(path, testLogger())
 	if err == nil {
@@ -79,7 +83,9 @@ func TestNewStore_CorruptedFile(t *testing.T) {
 func TestNewStore_EmptyFileContent(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "cron.json")
-	os.WriteFile(path, []byte(""), 0644)
+	if err := os.WriteFile(path, []byte(""), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	s, err := NewStore(path, testLogger())
 	if err != nil {

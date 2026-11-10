@@ -23,7 +23,7 @@ func TestGenerateID(t *testing.T) {
 	t.Run("HexOnly", func(t *testing.T) {
 		id := GenerateID()
 		for _, c := range id {
-			if !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
+			if (c < '0' || c > '9') && (c < 'a' || c > 'f') {
 				t.Errorf("non-hex character found: %c in %q", c, id)
 				break
 			}
@@ -166,7 +166,9 @@ func TestScheduler_UpdateJob(t *testing.T) {
 		Enabled:  true,
 		HTTP:     &HTTPConfig{Method: "GET", URL: server.URL},
 	}
-	scheduler.AddJob(job)
+	if err := scheduler.AddJob(job); err != nil {
+		t.Fatal(err)
+	}
 
 	// Update with a new schedule
 	updated := &Job{
@@ -207,11 +209,15 @@ func TestScheduler_UpdateJob_Disable(t *testing.T) {
 		Enabled:  true,
 		HTTP:     &HTTPConfig{Method: "GET", URL: server.URL},
 	}
-	scheduler.AddJob(job)
+	if err := scheduler.AddJob(job); err != nil {
+		t.Fatal(err)
+	}
 
 	// Disable
 	job.Enabled = false
-	scheduler.UpdateJob(job)
+	if err := scheduler.UpdateJob(job); err != nil {
+		t.Fatal(err)
+	}
 
 	scheduler.mu.Lock()
 	_, exists := scheduler.entries["test-disable"]
@@ -356,7 +362,9 @@ func TestScheduler_OnceJob(t *testing.T) {
 		LastStatus: JobStatusPending,
 	}
 	store.Set(job.ID, job)
-	scheduler.AddJob(job)
+	if err := scheduler.AddJob(job); err != nil {
+		t.Fatal(err)
+	}
 
 	// Execute manually
 	scheduler.executeWithLock("test-once")

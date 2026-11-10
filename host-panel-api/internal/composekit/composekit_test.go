@@ -13,13 +13,18 @@ func TestTailBuffer(t *testing.T) {
 		t.Fatalf("empty = %q", got)
 	}
 	short := &tailBuffer{max: 5}
-	short.Write([]byte("abc"))
+	if _, err := short.Write([]byte("abc")); err != nil {
+		t.Fatal(err)
+	}
 	if got := short.String(); got != "abc" {
 		t.Fatalf("untruncated = %q", got)
 	}
 	b := &tailBuffer{max: 5}
-	b.Write([]byte("abc"))
-	b.Write([]byte("defgh"))
+	for _, chunk := range []string{"abc", "defgh"} {
+		if _, err := b.Write([]byte(chunk)); err != nil {
+			t.Fatal(err)
+		}
+	}
 	if got := b.String(); got != "…defgh" {
 		t.Fatalf("tail = %q", got)
 	}
@@ -53,7 +58,9 @@ func TestExecRunnerArgs(t *testing.T) {
 func TestWriteFileAtomicPermAndSymlinkDir(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, "d")
-	os.Mkdir(dir, 0o750)
+	if err := os.Mkdir(dir, 0o750); err != nil {
+		t.Fatal(err)
+	}
 	if err := WriteFileAtomic(dir, "secret", []byte("x"), 0o400); err != nil {
 		t.Fatal(err)
 	}
@@ -61,11 +68,15 @@ func TestWriteFileAtomicPermAndSymlinkDir(t *testing.T) {
 		t.Fatalf("perm = %v", fi.Mode().Perm())
 	}
 	link := filepath.Join(root, "link")
-	os.Symlink(dir, link)
+	if err := os.Symlink(dir, link); err != nil {
+		t.Fatal(err)
+	}
 	if err := WriteFileAtomic(link, "f", []byte("x"), 0o640); err == nil {
 		t.Fatal("writing through a symlinked directory must fail")
 	}
-	os.Symlink(filepath.Join(dir, "secret"), filepath.Join(root, "filelink"))
+	if err := os.Symlink(filepath.Join(dir, "secret"), filepath.Join(root, "filelink")); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := ReadFileNoFollow(filepath.Join(root, "filelink")); err == nil {
 		t.Fatal("reading a symlinked file must fail")
 	}
@@ -83,7 +94,9 @@ func TestEnsureDir(t *testing.T) {
 	if created, err := EnsureDir(p, 0o750); err != nil || created {
 		t.Fatalf("second call: created=%v err=%v", created, err)
 	}
-	os.Symlink(p, filepath.Join(root, "l"))
+	if err := os.Symlink(p, filepath.Join(root, "l")); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := EnsureDir(filepath.Join(root, "l"), 0o750); err == nil {
 		t.Fatal("a symlink must not be accepted as a directory")
 	}
@@ -93,7 +106,9 @@ func TestEnsureDir(t *testing.T) {
 func TestRunStdin(t *testing.T) {
 	dir := t.TempDir()
 	bin := filepath.Join(t.TempDir(), "docker")
-	os.WriteFile(bin, []byte("#!/bin/sh\necho \"$@\"\ncat\n"), 0o755)
+	if err := os.WriteFile(bin, []byte("#!/bin/sh\necho \"$@\"\ncat\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
 	out, err := ExecRunner{Binary: bin}.RunStdin(t.Context(), dir, []byte("services: {}\n"), "up", "-d")
 	if err != nil {
 		t.Fatal(err)

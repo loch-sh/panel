@@ -9,6 +9,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"hash/crc32"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -26,19 +27,33 @@ type zentry struct {
 	body   []byte
 	method uint16
 	raw    *zip.FileHeader // body is then the raw (compressed) data
+	// rename, for a raw entry, replaces its name in the finished archive
+	// (local header and central directory). archive/zip refuses data for a
+	// name ending with "/": the entry is written under a placeholder name of
+	// the same length, then renamed, to forge a directory carrying data.
+	rename string
 }
 
 func buildZip(t *testing.T, entries ...zentry) []byte {
 	t.Helper()
 	var buf bytes.Buffer
 	w := zip.NewWriter(&buf)
+	var renames [][2]string
 	for _, e := range entries {
 		if e.raw != nil {
 			fw, err := w.CreateRaw(e.raw)
 			if err != nil {
 				t.Fatal(err)
 			}
-			fw.Write(e.body)
+			if _, err := fw.Write(e.body); err != nil {
+				t.Fatal(err)
+			}
+			if e.rename != "" {
+				if len(e.rename) != len(e.raw.Name) {
+					t.Fatalf("rename %q: the placeholder %q must have the same length", e.rename, e.raw.Name)
+				}
+				renames = append(renames, [2]string{e.raw.Name, e.rename})
+			}
 			continue
 		}
 		h := &zip.FileHeader{Name: e.name, Method: e.method}
@@ -61,14 +76,24 @@ func buildZip(t *testing.T, entries ...zentry) []byte {
 	if err := w.Close(); err != nil {
 		t.Fatal(err)
 	}
-	return buf.Bytes()
+	out := buf.Bytes()
+	for _, r := range renames {
+		// Once in the local header, once in the central directory.
+		if n := bytes.Count(out, []byte(r[0])); n != 2 {
+			t.Fatalf("placeholder %q found %d times in the archive, want 2", r[0], n)
+		}
+		out = bytes.ReplaceAll(out, []byte(r[0]), []byte(r[1]))
+	}
+	return out
 }
 
 func deflateBytes(t *testing.T, data []byte) []byte {
 	t.Helper()
 	var buf bytes.Buffer
 	fw, _ := flate.NewWriter(&buf, flate.BestCompression)
-	fw.Write(data)
+	if _, err := fw.Write(data); err != nil {
+		t.Fatal(err)
+	}
 	fw.Close()
 	return buf.Bytes()
 }
@@ -84,7 +109,11 @@ type deployEnv struct {
 func newDeployEnv(t *testing.T, limits ZipLimits) *deployEnv {
 	t.Helper()
 	p := Paths{DataDir: t.TempDir(), StacksDir: t.TempDir()}
-	t.Cleanup(func() { removeTree(p.DataDir) }) // read-only deployments
+	t.Cleanup(func() { // read-only deployments
+		if err := removeTree(p.DataDir); err != nil {
+			t.Error(err)
+		}
+	})
 	n := nm("hello")
 	if err := p.EnsureFunctionDirs(n); err != nil {
 		t.Fatal(err)
@@ -191,9 +220,9 @@ func TestDeployValidZip(t *testing.T) {
 
 	// Modified outside the panel: content, mode, added file, replaced link.
 	file := filepath.Join(dir, "index.js")
-	os.Chmod(file, 0o644)
-	os.WriteFile(file, []byte("evil"), 0o644)
-	os.Chmod(file, 0o444)
+	mustChmod(t, file, 0o644)
+	mustWriteFile(t, file, []byte("evil"), 0o644)
+	mustChmod(t, file, 0o444)
 	if err := env.paths.VerifyDeployment(env.name, d); CodeOf(err) != CodeArtifactModified {
 		t.Fatalf("modified content: %v", err)
 	}
@@ -201,19 +230,19 @@ func TestDeployValidZip(t *testing.T) {
 		t.Fatal(err)
 	}
 	dir2 := env.paths.Deployment(env.name, d2.ID)
-	os.Chmod(dir2, 0o755)
-	os.WriteFile(filepath.Join(dir2, "extra.js"), []byte("x"), 0o444)
-	os.Chmod(dir2, 0o555)
+	mustChmod(t, dir2, 0o755)
+	mustWriteFile(t, filepath.Join(dir2, "extra.js"), []byte("x"), 0o444)
+	mustChmod(t, dir2, 0o555)
 	if err := env.paths.VerifyDeployment(env.name, d2); CodeOf(err) != CodeArtifactModified {
 		t.Fatalf("added file: %v", err)
 	}
-	os.Chmod(dir2, 0o755)
+	mustChmod(t, dir2, 0o755)
 	os.Remove(filepath.Join(dir2, "extra.js"))
-	os.Chmod(dir2, 0o555)
+	mustChmod(t, dir2, 0o555)
 	if err := env.paths.VerifyDeployment(env.name, d2); err != nil {
 		t.Fatalf("restored: %v", err)
 	}
-	os.Chmod(filepath.Join(dir2, "index.js"), 0o644) // writable again
+	mustChmod(t, filepath.Join(dir2, "index.js"), 0o644) // writable again
 	if err := env.paths.VerifyDeployment(env.name, d2); CodeOf(err) != CodeArtifactModified {
 		t.Fatalf("writable file: %v", err)
 	}
@@ -325,12 +354,44 @@ func TestDeployAcceptsSafeSymlinks(t *testing.T) {
 	}
 }
 
+// dirWithData is a directory entry "d/" that really carries data: written
+// under the placeholder "d\x7f" (archive/zip refuses data for a name ending
+// with "/"), then renamed in the archive.
 func dirWithData() zentry {
 	data := []byte("data")
-	h := &zip.FileHeader{Name: "d/", Method: zip.Store, CRC32: crc32.ChecksumIEEE(data),
+	h := &zip.FileHeader{Name: "d\x7f", Method: zip.Store, CRC32: crc32.ChecksumIEEE(data),
 		CompressedSize64: uint64(len(data)), UncompressedSize64: uint64(len(data))}
 	h.SetMode(fs.ModeDir | 0o755)
-	return zentry{raw: h, body: data}
+	return zentry{raw: h, body: data, rename: "d/"}
+}
+
+// The "directory with data" case must be refused for that reason, on an
+// archive that really holds the data.
+func TestDeployRefusesDirectoryWithData(t *testing.T) {
+	archive := buildZip(t, dirWithData())
+	zr, err := zip.NewReader(bytes.NewReader(archive), int64(len(archive)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(zr.File) != 1 || zr.File[0].Name != "d/" || !zr.File[0].Mode().IsDir() {
+		t.Fatalf("fixture: want a single directory entry d/, got %+v", zr.File)
+	}
+	// Raw read: archive/zip itself refuses to open a directory with data.
+	rr, err := zr.File[0].OpenRaw()
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := io.ReadAll(rr)
+	if err != nil || string(got) != "data" {
+		t.Fatalf("fixture: directory data = %q, %v; want \"data\"", got, err)
+	}
+
+	env := newDeployEnv(t, DefaultZipLimits(0))
+	_, err = env.deploy(t, archive)
+	if CodeOf(err) != CodeInvalidCode || !strings.Contains(err.Error(), "is not a valid directory entry") {
+		t.Fatalf("err = %v (code %q), want %s: not a valid directory entry", err, CodeOf(err), CodeInvalidCode)
+	}
+	env.assertClean(t)
 }
 
 func rawEntry(t *testing.T, name string, method uint16, flags uint16, data []byte, declared uint64) zentry {
@@ -468,7 +529,7 @@ func TestDeployOperationalGuards(t *testing.T) {
 	t.Run("symlinked deployments directory", func(t *testing.T) {
 		env := newDeployEnv(t, DefaultZipLimits(0))
 		os.Remove(env.deployments)
-		os.Symlink(t.TempDir(), env.deployments)
+		mustSymlink(t, t.TempDir(), env.deployments)
 		if _, err := env.deploy(t, data); CodeOf(err) != CodeStorage {
 			t.Fatalf("err = %v", err)
 		}
@@ -528,7 +589,9 @@ func TestDeployRefusesZip64Decoy(t *testing.T) {
 	var buf bytes.Buffer
 	w := zip.NewWriter(&buf)
 	for i := range n {
-		w.CreateHeader(&zip.FileHeader{Name: strconv.Itoa(i), Method: zip.Store})
+		if _, err := w.CreateHeader(&zip.FileHeader{Name: strconv.Itoa(i), Method: zip.Store}); err != nil {
+			t.Fatal(err)
+		}
 	}
 	w.Close()
 	data := buf.Bytes()
@@ -689,14 +752,14 @@ func TestSweepLeftovers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	os.WriteFile(filepath.Join(env.uploads, "upload-123.zip"), []byte("x"), 0o600)
+	mustWriteFile(t, filepath.Join(env.uploads, "upload-123.zip"), []byte("x"), 0o600)
 	staging := filepath.Join(env.deployments, ".staging-456")
-	os.MkdirAll(filepath.Join(staging, "sub"), 0o700)
-	os.WriteFile(filepath.Join(staging, "sub", "f"), []byte("x"), 0o444)
-	os.Chmod(filepath.Join(staging, "sub"), 0o555)
+	mustMkdirAll(t, filepath.Join(staging, "sub"), 0o700)
+	mustWriteFile(t, filepath.Join(staging, "sub", "f"), []byte("x"), 0o444)
+	mustChmod(t, filepath.Join(staging, "sub"), 0o555)
 	victim := filepath.Join(t.TempDir(), "victim")
-	os.WriteFile(victim, []byte("keep"), 0o600)
-	os.Symlink(victim, filepath.Join(env.uploads, "upload-link.zip"))
+	mustWriteFile(t, victim, []byte("keep"), 0o600)
+	mustSymlink(t, victim, filepath.Join(env.uploads, "upload-link.zip"))
 	removed, err := env.paths.SweepLeftovers()
 	if err != nil || len(removed) != 3 {
 		t.Fatalf("removed %v, %v", removed, err)
@@ -726,26 +789,26 @@ func TestPathsRefuseUnsafeDirectories(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, dir := range []string{env.paths.DataDir, env.paths.FunctionData(env.name), env.deployments} {
-		os.Chmod(dir, 0o777)
+		mustChmod(t, dir, 0o777)
 		if err := env.paths.VerifyDeployment(env.name, d); CodeOf(err) != CodeArtifactModified {
 			t.Errorf("%s writable by others: %v", dir, err)
 		}
 		if _, err := env.deploy(t, buildZip(t, zentry{name: "b.js"})); err == nil {
 			t.Errorf("%s writable by others: upload accepted", dir)
 		}
-		os.Chmod(dir, 0o700)
+		mustChmod(t, dir, 0o700)
 	}
-	os.Chmod(env.paths.Private(env.name), 0o770)
+	mustChmod(t, env.paths.Private(env.name), 0o770)
 	if err := env.paths.WriteSecretsEnv(env.name, []string{"A"}, map[string]string{"A": "1"}); err == nil {
 		t.Error("group-writable private directory accepted")
 	}
 	if err := env.paths.EnsureFunctionDirs(env.name); err == nil {
 		t.Error("EnsureFunctionDirs accepted a group-writable private directory")
 	}
-	os.Chmod(env.paths.Private(env.name), 0o700)
+	mustChmod(t, env.paths.Private(env.name), 0o700)
 	// A file of the tree writable by others.
 	dir := env.paths.Deployment(env.name, d.ID)
-	os.Chmod(filepath.Join(dir, "a.js"), 0o446)
+	mustChmod(t, filepath.Join(dir, "a.js"), 0o446)
 	if err := env.paths.VerifyDeployment(env.name, d); CodeOf(err) != CodeArtifactModified {
 		t.Errorf("world-writable file: %v", err)
 	}

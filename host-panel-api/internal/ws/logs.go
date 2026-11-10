@@ -77,8 +77,8 @@ func HandleLogsStart(
 			// Demultiplex stdout/stderr
 			pr, pw := io.Pipe()
 			go func() {
-				stdcopy.StdCopy(pw, pw, logsReader)
-				pw.Close()
+				_, err := stdcopy.StdCopy(pw, pw, logsReader)
+				pw.CloseWithError(err)
 			}()
 			reader = pr
 		}

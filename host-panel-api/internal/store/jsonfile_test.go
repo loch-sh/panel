@@ -44,7 +44,9 @@ func TestJSONFileStore_LoadExisting(t *testing.T) {
 		"alice@test.com": {Email: "alice@test.com", Name: "Alice", Profile: model.ProfileAdmin},
 	}
 	raw, _ := json.MarshalIndent(data, "", "  ")
-	os.WriteFile(path, raw, 0o644)
+	if err := os.WriteFile(path, raw, 0o644); err != nil {
+		t.Fatal(err)
+	}
 
 	s, err := NewJSONFileStore(path, testLogger())
 	if err != nil {
@@ -65,7 +67,9 @@ func TestJSONFileStore_LoadExisting(t *testing.T) {
 func TestJSONFileStore_LoadEmptyFile(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "users.json")
-	os.WriteFile(path, []byte{}, 0o644)
+	if err := os.WriteFile(path, []byte{}, 0o644); err != nil {
+		t.Fatal(err)
+	}
 
 	s, err := NewJSONFileStore(path, testLogger())
 	if err != nil {
@@ -79,7 +83,9 @@ func TestJSONFileStore_LoadEmptyFile(t *testing.T) {
 func TestJSONFileStore_LoadCorrupted(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "users.json")
-	os.WriteFile(path, []byte("{invalid json"), 0o644)
+	if err := os.WriteFile(path, []byte("{invalid json"), 0o644); err != nil {
+		t.Fatal(err)
+	}
 
 	_, err := NewJSONFileStore(path, testLogger())
 	if err == nil {
@@ -240,7 +246,9 @@ func TestJSONFileStore_DropsFunctionPermissions(t *testing.T) {
 	data, _ := json.Marshal(map[string]*model.User{
 		"u@x": {Email: "u@x", Profile: model.ProfileRestricted, Permissions: []string{"web", "fn-resize", "/fn-other"}},
 	})
-	os.WriteFile(path, data, 0o600)
+	if err := os.WriteFile(path, data, 0o600); err != nil {
+		t.Fatal(err)
+	}
 	s, err := NewJSONFileStore(path, testLogger())
 	if err != nil {
 		t.Fatal(err)

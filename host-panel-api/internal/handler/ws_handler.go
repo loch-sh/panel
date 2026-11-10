@@ -530,9 +530,9 @@ func startExecStream(conn *ws.Conn, hijacked *client.HijackedResponse, hasTTY bo
 			stderrPR, stderrPW := io.Pipe()
 
 			go func() {
-				stdcopy.StdCopy(stdoutPW, stderrPW, hijacked.Reader)
-				stdoutPW.Close()
-				stderrPW.Close()
+				_, err := stdcopy.StdCopy(stdoutPW, stderrPW, hijacked.Reader)
+				stdoutPW.CloseWithError(err)
+				stderrPW.CloseWithError(err)
 			}()
 
 			go func() {

@@ -54,26 +54,26 @@ func (c *Conn) ReadMessage() (*Message, error) {
 	return &msg, nil
 }
 
-// WriteEvent sends an event with data to the client.
-func (c *Conn) WriteEvent(event string, data any) error {
+// WriteEvent sends an event with data to the client. Delivery is best-effort:
+// a write failure means the client is gone, so the connection context is
+// cancelled, which stops the streams feeding it and ends the read loop. The
+// data are the API's own types: a marshalling failure drops the event.
+func (c *Conn) WriteEvent(event string, data any) {
 	raw, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return
 	}
 
-	msg := Message{
-		Event: event,
-		Data:  raw,
-	}
-
-	payload, err := json.Marshal(msg)
+	payload, err := json.Marshal(Message{Event: event, Data: raw})
 	if err != nil {
-		return err
+		return
 	}
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	return c.WS.Write(c.Ctx, websocket.MessageText, payload)
+	if err := c.WS.Write(c.Ctx, websocket.MessageText, payload); err != nil {
+		c.Cancel()
+	}
 }
 
 // WriteBinary sends a raw binary message over the WebSocket (mutex-protected).

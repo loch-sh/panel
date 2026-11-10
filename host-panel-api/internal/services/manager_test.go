@@ -111,7 +111,7 @@ func TestArchiveOnRetire(t *testing.T) {
 	env.m.cfg.ArchiveOnRetire = true
 	env.m.now = func() time.Time { return time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC) }
 	mustCreate(t, env, "shop")
-	os.WriteFile(filepath.Join(env.dataDir(), "PG_VERSION"), []byte("2"), 0o600)
+	must(t, os.WriteFile(filepath.Join(env.dataDir(), "PG_VERSION"), []byte("2"), 0o600))
 	if res, err := env.m.Delete(context.Background(), "fake-2", "shop", "admin"); err != nil || !res.InstanceRetired {
 		t.Fatalf("res=%+v err=%v", res, err)
 	}
@@ -138,7 +138,7 @@ func TestModifiedInstanceIsNotRetired(t *testing.T) {
 	mustCreate(t, env, "shop")
 	p := filepath.Join(env.instanceDir(), ComposeFile)
 	data, _ := os.ReadFile(p)
-	os.WriteFile(p, append(data, []byte("# tuned by hand\n")...), 0o640)
+	must(t, os.WriteFile(p, append(data, []byte("# tuned by hand\n")...), 0o640))
 
 	res, err := env.m.Delete(context.Background(), "fake-2", "shop", "admin")
 	if err != nil || res.InstanceRetired || res.RetireBlocked != "modified" || !exists(env.dataDir()) {
@@ -146,8 +146,8 @@ func TestModifiedInstanceIsNotRetired(t *testing.T) {
 	}
 	wantCode(t, env.m.Retire(context.Background(), "fake-2", "admin"), CodeInstanceModified)
 	// Generated config files count too.
-	os.WriteFile(p, data, 0o640)
-	os.WriteFile(filepath.Join(env.instanceDir(), "fake.conf"), []byte("edited\n"), 0o644)
+	must(t, os.WriteFile(p, data, 0o640))
+	must(t, os.WriteFile(filepath.Join(env.instanceDir(), "fake.conf"), []byte("edited\n"), 0o644))
 	if inst, _ := env.m.load("fake-2"); !inst.modified {
 		t.Fatal("an edited generated file must be detected")
 	}
@@ -280,8 +280,8 @@ func TestUnknownDeprovisionOutcome(t *testing.T) {
 func TestDirectoryAndNameConflicts(t *testing.T) {
 	t.Run("directory without marker", func(t *testing.T) {
 		env := newEnv(t)
-		os.Mkdir(env.instanceDir(), 0o755)
-		os.WriteFile(filepath.Join(env.instanceDir(), "compose.yaml"), []byte("services: {}\n"), 0o644)
+		must(t, os.Mkdir(env.instanceDir(), 0o755))
+		must(t, os.WriteFile(filepath.Join(env.instanceDir(), "compose.yaml"), []byte("services: {}\n"), 0o644))
 		_, err := env.m.Create(context.Background(), CreateRequest{Engine: "fake", Version: "2", Name: "shop"}, "admin")
 		wantCode(t, err, CodeDirectoryConflict)
 		if !exists(filepath.Join(env.instanceDir(), "compose.yaml")) {
@@ -299,8 +299,8 @@ func TestDirectoryAndNameConflicts(t *testing.T) {
 	})
 	t.Run("data directory not empty", func(t *testing.T) {
 		env := newEnv(t)
-		os.Mkdir(env.dataDir(), 0o700)
-		os.WriteFile(filepath.Join(env.dataDir(), "old"), []byte("x"), 0o600)
+		must(t, os.Mkdir(env.dataDir(), 0o700))
+		must(t, os.WriteFile(filepath.Join(env.dataDir(), "old"), []byte("x"), 0o600))
 		_, err := env.m.Create(context.Background(), CreateRequest{Engine: "fake", Version: "2", Name: "shop"}, "admin")
 		wantCode(t, err, CodeDataDirNotEmpty)
 		if !exists(filepath.Join(env.dataDir(), "old")) || exists(env.instanceDir()) {
@@ -309,13 +309,13 @@ func TestDirectoryAndNameConflicts(t *testing.T) {
 	})
 	t.Run("empty data directory is reused", func(t *testing.T) {
 		env := newEnv(t)
-		os.Mkdir(env.dataDir(), 0o700)
+		must(t, os.Mkdir(env.dataDir(), 0o700))
 		mustCreate(t, env, "shop")
 	})
 	t.Run("symlinked data path", func(t *testing.T) {
 		env := newEnv(t)
 		target := t.TempDir()
-		os.Symlink(target, env.dataDir())
+		must(t, os.Symlink(target, env.dataDir()))
 		_, err := env.m.Create(context.Background(), CreateRequest{Engine: "fake", Version: "2", Name: "shop"}, "admin")
 		wantCode(t, err, CodeDataDirNotEmpty)
 		if !exists(target) {
@@ -328,9 +328,9 @@ func TestPurgeNeverFollowsASymlinkedDataDir(t *testing.T) {
 	env := newEnv(t)
 	mustCreate(t, env, "shop")
 	victim := t.TempDir()
-	os.WriteFile(filepath.Join(victim, "keep"), []byte("x"), 0o600)
+	must(t, os.WriteFile(filepath.Join(victim, "keep"), []byte("x"), 0o600))
 	os.RemoveAll(env.dataDir())
-	os.Symlink(victim, env.dataDir())
+	must(t, os.Symlink(victim, env.dataDir()))
 	res, err := env.m.Delete(context.Background(), "fake-2", "shop", "admin")
 	if err != nil || res.InstanceRetired || res.RetireBlocked != "error" {
 		t.Fatalf("res=%+v err=%v", res, err)
@@ -514,8 +514,8 @@ func TestDeleteAndCreateAreSerialized(t *testing.T) {
 		created <- err
 	}()
 	select {
-	case <-created:
-		t.Fatal("create must wait for the deletion holding the instance lock")
+	case err := <-created:
+		t.Fatalf("create must wait for the deletion holding the instance lock (err = %v)", err)
 	case <-time.After(50 * time.Millisecond):
 	}
 	close(release)
@@ -554,8 +554,8 @@ func TestInstancesListing(t *testing.T) {
 	mustCreate(t, env, "shop")
 	mustCreate(t, env, "blog")
 	// Directories that are not managed instances are ignored.
-	os.Mkdir(filepath.Join(env.cfg.StacksDir, "svc-other-1"), 0o755)
-	os.Mkdir(filepath.Join(env.cfg.StacksDir, "hosted-site"), 0o755)
+	must(t, os.Mkdir(filepath.Join(env.cfg.StacksDir, "svc-other-1"), 0o755))
+	must(t, os.Mkdir(filepath.Join(env.cfg.StacksDir, "hosted-site"), 0o755))
 	list, err := env.m.Instances(context.Background())
 	if err != nil || len(list) != 1 {
 		t.Fatalf("list=%+v err=%v", list, err)
@@ -596,8 +596,8 @@ func TestRetireResumesAnInterruptedRetirement(t *testing.T) {
 	// The purge fails once (symlink planted), after stop and down.
 	victim := t.TempDir()
 	saved := env.dataDir() + ".saved"
-	os.Rename(env.dataDir(), saved)
-	os.Symlink(victim, env.dataDir())
+	must(t, os.Rename(env.dataDir(), saved))
+	must(t, os.Symlink(victim, env.dataDir()))
 	res, err := env.m.Delete(context.Background(), "fake-2", "shop", "admin")
 	if err != nil || res.RetireBlocked != "error" || env.docker.byProject("svc-fake-2") != nil {
 		t.Fatalf("res=%+v err=%v", res, err)
@@ -605,7 +605,7 @@ func TestRetireResumesAnInterruptedRetirement(t *testing.T) {
 	// The operator fixes the data directory; Retire starts the instance
 	// again, reads its (empty) catalog and finishes.
 	os.Remove(env.dataDir())
-	os.Rename(saved, env.dataDir())
+	must(t, os.Rename(saved, env.dataDir()))
 	if err := env.m.Retire(context.Background(), "fake-2", "admin"); err != nil {
 		t.Fatal(err)
 	}
@@ -635,7 +635,7 @@ func TestArchiveNeverReplacesAnExistingDirectory(t *testing.T) {
 	env.m.cfg.ArchiveOnRetire = true
 	env.m.now = func() time.Time { return time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC) }
 	mustCreate(t, env, "shop")
-	os.Mkdir(env.dataDir()+"-retired-20261104T100000.000000000Z", 0o700)
+	must(t, os.Mkdir(env.dataDir()+"-retired-20261104T100000.000000000Z", 0o700))
 	res, err := env.m.Delete(context.Background(), "fake-2", "shop", "admin")
 	if err != nil || res.InstanceRetired || !exists(env.dataDir()) {
 		t.Fatalf("res=%+v err=%v", res, err)
@@ -644,8 +644,8 @@ func TestArchiveNeverReplacesAnExistingDirectory(t *testing.T) {
 
 func TestExistingEmptyDataDirIsReset(t *testing.T) {
 	env := newEnv(t)
-	os.Mkdir(env.dataDir(), 0o777)
-	os.Chmod(env.dataDir(), 0o777)
+	must(t, os.Mkdir(env.dataDir(), 0o777))
+	must(t, os.Chmod(env.dataDir(), 0o777))
 	mustCreate(t, env, "shop")
 	assertMode(t, env.dataDir(), os.ModeDir|0o700)
 }
@@ -700,7 +700,7 @@ func TestOtherManifestVersionIsModified(t *testing.T) {
 	// Any content with another layout version must not escape the check
 	// (the stacks directory is writable by CI).
 	other := strings.Replace(string(data), "  version: 1\n", "  version: 0\n", 1) + "# privileged: true\n"
-	os.WriteFile(p, []byte(other), 0o640)
+	must(t, os.WriteFile(p, []byte(other), 0o640))
 	if inst, err := env.m.load("fake-2"); err != nil || !inst.modified {
 		t.Fatalf("a manifest of another version must be reported as modified (%v)", err)
 	}
@@ -711,7 +711,7 @@ func TestEditedOverrideIsModified(t *testing.T) {
 	mustCreate(t, env, "shop")
 	p := filepath.Join(env.instanceDir(), OverrideFile)
 	data, _ := os.ReadFile(p)
-	os.WriteFile(p, append(data, []byte("  evil:\n    image: alpine\n    privileged: true\n")...), 0o640)
+	must(t, os.WriteFile(p, append(data, []byte("  evil:\n    image: alpine\n    privileged: true\n")...), 0o640))
 	if inst, err := env.m.load("fake-2"); err != nil || !inst.modified {
 		t.Fatalf("an edited override must be reported as modified (%v)", err)
 	}

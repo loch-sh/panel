@@ -71,7 +71,7 @@ func (m *Manager) checkNameFree(name string, containers []container.Summary) err
 	return nil
 }
 
-var hostRuleRe = regexp.MustCompile("Host\\(([^)]*)\\)")
+var hostRuleRe = regexp.MustCompile(`Host\(([^)]*)\)`)
 
 // routedDomains extracts the Host() domains of the Traefik routers of a container.
 func routedDomains(labels map[string]string) []string {

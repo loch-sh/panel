@@ -50,8 +50,8 @@ func (h *LogsHandler) readContainerLogs(r *http.Request, id string, hasTTY bool)
 	} else {
 		pr, pw := io.Pipe()
 		go func() {
-			stdcopy.StdCopy(pw, pw, logsReader)
-			pw.Close()
+			_, err := stdcopy.StdCopy(pw, pw, logsReader)
+			pw.CloseWithError(err)
 		}()
 		// Close pipe and logsReader on request cancellation to unblock
 		// both the StdCopy goroutine and the Docker connection
@@ -222,7 +222,11 @@ func (h *LogsHandler) FileTail(w http.ResponseWriter, r *http.Request) {
 
 	// Demultiplex stdout/stderr (tty=false)
 	var stdoutBuf, stderrBuf bytes.Buffer
-	stdcopy.StdCopy(&stdoutBuf, &stderrBuf, hijacked.Reader)
+	if _, err := stdcopy.StdCopy(&stdoutBuf, &stderrBuf, hijacked.Reader); err != nil {
+		h.Logger.Error("file tail read failed", "id", id, "path", filePath, "error", err)
+		writeError(w, http.StatusInternalServerError, ErrFileTailFailed, "Failed to read the file")
+		return
+	}
 
 	if stderrBuf.Len() > 0 {
 		h.Logger.Warn("file tail stderr", "container", id, "path", filePath, "stderr", strings.TrimSpace(stderrBuf.String()))
@@ -234,7 +238,8 @@ func (h *LogsHandler) FileTail(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	io.Copy(w, &stdoutBuf)
+	// The status is sent: a write error only means the client is gone.
+	_, _ = io.Copy(w, &stdoutBuf)
 }
 
 // JSON returns the logs as a JSON array.

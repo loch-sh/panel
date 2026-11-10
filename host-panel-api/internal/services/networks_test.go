@@ -124,7 +124,9 @@ func TestUpdateNetworksFailureNeverReconnects(t *testing.T) {
 	}
 	// A failed attach restores the previous networks.
 	delete(env.runner.fail, "up")
-	env.runner.Run(ctx, env.instanceDir(), "up") // the operator starts it again
+	if _, err := env.runner.Run(ctx, env.instanceDir(), "up"); err != nil { // the operator starts it again
+		t.Fatal(err)
+	}
 	env.runner.failTimes["up"] = 1
 	before := readFile(t, filepath.Join(env.instanceDir(), ComposeFile))
 	_, err = env.m.UpdateNetworks(ctx, "fake-2", []string{"jobs", "services"}, "admin")
@@ -185,12 +187,12 @@ func TestReferenceTamperingIsModified(t *testing.T) {
 	// to add a network makes the instance modified.
 	p := filepath.Join(env.instanceDir(), ComposeFile)
 	data := strings.Replace(readFile(t, p), "  services:\n    name: loch-services", "  jobs:\n    name: loch-net-jobs\n    external: true\n  services:\n    name: loch-services", 1)
-	os.WriteFile(p, []byte(data), 0o640)
+	must(t, os.WriteFile(p, []byte(data), 0o640))
 	if inst, _ := env.m.load("fake-2"); !inst.modified {
 		t.Fatal("an added network must make the instance modified")
 	}
 	// A missing reference too.
-	os.WriteFile(p, []byte(readFile(t, p)), 0o640)
+	must(t, os.WriteFile(p, []byte(readFile(t, p)), 0o640))
 	os.Remove(filepath.Join(env.cfg.Render.PrivatePath(ref2), referenceFile))
 	if inst, _ := env.m.load("fake-2"); !inst.modified {
 		t.Fatal("an instance without reference is modified")

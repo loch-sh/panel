@@ -132,8 +132,12 @@ func TestRenderGolden(t *testing.T) {
 	}
 	golden := filepath.Join("testdata", "compose-mongodb-8-0.golden.yaml")
 	if *update {
-		os.MkdirAll("testdata", 0o755)
-		os.WriteFile(golden, out, 0o644)
+		if err := os.MkdirAll("testdata", 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(golden, out, 0o644); err != nil {
+			t.Fatal(err)
+		}
 	}
 	want, err := os.ReadFile(golden)
 	if err != nil || string(out) != string(want) {
