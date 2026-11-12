@@ -65,15 +65,8 @@
     "fullScreen": "Plein écran",
     "consoleOnly": "Console uniquement",
     "noData": "Pas de données pour ce conteneur",
-    "heading": "Conteneur {{name}}",
-    "compose": {
-      "title": "Lancé par compose",
-      "project": "✅ Projet {{project}}",
-      "no": "❌ Non"
-    },
     "identifier": "Identifiant",
     "image": "Image",
-    "currentState": "État actuel",
     "startedAt": {
       "title": "Démarrage",
       "value": "Le {{date}} à {{time}}"
@@ -84,17 +77,28 @@
     "none": "Aucun",
     "hostPath": "Chemin physique",
     "logPath": "Chemin logs",
-    "logs": {
-      "title": "Logs en temps réel",
-      "show": "Afficher les logs",
-      "close": "Fermer les logs"
-    },
     "terminal": {
-      "title": "Terminal interactif docker",
       "open": "Ouvrir un terminal",
-      "detach": "Détacher",
       "detachPopup": "Détacher dans une popup",
-      "unavailable": "Le terminal n’est pas disponible (manque probablement <code>tty:true</code> dans le compose ou le conteneur n’a pas été lancé avec l’argument <code>-t</code>)."
+      "unavailable": "Le terminal n’est pas disponible (manque probablement <code>tty:true</code> dans le compose ou le conteneur n’a pas été lancé avec l’argument <code>-t</code>).",
+      "notRunning": "Le conteneur n’est pas démarré : démarrez-le pour ouvrir un terminal."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Conteneur autonome",
+    "created": "Création",
+    "networks": "Réseaux connectés",
+    "summary": {
+      "upFor": "En marche depuis",
+      "stoppedFor": "Arrêté depuis",
+      "ports": "Ports publiés",
+      "exitCode": "Code de sortie {{code}}",
+      "restarts": "Redémarrages",
+      "mounts": "Montages"
+    },
+    "tabs": {
+      "overview": "Aperçu",
+      "logs": "Logs",
+      "terminal": "Terminal"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "ID conteneur manquant",
     "windowTitle": "{{appName}} - Terminal",
     "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Détail de la stack",
+    "subtitle": "Stack Docker Compose",
+    "errorExits": "Arrêt en erreur",
+    "openSite": "Ouvrir le site",
+    "openService": "Ouvrir le service",
+    "containerDetail": "Détail du conteneur",
+    "readOnly": "lecture seule",
+    "noRunning": "Aucun conteneur démarré",
+    "summary": {
+      "running": "Actifs",
+      "services": "Services",
+      "networks": "Réseaux"
+    },
+    "tabs": {
+      "services": "Services",
+      "compose": "Compose",
+      "networks": "Réseaux",
+      "monitoring": "Monitoring"
+    },
+    "columns": {
+      "service": "Service",
+      "state": "État",
+      "image": "Image",
+      "ports": "Ports",
+      "dependsOn": "Dépend de",
+      "container": "Conteneur"
+    },
+    "compose": {
+      "project": "Projet Compose",
+      "workingDir": "Répertoire de travail",
+      "configFiles": "Fichiers Compose",
+      "version": "Version de Compose"
+    }
   }
 }

@@ -9,9 +9,15 @@ import "@xterm/xterm/css/xterm.css";
 interface LogViewerProps {
   id: string;
   tail?: number;
+  /** CSS height of the viewer (default 400 px); the terminal refits. */
+  height?: number | string;
 }
 
-const LogViewer = ({ id, tail = 100 }: Readonly<LogViewerProps>) => {
+const LogViewer = ({
+  id,
+  tail = 100,
+  height = 400,
+}: Readonly<LogViewerProps>) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
@@ -74,7 +80,7 @@ const LogViewer = ({ id, tail = 100 }: Readonly<LogViewerProps>) => {
     <div
       ref={terminalRef}
       className="terminal"
-      style={{ height: 400, overflow: "hidden" }}
+      style={{ height, overflow: "hidden" }}
     />
   );
 };

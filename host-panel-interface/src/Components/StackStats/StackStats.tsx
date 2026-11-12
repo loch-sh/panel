@@ -161,7 +161,7 @@ const StackStats = ({ snapshot }: StackStatsProps) => {
         columns={columns}
         dataSource={current}
         rowKey="id"
-        pagination={false}
+        pagination={current.length > 20 ? { pageSize: 20 } : false}
         size="small"
         scroll={{ x: "max-content" }}
       />

@@ -65,15 +65,8 @@
     "fullScreen": "全画面",
     "consoleOnly": "コンソールのみ",
     "noData": "このコンテナのデータはありません",
-    "heading": "コンテナ {{name}}",
-    "compose": {
-      "title": "Compose による起動",
-      "project": "✅ プロジェクト {{project}}",
-      "no": "❌ いいえ"
-    },
     "identifier": "識別子",
     "image": "イメージ",
-    "currentState": "現在の状態",
     "startedAt": {
       "title": "起動日時",
       "value": "{{date}} {{time}}"
@@ -84,17 +77,28 @@
     "none": "なし",
     "hostPath": "ホストのパス",
     "logPath": "ログのパス",
-    "logs": {
-      "title": "ライブログ",
-      "show": "ログを表示",
-      "close": "ログを閉じる"
-    },
     "terminal": {
-      "title": "Docker 対話型ターミナル",
       "open": "ターミナルを開く",
-      "detach": "切り離す",
       "detachPopup": "ポップアップで切り離す",
-      "unavailable": "ターミナルを利用できません（compose ファイルに <code>tty:true</code> が指定されていないか、コンテナが <code>-t</code> 引数なしで起動された可能性があります）。"
+      "unavailable": "ターミナルを利用できません（compose ファイルに <code>tty:true</code> が指定されていないか、コンテナが <code>-t</code> 引数なしで起動された可能性があります）。",
+      "notRunning": "コンテナが起動していません。ターミナルを開くには起動してください。"
+    },
+    "stack": "スタック {{stack}}",
+    "standalone": "単独のコンテナ",
+    "created": "作成日時",
+    "networks": "接続中のネットワーク",
+    "summary": {
+      "upFor": "稼働時間",
+      "stoppedFor": "停止してからの時間",
+      "ports": "公開ポート",
+      "exitCode": "終了コード {{code}}",
+      "restarts": "再起動回数",
+      "mounts": "マウント"
+    },
+    "tabs": {
+      "overview": "概要",
+      "logs": "ログ",
+      "terminal": "ターミナル"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "コンテナ ID がありません",
     "windowTitle": "{{appName}} - ターミナル",
     "windowTitleWithName": "{{appName}} - ターミナル #{{name}}"
+  },
+  "stackPanel": {
+    "open": "スタックの詳細",
+    "subtitle": "Docker Compose スタック",
+    "errorExits": "エラーで停止",
+    "openSite": "サイトを開く",
+    "openService": "サービスを開く",
+    "containerDetail": "コンテナの詳細",
+    "readOnly": "読み取り専用",
+    "noRunning": "実行中のコンテナはありません",
+    "summary": {
+      "running": "稼働中",
+      "services": "サービス",
+      "networks": "ネットワーク"
+    },
+    "tabs": {
+      "services": "サービス",
+      "compose": "Compose",
+      "networks": "ネットワーク",
+      "monitoring": "モニタリング"
+    },
+    "columns": {
+      "service": "サービス",
+      "state": "状態",
+      "image": "イメージ",
+      "ports": "ポート",
+      "dependsOn": "依存先",
+      "container": "コンテナ"
+    },
+    "compose": {
+      "project": "Compose プロジェクト",
+      "workingDir": "作業ディレクトリ",
+      "configFiles": "Compose ファイル",
+      "version": "Compose のバージョン"
+    }
   }
 }
