@@ -9,7 +9,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /server ./cmd/server
 
-FROM mirror.gcr.io/library/alpine:3.23
+FROM mirror.gcr.io/library/alpine:3.24
 
 # docker-cli + compose plugin: hosted stacks are deployed with `docker compose`
 # (the same command an operator runs to boot them without the panel).
