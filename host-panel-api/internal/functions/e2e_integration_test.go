@@ -87,7 +87,13 @@ func e2eRuntimeBinary(t *testing.T, arch string) string {
 		return p
 	}
 	if d := os.Getenv("LOCH_E2E_RUNTIME_DIR"); d != "" {
-		return filepath.Join(d, RuntimeBinaryName+"-linux-"+arch)
+		// A FUNCTIONS_RUNTIME_SOURCE_DIR: its newest release directory.
+		versions, err := sourceVersions(d)
+		v, ok := newestRuntimeVersion(versions)
+		if err != nil || !ok {
+			t.Fatalf("LOCH_E2E_RUNTIME_DIR holds no release directory %s or later (%v)", MinRuntimeVersion, err)
+		}
+		return filepath.Join(d, v, RuntimeAssetName(arch))
 	}
 	t.Skip("set LOCH_E2E_RUNTIME_DIR or LOCH_E2E_RUNTIME_BINARY to a loch-lambda-runtime build")
 	return ""
@@ -143,33 +149,29 @@ func newE2E(t *testing.T) *e2e {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// A binary of the newest release of the embedded table is installed the
-	// way the panel does (RuntimeProvider, source directory); any other
-	// build gets a test table.
+	// With LOCH_E2E_RUNTIME_DIR, the newest release is found and installed
+	// the way the panel does (RuntimeProvider, source directory, its
+	// SHA256SUMS); a single binary gets a test record.
 	hash := hex.EncodeToString(sum[:])
+	useDir := os.Getenv("LOCH_E2E_RUNTIME_DIR") != "" && os.Getenv("LOCH_E2E_RUNTIME_BINARY") == ""
 	trust := TrustTable{Releases: []TrustedRelease{{Version: e2eRuntimeVersion, Arch: arch, SHA256: hash}}}
-	embedded, err := EmbeddedTrust()
-	if err != nil {
-		t.Fatal(err)
-	}
-	newest, ok := embedded.Newest(arch)
-	useEmbedded := ok && newest.SHA256 == hash && os.Getenv("LOCH_E2E_RUNTIME_DIR") != ""
-	if useEmbedded {
-		trust = embedded
+	if useDir {
+		trust = TrustTable{}
 	}
 	store := NewRuntimeStore(cfg.Paths(), trust)
 	var runtimes RuntimeBinaries = store
-	if useEmbedded {
+	if useDir {
 		p := NewRuntimeProvider(store, arch, RuntimeSourceDir{Dir: os.Getenv("LOCH_E2E_RUNTIME_DIR")}, logger, auditLogger)
-		p.Backoff = nil
+		p.Backoff, p.CheckInterval = nil, 0
 		p.Run(ctx)
-		if b, err := p.Latest(arch); err != nil || b.Version != newest.Version {
+		b, err := p.Latest(arch)
+		if err != nil || b.SHA256 != hash {
 			t.Fatalf("installing the runtime binary from the source directory: %+v, %v", b, err)
 		}
 		if !strings.Contains(audit.String(), `"msg":"function runtime installed"`) {
 			t.Fatalf("audit = %s", audit)
 		}
-		t.Logf("runtime binary %s installed with the embedded trust table", newest.Version)
+		t.Logf("runtime binary %s installed from the source directory", b.Version)
 		runtimes = p
 	} else if _, err := store.Install(ctx, e2eRuntimeVersion, arch, bytes.NewReader(bin)); err != nil {
 		t.Fatalf("installing the runtime binary: %v", err)
