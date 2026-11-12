@@ -1,0 +1,126 @@
+name: Checks
+
+# The checks of the API and the interface, called by ci.yml (every push to
+# main and every pull request) and release.yml (release tags, only for the
+# released project). Runners are GitHub-hosted (ephemeral VMs); pull
+# requests from forks run with a read-only token and no secret.
+
+on:
+  workflow_call:
+    inputs:
+      api:
+        type: boolean
+        default: true
+      interface:
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  api-test:
+    name: API tests
+    if: inputs.api
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: host-panel-api
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: host-panel-api/go.mod
+          cache-dependency-path: host-panel-api/go.sum
+          check-latest: true
+
+      - name: gofmt
+        run: |
+          out=$(git ls-files -z '*.go' | xargs -0 gofmt -l)
+          if [ -n "$out" ]; then echo "unformatted files:"; echo "$out"; exit 1; fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go test
+        run: |
+          go test -race -count=1 -coverprofile=coverage.out -covermode=atomic ./...
+          go tool cover -func=coverage.out | tail -1
+
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
+  # golangci-lint (configuration: host-panel-api/.golangci.yml), blocking.
+  api-lint:
+    name: API lint
+    if: inputs.api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: host-panel-api/go.mod
+          cache-dependency-path: host-panel-api/go.sum
+          check-latest: true
+
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.15.0
+          working-directory: host-panel-api
+          args: --max-issues-per-linter 0 --max-same-issues 0
+
+  # ESLint (zero warnings), type check, translations, Vitest with coverage,
+  # Playwright on the mocked API.
+  interface:
+    name: Interface ${{ matrix.check }}
+    if: inputs.interface
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [lint, test, e2e]
+    defaults:
+      run:
+        working-directory: host-panel-interface
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+
+      # Node >= 25 no longer bundles corepack (nor yarn).
+      - name: Yarn
+        run: |
+          npm install -g corepack
+          corepack enable
+          yarn install --immutable
+
+      - name: Lint
+        if: matrix.check == 'lint'
+        run: yarn lint
+
+      - name: Type check, translations, unit tests
+        if: matrix.check == 'test'
+        run: |
+          yarn typecheck
+          yarn i18n:check
+          yarn coverage
+
+      - name: End-to-end tests
+        if: matrix.check == 'e2e'
+        run: |
+          npx playwright install --with-deps chromium
+          yarn test:e2e
+
+      - name: Keep the end-to-end results
+        if: matrix.check == 'e2e' && failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-results
+          path: host-panel-interface/test-results/
+          retention-days: 7

@@ -19,13 +19,13 @@ export default mergeConfig(
       },
       css: false,
       restoreMocks: true,
-      // The CI runner is shared with the e2e job (same stage) and runs the
-      // form tests about 10x slower than a workstation: allow more time
-      // per test and use fewer workers there, instead of failing at random.
+      // A CI runner (two vCPUs) runs the form tests about 10x slower than a
+      // workstation: allow more time per test and use fewer workers there,
+      // instead of failing at random.
       testTimeout: process.env.CI ? 20_000 : 5_000,
       maxWorkers: process.env.CI ? 2 : undefined,
-      // `yarn coverage`: Cobertura for the GitLab merge request diff and the
-      // coverage history, text summary for the job coverage regex.
+      // `yarn coverage`: text summary in the CI log, Cobertura and HTML
+      // reports for local inspection.
       coverage: {
         provider: "v8",
         include: ["src/**/*.{ts,tsx}"],

@@ -3058,13 +3058,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codeclimate-types@npm:^0.3.0":
-  version: 0.3.1
-  resolution: "codeclimate-types@npm:0.3.1"
-  checksum: 10c0/cd214f791516494c61173edc5d8a45522b46b21e2f210bb3377a4671c1964be3d5787861c7c0804d45d1738424a1968beb3ddb684207886e159c442443cbb42c
-  languageName: node
-  linkType: hard
-
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -3945,29 +3938,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-formatter-codeclimate@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "eslint-formatter-codeclimate@npm:2.0.1"
-  dependencies:
-    codeclimate-types: "npm:^0.3.0"
-  peerDependencies:
-    eslint: ">=9"
-  checksum: 10c0/63a20c169ad744051249519b7288595416f5a302e6b6647915162104cda5d5791c471e63c4f7caf792a156410967e5df65b62b6e455dd466836e30555e5015a8
-  languageName: node
-  linkType: hard
-
-"eslint-formatter-gitlab@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "eslint-formatter-gitlab@npm:7.2.0"
-  dependencies:
-    eslint-formatter-codeclimate: "npm:^2.0.0"
-    yaml: "npm:^2.0.0"
-  peerDependencies:
-    eslint: ">=9"
-  checksum: 10c0/1f13880c0edc24458ea743edb3a99053bcd6c48a38000c523b13f8db3ec8b7f88dd93aadb2aafa3644f0e0aaa26b43bc5f8716977daba6fc4a0e4506309af626
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-jsx-a11y@npm:^6.10.2":
   version: 6.10.2
   resolution: "eslint-plugin-jsx-a11y@npm:6.10.2"
@@ -4682,7 +4652,6 @@ __metadata:
     dayjs: "npm:1.11.19"
     dockerode: "npm:^5.0.1"
     eslint: "npm:^9.39.5"
-    eslint-formatter-gitlab: "npm:^7.2.0"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^7.1.1"
@@ -7672,15 +7641,6 @@ __metadata:
   version: 5.0.0
   resolution: "yallist@npm:5.0.0"
   checksum: 10c0/a499c81ce6d4a1d260d4ea0f6d49ab4da09681e32c3f0472dee16667ed69d01dae63a3b81745a24bd78476ec4fcf856114cb4896ace738e01da34b2c42235416
-  languageName: node
-  linkType: hard
-
-"yaml@npm:^2.0.0":
-  version: 2.9.1
-  resolution: "yaml@npm:2.9.1"
-  bin:
-    yaml: bin.mjs
-  checksum: 10c0/9d06676ef02b89559a8b10a71882bd2cdae81e8393dc8dbc871615c3259475d9609ad973d19cb3c9e71e72d6206e3d1e7aa241c7e55f3d16fd2e77db305827d6
   languageName: node
   linkType: hard
 

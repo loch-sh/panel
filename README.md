@@ -51,7 +51,7 @@ The reference documentation is in [`host-panel-api/docs/`](host-panel-api/docs/R
 | Use the API | [API reference](host-panel-api/docs/api.md) |
 | Customize and translate the interface | [interface README](host-panel-interface/README.md) |
 
-Releases are built by the GitLab pipeline from `vX.Y.Z-api`, `vX.Y.Z-interface` and `vX.Y.Z` tags, see [continuous integration and releases](host-panel-api/docs/development.md#continuous-integration-and-releases).
+Releases are built by GitHub Actions from `vX.Y.Z-api`, `vX.Y.Z-interface` and `vX.Y.Z` tags, see [continuous integration and releases](host-panel-api/docs/development.md#continuous-integration-and-releases).
 
 To report a vulnerability, see [`SECURITY.md`](SECURITY.md).
 

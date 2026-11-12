@@ -1,0 +1,24 @@
+# Keep the SHA-pinned actions, the Go and npm dependencies and the Docker
+# base images up to date (security advisories are reported separately by
+# GitHub).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+  - package-ecosystem: gomod
+    directory: /host-panel-api
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /host-panel-interface
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directories: [/host-panel-api, /host-panel-interface]
+    schedule:
+      interval: weekly

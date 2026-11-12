@@ -1,0 +1,224 @@
+name: Release
+
+# Release tags:
+#   v1.2.3-api        -> API: checks, image api:v1.2.3 + :latest, binaries
+#   v1.2.3-interface  -> interface: checks, image interface:v1.2.3 + :latest
+#   v1.2.3            -> both
+# Images: ghcr.io/<owner>/<repo>/{api,interface}, linux/amd64 + linux/arm64,
+# with SBOM and SLSA build provenance attestations. Binaries (API): Linux
+# amd64/arm64 and macOS arm64, with their sha256 and provenance, attached to
+# the GitHub release. Notes: git-cliff (cliff.toml) since the previous
+# release of the same scope.
+#
+# Actions are pinned to commit SHAs; Dependabot (.github/dependabot.yml)
+# proposes updates.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: read
+
+jobs:
+  scope:
+    name: Scope
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.scope.outputs.version }}
+      api: ${{ steps.scope.outputs.api }}
+      interface: ${{ steps.scope.outputs.interface }}
+      projects: ${{ steps.scope.outputs.projects }}
+      cliff: ${{ steps.scope.outputs.cliff }}
+    steps:
+      - id: scope
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -eu
+          case "$TAG" in
+            # git-cliff-action pastes its args into a shell command line:
+            # fixed values, single-quoted (never the tag name).
+            *-api)       api=true;  interface=false; projects='["api"]'
+                         cliff="--include-path 'host-panel-api/**' --tag-pattern '^v[0-9]+\.[0-9]+\.[0-9]+(-api)?\$'" ;;
+            *-interface) api=false; interface=true;  projects='["interface"]'
+                         cliff="--include-path 'host-panel-interface/**' --tag-pattern '^v[0-9]+\.[0-9]+\.[0-9]+(-interface)?\$'" ;;
+            *)           api=true;  interface=true;  projects='["api","interface"]'
+                         cliff="--tag-pattern '^v[0-9]+\.[0-9]+\.[0-9]+\$'" ;;
+          esac
+          version="${TAG%-api}"; version="${version%-interface}"
+          printf '%s' "$version" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' || { echo "::error::not a release tag: $TAG"; exit 1; }
+          {
+            echo "version=$version"; echo "api=$api"; echo "interface=$interface"
+            echo "projects=$projects"; echo "cliff=$cliff"
+          } >> "$GITHUB_OUTPUT"
+
+  checks:
+    needs: scope
+    uses: ./.github/workflows/checks.yml
+    with:
+      api: ${{ needs.scope.outputs.api == 'true' }}
+      interface: ${{ needs.scope.outputs.interface == 'true' }}
+
+  images:
+    name: Image ${{ matrix.project }}
+    needs: [scope, checks]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write      # push to GHCR
+      id-token: write      # provenance attestation (Sigstore)
+      attestations: write
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.scope.outputs.projects) }}
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}/${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=${{ needs.scope.outputs.version }}
+            type=raw,value=latest
+          labels: |
+            org.opencontainers.image.title=Loch.sh Panel ${{ matrix.project }}
+            org.opencontainers.image.licenses=Apache-2.0
+            org.opencontainers.image.version=${{ needs.scope.outputs.version }}
+
+      - id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: host-panel-${{ matrix.project }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          provenance: mode=max
+          sbom: true
+          cache-from: type=gha,scope=${{ matrix.project }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.project }}
+
+      - name: Attest image provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+  binaries:
+    name: Binary ${{ matrix.goos }}/${{ matrix.goarch }}
+    needs: [scope, checks]
+    if: needs.scope.outputs.api == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write      # provenance attestation (Sigstore)
+      attestations: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goos: linux, goarch: amd64 }
+          - { goos: linux, goarch: arm64 }
+          - { goos: darwin, goarch: arm64 }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: host-panel-api/go.mod
+          cache-dependency-path: host-panel-api/go.sum
+          check-latest: true
+
+      - name: Build
+        working-directory: host-panel-api
+        env:
+          CGO_ENABLED: "0"
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          set -eu
+          bin="host-panel-api-${GOOS}-${GOARCH}"
+          mkdir -p ../dist
+          go build -trimpath -ldflags="-s -w" -o "../dist/$bin" ./cmd/server
+          (cd ../dist && sha256sum "$bin" > "$bin.sha256")
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: dist/host-panel-api-*
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/
+          retention-days: 7
+
+  release:
+    name: GitHub release
+    needs: [scope, images, binaries]
+    # binaries is skipped on an interface release.
+    if: always() && needs.images.result == 'success' && (needs.binaries.result == 'success' || needs.binaries.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      # create the release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # Notes since the previous release of the same scope: a -api release
+      # lists the commits touching host-panel-api/ since the previous API or
+      # full release (same for the interface); a full release every commit
+      # since the previous full release.
+      - name: Generate changelog
+        id: cliff
+        uses: orhun/git-cliff-action@a9a95522b26fe6403f7bb24031f21fb573d0f5ff # v4.9.1
+        with:
+          config: cliff.toml
+          args: --latest --strip header ${{ needs.scope.outputs.cliff }}
+
+      - name: Release notes
+        env:
+          NOTES: ${{ steps.cliff.outputs.content }}
+          VERSION: ${{ needs.scope.outputs.version }}
+          PROJECTS: ${{ needs.scope.outputs.projects }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -eu
+          {
+            printf '%s\n\n### Docker images\n\n' "$NOTES"
+            for p in $(echo "$PROJECTS" | tr -d '[]"' | tr ',' ' '); do
+              echo "- \`ghcr.io/$REPOSITORY/$p:$VERSION\`"
+            done
+          } > release.md
+          cat release.md
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: needs.binaries.result == 'success'
+        with:
+          pattern: binary-*
+          path: dist
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
+        with:
+          body_path: release.md
+          files: dist/*
