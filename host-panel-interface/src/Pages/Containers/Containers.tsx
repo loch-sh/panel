@@ -1,4 +1,14 @@
-import { Flex, Segmented, Skeleton, Switch, Table, Tag, Tooltip } from "antd";
+import { InfoCircleTwoTone } from "@ant-design/icons";
+import {
+  Button,
+  Flex,
+  Segmented,
+  Skeleton,
+  Switch,
+  Table,
+  Tag,
+  Tooltip,
+} from "antd";
 import StackStatusTag from "../../Components/Base/StackStatusTag";
 import { ColumnsType } from "antd/es/table";
 import { ContainerInfo } from "dockerode";
@@ -24,42 +34,23 @@ import {
 } from "../../Services/Containers/Models/containers.model";
 import { getApiErrorMessage } from "../../Utils/apiErrors";
 import StackActions from "./StackActions";
+import StackSidePanel from "./StackSidePanel";
 import Search from "antd/es/input/Search";
 import ExpandedContainerTable from "./ExpandedContainerTable";
 import StackStatsToggle from "../../Components/StackStats/StackStatsToggle";
 import {
   displayContainerName,
   displayStackName,
-  isHostedContainer,
 } from "../../Utils/hostedStack";
-import { serviceEngineOf } from "../../Utils/serviceStack";
 import {
   filterStackType,
   isStackTypeFilter,
   STACK_TYPE_FILTERS,
   type StackTypeFilter,
 } from "../../Utils/stackType";
-import type { ServiceEngineId } from "../../Services/Databases/Models/databases.model";
-
-interface StackGroup {
-  /** real compose project (used for the API), or STANDALONE_KEY */
-  key: string;
-  /** name shown to the user ("hosted-" prefix stripped) */
-  stackName: string;
-  /** stack managed by the hosting feature */
-  hosted: boolean;
-  /** engine of a stack of the services module (database, cache...) */
-  serviceEngine: ServiceEngineId | null;
-  containers: ContainerInfo[];
-  runningCount: number;
-  healthyCount: number;
-  totalCount: number;
-  hasErrorExits: boolean;
-}
+import { groupByStack, STANDALONE_KEY, type StackGroup } from "./stackGroup";
 
 const STACKS_PAGE_SIZE = 20;
-
-const STANDALONE_KEY = "__standalone__";
 
 const STACK_SUCCESS_KEYS = {
   [StackActionEnum.START]: "stackActions.started",
@@ -152,43 +143,6 @@ function getStackColumns(
   ];
 }
 
-function groupByStack(
-  containers: ContainerInfo[],
-  noStackLabel: string,
-): StackGroup[] {
-  const groups = new Map<string, ContainerInfo[]>();
-  for (const container of containers) {
-    const stack = container.Labels["com.docker.compose.project"] ?? "";
-    if (!groups.has(stack)) groups.set(stack, []);
-    groups.get(stack)!.push(container);
-  }
-
-  return Array.from(groups.entries())
-    .map(([stackName, items]): StackGroup => ({
-      key: stackName || STANDALONE_KEY,
-      stackName: stackName ? displayStackName(stackName) : noStackLabel,
-      hosted: items.some((c) => isHostedContainer(c.Labels)),
-      serviceEngine:
-        items.map((c) => serviceEngineOf(c.Labels)).find(Boolean) ?? null,
-      containers: items,
-      runningCount: items.filter((c) => c.State === "running").length,
-      healthyCount: items.filter(
-        (c) =>
-          c.State === "running" ||
-          (c.State === "exited" && c.Status.includes("(0)")),
-      ).length,
-      totalCount: items.length,
-      hasErrorExits: items.some(
-        (c) => c.State === "exited" && !c.Status.includes("(0)"),
-      ),
-    }))
-    .sort((a, b) => {
-      if (a.key === STANDALONE_KEY) return -1;
-      if (b.key === STANDALONE_KEY) return 1;
-      return a.stackName.localeCompare(b.stackName);
-    });
-}
-
 export default function Containers() {
   const { t } = useTranslation("containers");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -206,6 +160,8 @@ export default function Containers() {
   });
 
   const [drawerOpen, setDrawerOpen] = useState("");
+  // Compose project of the stack whose detail panel is open.
+  const [stackPanelKey, setStackPanelKey] = useState("");
   const [searchInput, setSearchInput] = useState(initialSearch);
   const [search, setSearch] = useState(initialSearch);
   const [expandedStacks, setExpandedStacks] = useState<string[]>(() =>
@@ -264,20 +220,37 @@ export default function Containers() {
     [doStackAction, t],
   );
 
+  const stackActionButtons = useCallback(
+    (record: StackGroup) => (
+      <StackActions
+        stack={record.key}
+        displayName={record.stackName}
+        runningCount={record.runningCount}
+        totalCount={record.totalCount}
+        disabled={isPending}
+        loading={isStackPending && stackVariables?.stack === record.key}
+        onAction={handleStackAction}
+      />
+    ),
+    [handleStackAction, isPending, isStackPending, stackVariables],
+  );
+
   const renderStackActions = useCallback(
     (record: StackGroup) =>
       record.key === STANDALONE_KEY ? null : (
-        <StackActions
-          stack={record.key}
-          displayName={record.stackName}
-          runningCount={record.runningCount}
-          totalCount={record.totalCount}
-          disabled={isPending}
-          loading={isStackPending && stackVariables?.stack === record.key}
-          onAction={handleStackAction}
-        />
+        <Flex gap="middle" justify="flex-end" align="center">
+          <Tooltip title={t("stackPanel.open")}>
+            <Button
+              aria-label={t("stackPanel.open")}
+              shape="circle"
+              icon={<InfoCircleTwoTone />}
+              onClick={() => setStackPanelKey(record.key)}
+            />
+          </Tooltip>
+          {stackActionButtons(record)}
+        </Flex>
       ),
-    [handleStackAction, isPending, isStackPending, stackVariables],
+    [stackActionButtons, t],
   );
 
   const stackColumns = useMemo(
@@ -340,6 +313,24 @@ export default function Containers() {
     if (showErrorsOnly) groups = groups.filter((g) => g.hasErrorExits);
     return groups;
   }, [data, search, hideInactive, showErrorsOnly, stackFilter, typeFilter, t]);
+
+  // The stack of the detail panel, from every container (not the filtered
+  // list): its figures stay complete while searching.
+  const panelStack = useMemo(
+    () =>
+      stackPanelKey
+        ? groupByStack(data ?? [], t("list.noStack")).find(
+            (g) => g.key === stackPanelKey,
+          )
+        : undefined,
+    [data, stackPanelKey, t],
+  );
+
+  // The stack of the open panel is gone (removed, renamed): close the panel
+  // for good, instead of reopening it if a stack of that name comes back.
+  useEffect(() => {
+    if (stackPanelKey && data && !panelStack) setStackPanelKey("");
+  }, [stackPanelKey, data, panelStack]);
 
   // Auto-expand toutes les stacks quand on arrive avec une recherche pré-remplie
   useEffect(() => {
@@ -432,6 +423,13 @@ export default function Containers() {
           onExpand: handleExpand,
           expandedRowRender,
         }}
+      />
+
+      <StackSidePanel
+        stack={panelStack}
+        onClose={() => setStackPanelKey("")}
+        onOpenContainer={setDrawerOpen}
+        actions={panelStack && stackActionButtons(panelStack)}
       />
 
       <ContainerSidePanel

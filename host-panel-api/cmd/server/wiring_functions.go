@@ -31,11 +31,8 @@ func newFunctionsHandler(ctx context.Context, cfg *config.Config, dockerClient *
 		h.ConfigError = handler.FunctionsConfigErrorCode
 		return h
 	}
-	trust, err := functions.EmbeddedTrust()
-	if err != nil {
-		return disable("invalid runtime trust table", err)
-	}
 	runner := composekit.ExecRunner{}
+	var err error
 	var composeVersion, arch string
 	var ncpu int
 	var memTotal int64
@@ -71,7 +68,12 @@ func newFunctionsHandler(ctx context.Context, cfg *config.Config, dockerClient *
 	if mcfg.MaxTotalCPUs == 0 {
 		mcfg.MaxTotalCPUs = float64(4 * ncpu)
 	}
-	store := functions.NewRuntimeStore(fcfg.Paths(), trust)
+	// The runtime releases accepted so far (GitHub sha256, never changed).
+	accepted, err := functions.LoadRuntimeRecord(fcfg.Paths())
+	if err != nil {
+		return disable("invalid runtime record", err)
+	}
+	store := functions.NewRuntimeStore(fcfg.Paths(), accepted)
 	var source functions.RuntimeSource
 	switch {
 	case cfg.FunctionsRuntimeSourceDir != "":

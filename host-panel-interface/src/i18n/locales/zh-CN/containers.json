@@ -65,15 +65,8 @@
     "fullScreen": "全屏",
     "consoleOnly": "仅控制台",
     "noData": "该容器暂无数据",
-    "heading": "容器 {{name}}",
-    "compose": {
-      "title": "由 Compose 启动",
-      "project": "✅ 项目 {{project}}",
-      "no": "❌ 否"
-    },
     "identifier": "标识符",
     "image": "镜像",
-    "currentState": "当前状态",
     "startedAt": {
       "title": "启动时间",
       "value": "{{date}} {{time}}"
@@ -84,17 +77,28 @@
     "none": "无",
     "hostPath": "宿主机路径",
     "logPath": "日志路径",
-    "logs": {
-      "title": "实时日志",
-      "show": "查看日志",
-      "close": "关闭日志"
-    },
     "terminal": {
-      "title": "Docker 交互式终端",
       "open": "打开终端",
-      "detach": "分离",
       "detachPopup": "在弹出窗口中分离",
-      "unavailable": "终端不可用（可能是 compose 文件中缺少 <code>tty:true</code>，或容器启动时未使用 <code>-t</code> 参数）。"
+      "unavailable": "终端不可用（可能是 compose 文件中缺少 <code>tty:true</code>，或容器启动时未使用 <code>-t</code> 参数）。",
+      "notRunning": "容器未运行：请先启动容器再打开终端。"
+    },
+    "stack": "堆栈 {{stack}}",
+    "standalone": "独立容器",
+    "created": "创建时间",
+    "networks": "已连接的网络",
+    "summary": {
+      "upFor": "已运行",
+      "stoppedFor": "已停止",
+      "ports": "已发布端口",
+      "exitCode": "退出码 {{code}}",
+      "restarts": "重启次数",
+      "mounts": "挂载"
+    },
+    "tabs": {
+      "overview": "概览",
+      "logs": "日志",
+      "terminal": "终端"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "缺少容器 ID",
     "windowTitle": "{{appName}} - 终端",
     "windowTitleWithName": "{{appName}} - 终端 #{{name}}"
+  },
+  "stackPanel": {
+    "open": "堆栈详情",
+    "subtitle": "Docker Compose 堆栈",
+    "errorExits": "异常停止",
+    "openSite": "打开站点",
+    "openService": "打开服务",
+    "containerDetail": "容器详情",
+    "readOnly": "只读",
+    "noRunning": "没有运行中的容器",
+    "summary": {
+      "running": "运行中",
+      "services": "服务",
+      "networks": "网络"
+    },
+    "tabs": {
+      "services": "服务",
+      "compose": "Compose",
+      "networks": "网络",
+      "monitoring": "监控"
+    },
+    "columns": {
+      "service": "服务",
+      "state": "状态",
+      "image": "镜像",
+      "ports": "端口",
+      "dependsOn": "依赖于",
+      "container": "容器"
+    },
+    "compose": {
+      "project": "Compose 项目",
+      "workingDir": "工作目录",
+      "configFiles": "Compose 文件",
+      "version": "Compose 版本"
+    }
   }
 }

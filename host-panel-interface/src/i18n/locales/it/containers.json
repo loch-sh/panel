@@ -65,15 +65,8 @@
     "fullScreen": "Schermo intero",
     "consoleOnly": "Solo console",
     "noData": "Nessun dato per questo container",
-    "heading": "Container {{name}}",
-    "compose": {
-      "title": "Avviato da compose",
-      "project": "✅ Progetto {{project}}",
-      "no": "❌ No"
-    },
     "identifier": "Identificativo",
     "image": "Immagine",
-    "currentState": "Stato attuale",
     "startedAt": {
       "title": "Avvio",
       "value": "Il {{date}} alle {{time}}"
@@ -84,17 +77,28 @@
     "none": "Nessuno",
     "hostPath": "Percorso fisico",
     "logPath": "Percorso dei log",
-    "logs": {
-      "title": "Log in tempo reale",
-      "show": "Mostra i log",
-      "close": "Chiudi i log"
-    },
     "terminal": {
-      "title": "Terminale interattivo Docker",
       "open": "Apri un terminale",
-      "detach": "Separa",
       "detachPopup": "Separa in un popup",
-      "unavailable": "Il terminale non è disponibile (probabilmente manca <code>tty:true</code> nel compose oppure il container non è stato avviato con l'argomento <code>-t</code>)."
+      "unavailable": "Il terminale non è disponibile (probabilmente manca <code>tty:true</code> nel compose oppure il container non è stato avviato con l'argomento <code>-t</code>).",
+      "notRunning": "Il container non è in esecuzione: avvialo per aprire un terminale."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Container autonomo",
+    "created": "Creazione",
+    "networks": "Reti collegate",
+    "summary": {
+      "upFor": "In esecuzione da",
+      "stoppedFor": "Fermo da",
+      "ports": "Porte pubblicate",
+      "exitCode": "Codice di uscita {{code}}",
+      "restarts": "Riavvii",
+      "mounts": "Mount"
+    },
+    "tabs": {
+      "overview": "Panoramica",
+      "logs": "Log",
+      "terminal": "Terminale"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "ID del container mancante",
     "windowTitle": "{{appName}} - Terminale",
     "windowTitleWithName": "{{appName}} - Terminale #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Dettagli dello stack",
+    "subtitle": "Stack Docker Compose",
+    "errorExits": "Arrestato con errore",
+    "openSite": "Apri il sito",
+    "openService": "Apri il servizio",
+    "containerDetail": "Dettagli del container",
+    "readOnly": "sola lettura",
+    "noRunning": "Nessun container in esecuzione",
+    "summary": {
+      "running": "Attivi",
+      "services": "Servizi",
+      "networks": "Reti"
+    },
+    "tabs": {
+      "services": "Servizi",
+      "compose": "Compose",
+      "networks": "Reti",
+      "monitoring": "Monitoraggio"
+    },
+    "columns": {
+      "service": "Servizio",
+      "state": "Stato",
+      "image": "Immagine",
+      "ports": "Porte",
+      "dependsOn": "Dipende da",
+      "container": "Container"
+    },
+    "compose": {
+      "project": "Progetto Compose",
+      "workingDir": "Directory di lavoro",
+      "configFiles": "File Compose",
+      "version": "Versione di Compose"
+    }
   }
 }

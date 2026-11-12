@@ -3,7 +3,7 @@
  * Shapes follow the models in src/Services: a type error here means the API
  * contract changed.
  */
-import type { ContainerInfo } from "dockerode";
+import type { ContainerInfo, ContainerInspectInfo } from "dockerode";
 import type { ApiKeyModel } from "../../src/Services/ApiKeys/Models/apikeys.model";
 import type { DomainEntry } from "../../src/Services/Domains/Models/domains.model";
 import type { SftpUserModel } from "../../src/Services/Sftp/Models/sftp.model";
@@ -649,6 +649,121 @@ export function container(name: string, project?: string): ContainerInfo {
     NetworkSettings: { Networks: {} },
     Mounts: [],
   };
+}
+
+/**
+ * The inspection (GET /docker/:id) of a container listed by `container`:
+ * started two hours ago, one published port, one volume, on the `services`
+ * network.
+ */
+export function containerInspect(
+  info: ContainerInfo,
+  overrides: { running?: boolean; tty?: boolean; exitCode?: number } = {},
+): ContainerInspectInfo {
+  const running = overrides.running ?? true;
+  const started = new Date(Date.now() - 2 * 3600_000).toISOString();
+  return {
+    Id: info.Id,
+    Created: new Date(info.Created * 1000).toISOString(),
+    Path: "nginx",
+    Args: ["-g", "daemon off;"],
+    State: {
+      Status: running ? "running" : "exited",
+      Running: running,
+      Paused: false,
+      Restarting: false,
+      OOMKilled: false,
+      Dead: false,
+      Pid: running ? 4242 : 0,
+      ExitCode: running ? 0 : (overrides.exitCode ?? 0),
+      Error: "",
+      StartedAt: started,
+      FinishedAt: running ? "0001-01-01T00:00:00Z" : new Date().toISOString(),
+      Health: { Status: "healthy", FailingStreak: 0, Log: [] },
+    },
+    Image: info.ImageID,
+    ResolvConfPath: "/var/lib/docker/containers/x/resolv.conf",
+    HostnamePath: "/var/lib/docker/containers/x/hostname",
+    HostsPath: "/var/lib/docker/containers/x/hosts",
+    LogPath: "/var/lib/docker/containers/x/x-json.log",
+    Name: info.Names[0],
+    RestartCount: 3,
+    Driver: "overlay2",
+    Platform: "linux",
+    MountLabel: "",
+    ProcessLabel: "",
+    AppArmorProfile: "",
+    HostConfig: {},
+    GraphDriver: { Name: "overlay2", Data: {} },
+    Mounts: [
+      {
+        Type: "volume",
+        Name: "data",
+        Source: "/var/lib/docker/volumes/data/_data",
+        Destination: "/data",
+        Driver: "local",
+        Mode: "z",
+        RW: true,
+        Propagation: "",
+      },
+    ],
+    Config: {
+      Hostname: "web",
+      Domainname: "",
+      User: "",
+      AttachStdin: false,
+      AttachStdout: false,
+      AttachStderr: false,
+      ExposedPorts: { "80/tcp": {} },
+      Tty: overrides.tty ?? false,
+      OpenStdin: false,
+      StdinOnce: false,
+      Env: [],
+      Cmd: ["nginx", "-g", "daemon off;"],
+      Image: info.Image,
+      Volumes: {},
+      WorkingDir: "",
+      Entrypoint: undefined,
+      OnBuild: undefined,
+      Labels: info.Labels,
+    },
+    NetworkSettings: {
+      Bridge: "",
+      SandboxID: "",
+      HairpinMode: false,
+      LinkLocalIPv6Address: "",
+      LinkLocalIPv6PrefixLen: 0,
+      Ports: { "80/tcp": [{ HostIp: "127.0.0.1", HostPort: "8080" }] },
+      SandboxKey: "",
+      SecondaryIPAddresses: null,
+      SecondaryIPv6Addresses: null,
+      EndpointID: "",
+      Gateway: "",
+      GlobalIPv6Address: "",
+      GlobalIPv6PrefixLen: 0,
+      IPAddress: "",
+      IPPrefixLen: 0,
+      IPv6Gateway: "",
+      MacAddress: "",
+      Networks: {
+        "loch-services": {
+          IPAMConfig: null,
+          Links: null,
+          Aliases: null,
+          NetworkID: "n",
+          EndpointID: "e",
+          Gateway: "172.20.0.1",
+          IPAddress: "172.20.0.5",
+          IPPrefixLen: 16,
+          IPv6Gateway: "",
+          GlobalIPv6Address: "",
+          GlobalIPv6PrefixLen: 0,
+          MacAddress: "",
+        },
+      },
+      Node: undefined,
+    },
+  } as unknown as ContainerInspectInfo;
 }
 
 /** A domain entry routing the given names to a container. */

@@ -65,15 +65,8 @@
     "fullScreen": "Volledig scherm",
     "consoleOnly": "Alleen console",
     "noData": "Geen gegevens voor deze container",
-    "heading": "Container {{name}}",
-    "compose": {
-      "title": "Gestart door compose",
-      "project": "✅ Project {{project}}",
-      "no": "❌ Nee"
-    },
     "identifier": "Identificatie",
     "image": "Image",
-    "currentState": "Huidige status",
     "startedAt": {
       "title": "Gestart",
       "value": "Op {{date}} om {{time}}"
@@ -84,17 +77,28 @@
     "none": "Geen",
     "hostPath": "Hostpad",
     "logPath": "Logpad",
-    "logs": {
-      "title": "Live logs",
-      "show": "Logs tonen",
-      "close": "Logs sluiten"
-    },
     "terminal": {
-      "title": "Interactieve Docker-terminal",
       "open": "Terminal openen",
-      "detach": "Loskoppelen",
       "detachPopup": "Loskoppelen in een pop-up",
-      "unavailable": "De terminal is niet beschikbaar (waarschijnlijk ontbreekt <code>tty:true</code> in het compose-bestand, of is de container niet gestart met het argument <code>-t</code>)."
+      "unavailable": "De terminal is niet beschikbaar (waarschijnlijk ontbreekt <code>tty:true</code> in het compose-bestand, of is de container niet gestart met het argument <code>-t</code>).",
+      "notRunning": "De container draait niet: start hem om een terminal te openen."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Losse container",
+    "created": "Aangemaakt",
+    "networks": "Gekoppelde netwerken",
+    "summary": {
+      "upFor": "Actief sinds",
+      "stoppedFor": "Gestopt sinds",
+      "ports": "Gepubliceerde poorten",
+      "exitCode": "Exitcode {{code}}",
+      "restarts": "Herstarts",
+      "mounts": "Mounts"
+    },
+    "tabs": {
+      "overview": "Overzicht",
+      "logs": "Logs",
+      "terminal": "Terminal"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "Container-ID ontbreekt",
     "windowTitle": "{{appName}} - Terminal",
     "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Stackdetails",
+    "subtitle": "Docker Compose-stack",
+    "errorExits": "Met fout gestopt",
+    "openSite": "Site openen",
+    "openService": "Dienst openen",
+    "containerDetail": "Containerdetails",
+    "readOnly": "alleen-lezen",
+    "noRunning": "Geen actieve container",
+    "summary": {
+      "running": "Actief",
+      "services": "Diensten",
+      "networks": "Netwerken"
+    },
+    "tabs": {
+      "services": "Diensten",
+      "compose": "Compose",
+      "networks": "Netwerken",
+      "monitoring": "Monitoring"
+    },
+    "columns": {
+      "service": "Dienst",
+      "state": "Status",
+      "image": "Image",
+      "ports": "Poorten",
+      "dependsOn": "Afhankelijk van",
+      "container": "Container"
+    },
+    "compose": {
+      "project": "Compose-project",
+      "workingDir": "Werkmap",
+      "configFiles": "Compose-bestanden",
+      "version": "Compose-versie"
+    }
   }
 }

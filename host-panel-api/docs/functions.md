@@ -179,52 +179,57 @@ The zip itself is not kept: only its sha256 is recorded with the deployment. Tem
 | `FUNCTIONS_TMP_SIZE` | `512` | default `/tmp` size of a function, MB |
 | `FUNCTIONS_MAX_TOTAL_MEMORY` | `0` | sum of the memory limits of every function, MB (or `64G`); `0` = the memory of the Docker host |
 | `FUNCTIONS_MAX_TOTAL_CPUS` | `0` | sum of the CPU limits of every function; `0` = 4 × the CPUs of the Docker host |
-| `FUNCTIONS_RUNTIME_DOWNLOAD` | `true` | download the runtime binary from GitHub when it is missing (see [Runtime binary](#runtime-binary)); `false` for offline installations |
-| `FUNCTIONS_RUNTIME_SOURCE_DIR` | (empty) | absolute path of a directory holding `loch-lambda-runtime-linux-<arch>`: read and checked instead of downloading (takes precedence over `FUNCTIONS_RUNTIME_DOWNLOAD`); it and its runtime files must be owned by the panel's user or root and not writable by group or others (checked at startup) |
+| `FUNCTIONS_RUNTIME_DOWNLOAD` | `true` | find the newest runtime release on GitHub (at startup and every hour) and download its binary (see [Runtime binary](#runtime-binary)); `false` for offline installations |
+| `FUNCTIONS_RUNTIME_SOURCE_DIR` | (empty) | absolute path of a directory holding one directory per release (`vX.Y.Z/`, with its `SHA256SUMS` and `loch-lambda-runtime-linux-<arch>` files): read instead of downloading (takes precedence over `FUNCTIONS_RUNTIME_DOWNLOAD`); it, its release directories and their files must be owned by the panel's user or root and not writable by group or others (checked at startup) |
 
 Sizes are in MB and accept a binary unit (`512M`, `512MiB`, `1G`).
 
 ## Runtime binary
 
-Every function runs the loch function runtime ([loch-sh/lambda-runtime](https://github.com/loch-sh/lambda-runtime)), a static Go binary. The panel build embeds the table of the trusted releases (`internal/functions/runtime-trust.json`: version, architecture, sha256, size, and the signing identity of the releases for the record); only a binary matching an entry is ever stored or mounted. Today: **v1.0.1** (amd64, arm64).
+Every function runs the loch function runtime ([loch-sh/lambda-runtime](https://github.com/loch-sh/lambda-runtime)), a static Go binary, published as GitHub [releases](https://github.com/loch-sh/lambda-runtime/releases) (`https://github.com/loch-sh/lambda-runtime/releases/download/<version>/<file>`).
 
-At startup, if the newest trusted release for the architecture of the Docker host is not installed, the panel installs it in the background (retries with backoff: 15 s, 30 s, 1 min, 2 min, 5 min, 10 min, 30 min, then on demand). The module answers meanwhile: creating a function (or starting one whose binary is missing) answers `FUNCTION_RUNTIME_UNAVAILABLE` (503) and starts a new attempt (at most one per minute), the reason is in the API logs. `GET /functions/config` shows `runtime: {state, version}` (and `runtimeReady`): `idle` (nothing attempted yet), `installing`, `installed` (with `version`), `unavailable` (failed, no source, or no trusted release for the host architecture: see the logs) or `untrusted` (a binary was refused: no on-demand retry for 30 minutes).
+**Which release.** At startup, then every hour, the panel reads the list of releases (`https://api.github.com/repos/loch-sh/lambda-runtime/releases`, anonymous: 60 requests an hour per address, a check uses one) and takes the newest stable version (`vX.Y.Z`, drafts and prereleases ignored), **v1.0.1 or later** (the release the panel builds trusted before; functions created with it keep running). Until the record exists, it starts with the v1.0.1 sha256 those builds embedded (equal to the published ones), so an upgraded panel keeps using the binaries already installed, offline too. It reads that release's `SHA256SUMS`, installs the binary of the Docker host's architecture when it has the published sha256, and only then records that sha256 in `FUNCTIONS_DATA_DIRECTORY/.runtime/releases.json` (0600, owned by the panel; the API refuses to enable the module when the file or its directory was changed by someone else)). New functions get the newest installed release; a function keeps the release (and the sha256) it was created with.
 
-- **Download** (default): `https://github.com/loch-sh/lambda-runtime/releases/download/<version>/loch-lambda-runtime-linux-<arch>`, HTTPS only, with a client of its own (5 min timeout; `HTTPS_PROXY` is honored). Outbound hosts: `github.com`, then the redirect to `release-assets.githubusercontent.com` or `objects.githubusercontent.com` (HTTPS only, any other redirect is refused). The body is streamed into the store, capped at the size of the table, hashed and checked; a mismatch is refused, never stored, and audited (`function runtime refused`).
-- **Offline installations**: set `FUNCTIONS_RUNTIME_DOWNLOAD=false` and either install nothing (no function can start), or put the release file in a directory and point `FUNCTIONS_RUNTIME_SOURCE_DIR` at it:
+**Trust.** GitHub is the trust root: its TLS, the `loch-sh/lambda-runtime` repository and the people allowed to publish releases there. No signature is verified by the panel. What it adds:
+- a recorded sha256 never changes: a release published again with other bytes is refused, never stored, and audited (`function runtime refused`), the binary already installed stays;
+- a binary is stored only when its sha256 is the published one (and the recorded one, if any) and it is a Linux ELF executable of the architecture; a `SHA256SUMS` that does not match its binary records nothing, so a corrected release installs afterwards; it is re-hashed before every start against the sha256 the function pinned;
+- a binary missing from the store (a data directory restored without `.runtime`), or present but not recorded, is fetched again from its own release (v1.0.1 or later only) and kept only when the release publishes the sha256 the function pinned; deleting `releases.json` by hand resets the record to the v1.0.1 entries (the other sha256 are taken from GitHub again).
+- GitHub's anonymous rate limit (60 API requests an hour per address): a check reads the releases list once (the release files do not count); on-demand attempts reuse the version found by the last check for the hour; when GitHub answers with its rate limit, no attempt is made before the time it announces (at most an hour).
 
-  ```sh
-  # on a machine with Internet access, then copy the files to the host
-  gh release download v1.0.1 -R loch-sh/lambda-runtime -p 'loch-lambda-runtime-linux-*' -p 'SHA256SUMS*'
-  shasum -a 256 -c SHA256SUMS --ignore-missing
-  # mount the directory read-only in the API container, e.g. /opt/loch-runtime
-  FUNCTIONS_RUNTIME_SOURCE_DIR=/opt/loch-runtime
-  ```
-
-  The directory must hold `loch-lambda-runtime-linux-<arch>` of the newest release trusted by the build (the panel checks it the same way: size, sha256, ELF architecture); it is read at startup and on demand, never written. The directory and its runtime files must be owned by the panel's user or root and writable by nobody else (no group or world write bit), and the files must be regular files, not symlinks: otherwise the API refuses to start (environment lint). Each read opens the file without following a symlink and without blocking (a FIFO or a device is refused).
-
-- An installed binary is never replaced: a stored binary that fails verification is reported (`FUNCTION_ARTIFACT_MODIFIED` / `FUNCTION_RUNTIME_UNTRUSTED`, audited `function runtime refused` with the reason `stored binary modified`) and must be removed by hand before the panel installs it again.
-
-### Adding a release to the trust table
-
-A new release is trusted by a new panel build only. Tools: `cosign` ≥ 2.4 (`verify-blob --bundle`) and a `gh` release whose `attestation verify` supports `--source-ref`. For each release, on a trusted machine, in this order (signature first, then the hashes it covers, then the provenance of each binary):
+To check a release by hand, its `SHA256SUMS` is signed with cosign keyless by the repository's release workflow, and each binary has a GitHub build provenance attestation:
 
 ```sh
 V=vX.Y.Z
-gh release download $V -R loch-sh/lambda-runtime \
-  -p 'loch-lambda-runtime-linux-*' -p SHA256SUMS -p SHA256SUMS.cosign.bundle
+B=https://github.com/loch-sh/lambda-runtime/releases/download/$V
+for f in loch-lambda-runtime-linux-amd64 loch-lambda-runtime-linux-arm64 SHA256SUMS SHA256SUMS.cosign.bundle; do
+  curl -fsSLO "$B/$f"
+done
 cosign verify-blob --bundle SHA256SUMS.cosign.bundle \
   --certificate-identity "https://github.com/loch-sh/lambda-runtime/.github/workflows/ci.yml@refs/tags/$V" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com SHA256SUMS
 shasum -a 256 -c SHA256SUMS --ignore-missing
-for f in loch-lambda-runtime-linux-amd64 loch-lambda-runtime-linux-arm64; do
-  gh attestation verify $f -R loch-sh/lambda-runtime \
-    --signer-workflow loch-sh/lambda-runtime/.github/workflows/ci.yml --source-ref refs/tags/$V
-done
-wc -c loch-lambda-runtime-linux-amd64 loch-lambda-runtime-linux-arm64
 ```
 
-Then add one entry per architecture to `runtime-trust.json`: `version`, `arch`, `sha256` (from the verified `SHA256SUMS`) and `size` (bytes, from `wc -c`; a unit test requires it on every entry). The `signing` object (`identity` without its `@refs/tags/<version>`, `issuer`) documents the identity checked above; the panel never verifies signatures at run time.
+**Installation.** When the newest release is not installed, the panel installs it in the background (retries with backoff: 15 s, 30 s, 1 min, 2 min, 5 min, 10 min, 30 min, then on demand or at the next hourly check). The module answers meanwhile: creating a function (or starting one whose binary is missing) answers `FUNCTION_RUNTIME_UNAVAILABLE` (503) and starts a new attempt (at most one per minute), the reason is in the API logs. `GET /functions/config` shows `runtime: {state, version}` (and `runtimeReady`): `idle` (nothing attempted yet), `installing`, `installed` (with `version`), `unavailable` (failed, no source, or no binary for the host architecture: see the logs) or `untrusted` (a binary or a release was refused: no on-demand retry for 30 minutes).
+
+- **Download** (default): HTTPS only, with a client of its own (5 min timeout; `HTTPS_PROXY` is honored). Outbound hosts: `api.github.com` (releases list), `github.com` (release files), then the redirect to `release-assets.githubusercontent.com` or `objects.githubusercontent.com` (HTTPS only, any other host is refused). The releases list is capped at 1 MiB, `SHA256SUMS` at 64 KiB, a binary at 64 MiB; the binary is streamed into the store, hashed and checked; a mismatch is refused, never stored, and audited (`function runtime refused`).
+- **Offline installations**: set `FUNCTIONS_RUNTIME_DOWNLOAD=false` and either install nothing (no function can start), or copy releases into a directory and point `FUNCTIONS_RUNTIME_SOURCE_DIR` at it, one directory per release:
+
+  ```sh
+  # on a machine with Internet access, then copy the directory to the host
+  V=v1.0.1
+  mkdir -p loch-runtime/$V && cd loch-runtime/$V
+  for f in loch-lambda-runtime-linux-amd64 loch-lambda-runtime-linux-arm64 SHA256SUMS; do
+    curl -fsSLO "https://github.com/loch-sh/lambda-runtime/releases/download/$V/$f"
+  done
+  shasum -a 256 -c SHA256SUMS --ignore-missing
+  # mount loch-runtime read-only in the API container, e.g. /opt/loch-runtime
+  FUNCTIONS_RUNTIME_SOURCE_DIR=/opt/loch-runtime
+  ```
+
+  The panel takes the newest `vX.Y.Z` directory (v1.0.1 or later), reads its `SHA256SUMS` and checks the binary the same way (sha256, ELF architecture; the recorded sha256 never changes); the directory is read at startup, every hour and on demand, never written. It, its release directories, their `SHA256SUMS` and runtime files must be owned by the panel's user or root and writable by nobody else (no group or world write bit), and the files must be regular files, not symlinks: otherwise the API refuses to start (environment lint). Each read opens the file without following a symlink and without blocking (a FIFO or a device is refused).
+
+- An installed binary is never replaced: a stored binary that fails verification is reported (`FUNCTION_ARTIFACT_MODIFIED` / `FUNCTION_RUNTIME_UNTRUSTED`, audited `function runtime refused` with the reason `stored binary modified`) and must be removed by hand before the panel installs it again.
 
 ## Files
 
@@ -234,8 +239,10 @@ FUNCTIONS_DATA_DIRECTORY/
     function.json               0600  reference: what the panel trusts
     secrets.env                 0400  secrets (env_file, format: raw)
     runtime.env                 0400  token SHA-256 (+ SigV4 key pair) for the runtime (env_file, raw)
-  .runtime/<version>/<arch>/
-    loch-lambda-runtime         0555  runtime binary, written once
+  .runtime/                     0700
+    releases.json               0600  sha256 of the installed releases (from GitHub, never changed)
+    <version>/<arch>/
+      loch-lambda-runtime       0555  runtime binary, written once
   fn-<name>/
     deployments/<id>/           0555  extracted code, mounted read-only at /var/task
     uploads/                    0700  zips being validated (temporary)
@@ -247,16 +254,16 @@ Deleting the compose directory does not delete the code or the secrets. Every di
 
 ## Tests
 
-Besides the unit tests, `internal/functions/e2e_integration_test.go` (build tag `integration`) runs the module end to end against a real Docker daemon, a `loch-lambda-runtime` build and the AWS Lambda base images: creation, deployment, invocation (Node.js 22, Python 3.13, a Go bootstrap on provided.al2023 built from `testdata/gofunc` — wrong architecture refused, exec bit set by the panel, a bootstrap that cannot start rolled back —, scalar and 6 MiB events, function error, timeout, out of memory, concurrency, caller gone), rollback and tampered deployments, secrets and masking, bearer and SigV4 callers from other containers, rotation, edited compose files and containers recreated by hand, networks and egress, image pinning (also under the containerd image store), hardening, a panel restart, deletion and purge. Binaries of the newest release of the embedded table are installed from `LOCH_E2E_RUNTIME_DIR` like `FUNCTIONS_RUNTIME_SOURCE_DIR` (with the embedded table); any other build gets a test table holding its sha256:
+Besides the unit tests, `internal/functions/e2e_integration_test.go` (build tag `integration`) runs the module end to end against a real Docker daemon, a `loch-lambda-runtime` build and the AWS Lambda base images: creation, deployment, invocation (Node.js 22, Python 3.13, a Go bootstrap on provided.al2023 built from `testdata/gofunc` — wrong architecture refused, exec bit set by the panel, a bootstrap that cannot start rolled back —, scalar and 6 MiB events, function error, timeout, out of memory, concurrency, caller gone), rollback and tampered deployments, secrets and masking, bearer and SigV4 callers from other containers, rotation, edited compose files and containers recreated by hand, networks and egress, image pinning (also under the containerd image store), hardening, a panel restart, deletion and purge. With `LOCH_E2E_RUNTIME_DIR` (a `FUNCTIONS_RUNTIME_SOURCE_DIR`: one `vX.Y.Z/` directory per release with its `SHA256SUMS`), the newest release is found and installed the way the panel does; `LOCH_E2E_RUNTIME_BINARY` (a single build) gets a test record holding its sha256:
 
 ```sh
-LOCH_E2E_RUNTIME_DIR=<dir with loch-lambda-runtime-linux-{amd64,arm64}> \
+LOCH_E2E_RUNTIME_DIR=<dir with vX.Y.Z/{SHA256SUMS,loch-lambda-runtime-linux-*}> \
   go test -tags integration -run E2E -count=1 -timeout 40m -v ./internal/functions/
 ```
 
 Everything it creates is named `fn-e2e*`, `loch-net-fn-e2e*` or `e2efn-*` and removed at the end.
 
-`internal/functions/runtimefetch_integration_test.go` downloads the newest trusted release from GitHub for both architectures and installs it (Internet access required):
+`internal/functions/runtimefetch_integration_test.go` finds the newest release on GitHub and installs it for both architectures, as the panel does (Internet access required):
 
 ```sh
 LOCH_E2E_DOWNLOAD=1 go test -tags integration -run RealDownload -count=1 -v ./internal/functions/
@@ -266,7 +273,7 @@ LOCH_E2E_DOWNLOAD=1 go test -tags integration -run RealDownload -count=1 -v ./in
 
 `loch functions dev` (CLI, no panel nor API key) runs a function on the developer's machine with Docker and the loch function runtime, in a container that mirrors the one `Render` produces: same base image (line tag, not pinned by digest), uid 10001, entrypoint and command, read-only root, `cap_drop: ALL`, `no-new-privileges`, tmpfs, shm, `ipc: private`, ulimits, PID/memory/CPU limits, health check, stop grace period, logging, `traefik.enable=false` and the panel's variables; the reserved variable names are refused the same way. The local differences, listed in the header of the compose file it renders: the code directory and the runtime binary bind-mounted read-only, an explicit platform, the invoke port published on `127.0.0.1` only with locally generated credentials (token SHA-256 and SigV4 key pair in a cache env file; `--no-auth` sets `LOCH_RUNTIME_AUTH=off`), every variable in one env file, its own network (outbound access on by default, `--egress=false` for an internal one), `restart: "no"`, no `x-loch` manifest, and the label `sh.loch.dev-function` on a `loch-dev-<name>` project instead of `sh.loch.function` / `sh.loch.managed` on `fn-<name>`. `dev invoke` runs the same `docker exec … invoke --watch-stdin --log-tail` as the panel. Usage: the CLI README, "Local development". It also offers `--watch` (polling restart on code changes, Enter to restart), `--from FUNCTION` (the settings and the variable and secret names of a deployed function, never their values; `--exact-image` runs the deployed digest-pinned image) and `loch functions dev event` (sample S3, SQS, API Gateway v2 and schedule events).
 
-**Runtime binary of `loch functions dev`**: unless `--runtime-binary` or `LOCH_RUNTIME_BINARY` names a local build (used as given, warned when its sha256 is not trusted), the CLI downloads the newest release it trusts (`--runtime-version vX.Y.Z` for another) from `https://github.com/loch-sh/lambda-runtime/releases/download/<version>/loch-lambda-runtime-linux-<arch>`, over HTTPS, redirects allowed only to `github.com`, `objects.githubusercontent.com` and `release-assets.githubusercontent.com`. The CLI embeds a copy of `runtime-trust.json` (host-panel-cli `internal/fndev/runtime-trust.json`; a test compares it with this file when this repository is checked out next to the CLI): sha256 and size are checked before the file is kept in `$XDG_CACHE_HOME/loch/lambda-runtime/<version>/` (else the OS cache directory; 0700 directories owned by the user, file 0555), re-hashed on every run and again right before the container starts or restarts (a narrowed window, not a closed one). `loch functions dev runtime` shows the binary used, its origin and the `cosign verify-blob` / `gh attestation verify` commands; `--print-compose` never downloads. When a release is added here, add it to the CLI's copy too.
+**Runtime binary of `loch functions dev`**: unless `--runtime-binary` or `LOCH_RUNTIME_BINARY` names a local build (used as given, warned when its sha256 is not trusted), the CLI downloads the newest release (`--runtime-version vX.Y.Z` for another) from `https://github.com/loch-sh/lambda-runtime/releases/download/<version>/loch-lambda-runtime-linux-<arch>`, over HTTPS, redirects allowed only to `github.com`, `objects.githubusercontent.com` and `release-assets.githubusercontent.com`. Like the panel, the CLI discovers the newest release on GitHub (at most once an hour, offline: the newest known one), starts from the v1.0.1 sha256 it embeds (host-panel-cli `internal/fndev/runtime-trust.json`, compared by a test with this panel's `legacyRuntimeReleases`) and records in its cache (`releases.json`) the sha256 of every release whose download matched its `SHA256SUMS`: sha256 and size are checked before the file is kept in `$XDG_CACHE_HOME/loch/lambda-runtime/<version>/` (else the OS cache directory; 0700 directories owned by the user, file 0555), re-hashed on every run and again right before the container starts or restarts (a narrowed window, not a closed one). `loch functions dev runtime` shows the binary used, its origin and the `cosign verify-blob` / `gh attestation verify` commands; `--print-compose` never downloads.
 
 **Keep `loch functions dev` in sync**: the CLI duplicates the runtimes and versions (`RuntimeVersions`), the name and handler rules, the reserved names and variables, the limits (and the default `FUNCTIONS_MAX_MEMORY`, 3008 MB, above which it warns), the tmpfs options, the health check timings and every fixed setting of `Render`. Its golden test starts from a copy of `testdata/compose-nodejs.golden.yaml` (host-panel-cli `internal/fndev/testdata/panel-compose-nodejs.yaml`) (and `compose-python-egress.golden.yaml`, `compose-provided.golden.yaml` for the custom runtime) and fails on any difference other than the documented local ones; another test compares those copies byte for byte with this repository's files when it is checked out next to the CLI (or `LOCH_API_REPO`). When `Render` changes, copy the new golden files there and update `internal/fndev`.
 

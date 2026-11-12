@@ -9,7 +9,8 @@ type PortsType = {
 };
 
 interface Props {
-  ports: Record<string, PortsType[]>;
+  /** Docker's NetworkSettings.Ports (a port without binding maps to null). */
+  ports: Record<string, PortsType[] | null> | null;
 }
 
 interface MappedType {
@@ -23,12 +24,10 @@ export default function NetworkTable({ ports }: Readonly<Props>) {
   const { t } = useTranslation("containers");
   const columns = useMemo(() => getColumns(t), [t]);
   const mapped: MappedType[] = useMemo(() => {
-    return Object.entries(ports)
-      .filter(([, value]) => value !== null)
-      .flatMap(([key, value]) => {
+    return Object.entries(ports ?? {}).flatMap(([key, value]) => {
         const [localPort, protocol] = key.split("/");
 
-        return value?.map((el) => ({
+        return (value ?? []).map((el) => ({
           Protocol: protocol,
           LocalPort: localPort,
           HostIp: el.HostIp,
@@ -40,7 +39,13 @@ export default function NetworkTable({ ports }: Readonly<Props>) {
   return mapped.length === 0 ? (
     <p>{t("sidePanel.none")}</p>
   ) : (
-    <Table columns={columns} dataSource={mapped} virtual />
+    <Table
+      columns={columns}
+      dataSource={mapped}
+      rowKey={(r) => `${r.HostIp}:${r.HostPort}/${r.Protocol}`}
+      size="small"
+      pagination={mapped.length > 10 ? undefined : false}
+    />
   );
 }
 

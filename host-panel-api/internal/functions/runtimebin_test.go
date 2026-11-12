@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -58,52 +59,97 @@ type failingReader struct{}
 
 func (failingReader) Read([]byte) (int, error) { return 0, errors.New("must not be read") }
 
-func TestTrustTable(t *testing.T) {
-	embedded, err := EmbeddedTrust()
-	if err != nil {
-		t.Fatal(err)
-	}
-	// v1.0.1, verified by hand (docs/functions.md): every entry has its size.
-	if len(embedded.Releases) != 2 || embedded.Signing == nil ||
-		embedded.Signing.Identity != "https://github.com/loch-sh/lambda-runtime/.github/workflows/ci.yml" ||
-		embedded.Signing.Issuer != "https://token.actions.githubusercontent.com" {
-		t.Fatalf("embedded table = %+v", embedded)
-	}
-	for _, r := range embedded.Releases {
-		if r.Size <= 0 {
-			t.Errorf("embedded entry %s/%s has no size", r.Version, r.Arch)
-		}
-	}
-	for _, arch := range []string{"amd64", "arm64"} {
-		if r, ok := embedded.Newest(arch); !ok || r.Version != "v1.0.1" || r.Size == 0 {
-			t.Errorf("newest %s = %+v", arch, r)
-		}
-	}
+func TestRuntimeRecordParse(t *testing.T) {
 	h := strings.Repeat("a", 64)
-	sg := `"signing":{"identity":"https://github.com/o/r/.github/workflows/ci.yml","issuer":"https://token.actions.githubusercontent.com"},`
-	if _, err := ParseTrustTable([]byte(`{` + sg + `"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `","size":10}]}`)); err != nil {
+	if _, err := ParseTrustTable([]byte(`{"releases":[{"version":"v1.0.2","arch":"arm64","sha256":"` + h + `","size":10}]}`)); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := ParseTrustTable([]byte(`{"releases":[]}`)); err != nil {
 		t.Fatal(err)
 	}
 	for name, doc := range map[string]string{
-		"unknown field":     `{"releases":[],"extra":1}`,
-		"public key":        `{"publicKey":"k","releases":[]}`,
-		"no signing":        `{"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `"}]}`,
-		"identity with ref": `{"signing":{"identity":"https://github.com/o/r/ci.yml@refs/tags/v1","issuer":"https://x.y"},"releases":[]}`,
-		"plain issuer":      `{"signing":{"identity":"https://github.com/o/r/ci.yml","issuer":"http://x.y"},"releases":[]}`,
-		"negative size":     `{` + sg + `"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `","size":-1}]}`,
-		"huge size":         `{` + sg + `"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `","size":1000000000}]}`,
-		"bad version":       `{` + sg + `"releases":[{"version":"1.0","arch":"arm64","sha256":"` + h + `"}]}`,
-		"bad arch":          `{` + sg + `"releases":[{"version":"v1.0.0","arch":"riscv64","sha256":"` + h + `"}]}`,
-		"bad sha":           `{` + sg + `"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"abc"}]}`,
-		"duplicate": `{` + sg + `"releases":[{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `"},` +
-			`{"version":"v1.0.0","arch":"arm64","sha256":"` + h + `"}]}`,
+		"unknown field": `{"releases":[],"extra":1}`,
+		"old signing":   `{"signing":{"identity":"https://x.y/ci.yml","issuer":"https://x.y"},"releases":[]}`,
+		"negative size": `{"releases":[{"version":"v1.0.2","arch":"arm64","sha256":"` + h + `","size":-1}]}`,
+		"huge size":     `{"releases":[{"version":"v1.0.2","arch":"arm64","sha256":"` + h + `","size":1000000000}]}`,
+		"bad version":   `{"releases":[{"version":"1.0","arch":"arm64","sha256":"` + h + `"}]}`,
+		"bad arch":      `{"releases":[{"version":"v1.0.2","arch":"riscv64","sha256":"` + h + `"}]}`,
+		"bad sha":       `{"releases":[{"version":"v1.0.2","arch":"arm64","sha256":"abc"}]}`,
+		"duplicate":     `{"releases":[{"version":"v1.0.2","arch":"arm64","sha256":"` + h + `"},{"version":"v1.0.2","arch":"arm64","sha256":"` + h + `"}]}`,
+		"not json":      `releases`,
 	} {
 		if _, err := ParseTrustTable([]byte(doc)); err == nil {
 			t.Errorf("%s accepted", name)
 		}
+	}
+}
+
+func TestRuntimeRecordAccept(t *testing.T) {
+	store, p := testStore(t)
+	h1, h2 := strings.Repeat("a", 64), strings.Repeat("b", 64)
+	rel := TrustedRelease{Version: "v1.0.2", Arch: "arm64", SHA256: h1}
+	// Nothing recorded yet: the table of the builds before the discovery
+	// (v1.0.1), no file needed.
+	if got, err := LoadRuntimeRecord(p); err != nil || !slices.Equal(got.Releases, legacyRuntimeReleases) {
+		t.Fatalf("initial record = %+v, %v", got, err)
+	}
+	if err := store.Accept([]TrustedRelease{rel, {Version: "v1.0.2", Arch: "amd64", SHA256: h2}}); err != nil {
+		t.Fatal(err)
+	}
+	if r, ok := store.Release("v1.0.2", "arm64"); !ok || r.SHA256 != h1 {
+		t.Fatalf("release = %+v", r)
+	}
+	if r, ok := store.Newest("amd64"); !ok || r.SHA256 != h2 {
+		t.Fatalf("newest = %+v", r)
+	}
+	// Persisted 0600 in a 0700 directory, read back as written.
+	fi, err := os.Stat(filepath.Join(p.Runtime(), runtimeRecordName))
+	if err != nil || fi.Mode().Perm() != 0o600 {
+		t.Fatalf("record file: %v %v", fi, err)
+	}
+	if got, err := LoadRuntimeRecord(p); err != nil || len(got.Releases) != 2 {
+		t.Fatalf("reloaded record = %+v, %v", got, err)
+	}
+	// The same release again: nothing changes. Another sha256: refused, the
+	// record keeps the first one.
+	if err := store.Accept([]TrustedRelease{rel}); err != nil {
+		t.Fatal(err)
+	}
+	var conflict errRecordConflict
+	if err := store.Accept([]TrustedRelease{{Version: "v1.0.2", Arch: "arm64", SHA256: h2}}); !errors.As(err, &conflict) {
+		t.Fatalf("conflicting sha256: %v", err)
+	}
+	// A conflict in a batch records nothing of it.
+	if err := store.Accept([]TrustedRelease{{Version: "v1.0.3", Arch: "arm64", SHA256: h2}, {Version: "v1.0.2", Arch: "arm64", SHA256: h2}}); err == nil {
+		t.Fatal("batch with a conflict accepted")
+	}
+	if _, ok := store.Release("v1.0.3", "arm64"); ok {
+		t.Fatal("part of a refused batch recorded")
+	}
+	if got, _ := LoadRuntimeRecord(p); got.Releases[0].SHA256 != h1 && got.Releases[1].SHA256 != h1 {
+		t.Fatalf("record changed: %+v", got)
+	}
+	// Older than MinRuntimeVersion, or invalid: refused.
+	for _, r := range []TrustedRelease{{Version: "v1.0.0", Arch: "arm64", SHA256: h1}, {Version: "v1.0.4", Arch: "riscv64", SHA256: h1}, {Version: "v1.0.4", Arch: "arm64", SHA256: "x"}} {
+		if err := store.Accept([]TrustedRelease{r}); err == nil {
+			t.Errorf("%+v accepted", r)
+		}
+	}
+	// A record modified outside the panel is not loaded.
+	if err := os.Chmod(filepath.Join(p.Runtime(), runtimeRecordName), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := LoadRuntimeRecord(p); err == nil {
+		t.Fatal("group-readable record loaded")
+	}
+	if err := os.Chmod(filepath.Join(p.Runtime(), runtimeRecordName), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chmod(p.Runtime(), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := LoadRuntimeRecord(p); err == nil {
+		t.Fatal("record in a 0755 directory loaded")
 	}
 }
 
