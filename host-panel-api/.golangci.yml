@@ -1,4 +1,4 @@
-# golangci-lint v2 configuration (CI job api:lint, code quality report).
+# golangci-lint v2 configuration (CI: "API lint" in .github/workflows/checks.yml).
 version: "2"
 
 linters:
