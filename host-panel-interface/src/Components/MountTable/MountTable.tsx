@@ -39,6 +39,13 @@ export default function MountTable({ item }: Readonly<{ item: Mount[] }>) {
   const { t } = useTranslation("containers");
   const columns = useMemo(() => getColumns(t), [t]);
   return (
-    <Table columns={columns} dataSource={item} rowKey="Source" virtual scroll={{ x: "max-content" }} />
+    <Table
+      columns={columns}
+      dataSource={item}
+      rowKey="Destination"
+      size="small"
+      pagination={item.length > 10 ? undefined : false}
+      scroll={{ x: "max-content" }}
+    />
   );
 }

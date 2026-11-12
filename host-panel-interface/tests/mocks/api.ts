@@ -6,7 +6,7 @@
  * received (api.requests). A request no route handles is answered 404 and
  * recorded in api.unhandled, so that a missing mock is visible.
  */
-import type { ContainerInfo } from "dockerode";
+import type { ContainerInfo, ContainerInspectInfo } from "dockerode";
 import type { ApiKeyModel } from "../../src/Services/ApiKeys/Models/apikeys.model";
 import type { DomainEntry } from "../../src/Services/Domains/Models/domains.model";
 import type {
@@ -53,6 +53,7 @@ import type {
 } from "../../src/Services/Cron/Models/cron.model";
 import {
   adminUser,
+  containerInspect,
   dockerNetworks,
   FUNCTION_ACCESS_KEY,
   FUNCTION_SECRET_KEY,
@@ -115,6 +116,8 @@ export interface MockState {
   cronJobs: CronJobModel[];
   /** GET /docker: the containers the user can see */
   containers: ContainerInfo[];
+  /** GET /docker/:id answers, by container id (default: containerInspect). */
+  inspects: Record<string, ContainerInspectInfo>;
   /** GET /domains */
   domains: DomainEntry[];
   /** GET /sftp/config (default: module disabled) */
@@ -171,6 +174,7 @@ export class MockApi {
       functions: functions(),
       cronJobs: [],
       containers: [],
+      inspects: {},
       domains: [],
       sftpConfig: { enabled: false },
       sftpUsers: [],
@@ -259,6 +263,12 @@ export class MockApi {
           : apiError(401, "UNAUTHORIZED", "Unauthorized"),
       ),
       r("GET", "/docker", () => json(200, this.state.containers)),
+      r("GET", "/docker/:id", (_req, p) => {
+        const c = this.state.containers.find((c) => c.Id === p.id);
+        return c
+          ? json(200, this.state.inspects[c.Id] ?? containerInspect(c))
+          : apiError(404, "CONTAINER_NOT_FOUND", "container not found");
+      }),
       r("GET", "/domains", () => {
         const denied = this.admin();
         return denied ?? json(200, this.state.domains);

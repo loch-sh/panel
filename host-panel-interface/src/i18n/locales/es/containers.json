@@ -65,15 +65,8 @@
     "fullScreen": "Pantalla completa",
     "consoleOnly": "Solo consola",
     "noData": "No hay datos para este contenedor",
-    "heading": "Contenedor {{name}}",
-    "compose": {
-      "title": "Iniciado por compose",
-      "project": "✅ Proyecto {{project}}",
-      "no": "❌ No"
-    },
     "identifier": "Identificador",
     "image": "Imagen",
-    "currentState": "Estado actual",
     "startedAt": {
       "title": "Inicio",
       "value": "El {{date}} a las {{time}}"
@@ -84,17 +77,28 @@
     "none": "Ninguno",
     "hostPath": "Ruta física",
     "logPath": "Ruta de logs",
-    "logs": {
-      "title": "Logs en tiempo real",
-      "show": "Mostrar logs",
-      "close": "Cerrar logs"
-    },
     "terminal": {
-      "title": "Terminal interactivo de Docker",
       "open": "Abrir un terminal",
-      "detach": "Separar",
       "detachPopup": "Separar en una ventana emergente",
-      "unavailable": "El terminal no está disponible (probablemente falta <code>tty:true</code> en el compose o el contenedor no se inició con el argumento <code>-t</code>)."
+      "unavailable": "El terminal no está disponible (probablemente falta <code>tty:true</code> en el compose o el contenedor no se inició con el argumento <code>-t</code>).",
+      "notRunning": "El contenedor no está en ejecución: inícielo para abrir un terminal."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Contenedor independiente",
+    "created": "Creación",
+    "networks": "Redes conectadas",
+    "summary": {
+      "upFor": "En ejecución desde hace",
+      "stoppedFor": "Detenido desde hace",
+      "ports": "Puertos publicados",
+      "exitCode": "Código de salida {{code}}",
+      "restarts": "Reinicios",
+      "mounts": "Montajes"
+    },
+    "tabs": {
+      "overview": "Resumen",
+      "logs": "Logs",
+      "terminal": "Terminal"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "Falta el ID del contenedor",
     "windowTitle": "{{appName}} - Terminal",
     "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Detalles de la stack",
+    "subtitle": "Stack de Docker Compose",
+    "errorExits": "Detenido con error",
+    "openSite": "Abrir el sitio",
+    "openService": "Abrir el servicio",
+    "containerDetail": "Detalles del contenedor",
+    "readOnly": "solo lectura",
+    "noRunning": "Ningún contenedor en ejecución",
+    "summary": {
+      "running": "Activos",
+      "services": "Servicios",
+      "networks": "Redes"
+    },
+    "tabs": {
+      "services": "Servicios",
+      "compose": "Compose",
+      "networks": "Redes",
+      "monitoring": "Monitorización"
+    },
+    "columns": {
+      "service": "Servicio",
+      "state": "Estado",
+      "image": "Imagen",
+      "ports": "Puertos",
+      "dependsOn": "Depende de",
+      "container": "Contenedor"
+    },
+    "compose": {
+      "project": "Proyecto Compose",
+      "workingDir": "Directorio de trabajo",
+      "configFiles": "Archivos Compose",
+      "version": "Versión de Compose"
+    }
   }
 }

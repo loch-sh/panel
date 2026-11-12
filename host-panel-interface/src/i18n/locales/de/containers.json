@@ -65,15 +65,8 @@
     "fullScreen": "Vollbild",
     "consoleOnly": "Nur Konsole",
     "noData": "Keine Daten für diesen Container",
-    "heading": "Container {{name}}",
-    "compose": {
-      "title": "Von Compose gestartet",
-      "project": "✅ Projekt {{project}}",
-      "no": "❌ Nein"
-    },
     "identifier": "Kennung",
     "image": "Image",
-    "currentState": "Aktueller Status",
     "startedAt": {
       "title": "Gestartet",
       "value": "Am {{date}} um {{time}}"
@@ -84,17 +77,28 @@
     "none": "Keine",
     "hostPath": "Host-Pfad",
     "logPath": "Log-Pfad",
-    "logs": {
-      "title": "Live-Logs",
-      "show": "Logs anzeigen",
-      "close": "Logs schließen"
-    },
     "terminal": {
-      "title": "Interaktives Docker-Terminal",
       "open": "Terminal öffnen",
-      "detach": "Abdocken",
       "detachPopup": "In einem Pop-up abdocken",
-      "unavailable": "Das Terminal ist nicht verfügbar (vermutlich fehlt <code>tty:true</code> in der Compose-Datei, oder der Container wurde nicht mit dem Argument <code>-t</code> gestartet)."
+      "unavailable": "Das Terminal ist nicht verfügbar (vermutlich fehlt <code>tty:true</code> in der Compose-Datei, oder der Container wurde nicht mit dem Argument <code>-t</code> gestartet).",
+      "notRunning": "Der Container läuft nicht: Starten Sie ihn, um ein Terminal zu öffnen."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Eigenständiger Container",
+    "created": "Erstellt",
+    "networks": "Verbundene Netzwerke",
+    "summary": {
+      "upFor": "Läuft seit",
+      "stoppedFor": "Gestoppt seit",
+      "ports": "Veröffentlichte Ports",
+      "exitCode": "Exit-Code {{code}}",
+      "restarts": "Neustarts",
+      "mounts": "Mounts"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "logs": "Logs",
+      "terminal": "Terminal"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "Container-ID fehlt",
     "windowTitle": "{{appName}} - Terminal",
     "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Stack-Details",
+    "subtitle": "Docker-Compose-Stack",
+    "errorExits": "Mit Fehler beendet",
+    "openSite": "Website öffnen",
+    "openService": "Dienst öffnen",
+    "containerDetail": "Container-Details",
+    "readOnly": "schreibgeschützt",
+    "noRunning": "Kein laufender Container",
+    "summary": {
+      "running": "Aktiv",
+      "services": "Dienste",
+      "networks": "Netzwerke"
+    },
+    "tabs": {
+      "services": "Dienste",
+      "compose": "Compose",
+      "networks": "Netzwerke",
+      "monitoring": "Monitoring"
+    },
+    "columns": {
+      "service": "Dienst",
+      "state": "Status",
+      "image": "Image",
+      "ports": "Ports",
+      "dependsOn": "Abhängig von",
+      "container": "Container"
+    },
+    "compose": {
+      "project": "Compose-Projekt",
+      "workingDir": "Arbeitsverzeichnis",
+      "configFiles": "Compose-Dateien",
+      "version": "Compose-Version"
+    }
   }
 }

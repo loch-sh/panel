@@ -65,15 +65,8 @@
     "fullScreen": "Full screen",
     "consoleOnly": "Console only",
     "noData": "No data for this container",
-    "heading": "Container {{name}}",
-    "compose": {
-      "title": "Started by compose",
-      "project": "✅ Project {{project}}",
-      "no": "❌ No"
-    },
     "identifier": "Identifier",
     "image": "Image",
-    "currentState": "Current state",
     "startedAt": {
       "title": "Started",
       "value": "On {{date}} at {{time}}"
@@ -84,17 +77,28 @@
     "none": "None",
     "hostPath": "Host path",
     "logPath": "Log path",
-    "logs": {
-      "title": "Live logs",
-      "show": "Show logs",
-      "close": "Close logs"
-    },
     "terminal": {
-      "title": "Interactive Docker terminal",
       "open": "Open a terminal",
-      "detach": "Detach",
       "detachPopup": "Detach in a popup",
-      "unavailable": "The terminal is not available (<code>tty:true</code> is probably missing in the compose file, or the container was not started with the <code>-t</code> argument)."
+      "unavailable": "The terminal is not available (<code>tty:true</code> is probably missing in the compose file, or the container was not started with the <code>-t</code> argument).",
+      "notRunning": "The container is not running: start it to open a terminal."
+    },
+    "stack": "Stack {{stack}}",
+    "standalone": "Standalone container",
+    "created": "Created",
+    "networks": "Attached networks",
+    "summary": {
+      "upFor": "Up for",
+      "stoppedFor": "Stopped for",
+      "ports": "Published ports",
+      "exitCode": "Exit code {{code}}",
+      "restarts": "Restarts",
+      "mounts": "Mounts"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "logs": "Logs",
+      "terminal": "Terminal"
     }
   },
   "mountTable": {
@@ -130,5 +134,40 @@
     "missingId": "Missing container ID",
     "windowTitle": "{{appName}} - Terminal",
     "windowTitleWithName": "{{appName}} - Terminal #{{name}}"
+  },
+  "stackPanel": {
+    "open": "Stack details",
+    "subtitle": "Docker Compose stack",
+    "errorExits": "Stopped with an error",
+    "openSite": "Open the site",
+    "openService": "Open the service",
+    "containerDetail": "Container details",
+    "readOnly": "read-only",
+    "noRunning": "No running container",
+    "summary": {
+      "running": "Running",
+      "services": "Services",
+      "networks": "Networks"
+    },
+    "tabs": {
+      "services": "Services",
+      "compose": "Compose",
+      "networks": "Networks",
+      "monitoring": "Monitoring"
+    },
+    "columns": {
+      "service": "Service",
+      "state": "State",
+      "image": "Image",
+      "ports": "Ports",
+      "dependsOn": "Depends on",
+      "container": "Container"
+    },
+    "compose": {
+      "project": "Compose project",
+      "workingDir": "Working directory",
+      "configFiles": "Compose files",
+      "version": "Compose version"
+    }
   }
 }
