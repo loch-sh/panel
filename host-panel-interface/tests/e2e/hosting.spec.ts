@@ -26,3 +26,36 @@ test.describe("hosting creation", () => {
     await expect(selectedNetworks(page)).toHaveCount(0);
   });
 });
+
+test.describe("hosting creation review", () => {
+  // The review used to crash on its first render (a selector watcher starts
+  // with an empty object): every template, PHP or static, must reach it.
+  for (const template of [
+    "PHP + Nginx",
+    "PHP + Apache",
+    "Static (Nginx)",
+    "Static (Apache)",
+  ]) {
+    test(`summarizes a ${template} site`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on("pageerror", (e) => errors.push(e.message));
+      await page.goto("/hosting/new");
+      await page.getByRole("radio", { name: template }).click();
+      await page.getByRole("button", { name: /Next/ }).click();
+      await page.getByLabel("Name").fill("mysite");
+
+      const review = page.getByText(
+        "Check the settings before creating the hosting",
+      );
+      const next = page.getByRole("button", { name: /Next/ });
+      for (let step = 0; step < 10 && !(await review.isVisible()); step++) {
+        await next.click();
+      }
+
+      await expect(review).toBeVisible();
+      await expect(page.getByText("mysite", { exact: true })).toBeVisible();
+      await expect(page.getByRole("button", { name: /Create/ })).toBeEnabled();
+      expect(errors).toEqual([]);
+    });
+  }
+});

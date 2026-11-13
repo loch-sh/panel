@@ -21,13 +21,12 @@ export default function ReviewStep({
 }: Readonly<Props>) {
   const { t } = useTranslation("hosting");
   const form = Form.useFormInstance<HostingFormValues>();
-  // Re-rendered on any change; the whole store, like the submission.
-  const values = Form.useWatch((all: HostingFormValues) => all, {
-    form,
-    preserve: true,
-  });
+  // Subscribes to every change (re-render) but reads the store itself: on
+  // its first render a selector watcher returns selector({}), an empty
+  // object, not the form values.
+  Form.useWatch((all: HostingFormValues) => all, { form, preserve: true });
   const items = useReviewItems(
-    formValuesToPayload(values ?? form.getFieldsValue(true)),
+    formValuesToPayload(form.getFieldsValue(true)),
     sitesDirectory,
   );
 
