@@ -1,0 +1,6 @@
+# Known gitleaks false positives (fingerprint: commit:file:rule:line).
+# Add one only after checking that the match is not a secret, with the reason.
+
+# docs/services.md: `curl --aws-sigv4 … -u KEY:SECRET`, a placeholder in the
+# Loch S3 usage example.
+2f97bed7dd7acf95a0ac9d9bb2b7ce3d057e3452:host-panel-api/docs/services.md:curl-auth-user:185

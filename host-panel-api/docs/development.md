@@ -97,6 +97,7 @@ The checks (`checks.yml`, called by both):
 
 | Job | What |
 |---|---|
+| Secrets | `gitleaks` on the whole Git history (pull requests included), findings redacted; version pinned (`go run …@v8.30.1`, same as `make secrets` at the repository root); known false positives in `.gitleaksignore` (fingerprint + reason, only after checking the match is not a secret) |
 | API tests | `gofmt`, `go vet`, `go test -race` with coverage, `govulncheck` |
 | API lint | `golangci-lint` (`.golangci.yml`: standard linters, errors conventionally ignored such as `Close` excluded), blocking |
 | Interface lint | ESLint, zero warnings, blocking |

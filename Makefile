@@ -1,7 +1,9 @@
 API_DIR := host-panel-api
 WEB_DIR := host-panel-interface
+# Same version as the "Secrets" job of .github/workflows/checks.yml.
+GITLEAKS_VERSION := v8.30.1
 
-.PHONY: help install dev api web sftpgo sftpgo-logs down clean
+.PHONY: help install dev api web sftpgo sftpgo-logs down clean secrets
 
 ## Development
 
@@ -34,6 +36,9 @@ down: ## Stop SFTPGo
 install: ## Install the dependencies (API and interface)
 	cd $(API_DIR) && go mod download
 	cd $(WEB_DIR) && yarn install
+
+secrets: ## Scan the Git history for secrets (gitleaks, as in the CI; false positives: .gitleaksignore)
+	go run github.com/zricethezav/gitleaks/v8@$(GITLEAKS_VERSION) git --redact --verbose --no-banner .
 
 clean: ## Stop SFTPGo and delete its local data
 	docker compose down
