@@ -1,0 +1,5 @@
+# Local configuration and data of the examples
+*/.env
+*/app.env
+*/data/
+*/branding/

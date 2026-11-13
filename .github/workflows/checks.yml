@@ -1,9 +1,10 @@
 name: Checks
 
-# The checks of the API and the interface, called by ci.yml (every push to
-# main and every pull request) and release.yml (release tags, only for the
-# released project). Runners are GitHub-hosted (ephemeral VMs); pull
-# requests from forks run with a read-only token and no secret.
+# The checks of the API, the interface and the production examples, called
+# by ci.yml (every push to main and every pull request) and release.yml
+# (release tags, only for the released project). Runners are GitHub-hosted
+# (ephemeral VMs); pull requests from forks run with a read-only token and no
+# secret.
 
 on:
   workflow_call:
@@ -133,3 +134,45 @@ jobs:
           name: e2e-results
           path: host-panel-interface/test-results/
           retention-days: 7
+
+  # The production examples (example/): each compose file is valid with its
+  # .env.example and app.env.example, and every image it references exists.
+  # Not on release tags: the examples are bumped to a version after its
+  # images are published, and a release must not depend on them.
+  examples:
+    name: Examples
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: docker compose config
+        working-directory: example
+        run: |
+          for dir in */; do
+            dir=${dir%/}
+            echo "::group::$dir"
+            cp "$dir/app.env.example" "$dir/app.env"
+            docker compose --project-directory "$dir" --env-file "$dir/.env.example" config --quiet
+            # Images pulled from a registry only: a service with `build`
+            # (web-build) is built from this repository's sources.
+            docker compose --project-directory "$dir" --env-file "$dir/.env.example" config --format json \
+              | jq -r '.services[] | select(.build == null) | .image' >> images.txt
+            echo "::endgroup::"
+          done
+
+      - name: Images exist
+        working-directory: example
+        run: |
+          status=0
+          for image in $(sort -u images.txt); do
+            if docker buildx imagetools inspect "$image" >/dev/null 2>&1; then
+              echo "ok      $image"
+            else
+              echo "::error::image not found: $image"; status=1
+            fi
+          done
+          exit $status

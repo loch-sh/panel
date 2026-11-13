@@ -11,6 +11,17 @@ This repository holds the API and the web interface:
 
 The `loch` CLI and MCP server live in their own repository: [loch.sh/cli](https://lab.nitrique.net/loch.sh/cli).
 
+## Run on a server
+
+Ready-to-use Docker Compose stacks (Traefik, the panel images from `ghcr.io/loch-sh/panel`, SFTPGo, [deploy-server](https://github.com/loch-sh/deploy)) are in [`example/`](example/README.md): copy `.env.example` and `app.env.example`, fill them in, `./up.sh`. The defaults run locally (`127.0.0.1.traefik.me`).
+
+| Example | For |
+|---|---|
+| [`web`](example/web/README.md) | web agency hosting: hosting, SFTP (SFTPGo), managed services, GitLab CI deployments |
+| [`light`](example/light/README.md) | stacks deployed by GitLab CI only (deploy-server, plugins off) |
+| [`minimal`](example/minimal/README.md) | the panel alone, stacks deployed by other means |
+| [`web-build`](example/web-build/README.md) | web with the API and the interface built from this repository: test a change in a full stack |
+
 ## Run locally
 
 Requirements: Go 1.27+, Node.js and Yarn, Docker with `docker compose`.

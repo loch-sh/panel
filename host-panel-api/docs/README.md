@@ -6,6 +6,7 @@ Start with the page matching what you want to do.
 
 | Page | Read it to |
 |---|---|
+| [Production examples](../../example/README.md) | install the panel on a server: Docker Compose stacks with Traefik, SFTPGo and deploy-server |
 | [Configuration](configuration.md) | set the environment variables (authentication, storage, plugins) |
 | [Web hosting](hosting.md) | let admins create PHP / static sites from the panel |
 | [SFTP users](sftp.md) | give site owners SFTP access through SFTPGo |

@@ -1,0 +1,141 @@
+# Loch.sh Panel — the panel behind Traefik, nothing else. Stacks are
+# deployed by other means (by hand, over SSH).
+#
+#   1. Ingress   traefik
+#   2. Panel     api, interface
+#
+# Every value to adapt is in .env (copy .env.example) and app.env (copy
+# app.env.example): this file needs no edit. See README.md.
+
+name: loch
+
+services:
+
+  # ── 1. Ingress ──────────────────────────────────────────────────────────────
+
+  traefik:
+    image: mirror.gcr.io/library/traefik:v3.7
+    container_name: traefik
+    restart: always
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Network used to reach a container that has no traefik.docker.network
+      # label (hosted sites and CI stacks join it).
+      - "--providers.docker.network=traefik_default"
+      # No redirection on the entrypoint: it would apply before the routers,
+      # to the hosted sites with HTTPS off too. HTTP -> HTTPS is the
+      # "http-to-https" router below (lowest priority) and, per site, the
+      # redirect the hosting plugin adds when "Redirect to HTTPS" is on.
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--entryPoints.websecure.http3"
+      - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=600s"
+      # "letsencrypt" is the resolver the hosting plugin puts on the sites
+      # (HOSTING_TRAEFIK_CERTRESOLVER default).
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:?set ACME_EMAIL in .env}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--log.filePath=/var/log/traefik/traefik.log"
+      - "--accesslog.filePath=/var/log/traefik/access.log"
+      - "--ping=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - "${DATA_ROOT:-/data}/traefik/letsencrypt:/letsencrypt"
+      - "${DATA_ROOT:-/data}/traefik/logs:/var/log/traefik"
+      # Root-equivalent access to the host, :ro does not change that (see README).
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      traefik_default: {}
+      panel:
+        ipv4_address: 10.255.252.2    # = TRUSTED_PROXIES of the api (app.env)
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "system=true"
+      # Catch-all HTTP -> HTTPS redirect (panel, deploy-server, SFTPGo web
+      # client, sites without an HTTP router): priority 1, so any router
+      # of a host on the web entrypoint (a site with HTTPS off) wins.
+      - "traefik.enable=true"
+      - "traefik.http.routers.http-to-https.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.http-to-https.entrypoints=web"
+      - "traefik.http.routers.http-to-https.priority=1"
+      - "traefik.http.routers.http-to-https.middlewares=http-to-https"
+      - "traefik.http.routers.http-to-https.service=noop@internal"
+      - "traefik.http.middlewares.http-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.http-to-https.redirectscheme.permanent=true"
+
+  # ── 2. Panel ────────────────────────────────────────────────────────────────
+
+  api:
+    image: ghcr.io/loch-sh/panel/api:v1.1.0
+    restart: unless-stopped
+    env_file:
+      - app.env
+    volumes:
+      # Users, API keys, scheduled tasks, private networks registry
+      - "${DATA_ROOT:-/data}/panel/data:/app/data"
+      # Audit trail (audit.log)
+      - "${DATA_ROOT:-/data}/panel/log:/app/log"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # To enable the hosting or services plugin, mount their directories at
+      # the same path (see ../web/compose.yaml and app.env.example).
+    # Healthcheck: defined in the image (GET /_health on :2538).
+    networks:
+      panel:
+        ipv4_address: 10.255.252.3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.panel-api.rule=Host(`manager.api.${DOMAIN:?set DOMAIN in .env}`)"
+      - "traefik.http.routers.panel-api.entrypoints=websecure"
+      - "traefik.http.routers.panel-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.panel-api.loadbalancer.server.port=2538"
+      - "traefik.docker.network=loch-panel"
+      - "system=true"
+
+  interface:
+    image: ghcr.io/loch-sh/panel/interface:v1.1.0
+    restart: unless-stopped
+    environment:
+      API_URL: "https://manager.api.${DOMAIN}"
+      WS_URL: "wss://manager.api.${DOMAIN}"
+      # APP_NAME: "My Hosting"
+      # SUPPORT_URL: "https://support.example.com"
+    # Branding: logo.svg / favicon.svg in ./branding
+    # volumes:
+    #   - ./branding:/branding:ro
+    networks:
+      panel:
+        ipv4_address: 10.255.252.4
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.panel-interface.rule=Host(`manager.${DOMAIN}`)"
+      - "traefik.http.routers.panel-interface.entrypoints=websecure"
+      - "traefik.http.routers.panel-interface.tls.certresolver=letsencrypt"
+      - "traefik.http.services.panel-interface.loadbalancer.server.port=80"
+      - "traefik.docker.network=loch-panel"
+      - "system=true"
+
+networks:
+  # Shared with the routed stacks. Created once per host (docker network
+  # create traefik_default), subnet from the daemon's default-address-pools.
+  traefik_default:
+    external: true
+
+  # Traefik <-> panel. Fixed /29 subnet outside the daemon's
+  # default-address-pools, so Traefik has a fixed IP that the API trusts for
+  # X-Forwarded-For. Not `internal`: the API needs outbound access (OIDC
+  # discovery, registries).
+  panel:
+    name: loch-panel
+    ipam:
+      config:
+        - subnet: 10.255.252.0/29
