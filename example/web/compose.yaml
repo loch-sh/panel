@@ -113,7 +113,7 @@ services:
       - "system=true"
 
   interface:
-    image: ghcr.io/loch-sh/panel/interface:v1.1.0
+    image: ghcr.io/loch-sh/panel/interface:v1.1.1
     restart: unless-stopped
     environment:
       API_URL: "https://manager.api.${DOMAIN}"
